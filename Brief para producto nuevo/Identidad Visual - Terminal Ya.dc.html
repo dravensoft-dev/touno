@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<style>
+  body { margin:0; background:#F7F7F6; color:#14171A; font-family:'Archivo',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:oklch(0.44 0.042 228); text-decoration:none; }
+  a:hover { color:oklch(0.34 0.042 228); }
+</style>
+</helmet>
+<div style="min-height:100vh;padding:72px 24px 110px;display:flex;justify-content:center">
+<div style="width:100%;max-width:1180px;display:flex;flex-direction:column;gap:80px">
+
+  <header style="display:flex;flex-direction:column;gap:26px;border-bottom:1px solid #E0DFD9;padding-bottom:40px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:44px;height:44px;background:#14171A;border-radius:10px;position:relative;display:flex;align-items:center;justify-content:center;flex:none">
+        <div style="width:24px;height:24px;border:2.5px solid #F7F7F6;border-radius:4px"></div>
+        <div style="position:absolute;left:0;top:20px;width:44px;height:2.5px;background:oklch(0.72 0.15 68)"></div>
+        <div style="position:absolute;left:30px;top:16.5px;width:9px;height:9px;border-radius:50%;background:oklch(0.72 0.15 68);border:2.5px solid #14171A"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;line-height:1">Terminal Ya</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#6E7379">Sistema visual y pantallas · v0.2</div>
+      </div>
+    </div>
+    <h1 style="margin:0;font-size:52px;line-height:1.04;font-weight:600;letter-spacing:-0.03em;max-width:20ch;text-wrap:pretty">Identidad visual y pantallas de la demo</h1>
+    <p style="margin:0;max-width:64ch;font-size:18px;line-height:1.55;color:#3C4148;text-wrap:pretty">Una herramienta de trabajo para mover encomiendas entre ciudades: sobria, densa, legible con sol y con una mano. Nada decorativo que no ayude a leer el estado de un paquete.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 11px;border:1px solid #E0DFD9;background:#fff">Archivo + IBM Plex Mono</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 11px;border:1px solid #E0DFD9;background:#fff">Phosphor Icons</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 11px;border:1px solid #E0DFD9;background:#fff">Web móvil · 5 roles</span>
+    </div>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.44 0.042 228)">01</span>
+      <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#3C4148">Logo</h2>
+    </div>
+    <p style="margin:0;max-width:62ch;font-size:16px;line-height:1.6;color:#3C4148;text-wrap:pretty">Una caja y una ruta que la atraviesa. El punto ámbar es el paquete sobre la ruta: el mismo punto se repite en los mapas y en la línea de hitos, así que la marca y el producto usan el mismo signo.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#E0DFD9;border:1px solid #E0DFD9">
+      <div style="background:#fff;padding:44px 32px;display:flex;flex-direction:column;gap:26px;align-items:center;justify-content:center">
+        <div style="width:96px;height:96px;background:#14171A;border-radius:22px;position:relative;display:flex;align-items:center;justify-content:center">
+          <div style="width:52px;height:52px;border:5px solid #F7F7F6;border-radius:9px"></div>
+          <div style="position:absolute;left:0;top:44px;width:96px;height:5px;background:oklch(0.72 0.15 68)"></div>
+          <div style="position:absolute;left:65px;top:36.5px;width:20px;height:20px;border-radius:50%;background:oklch(0.72 0.15 68);border:5px solid #14171A"></div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Isotipo</div>
+      </div>
+
+      <div style="background:#fff;padding:44px 32px;display:flex;flex-direction:column;gap:26px;align-items:center;justify-content:center">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:48px;height:48px;background:#14171A;border-radius:11px;position:relative;display:flex;align-items:center;justify-content:center;flex:none">
+            <div style="width:26px;height:26px;border:2.8px solid #F7F7F6;border-radius:5px"></div>
+            <div style="position:absolute;left:0;top:22px;width:48px;height:2.8px;background:oklch(0.72 0.15 68)"></div>
+            <div style="position:absolute;left:32px;top:18px;width:10px;height:10px;border-radius:50%;background:oklch(0.72 0.15 68);border:2.8px solid #14171A"></div>
+          </div>
+          <div style="font-size:27px;font-weight:700;letter-spacing:-0.03em">Terminal<span style="color:oklch(0.44 0.042 228)"> Ya</span></div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Lockup horizontal</div>
+      </div>
+
+      <div style="background:#14171A;padding:44px 32px;display:flex;flex-direction:column;gap:26px;align-items:center;justify-content:center">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:48px;height:48px;background:#F7F7F6;border-radius:11px;position:relative;display:flex;align-items:center;justify-content:center;flex:none">
+            <div style="width:26px;height:26px;border:2.8px solid #14171A;border-radius:5px"></div>
+            <div style="position:absolute;left:0;top:22px;width:48px;height:2.8px;background:oklch(0.72 0.15 68)"></div>
+            <div style="position:absolute;left:32px;top:18px;width:10px;height:10px;border-radius:50%;background:oklch(0.72 0.15 68);border:2.8px solid #F7F7F6"></div>
+          </div>
+          <div style="font-size:27px;font-weight:700;letter-spacing:-0.03em;color:#F7F7F6">Terminal<span style="color:oklch(0.72 0.15 68)"> Ya</span></div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Sobre fondo oscuro</div>
+      </div>
+    </div>
+
+    <sc-if value="{{ showSpecs }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <i class="ph ph-check" style="font-size:16px;color:oklch(0.52 0.10 155);margin-top:2px"></i>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:#3C4148">Aire mínimo alrededor: la altura del cuadro interior. Nunca menor a 24px de lado en pantalla.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <i class="ph ph-check" style="font-size:16px;color:oklch(0.52 0.10 155);margin-top:2px"></i>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:#3C4148">Bajo 32px se usa solo el isotipo; el texto deja de leerse en la barra superior.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <i class="ph ph-x" style="font-size:16px;color:oklch(0.55 0.15 27);margin-top:2px"></i>
+        <p style="margin:0;font-size:14px;line-height:1.5;color:#3C4148">No teñir el isotipo de un solo color plano: la ruta ámbar es lo que lo distingue.</p>
+      </div>
+    </div>
+    </sc-if>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.44 0.042 228)">02</span>
+      <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#3C4148">Paleta</h2>
+    </div>
+    <p style="margin:0;max-width:62ch;font-size:16px;line-height:1.6;color:#3C4148;text-wrap:pretty">Dos neutros hacen el 90% de la pantalla. El petróleo marca lo accionable, el ámbar marca lo que está en movimiento y el verde solo confirma. Ningún color decora.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;background:#E0DFD9;border:1px solid #E0DFD9">
+      <div style="background:#fff;display:flex;flex-direction:column">
+        <div style="height:104px;background:#14171A"></div>
+        <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:14px;font-weight:600">Tinta</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">#14171A</div>
+          <div style="font-size:13px;line-height:1.45;color:#6E7379;margin-top:4px">Texto, barras, encabezados de rol.</div>
+        </div>
+      </div>
+      <div style="background:#fff;display:flex;flex-direction:column">
+        <div style="height:104px;background:#F7F7F6;border-bottom:1px solid #E0DFD9"></div>
+        <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:14px;font-weight:600">Papel</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">#F7F7F6</div>
+          <div style="font-size:13px;line-height:1.45;color:#6E7379;margin-top:4px">Fondo de app; el blanco queda para tarjetas.</div>
+        </div>
+      </div>
+      <div style="background:#fff;display:flex;flex-direction:column">
+        <div style="height:104px;background:oklch(0.44 0.042 228)"></div>
+        <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:14px;font-weight:600">Petróleo</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">oklch(.44 .042 228)</div>
+          <div style="font-size:13px;line-height:1.45;color:#6E7379;margin-top:4px">Acción primaria, links, selección.</div>
+        </div>
+      </div>
+      <div style="background:#fff;display:flex;flex-direction:column">
+        <div style="height:104px;background:oklch(0.72 0.15 68)"></div>
+        <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:14px;font-weight:600">Ámbar ruta</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">oklch(.72 .15 68)</div>
+          <div style="font-size:13px;line-height:1.45;color:#6E7379;margin-top:4px">En movimiento, pendiente, atención.</div>
+        </div>
+      </div>
+      <div style="background:#fff;display:flex;flex-direction:column">
+        <div style="height:104px;background:oklch(0.55 0.11 155)"></div>
+        <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:14px;font-weight:600">Verde sello</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">oklch(.55 .11 155)</div>
+          <div style="font-size:13px;line-height:1.45;color:#6E7379;margin-top:4px">Confirmado, sellado, entregado.</div>
+        </div>
+      </div>
+      <div style="background:#fff;display:flex;flex-direction:column">
+        <div style="height:104px;background:oklch(0.55 0.15 27)"></div>
+        <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:14px;font-weight:600">Rojo alerta</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">oklch(.55 .15 27)</div>
+          <div style="font-size:13px;line-height:1.45;color:#6E7379;margin-top:4px">Solo errores y cancelaciones.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.44 0.042 228)">03</span>
+      <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#3C4148">Tipografía</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1px;background:#E0DFD9;border:1px solid #E0DFD9">
+      <div style="background:#fff;padding:30px;display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-size:19px;font-weight:600">Archivo</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">Interfaz · 400 / 500 / 600 / 700</div>
+        </div>
+        <div style="font-size:44px;line-height:1.05;letter-spacing:-0.03em;font-weight:600">Encomienda<br>a Santa Cruz</div>
+        <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid #EFEEEA;padding-top:18px">
+          <div style="display:flex;gap:14px;align-items:baseline"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95;width:64px;flex:none">28/600</span><span style="font-size:28px;font-weight:600;letter-spacing:-0.02em">Título de pantalla</span></div>
+          <div style="display:flex;gap:14px;align-items:baseline"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95;width:64px;flex:none">17/600</span><span style="font-size:17px;font-weight:600">Nombre de sección</span></div>
+          <div style="display:flex;gap:14px;align-items:baseline"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95;width:64px;flex:none">15/400</span><span style="font-size:15px">Cuerpo y descripciones</span></div>
+          <div style="display:flex;gap:14px;align-items:baseline"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95;width:64px;flex:none">13/500</span><span style="font-size:13px;font-weight:500;color:#6E7379">Etiqueta secundaria</span></div>
+        </div>
+      </div>
+      <div style="background:#fff;padding:30px;display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font-size:19px;font-weight:600;font-family:'IBM Plex Mono',monospace">IBM Plex Mono</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">Datos · 400 / 500</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:32px;line-height:1.15;letter-spacing:-0.01em">TY-4471<br>Bs 65,00</div>
+        <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid #EFEEEA;padding-top:18px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#3C4148">
+          <div>Códigos de guía · TY-4471</div>
+          <div>Montos y tarifas · Bs 65,00</div>
+          <div>Horas y fechas · 14:20 · 15 ago</div>
+          <div>Placas y cédulas · 3421 KZP</div>
+        </div>
+        <p style="margin:0;font-size:13px;line-height:1.5;color:#6E7379;text-wrap:pretty">Todo dato que alguien vaya a dictar por teléfono o copiar a mano va en mono: se lee dígito por dígito.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.44 0.042 228)">04</span>
+      <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#3C4148">Iconografía · Phosphor</h2>
+    </div>
+    <p style="margin:0;max-width:62ch;font-size:16px;line-height:1.6;color:#3C4148;text-wrap:pretty">Peso <strong style="font-weight:600">regular</strong> por defecto, <strong style="font-weight:600">fill</strong> solo para el ítem activo de la barra y para estados completados. Tamaños 18 / 22 / 28. Nunca dos pesos en la misma fila.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:1px;background:#E0DFD9;border:1px solid #E0DFD9">
+      <sc-for list="{{ icons }}" as="ic" hint-placeholder-count="16">
+        <div style="background:#fff;padding:20px 10px;display:flex;flex-direction:column;align-items:center;gap:10px">
+          <i class="{{ ic.i }}" style="font-size:26px;color:#14171A"></i>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95;text-align:center;line-height:1.3">{{ ic.n }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <sc-if value="{{ showComponents }}" hint-placeholder-val="{{ true }}">
+  <section style="display:flex;flex-direction:column;gap:26px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.44 0.042 228)">05</span>
+      <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#3C4148">Componentes</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#E0DFD9;border:1px solid #E0DFD9">
+
+      <div style="background:#fff;padding:26px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Botones · alto 52px</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="height:52px;background:oklch(0.44 0.042 228);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:600;border-radius:8px"><i class="ph-bold ph-truck" style="font-size:19px"></i>Pedir recojo</div>
+          <div style="height:52px;background:#fff;color:#14171A;border:1.5px solid #14171A;display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:600;border-radius:8px">Guardar borrador</div>
+          <div style="height:52px;background:#EFEEEA;color:#A6ABB0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;border-radius:8px">Sin datos aún</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;padding:26px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Estados del paquete</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:7px 11px;border-radius:999px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)"><i class="ph-fill ph-circle" style="font-size:8px"></i>Esperando recojo</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:7px 11px;border-radius:999px;background:oklch(0.955 0.012 228);color:oklch(0.41 0.042 228)"><i class="ph-fill ph-circle" style="font-size:8px"></i>En camino</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:7px 11px;border-radius:999px;background:oklch(0.95 0.04 155);color:oklch(0.42 0.10 155)"><i class="ph-fill ph-check-circle" style="font-size:13px"></i>Sellado</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:7px 11px;border-radius:999px;background:#EFEEEA;color:#6E7379"><i class="ph ph-clock" style="font-size:13px"></i>En bus</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;padding:7px 11px;border-radius:999px;background:oklch(0.95 0.04 27);color:oklch(0.48 0.15 27)"><i class="ph ph-warning" style="font-size:13px"></i>Sin conductor</span>
+        </div>
+      </div>
+
+      <div style="background:#fff;padding:26px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Campo y tarjeta de guía</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:13px;font-weight:500;color:#6E7379">Destinatario</span>
+          <div style="height:50px;border:1.5px solid oklch(0.44 0.042 228);border-radius:8px;display:flex;align-items:center;padding:0 14px;gap:10px;font-size:16px"><i class="ph ph-user" style="font-size:19px;color:#8A8F95"></i>Rosa Villca<span style="width:1.5px;height:20px;background:oklch(0.44 0.042 228);margin-left:2px"></span></div>
+        </div>
+        <div style="border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;gap:12px;align-items:center">
+          <div style="width:38px;height:38px;border-radius:8px;background:#F7F7F6;display:flex;align-items:center;justify-content:center;flex:none"><i class="ph ph-package" style="font-size:20px"></i></div>
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <div style="font-size:15px;font-weight:600">Caja de ropa · 3 kg</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8A8F95">TY-4471 · La Paz → Santa Cruz</div>
+          </div>
+          <i class="ph ph-caret-right" style="font-size:18px;color:#A6ABB0;margin-left:auto"></i>
+        </div>
+      </div>
+
+      <div style="background:#fff;padding:26px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Barra inferior · rol vendedor</div>
+        <div style="border:1px solid #E0DFD9;border-radius:12px;background:#fff;display:grid;grid-template-columns:repeat(4,1fr);padding:10px 4px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;color:oklch(0.44 0.042 228)"><i class="ph-fill ph-package" style="font-size:22px"></i><span style="font-size:11px;font-weight:600">Envíos</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;color:#8A8F95"><i class="ph ph-plus-circle" style="font-size:22px"></i><span style="font-size:11px">Nuevo</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;color:#8A8F95"><i class="ph ph-tag" style="font-size:22px"></i><span style="font-size:11px">Tarifas</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;color:#8A8F95"><i class="ph ph-user-circle" style="font-size:22px"></i><span style="font-size:11px">Cuenta</span></div>
+        </div>
+        <p style="margin:0;font-size:13px;line-height:1.5;color:#6E7379">Cada rol tiene su propia barra: el conductor ve Carreras / Mapa / Ganancias, la sucursal ve Recepción / Historial.</p>
+      </div>
+
+    </div>
+  </section>
+  </sc-if>
+
+  <sc-if value="{{ showScreens }}" hint-placeholder-val="{{ true }}">
+  <section style="display:flex;flex-direction:column;gap:30px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.44 0.042 228)">06</span>
+      <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#3C4148">Pantallas por rol</h2>
+    </div>
+    <p style="margin:0;max-width:66ch;font-size:16px;line-height:1.6;color:#3C4148;text-wrap:pretty">Las pantallas de la demo agrupadas por quién las usa, más las que faltaban para que cada rol pueda terminar su trabajo sin salir de la app. Cada grupo abre con lo que ese usuario necesita resolver sí o sí.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 11px;border:1px solid #E0DFD9;background:#fff">5 roles · 22 pantallas</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 11px;border:1px solid #E0DFD9;background:oklch(0.955 0.012 228);color:oklch(0.41 0.042 228)">6 ya diseñadas</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;padding:7px 11px;border:1px solid #E0DFD9;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">16 nuevas</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:72px">
+  <!-- ══════════ VENDEDOR ══════════ -->
+  <section style="display:flex;flex-direction:column;gap:28px" data-screen-label="Vendedor">
+    <div style="background:#14171A;color:#F7F7F6;padding:28px 30px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+      <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8A8F95"><i class="ph ph-storefront" style="font-size:15px"></i><span>Rol 01 · 6 pantallas</span></div>
+        <h2 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-0.02em">Vendedor</h2>
+        <p style="margin:0;max-width:46ch;font-size:15px;line-height:1.55;color:#B6B8B0;text-wrap:pretty">Vende por redes, despacha varias veces al día y hoy lleva todo en un Excel. Es quien paga y quien responde al comprador cuando algo se atrasa.</p>
+      </div>
+      <sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95;margin-bottom:2px">Tiene que poder</div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Dar de alta un envío y pedir el recojo en menos de un minuto</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Pagar recojo y encomienda en un solo cobro</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Pasarle el seguimiento a su comprador sin explicar nada</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Cargar diez envíos seguidos después de una transmisión en vivo</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Ver qué se atascó y qué le queda por cobrar</span></div>
+      </div>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:36px">
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Tus envíos</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">Tienda Ale · La Paz</span></div>
+              <i class="ph ph-magnifying-glass" style="font-size:20px;color:#6E7379"></i>
+            </div>
+            <div style="padding:0 16px 10px;display:flex;gap:6px">
+              <span style="font-size:12px;font-weight:600;padding:6px 11px;border-radius:999px;background:#14171A;color:#fff">Activos 7</span>
+              <span style="font-size:12px;padding:6px 11px;border-radius:999px;background:#fff;border:1px solid #E0DFD9;color:#6E7379">Entregados</span>
+              <span style="font-size:12px;padding:6px 11px;border-radius:999px;background:#fff;border:1px solid #E0DFD9;color:#6E7379">Todos</span>
+            </div>
+            <div style="flex:1;padding:0 16px;display:flex;flex-direction:column;gap:9px;overflow:hidden">
+              <div style="background:oklch(0.96 0.04 27);border:1px solid oklch(0.88 0.06 27);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px">
+                <i class="ph ph-warning" style="font-size:19px;color:oklch(0.55 0.15 27)"></i>
+                <span style="font-size:13px;line-height:1.4;font-weight:500">1 envío sin conductor hace 12 min</span>
+                <i class="ph ph-caret-right" style="font-size:16px;color:oklch(0.55 0.15 27);margin-left:auto"></i>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;gap:11px;align-items:center">
+                <div style="width:36px;height:36px;border-radius:8px;background:oklch(0.955 0.012 228);display:flex;align-items:center;justify-content:center;flex:none"><i class="ph ph-bus" style="font-size:19px;color:oklch(0.44 0.042 228)"></i></div>
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px;font-weight:600">Rosa Villca · Santa Cruz</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">TY-4471 · en bus · llega 21:40</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;gap:11px;align-items:center">
+                <div style="width:36px;height:36px;border-radius:8px;background:oklch(0.96 0.03 68);display:flex;align-items:center;justify-content:center;flex:none"><i class="ph ph-truck" style="font-size:19px;color:oklch(0.55 0.13 68)"></i></div>
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px;font-weight:600">Marco Quispe · Cochabamba</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">TY-4470 · conductor en camino</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;gap:11px;align-items:center">
+                <div style="width:36px;height:36px;border-radius:8px;background:oklch(0.95 0.04 155);display:flex;align-items:center;justify-content:center;flex:none"><i class="ph-fill ph-check-circle" style="font-size:19px;color:oklch(0.50 0.11 155)"></i></div>
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px;font-weight:600">Lucía Paz · Sucre</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">TY-4468 · entregado 11:02</span></div>
+              </div>
+            </div>
+            <div style="border-top:1px solid #E0DFD9;background:#fff;display:grid;grid-template-columns:repeat(4,1fr);padding:9px 4px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:oklch(0.44 0.042 228)"><i class="ph-fill ph-package" style="font-size:21px"></i><span style="font-size:10px;font-weight:600">Envíos</span></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A8F95"><i class="ph ph-plus-circle" style="font-size:21px"></i><span style="font-size:10px">Nuevo</span></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A8F95"><i class="ph ph-tag" style="font-size:21px"></i><span style="font-size:10px">Tarifas</span></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A8F95"><i class="ph ph-user-circle" style="font-size:21px"></i><span style="font-size:10px">Cuenta</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">V·01</span><span style="font-size:15px;font-weight:600">Panel de envíos</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">La pantalla que reemplaza al Excel. Lo roto arriba, lo normal abajo.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;align-items:center;gap:10px"><i class="ph ph-arrow-left" style="font-size:19px"></i><span style="font-size:19px;font-weight:600;letter-spacing:-0.01em">Nuevo envío</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:11px">
+                <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:500;color:#6E7379">Destinatario</span><span style="font-size:15px;font-weight:500">Rosa Villca · 7712 4408</span></div>
+                <div style="height:1px;background:#EFEEEA"></div>
+                <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:500;color:#6E7379">Destino</span><span style="font-size:15px;font-weight:500">Santa Cruz · Terminal Bimodal</span></div>
+                <div style="height:1px;background:#EFEEEA"></div>
+                <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:12px;font-weight:500;color:#6E7379">Contenido</span><span style="font-size:15px;font-weight:500">Caja de ropa · 3 kg</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Empresa de transporte</span>
+                <div style="background:#fff;border:1.5px solid oklch(0.44 0.042 228);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px">
+                  <div style="width:32px;height:32px;border-radius:7px;background:oklch(0.955 0.012 228);display:flex;align-items:center;justify-content:center"><i class="ph ph-bus" style="font-size:18px;color:oklch(0.44 0.042 228)"></i></div>
+                  <div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">Flota Bolívar</span><span style="font-size:11px;color:#6E7379">Salidas 14:00 · 19:00 · 22:30</span></div>
+                  <i class="ph-fill ph-check-circle" style="font-size:19px;color:oklch(0.44 0.042 228);margin-left:auto"></i>
+                </div>
+              </div>
+              <div style="margin-top:auto;display:flex;flex-direction:column;gap:9px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12px;color:#6E7379">Recojo Bs 15 + encomienda Bs 50</span><span style="font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600">Bs 65,00</span></div>
+                <div style="height:50px;background:oklch(0.44 0.042 228);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border-radius:8px"><i class="ph-bold ph-truck" style="font-size:18px"></i>Pedir recojo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">V·02</span><span style="font-size:15px;font-weight:600">Alta y recojo</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.955 0.012 228);color:oklch(0.41 0.042 228)">ya diseñada</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Un solo formulario, un solo precio.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;align-items:center;gap:10px"><i class="ph ph-arrow-left" style="font-size:19px"></i><span style="font-size:19px;font-weight:600;letter-spacing:-0.01em">Pagar Bs 65,00</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:12px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px">
+                <div style="width:150px;height:150px;background:repeating-linear-gradient(45deg,#E6E5E0,#E6E5E0 5px,#F7F6F3 5px,#F7F6F3 10px);border-radius:8px;display:flex;align-items:center;justify-content:center"><i class="ph ph-qr-code" style="font-size:44px;color:#8A8F95"></i></div>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95;text-align:center;line-height:1.4">Escanea con tu banco · vence en 09:41</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:10px"><i class="ph ph-device-mobile" style="font-size:20px;color:#6E7379"></i><span style="font-size:14px;font-weight:500">Pagar con billetera móvil</span><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:10px"><i class="ph ph-hand-coins" style="font-size:20px;color:#6E7379"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Que pague el destinatario</span><span style="font-size:11px;color:#8A8F95">Cobra la sucursal al entregar</span></div></div>
+              <div style="margin-top:auto;background:oklch(0.97 0.02 68);border-left:2px solid oklch(0.72 0.15 68);padding:11px 13px"><p style="margin:0;font-size:12px;line-height:1.5;color:#3C4148">La guía TY-4471 se genera recién con el pago confirmado.</p></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">V·03</span><span style="font-size:15px;font-weight:600">Cobro único</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Tres formas de pago, incluida la que traslada el cobro al comprador.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:#14171A;color:#F7F7F6;padding:16px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:10px"><i class="ph ph-arrow-left" style="font-size:19px"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600;letter-spacing:0.02em">TY-4471</span></div>
+              <span style="font-size:14px;color:#B6B8B0">Rosa Villca · Santa Cruz · Bs 65,00 pagado</span>
+            </div>
+            <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:11px">
+                <div style="display:flex;gap:11px;align-items:center"><i class="ph-fill ph-check-circle" style="font-size:18px;color:oklch(0.55 0.11 155)"></i><span style="font-size:14px;font-weight:500">Recogido 12:05</span></div>
+                <div style="display:flex;gap:11px;align-items:center"><i class="ph-fill ph-check-circle" style="font-size:18px;color:oklch(0.55 0.11 155)"></i><span style="font-size:14px;font-weight:500">Sellado 14:22</span></div>
+                <div style="display:flex;gap:11px;align-items:center"><i class="ph-fill ph-circle" style="font-size:18px;color:oklch(0.72 0.15 68)"></i><span style="font-size:14px;font-weight:500">En bus · salida 14:00</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-link-simple" style="font-size:20px;color:oklch(0.44 0.042 228)"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">Compartir seguimiento</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">terminalya.bo/s/4471</span></div></div>
+              <div style="display:flex;gap:9px">
+                <div style="flex:1;height:46px;background:#fff;border:1.5px solid #14171A;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:600"><i class="ph ph-phone" style="font-size:17px"></i>Conductor</div>
+                <div style="flex:1;height:46px;background:#fff;border:1.5px solid #14171A;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:600"><i class="ph ph-copy" style="font-size:17px"></i>Copiar guía</div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:6px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Voucher de sucursal</span>
+                <div style="height:74px;border-radius:8px;background:repeating-linear-gradient(45deg,#E6E5E0,#E6E5E0 6px,#EFEEEA 6px,#EFEEEA 12px);display:flex;align-items:center;justify-content:center"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">[ foto del comprobante ]</span></div>
+              </div>
+              <div style="margin-top:auto;height:46px;border:1.5px solid oklch(0.55 0.15 27);color:oklch(0.55 0.15 27);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Reportar un problema</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">V·04</span><span style="font-size:15px;font-weight:600">Detalle del envío</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Todo lo que el vendedor necesita cuando el comprador escribe preguntando.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;flex-direction:column;gap:3px"><span style="font-size:19px;font-weight:600;letter-spacing:-0.02em">Carga después de la transmisión</span><span style="font-size:13px;color:#6E7379">8 pedidos pegados desde tu lista</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:9px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px"><i class="ph-fill ph-check-square" style="font-size:19px;color:oklch(0.44 0.042 228)"></i><div style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:600">Rosa Villca · Santa Cruz</span><span style="font-size:11px;color:#8A8F95">Ropa · 3 kg · Bs 65</span></div></div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px"><i class="ph-fill ph-check-square" style="font-size:19px;color:oklch(0.44 0.042 228)"></i><div style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:600">Juan Mamani · Oruro</span><span style="font-size:11px;color:#8A8F95">Zapatos · 2 kg · Bs 55</span></div></div>
+              <div style="background:#fff;border:1px solid oklch(0.85 0.06 68);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px"><i class="ph ph-warning-circle" style="font-size:19px;color:oklch(0.55 0.13 68)"></i><div style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:600">Ana Choque · ?</span><span style="font-size:11px;color:oklch(0.50 0.12 68)">Falta ciudad de destino</span></div></div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;opacity:0.6"><i class="ph ph-square" style="font-size:19px;color:#A6ABB0"></i><div style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:600">Pedro Luna · La Paz</span><span style="font-size:11px;color:#8A8F95">Mismo destino · sin envío</span></div></div>
+              <div style="margin-top:auto;display:flex;flex-direction:column;gap:9px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:12px;color:#6E7379">7 envíos · 1 recojo</span><span style="font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:600">Bs 420,00</span></div>
+                <div style="height:50px;background:oklch(0.44 0.042 228);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border-radius:8px"><i class="ph-bold ph-stack" style="font-size:18px"></i>Crear los 7 y pedir recojo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">V·05</span><span style="font-size:15px;font-weight:600">Envíos en lote</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">El pico después de una transmisión: un recojo para varios paquetes, errores marcados antes de cobrar.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;flex-direction:column;gap:3px"><span style="font-size:19px;font-weight:600;letter-spacing:-0.02em">Tu mes</span><span style="font-size:13px;color:#6E7379">1 – 15 de agosto</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#14171A;color:#F7F7F6;border-radius:10px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600">42</span><span style="font-size:11px;color:#8A8F95">Envíos</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600">Bs 2.730</span><span style="font-size:11px;color:#8A8F95">Gastado</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:oklch(0.72 0.15 68)">Bs 260</span><span style="font-size:11px;color:#8A8F95">Por cobrar al recoger</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600">98%</span><span style="font-size:11px;color:#8A8F95">Entregados a tiempo</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Destinos frecuentes</span>
+                <div style="display:flex;align-items:center;gap:9px"><span style="font-size:13px;width:78px">Santa Cruz</span><div style="flex:1;height:8px;background:#EFEEEA;border-radius:999px;overflow:hidden"><div style="width:72%;height:8px;background:oklch(0.44 0.042 228)"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px">19</span></div>
+                <div style="display:flex;align-items:center;gap:9px"><span style="font-size:13px;width:78px">Cochabamba</span><div style="flex:1;height:8px;background:#EFEEEA;border-radius:999px;overflow:hidden"><div style="width:46%;height:8px;background:oklch(0.44 0.042 228)"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px">12</span></div>
+                <div style="display:flex;align-items:center;gap:9px"><span style="font-size:13px;width:78px">Oruro</span><div style="flex:1;height:8px;background:#EFEEEA;border-radius:999px;overflow:hidden"><div style="width:28%;height:8px;background:oklch(0.44 0.042 228)"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px">7</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-file-arrow-down" style="font-size:20px;color:#6E7379"></i><span style="font-size:14px;font-weight:500">Descargar detalle del mes</span><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">V·06</span><span style="font-size:15px;font-weight:600">Cuenta y cobros</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Lo que el Excel sí hacía bien: cuánto se gastó y qué falta cobrar.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════ CONDUCTOR ══════════ -->
+  <section style="display:flex;flex-direction:column;gap:28px" data-screen-label="Conductor">
+    <div style="background:#14171A;color:#F7F7F6;padding:28px 30px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+      <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8A8F95"><i class="ph ph-steering-wheel" style="font-size:15px"></i><span>Rol 02 · 5 pantallas</span></div>
+        <h2 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-0.02em">Conductor</h2>
+        <p style="margin:0;max-width:46ch;font-size:15px;line-height:1.55;color:#B6B8B0;text-wrap:pretty">Maneja mientras la usa. Cada pantalla resuelve una decisión sola, con botones grandes y el dinero siempre visible.</p>
+      </div>
+      <sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95;margin-bottom:2px">Tiene que poder</div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Ponerse disponible y dejar de estarlo en un toque</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Ver cuánto gana antes de aceptar</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Probar que recogió el paquete correcto</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Cerrar la entrega en sucursal sin depender del cuaderno</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Saber cuándo y cuánto le pagan</span></div>
+      </div>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:36px">
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:#14171A;color:#F7F7F6;padding:16px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;gap:11px">
+                <div style="width:38px;height:38px;border-radius:50%;background:#3C4148;display:flex;align-items:center;justify-content:center"><i class="ph ph-user" style="font-size:20px;color:#B6B8B0"></i></div>
+                <div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:600">Marco Q.</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">3421 KZP</span></div>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:8px"><span style="font-size:12px;color:oklch(0.75 0.13 155)">Disponible</span><div style="width:44px;height:26px;border-radius:999px;background:oklch(0.55 0.11 155);display:flex;align-items:center;justify-content:flex-end;padding:3px"><div style="width:20px;height:20px;border-radius:50%;background:#fff"></div></div></div>
+              </div>
+              <div style="display:flex;gap:20px">
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600">Bs 105</span><span style="font-size:11px;color:#8A8F95">Hoy</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600">7</span><span style="font-size:11px;color:#8A8F95">Carreras</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600">4,9</span><span style="font-size:11px;color:#8A8F95">Puntaje</span></div>
+              </div>
+            </div>
+            <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:9px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">En curso</span>
+                <div style="display:flex;align-items:center;gap:11px"><div style="width:34px;height:34px;border-radius:8px;background:oklch(0.96 0.03 68);display:flex;align-items:center;justify-content:center"><i class="ph ph-package" style="font-size:18px;color:oklch(0.55 0.13 68)"></i></div><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">TY-4471 · a sucursal</span><span style="font-size:11px;color:#6E7379">Entregar antes de 13:30</span></div><i class="ph ph-caret-right" style="font-size:17px;color:#A6ABB0;margin-left:auto"></i></div>
+              </div>
+              <div style="background:#fff;border:1px dashed #C9C8C2;border-radius:10px;padding:22px;display:flex;flex-direction:column;align-items:center;gap:7px">
+                <i class="ph ph-broadcast" style="font-size:26px;color:#8A8F95"></i>
+                <span style="font-size:13px;color:#6E7379;text-align:center;line-height:1.45">Buscando carreras cerca de Miraflores</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-map-pin-area" style="font-size:20px;color:#6E7379"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Zona de trabajo</span><span style="font-size:11px;color:#8A8F95">La Paz centro y sur</span></div><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+            </div>
+            <div style="border-top:1px solid #E0DFD9;background:#fff;display:grid;grid-template-columns:repeat(3,1fr);padding:9px 4px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:oklch(0.44 0.042 228)"><i class="ph-fill ph-steering-wheel" style="font-size:21px"></i><span style="font-size:10px;font-weight:600">Carreras</span></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A8F95"><i class="ph ph-map-trifold" style="font-size:21px"></i><span style="font-size:10px">Mapa</span></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A8F95"><i class="ph ph-wallet" style="font-size:21px"></i><span style="font-size:10px">Ganancias</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">C·01</span><span style="font-size:15px;font-weight:600">Turno</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Funciona igual con flota propia o con conductores de una app externa.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="height:230px;background:repeating-linear-gradient(45deg,#E6E5E0,#E6E5E0 6px,#EFEEEA 6px,#EFEEEA 12px);position:relative;display:flex;align-items:center;justify-content:center">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">[ mapa · recojo ]</span>
+              <div style="position:absolute;left:58px;top:78px;width:14px;height:14px;border-radius:50%;background:oklch(0.72 0.15 68);border:3px solid #fff"></div>
+              <div style="position:absolute;right:50px;bottom:56px;width:14px;height:14px;border-radius:50%;background:#14171A;border:3px solid #fff"></div>
+            </div>
+            <div style="flex:1;background:#F7F7F6;border-radius:20px 20px 0 0;margin-top:-20px;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:6px 10px;border-radius:999px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)"><i class="ph-fill ph-circle" style="font-size:7px"></i>Carrera entrante</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#6E7379;margin-left:auto">00:18</span>
+              </div>
+              <div style="font-size:21px;font-weight:600;letter-spacing:-0.02em;line-height:1.2">Recojo en Zona Miraflores</div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:11px">
+                <div style="display:flex;gap:11px;align-items:flex-start"><i class="ph-fill ph-circle" style="font-size:11px;color:oklch(0.72 0.15 68);margin-top:5px"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Av. Saavedra 1450</span><span style="font-size:11px;color:#6E7379">Tienda Ale · 1,2 km</span></div></div>
+                <div style="display:flex;gap:11px;align-items:flex-start"><i class="ph-fill ph-map-pin" style="font-size:13px;color:#14171A;margin-top:3px"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Oficina Bolívar · Terminal</span><span style="font-size:11px;color:#6E7379">Entrega antes de 13:30</span></div></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:#6E7379">Ganas por esta carrera</span><span style="font-family:'IBM Plex Mono',monospace;font-size:21px;font-weight:600">Bs 15,00</span></div>
+              <div style="margin-top:auto;display:flex;gap:9px">
+                <div style="width:50px;height:50px;border:1.5px solid #E0DFD9;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#fff;flex:none"><i class="ph ph-x" style="font-size:19px;color:#6E7379"></i></div>
+                <div style="flex:1;height:50px;background:oklch(0.44 0.042 228);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;border-radius:8px">Aceptar carrera</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">C·02</span><span style="font-size:15px;font-weight:600">Carrera entrante</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.955 0.012 228);color:oklch(0.41 0.042 228)">ya diseñada</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Una sola decisión, con el pago antes del sí.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:#14171A;color:#F7F7F6;padding:14px 16px;display:flex;flex-direction:column;gap:5px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">Paso 1 de 2 · en el punto de recojo</span>
+              <span style="font-size:19px;font-weight:600;letter-spacing:-0.02em">Verificá el paquete</span>
+            </div>
+            <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:9px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;letter-spacing:0.02em">TY-4471</span>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Declarado</span><span style="font-size:13px;font-weight:500">Caja de ropa · 3 kg</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Remitente</span><span style="font-size:13px;font-weight:500">Tienda Ale</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Foto del paquete</span>
+                <div style="height:120px;border:1.5px dashed #C9C8C2;border-radius:10px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px"><i class="ph ph-camera" style="font-size:26px;color:#8A8F95"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">obligatoria antes de salir</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-scales" style="font-size:20px;color:#6E7379"></i><span style="font-size:14px">El peso no coincide</span><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+              <div style="margin-top:auto;height:50px;background:oklch(0.44 0.042 228);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border-radius:8px"><i class="ph-bold ph-package" style="font-size:18px"></i>Recogido, voy a sucursal</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">C·03</span><span style="font-size:15px;font-weight:600">Recojo verificado</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">La foto es la prueba que hoy nadie tiene cuando algo se pierde.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;flex-direction:column;gap:4px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">Paso 2 de 2 · en la oficina</span><span style="font-size:19px;font-weight:600;letter-spacing:-0.02em">Entregá en sucursal</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:12px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Mostrá este código</span>
+                <div style="width:140px;height:140px;background:repeating-linear-gradient(45deg,#E6E5E0,#E6E5E0 5px,#F7F6F3 5px,#F7F6F3 10px);border-radius:8px;display:flex;align-items:center;justify-content:center"><i class="ph ph-qr-code" style="font-size:42px;color:#8A8F95"></i></div>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;letter-spacing:0.1em">4471</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-buildings" style="font-size:20px;color:#6E7379"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">Bolívar · Terminal La Paz</span><span style="font-size:11px;color:#6E7379">Ventanilla 3 · abierta hasta 22:00</span></div></div>
+              <div style="background:oklch(0.97 0.02 68);border-left:2px solid oklch(0.72 0.15 68);padding:11px 13px"><p style="margin:0;font-size:12px;line-height:1.5;color:#3C4148">Si la oficina no tiene señal, el código de 4 dígitos sirve igual: se sincroniza después.</p></div>
+              <div style="margin-top:auto;height:50px;background:#14171A;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border-radius:8px"><i class="ph-bold ph-check" style="font-size:18px"></i>Entregado a la oficina</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">C·04</span><span style="font-size:15px;font-weight:600">Entrega en oficina</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">El punto donde se cruzan conductor y sucursal: un código, dos registros.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;flex-direction:column;gap:3px"><span style="font-size:19px;font-weight:600;letter-spacing:-0.02em">Ganancias</span><span style="font-size:13px;color:#6E7379">Semana del 10 al 16 de agosto</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#14171A;color:#F7F7F6;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:12px;color:#8A8F95">A cobrar el lunes</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:32px;font-weight:600">Bs 640,00</span>
+                <span style="font-size:12px;color:#8A8F95">43 carreras · promedio Bs 14,9</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;overflow:hidden">
+                <div style="padding:12px 13px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EFEEEA"><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Viernes 15</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">7 carreras</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">Bs 105</span></div>
+                <div style="padding:12px 13px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EFEEEA"><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Jueves 14</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">9 carreras</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">Bs 138</span></div>
+                <div style="padding:12px 13px;display:flex;justify-content:space-between;align-items:center"><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Miércoles 13</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">6 carreras</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">Bs 92</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-bank" style="font-size:20px;color:#6E7379"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Cuenta de cobro</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">•••• 4408 · Banco Unión</span></div><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">C·05</span><span style="font-size:15px;font-weight:600">Liquidación</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Sin esto ningún conductor se queda: depende de cómo se reparta el cobro.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════ SUCURSAL ══════════ -->
+  <section style="display:flex;flex-direction:column;gap:28px" data-screen-label="Sucursal">
+    <div style="background:#14171A;color:#F7F7F6;padding:28px 30px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+      <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8A8F95"><i class="ph ph-stamp" style="font-size:15px"></i><span>Rol 03 · 4 pantallas</span></div>
+        <h2 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-0.02em">Sucursal</h2>
+        <p style="margin:0;max-width:46ch;font-size:15px;line-height:1.55;color:#B6B8B0;text-wrap:pretty">El cuaderno de la oficina, digitalizado. Es el único punto donde la app y el mundo físico se tienen que dar la mano dos veces: al despachar y al entregar.</p>
+      </div>
+      <sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95;margin-bottom:2px">Tiene que poder</div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Ver qué paquetes le van a llegar hoy y cuáles faltan</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Recibir, sellar y dejar constancia con una foto</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Cerrar el manifiesto de cada salida de bus</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Entregar en destino verificando identidad y cobrando si falta</span></div>
+      </div>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:36px">
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:#14171A;color:#F7F7F6;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95"><span>Sucursal La Paz · Bolívar</span><span>13:12</span></div>
+              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Cola de recepción</div>
+            </div>
+            <div style="padding:12px 16px;display:flex;gap:9px">
+              <div style="flex:1;height:42px;background:#fff;border:1px solid #E0DFD9;border-radius:8px;display:flex;align-items:center;gap:8px;padding:0 12px"><i class="ph ph-magnifying-glass" style="font-size:17px;color:#8A8F95"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#A6ABB0">Buscar guía</span></div>
+              <div style="width:42px;height:42px;background:#14171A;border-radius:8px;display:flex;align-items:center;justify-content:center"><i class="ph ph-qr-code" style="font-size:20px;color:#fff"></i></div>
+            </div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:9px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">En camino · 5</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.55 0.13 68)">salida 14:00</span></div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px"><i class="ph ph-truck" style="font-size:19px;color:oklch(0.55 0.13 68)"></i><div style="display:flex;flex-direction:column"><span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600">TY-4471</span><span style="font-size:11px;color:#6E7379">Marco Q. · a 6 min</span></div></div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px"><i class="ph ph-truck" style="font-size:19px;color:oklch(0.55 0.13 68)"></i><div style="display:flex;flex-direction:column"><span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600">TY-4473</span><span style="font-size:11px;color:#6E7379">Iván R. · a 14 min</span></div></div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:5px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Recibidos sin sellar · 2</span></div>
+              <div style="background:#fff;border:1px solid oklch(0.85 0.06 68);border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px"><i class="ph ph-package" style="font-size:19px;color:#14171A"></i><div style="display:flex;flex-direction:column"><span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600">TY-4469</span><span style="font-size:11px;color:oklch(0.50 0.12 68)">Esperando sello hace 22 min</span></div><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+            </div>
+            <div style="border-top:1px solid #E0DFD9;background:#fff;display:grid;grid-template-columns:repeat(3,1fr);padding:9px 4px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:oklch(0.44 0.042 228)"><i class="ph-fill ph-tray" style="font-size:21px"></i><span style="font-size:10px;font-weight:600">Recepción</span></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A8F95"><i class="ph ph-bus" style="font-size:21px"></i><span style="font-size:10px">Salidas</span></div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A8F95"><i class="ph ph-clock-counter-clockwise" style="font-size:21px"></i><span style="font-size:10px">Historial</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">S·01</span><span style="font-size:15px;font-weight:600">Cola de recepción</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Lo que llega, lo que está detenido. El cuaderno nunca supo esto.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:#14171A;color:#F7F7F6;padding:14px 16px;display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95"><span>Sucursal La Paz · Bolívar</span><span>14:20</span></div>
+              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Recepción de paquete</div>
+            </div>
+            <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:11px">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;letter-spacing:0.02em">TY-4471</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:11px">
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#6E7379">Remitente</span><span style="font-size:13px;font-weight:500">Tienda Ale</span></div>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#6E7379">Destino</span><span style="font-size:13px;font-weight:500">Santa Cruz</span></div>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#6E7379">Contenido</span><span style="font-size:13px;font-weight:500">Ropa · 3 kg</span></div>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:11px;color:#6E7379">Pago</span><span style="font-size:13px;font-weight:500;color:oklch(0.45 0.10 155)">Cobrado</span></div>
+                </div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Foto del voucher</span>
+                <div style="height:96px;border:1.5px dashed #C9C8C2;border-radius:10px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><i class="ph ph-camera" style="font-size:24px;color:#8A8F95"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">tomar foto del comprobante</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:11px"><i class="ph ph-identification-card" style="font-size:20px;color:#8A8F95"></i><span style="font-size:14px">Cédula verificada</span><div style="margin-left:auto;width:42px;height:25px;border-radius:999px;background:oklch(0.55 0.11 155);display:flex;align-items:center;justify-content:flex-end;padding:3px"><div style="width:19px;height:19px;border-radius:50%;background:#fff"></div></div></div>
+              <div style="margin-top:auto;height:50px;background:#14171A;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border-radius:8px"><i class="ph-bold ph-stamp" style="font-size:18px"></i>Sellar y despachar</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">S·02</span><span style="font-size:15px;font-weight:600">Sello y voucher</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.955 0.012 228);color:oklch(0.41 0.042 228)">ya diseñada</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Mismo dato del cuaderno, una foto y un botón grande.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;flex-direction:column;gap:3px"><span style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Salida 14:00</span><span style="font-size:13px;color:#6E7379">Bus 3421 KZP · La Paz → Santa Cruz</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600">54</span><span style="font-size:11px;color:#6E7379">Paquetes sellados</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:oklch(0.72 0.15 68)">3</span><span style="font-size:11px;color:#6E7379">Sin llegar</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;overflow:hidden">
+                <div style="padding:11px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #EFEEEA"><i class="ph-fill ph-check-circle" style="font-size:17px;color:oklch(0.55 0.11 155)"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:13px">TY-4471</span><span style="font-size:12px;color:#6E7379;margin-left:auto">Santa Cruz</span></div>
+                <div style="padding:11px 13px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #EFEEEA"><i class="ph-fill ph-check-circle" style="font-size:17px;color:oklch(0.55 0.11 155)"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:13px">TY-4470</span><span style="font-size:12px;color:#6E7379;margin-left:auto">Santa Cruz</span></div>
+                <div style="padding:11px 13px;display:flex;align-items:center;gap:9px"><i class="ph ph-clock" style="font-size:17px;color:oklch(0.72 0.15 68)"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:13px">TY-4473</span><span style="font-size:12px;color:oklch(0.50 0.12 68);margin-left:auto">en camino</span></div>
+              </div>
+              <div style="background:oklch(0.97 0.02 68);border-left:2px solid oklch(0.72 0.15 68);padding:11px 13px"><p style="margin:0;font-size:12px;line-height:1.5;color:#3C4148">Si cierras ahora, los 3 pendientes pasan solos a la salida de las 19:00 y se avisa a cada vendedor.</p></div>
+              <div style="margin-top:auto;height:50px;background:#14171A;color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border-radius:8px"><i class="ph-bold ph-bus" style="font-size:18px"></i>Cerrar manifiesto y despachar</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">S·03</span><span style="font-size:15px;font-weight:600">Manifiesto de salida</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">El momento exacto en que el paquete deja de tener ubicación en vivo.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:#14171A;color:#F7F7F6;padding:14px 16px;display:flex;flex-direction:column;gap:7px">
+              <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">Sucursal Santa Cruz · Bimodal</div>
+              <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Entrega al destinatario</div>
+            </div>
+            <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:9px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:600;letter-spacing:0.02em">TY-4471</span>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Retira</span><span style="font-size:13px;font-weight:500">Rosa Villca</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Código del cliente</span><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;letter-spacing:0.1em">4471</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:11px"><i class="ph ph-identification-card" style="font-size:20px;color:#8A8F95"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Cédula coincide</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">•••• 4408</span></div><i class="ph-fill ph-check-circle" style="font-size:19px;color:oklch(0.55 0.11 155);margin-left:auto"></i></div>
+              <div style="background:oklch(0.95 0.04 155);border:1px solid oklch(0.85 0.07 155);border-radius:10px;padding:13px;display:flex;align-items:center;gap:10px"><i class="ph-fill ph-check-circle" style="font-size:19px;color:oklch(0.45 0.10 155)"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600;color:oklch(0.38 0.09 155)">Nada por cobrar</span><span style="font-size:11px;color:oklch(0.45 0.09 155)">Pagado por el vendedor · Bs 65,00</span></div></div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Constancia de entrega</span>
+                <div style="height:80px;border:1.5px dashed #C9C8C2;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;gap:7px"><i class="ph ph-signature" style="font-size:22px;color:#8A8F95"></i><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">firma o foto</span></div>
+              </div>
+              <div style="margin-top:auto;height:50px;background:oklch(0.55 0.11 155);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border-radius:8px"><i class="ph-bold ph-check" style="font-size:18px"></i>Confirmar entrega</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">S·04</span><span style="font-size:15px;font-weight:600">Entrega en destino</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Cierra el ciclo: sin esta pantalla nadie sabe si el paquete llegó a manos de alguien.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════ DESTINATARIO ══════════ -->
+  <section style="display:flex;flex-direction:column;gap:28px" data-screen-label="Destinatario">
+    <div style="background:#14171A;color:#F7F7F6;padding:28px 30px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+      <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8A8F95"><i class="ph ph-user-circle" style="font-size:15px"></i><span>Rol 04 · 4 pantallas</span></div>
+        <h2 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-0.02em">Destinatario</h2>
+        <p style="margin:0;max-width:46ch;font-size:15px;line-height:1.55;color:#B6B8B0;text-wrap:pretty">Entra por un link, no por una tienda de apps. Nunca eligió Terminal Ya: hay que ganarlo en la primera pantalla y no perderlo cuando el mapa se apaga.</p>
+      </div>
+      <sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95;margin-bottom:2px">Tiene que poder</div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Ver su paquete sin cuenta, y crearla solo si quiere</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Entender por qué el mapa se detiene, sin sentirlo un vacío</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Saber dónde, cuándo y con qué código retirar</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Pagar al recoger si el vendedor no pagó</span></div>
+      </div>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:36px">
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="flex:1;padding:24px 18px;display:flex;flex-direction:column;gap:16px">
+              <div style="width:44px;height:44px;background:#14171A;border-radius:10px;position:relative;display:flex;align-items:center;justify-content:center">
+                <div style="width:24px;height:24px;border:2.5px solid #F7F7F6;border-radius:4px"></div>
+                <div style="position:absolute;left:0;top:20px;width:44px;height:2.5px;background:oklch(0.72 0.15 68)"></div>
+                <div style="position:absolute;left:30px;top:16.5px;width:9px;height:9px;border-radius:50%;background:oklch(0.72 0.15 68);border:2.5px solid #14171A"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <span style="font-size:24px;font-weight:600;letter-spacing:-0.02em;line-height:1.2;text-wrap:pretty">Tienda Ale te envió un paquete</span>
+                <span style="font-size:14px;color:#6E7379;line-height:1.5">Sale hoy de La Paz a Santa Cruz. Te avisamos en cada paso.</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;gap:11px;align-items:center">
+                <div style="width:36px;height:36px;border-radius:8px;background:#F7F7F6;display:flex;align-items:center;justify-content:center;flex:none"><i class="ph ph-package" style="font-size:19px"></i></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Caja de ropa · 3 kg</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">TY-4471</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px">
+                <div style="height:50px;background:oklch(0.44 0.042 228);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;border-radius:8px">Seguir mi paquete</div>
+                <div style="height:50px;background:#fff;border:1.5px solid #14171A;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;border-radius:8px">Crear cuenta con mi celular</div>
+              </div>
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#8A8F95;text-wrap:pretty">Con una cuenta guardas tus direcciones y ves todos tus paquetes, de cualquier tienda.</p>
+              <div style="margin-top:auto;background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px"><i class="ph ph-shield-check" style="font-size:19px;color:#6E7379"></i><span style="font-size:12px;line-height:1.45;color:#3C4148">No necesitas instalar nada. Funciona en tu navegador.</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">D·01</span><span style="font-size:15px;font-weight:600">Invitación por link</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">La puerta de entrada del cuarto rol: seguir primero, registrarse después.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 10px;display:flex;flex-direction:column;gap:3px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">TY-4471</span>
+              <span style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Tu paquete está en bus</span>
+              <span style="font-size:13px;color:#6E7379">Llega a Santa Cruz hoy ~21:40</span>
+            </div>
+            <div style="height:132px;margin:0 16px;border-radius:12px;background:repeating-linear-gradient(45deg,#E6E5E0,#E6E5E0 6px,#EFEEEA 6px,#EFEEEA 12px);display:flex;align-items:center;justify-content:center"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">[ mapa congelado · último punto ]</span></div>
+            <div style="flex:1;padding:16px;display:flex;flex-direction:column">
+              <div style="display:flex;gap:13px"><div style="display:flex;flex-direction:column;align-items:center;flex:none"><i class="ph-fill ph-check-circle" style="font-size:19px;color:oklch(0.55 0.11 155)"></i><div style="width:2px;flex:1;background:oklch(0.55 0.11 155)"></div></div><div style="padding-bottom:18px;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Recogido en tienda</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">12:05 · La Paz</span></div></div>
+              <div style="display:flex;gap:13px"><div style="display:flex;flex-direction:column;align-items:center;flex:none"><i class="ph-fill ph-check-circle" style="font-size:19px;color:oklch(0.55 0.11 155)"></i><div style="width:2px;flex:1;background:oklch(0.55 0.11 155)"></div></div><div style="padding-bottom:18px;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Sellado en sucursal</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95">14:22 · Bolívar La Paz</span></div></div>
+              <div style="display:flex;gap:13px"><div style="display:flex;flex-direction:column;align-items:center;flex:none"><i class="ph-fill ph-circle" style="font-size:19px;color:oklch(0.72 0.15 68)"></i><div style="width:2px;flex:1;background:#E0DFD9"></div></div><div style="padding-bottom:18px;display:flex;flex-direction:column;gap:4px"><span style="font-size:14px;font-weight:600">En ruta</span><span style="font-size:12px;line-height:1.45;color:#6E7379">Mientras viaja en bus no hay ubicación en vivo: te avisamos cuando llegue a la terminal.</span></div></div>
+              <div style="display:flex;gap:13px"><div style="display:flex;flex-direction:column;align-items:center;flex:none"><i class="ph ph-circle" style="font-size:19px;color:#C9C8C2"></i></div><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600;color:#A6ABB0">Listo para recoger</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#A6ABB0">Terminal Bimodal</span></div></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">D·02</span><span style="font-size:15px;font-weight:600">Seguimiento</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.955 0.012 228);color:oklch(0.41 0.042 228)">ya diseñada</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">El límite del mapa se explica en el hito, no se disimula.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:oklch(0.55 0.11 155);color:#fff;padding:18px 16px;display:flex;flex-direction:column;gap:5px">
+              <i class="ph-fill ph-check-circle" style="font-size:26px"></i>
+              <span style="font-size:21px;font-weight:600;letter-spacing:-0.02em">Llegó a Santa Cruz</span>
+              <span style="font-size:13px;opacity:0.9">Puedes retirarlo desde las 21:40</span>
+            </div>
+            <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Código de retiro</span>
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:38px;font-weight:600;letter-spacing:0.14em">4471</span>
+                <span style="font-size:12px;color:#6E7379;text-align:center;line-height:1.45">Muéstralo con tu cédula en ventanilla</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:9px">
+                <div style="display:flex;gap:11px;align-items:flex-start"><i class="ph ph-map-pin" style="font-size:19px;color:#6E7379;margin-top:2px"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">Bolívar · Terminal Bimodal</span><span style="font-size:12px;color:#6E7379">Ventanilla 7 · Av. Brasil</span></div></div>
+                <div style="display:flex;gap:11px;align-items:flex-start"><i class="ph ph-clock" style="font-size:19px;color:#6E7379;margin-top:2px"></i><span style="font-size:13px;color:#3C4148">Hoy hasta 23:00 · mañana 06:00 a 23:00</span></div>
+              </div>
+              <div style="background:oklch(0.97 0.03 68);border:1px solid oklch(0.88 0.06 68);border-radius:10px;padding:13px;display:flex;align-items:center;gap:10px"><i class="ph ph-hand-coins" style="font-size:20px;color:oklch(0.50 0.12 68)"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">Pagar Bs 65,00 al recoger</span><span style="font-size:11px;color:oklch(0.50 0.12 68)">O paga ahora por QR y solo muestras el código</span></div></div>
+              <div style="margin-top:auto;display:flex;gap:9px">
+                <div style="flex:1;height:48px;background:#fff;border:1.5px solid #14171A;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:600"><i class="ph ph-navigation-arrow" style="font-size:17px"></i>Cómo llegar</div>
+                <div style="flex:1;height:48px;background:oklch(0.44 0.042 228);color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14px;font-weight:600"><i class="ph ph-qr-code" style="font-size:17px"></i>Pagar ahora</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">D·03</span><span style="font-size:15px;font-weight:600">Listo para recoger</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">La pantalla que más se va a abrir: código, dirección, horario y pago.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:16px;display:flex;flex-direction:column;gap:4px"><span style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Entregado</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8A8F95">TY-4471 · 22:14 · Ventanilla 7</span></div>
+            <div style="flex:1;padding:0 16px 16px;display:flex;flex-direction:column;gap:12px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:11px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Comprobante</span>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Enviado por</span><span style="font-size:13px;font-weight:500">Tienda Ale</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Recorrido</span><span style="font-size:13px;font-weight:500">La Paz → Santa Cruz</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Tiempo total</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500">10 h 09 min</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="font-size:13px;color:#6E7379">Pagado</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500">Bs 65,00</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:11px;align-items:center">
+                <span style="font-size:14px;font-weight:600;text-align:center">¿Cómo estuvo el envío?</span>
+                <div style="display:flex;gap:9px"><i class="ph ph-star" style="font-size:26px;color:oklch(0.72 0.15 68)"></i><i class="ph ph-star" style="font-size:26px;color:oklch(0.72 0.15 68)"></i><i class="ph ph-star" style="font-size:26px;color:oklch(0.72 0.15 68)"></i><i class="ph ph-star" style="font-size:26px;color:#C9C8C2"></i><i class="ph ph-star" style="font-size:26px;color:#C9C8C2"></i></div>
+              </div>
+              <div style="margin-top:auto;background:#14171A;color:#F7F7F6;border-radius:10px;padding:15px;display:flex;flex-direction:column;gap:9px">
+                <span style="font-size:14px;font-weight:600;line-height:1.4;text-wrap:pretty">¿Tú también envías encomiendas?</span>
+                <span style="font-size:12px;color:#B6B8B0;line-height:1.5">Con la misma cuenta puedes despachar desde tu casa.</span>
+                <div style="height:44px;background:#F7F7F6;color:#14171A;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;margin-top:2px">Enviar un paquete</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">D·04</span><span style="font-size:15px;font-weight:600">Entregado</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Cierre, prueba y el único momento honesto para convertir al destinatario en vendedor.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════ EMPRESA ALIADA ══════════ -->
+  <section style="display:flex;flex-direction:column;gap:28px" data-screen-label="Empresa aliada">
+    <div style="background:#14171A;color:#F7F7F6;padding:28px 30px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+      <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#8A8F95"><i class="ph ph-bus" style="font-size:15px"></i><span>Rol 05 · 3 pantallas · escritorio o tablet</span></div>
+        <h2 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-0.02em">Empresa aliada</h2>
+        <p style="margin:0;max-width:46ch;font-size:15px;line-height:1.55;color:#B6B8B0;text-wrap:pretty">Bolívar hoy. No usa la app para trabajar sino para decidir si le conviene: volumen, cumplimiento y dinero.</p>
+      </div>
+      <sc-if value="{{ showChecklist }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:9px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95;margin-bottom:2px">Tiene que poder</div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Ver cuánto volumen le trae Terminal Ya por salida y por día</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Administrar sus sucursales y quién puede sellar</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><i class="ph ph-check" style="font-size:15px;color:oklch(0.72 0.15 68);margin-top:3px"></i><span style="font-size:14px;line-height:1.45">Cuadrar lo cobrado y lo que le corresponde</span></div>
+      </div>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:36px">
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="background:#14171A;color:#F7F7F6;padding:16px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:18px;font-weight:600">Flota Bolívar</span><i class="ph ph-calendar-blank" style="font-size:19px;color:#8A8F95"></i></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600">128</span><span style="font-size:11px;color:#8A8F95">Envíos hoy</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600;color:oklch(0.72 0.15 68)">14</span><span style="font-size:11px;color:#8A8F95">Sin sellar</span></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:600">3</span><span style="font-size:11px;color:#8A8F95">Buses</span></div>
+              </div>
+            </div>
+            <div style="flex:1;padding:16px;display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;gap:7px">
+                <span style="font-size:12px;font-weight:600;padding:6px 11px;border-radius:999px;background:#14171A;color:#fff">Hoy</span>
+                <span style="font-size:12px;padding:6px 11px;border-radius:999px;background:#fff;border:1px solid #E0DFD9;color:#6E7379">Semana</span>
+                <span style="font-size:12px;padding:6px 11px;border-radius:999px;background:#fff;border:1px solid #E0DFD9;color:#6E7379">Mes</span>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:11px">
+                <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">Por salida</span>
+                <div style="display:flex;align-items:center;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;width:40px;color:#6E7379">14:00</span><div style="flex:1;height:8px;background:#EFEEEA;border-radius:999px;overflow:hidden"><div style="width:78%;height:8px;background:oklch(0.44 0.042 228)"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;width:24px;text-align:right">54</span></div>
+                <div style="display:flex;align-items:center;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;width:40px;color:#6E7379">19:00</span><div style="flex:1;height:8px;background:#EFEEEA;border-radius:999px;overflow:hidden"><div style="width:56%;height:8px;background:oklch(0.44 0.042 228)"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;width:24px;text-align:right">39</span></div>
+                <div style="display:flex;align-items:center;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;width:40px;color:#6E7379">22:30</span><div style="flex:1;height:8px;background:#EFEEEA;border-radius:999px;overflow:hidden"><div style="width:50%;height:8px;background:oklch(0.72 0.15 68)"></div></div><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;width:24px;text-align:right">35</span></div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-warning-circle" style="font-size:20px;color:oklch(0.72 0.15 68)"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:600">14 paquetes sin sellar</span><span style="font-size:11px;color:#6E7379">Salida 22:30 · sucursal La Paz</span></div><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">T·01</span><span style="font-size:15px;font-weight:600">Dashboard</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.955 0.012 228);color:oklch(0.41 0.042 228)">ya diseñada</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Volumen por salida y lo que está atrasado.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;flex-direction:column;gap:3px"><span style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Sucursales y equipo</span><span style="font-size:13px;color:#6E7379">4 oficinas · 11 personas</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:9px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:9px">
+                <div style="display:flex;align-items:center;gap:10px"><i class="ph ph-buildings" style="font-size:19px"></i><span style="font-size:14px;font-weight:600">La Paz · Terminal</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95;margin-left:auto">4 personas</span></div>
+                <div style="display:flex;gap:7px;flex-wrap:wrap">
+                  <span style="font-size:11px;padding:5px 9px;border-radius:999px;background:oklch(0.95 0.04 155);color:oklch(0.42 0.10 155);font-weight:500">Puede sellar</span>
+                  <span style="font-size:11px;padding:5px 9px;border-radius:999px;background:#EFEEEA;color:#6E7379">Puede cobrar</span>
+                </div>
+              </div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:10px"><i class="ph ph-buildings" style="font-size:19px"></i><span style="font-size:14px;font-weight:600">Santa Cruz · Bimodal</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8A8F95;margin-left:auto">3 personas</span></div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:10px;opacity:0.7"><i class="ph ph-buildings" style="font-size:19px"></i><span style="font-size:14px;font-weight:600">Oruro</span><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.55 0.13 68);margin-left:auto">sin activar</span></div>
+              <div style="background:#fff;border:1px dashed #C9C8C2;border-radius:10px;padding:13px;display:flex;align-items:center;gap:10px;justify-content:center"><i class="ph ph-plus" style="font-size:17px;color:#6E7379"></i><span style="font-size:14px;font-weight:500;color:#3C4148">Invitar a alguien</span></div>
+              <div style="margin-top:auto;background:oklch(0.97 0.02 68);border-left:2px solid oklch(0.72 0.15 68);padding:11px 13px"><p style="margin:0;font-size:12px;line-height:1.5;color:#3C4148">Pendiente de definir: si este administrador es de la empresa aliada o de Terminal Ya.</p></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">T·02</span><span style="font-size:15px;font-weight:600">Sucursales y permisos</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">Responde una de las preguntas abiertas del brief: quién puede sellar y cobrar.</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+        <div style="padding:10px 7px;background:#14171A;border-radius:30px">
+          <div style="background:#F7F7F6;border-radius:22px;overflow:hidden;height:600px;display:flex;flex-direction:column">
+            <div style="padding:14px 16px 12px;display:flex;flex-direction:column;gap:3px"><span style="font-size:20px;font-weight:600;letter-spacing:-0.02em">Liquidación</span><span style="font-size:13px;color:#6E7379">Semana del 10 al 16 de agosto</span></div>
+            <div style="flex:1;padding:0 16px 14px;display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;overflow:hidden">
+                <div style="padding:13px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EFEEEA"><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Cobrado por la app</span><span style="font-size:11px;color:#6E7379">612 envíos</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600">Bs 39.780</span></div>
+                <div style="padding:13px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EFEEEA"><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Recojos a conductores</span><span style="font-size:11px;color:#6E7379">No corresponde a Bolívar</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#8A8F95">– Bs 9.180</span></div>
+                <div style="padding:13px;display:flex;justify-content:space-between;align-items:center"><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Servicio Terminal Ya</span><span style="font-size:11px;color:#6E7379">Comisión por definir</span></div><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:oklch(0.55 0.13 68)">– por definir</span></div>
+              </div>
+              <div style="background:#14171A;color:#F7F7F6;border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:500">A transferir</span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600">Bs 30.600</span></div>
+              <div style="background:#fff;border:1px solid #E0DFD9;border-radius:10px;padding:13px;display:flex;align-items:center;gap:11px"><i class="ph ph-tag" style="font-size:20px;color:#6E7379"></i><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Tarifas por ruta</span><span style="font-size:11px;color:#8A8F95">La Paz → Santa Cruz · Bs 50 hasta 5 kg</span></div><i class="ph ph-caret-right" style="font-size:16px;color:#A6ABB0;margin-left:auto"></i></div>
+              <div style="margin-top:auto;height:48px;background:#fff;border:1.5px solid #14171A;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600"><i class="ph ph-file-arrow-down" style="font-size:17px"></i>Exportar detalle</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8A8F95">T·03</span><span style="font-size:15px;font-weight:600">Liquidación y tarifas</span><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 6px;background:oklch(0.96 0.03 68);color:oklch(0.45 0.10 68)">nueva</span></div>
+          <span style="font-size:13px;color:#6E7379;line-height:1.45">La conversación comercial pendiente, hecha pantalla: falta la comisión.</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <sc-if value="{{ showHandoffs }}" hint-placeholder-val="{{ true }}">
+  <section style="display:flex;flex-direction:column;gap:22px">
+    <div style="display:flex;align-items:baseline;gap:12px">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.44 0.042 228)">↔</span>
+      <h2 style="margin:0;font-size:13px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#3C4148">Dónde se tocan los roles</h2>
+    </div>
+    <p style="margin:0;max-width:64ch;font-size:16px;line-height:1.6;color:#3C4148;text-wrap:pretty">Cuatro traspasos. Cada uno es un punto donde hoy se pierde información, y donde la app tiene que dejar una prueba que sirva para las dos partes.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:#E0DFD9;border:1px solid #E0DFD9">
+      <div style="background:#fff;padding:20px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8F95">V·04 → C·03</div>
+        <div style="font-size:15px;font-weight:600;line-height:1.35">Vendedor entrega al conductor</div>
+        <div style="font-size:13px;line-height:1.5;color:#6E7379">Prueba: foto del paquete y hora del recojo.</div>
+      </div>
+      <div style="background:#fff;padding:20px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8F95">C·04 → S·02</div>
+        <div style="font-size:15px;font-weight:600;line-height:1.35">Conductor entrega en sucursal</div>
+        <div style="font-size:13px;line-height:1.5;color:#6E7379">Prueba: código de 4 dígitos, funciona sin señal.</div>
+      </div>
+      <div style="background:#fff;padding:20px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8F95">S·03 → D·02</div>
+        <div style="font-size:15px;font-weight:600;line-height:1.35">Sucursal despacha el bus</div>
+        <div style="font-size:13px;line-height:1.5;color:#6E7379">Aquí muere el mapa en vivo y empiezan los hitos.</div>
+      </div>
+      <div style="background:#fff;padding:20px;display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#8A8F95">S·04 → D·04</div>
+        <div style="font-size:15px;font-weight:600;line-height:1.35">Sucursal entrega al destinatario</div>
+        <div style="font-size:13px;line-height:1.5;color:#6E7379">Prueba: cédula, código y firma. Cierra el cobro.</div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <section style="background:#14171A;color:#F7F7F6;padding:40px 34px;display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95"><i class="ph ph-target" style="font-size:15px"></i><span>Qué construir primero</span></div>
+    <p style="margin:0;max-width:64ch;font-size:20px;line-height:1.5;font-weight:500;text-wrap:pretty">Para la demo de este mes: el carril completo del vendedor (V·01 → V·04) navegable, y una pantalla estática por cada otro rol. Lo que no se puede simular es el traspaso C·04 → S·02: ese conviene mostrarlo funcionando, porque es el que reemplaza al cuaderno.</p>
+  </section>
+    </div>
+  </section>
+  </sc-if>
+
+  <section style="background:#14171A;color:#F7F7F6;padding:40px 34px;display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#8A8F95">
+      <i class="ph ph-compass" style="font-size:15px"></i><span>Regla de la marca</span>
+    </div>
+    <p style="margin:0;max-width:64ch;font-size:20px;line-height:1.5;font-weight:500;text-wrap:pretty">Terminal Ya no vende velocidad, vende saber dónde está el paquete. Cuando no lo sabemos, la pantalla lo dice con las mismas letras con que da una buena noticia.</p>
+  </section>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showSpecs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;},&quot;showComponents&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;},&quot;showScreens&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;},&quot;showChecklist&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;},&quot;showHandoffs&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Contenido&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      showSpecs: this.props.showSpecs ?? true,
+      showComponents: this.props.showComponents ?? true,
+      showScreens: this.props.showScreens ?? true,
+      showChecklist: this.props.showChecklist ?? true,
+      showHandoffs: this.props.showHandoffs ?? true,
+      icons: [
+        { i: "ph ph-package", n: "package" },
+        { i: "ph ph-truck", n: "truck" },
+        { i: "ph ph-bus", n: "bus" },
+        { i: "ph ph-stamp", n: "stamp" },
+        { i: "ph ph-map-pin", n: "map-pin" },
+        { i: "ph ph-steering-wheel", n: "steering-wheel" },
+        { i: "ph ph-qr-code", n: "qr-code" },
+        { i: "ph ph-camera", n: "camera" },
+        { i: "ph ph-identification-card", n: "id-card" },
+        { i: "ph ph-user-circle", n: "user-circle" },
+        { i: "ph ph-clock", n: "clock" },
+        { i: "ph ph-warning-circle", n: "warning-circle" },
+        { i: "ph-fill ph-check-circle", n: "check-circle · fill" },
+        { i: "ph ph-tag", n: "tag" },
+        { i: "ph ph-chart-bar", n: "chart-bar" },
+        { i: "ph ph-magnifying-glass", n: "magnifying-glass" }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>

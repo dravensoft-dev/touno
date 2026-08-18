@@ -1,0 +1,41 @@
+<div class="arena-stack arena-stack--section">
+  <arena-hero
+    eyebrow="Conducir con Touno"
+    title="Te contratan por carreras, y tú decides si aceptas"
+    lede="Un restaurante o una importadora te busca por zona, te ofrece un número de carreras y una tarifa. La oferta llega a tu bandeja y no corre hasta que la aceptas."
+  >
+    <div actions class="arena-row">
+      <arena-button size="lg" icon="ph-bold ph-steering-wheel" (click)="goTo('/conductor/turno')">
+        Entrar al panel del conductor
+      </arena-button>
+    </div>
+  </arena-hero>
+
+  <arena-section
+    eyebrow="Cómo funciona"
+    title="Sin sorpresas al final de la semana"
+    description="Lo que ves antes de aceptar es lo que cobras."
+    rhythm="md"
+  >
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-handshake"
+        label="Contratación"
+        value="Por carreras"
+        sub="Un negocio te ofrece N carreras a una tarifa fija y tú aceptas o rechazas."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-hand-coins"
+        label="Pago"
+        value="Semanal"
+        sub="Se liquida el lunes a la cuenta que registres."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-camera"
+        label="Respaldo"
+        value="Foto y código"
+        sub="La foto del recojo y el código de cuatro dígitos son tu prueba si algo se pierde."
+      />
+    </arena-grid>
+  </arena-section>
+</div>

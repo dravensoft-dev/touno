@@ -1,0 +1,30 @@
+<ol class="timeline arena-stack">
+  @for (step of steps(); track step.kind) {
+    <li class="timeline__step" [class.is-reached]="step.reached" [class.is-current]="step.current">
+      <span class="timeline__bullet" aria-hidden="true">
+        @if (step.reached) {
+          <i class="ph-fill ph-check-circle"></i>
+        } @else if (step.current) {
+          <i class="ph-fill ph-circle"></i>
+        } @else {
+          <i class="ph ph-circle"></i>
+        }
+      </span>
+
+      <span class="timeline__body arena-stack arena-stack--group">
+        <span class="timeline__label">{{ step.label }}</span>
+        @if (step.stamp) {
+          <span class="timeline__stamp arena-num">
+            {{ step.stamp }}
+            @if (step.place) {
+              · {{ step.place }}
+            }
+          </span>
+        }
+        @if (step.note && !step.reached) {
+          <span class="timeline__note">{{ step.note }}</span>
+        }
+      </span>
+    </li>
+  }
+</ol>

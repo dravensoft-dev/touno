@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es" class="arena-comfortable">
+  <head>
+    <meta charset="utf-8" />
+    <title>Touno</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="theme-color" content="#f7f7f6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14171a" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href="fonts/ibm-plex-mono-latin-500.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script>
+      (function () {
+        var DEFAULT = 'papel';
+        var PREFERS_DARK = 'noche';
+        try {
+          var name = localStorage.getItem('arena-theme');
+          if (!name && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            name = PREFERS_DARK;
+          }
+          if (name && name !== DEFAULT && /^[a-z][a-z0-9-]*$/.test(name)) {
+            document.documentElement.classList.add('arena-' + name);
+          }
+        } catch (error) {
+          void error;
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
+</html>

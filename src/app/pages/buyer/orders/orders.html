@@ -1,0 +1,39 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Mis pedidos"
+    subtitle="Comida y encomiendas en la misma lista."
+  />
+
+  <arena-segmented-control
+    ariaLabel="Filtrar pedidos"
+    [options]="filters"
+    [value]="filter()"
+    (change)="filter.set($event)"
+  />
+
+  @if (rows().length > 0) {
+    <arena-table label="Pedidos del comprador" [columns]="columns">
+      @for (row of rows(); track row.code) {
+        <tr arena-table-row interactive (click)="open(row.slug)">
+          <td arena-table-cell>{{ row.code }}</td>
+          <td arena-table-cell>{{ row.merchant }}</td>
+          <td arena-table-cell><app-status-tag [order]="row.state" /></td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.placed }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.total }}</span>
+          </td>
+        </tr>
+      }
+    </arena-table>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-package"
+      title="Nada en este filtro"
+      message="Cambia el filtro o haz tu primer pedido."
+    />
+  }
+</div>

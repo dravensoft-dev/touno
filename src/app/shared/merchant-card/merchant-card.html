@@ -1,0 +1,37 @@
+<arena-card [href]="href()" (click)="open()">
+  <arena-figure>
+    @if (cover(); as source) {
+      <img media [src]="source" [alt]="merchant().name" loading="lazy" decoding="async" />
+    } @else {
+      <i fallback [class]="fallbackIcon()" aria-hidden="true"></i>
+    }
+  </arena-figure>
+
+  <div class="merchant-card__body arena-stack arena-stack--group">
+    <p class="merchant-card__place">{{ merchant().city }} · {{ merchant().zone }}</p>
+    @if (headingLevel() === 'h2') {
+      <h2 class="merchant-card__name">{{ merchant().name }}</h2>
+    } @else {
+      <h3 class="merchant-card__name">{{ merchant().name }}</h3>
+    }
+    <p class="merchant-card__summary">{{ merchant().summary }}</p>
+
+    <div class="merchant-card__tags arena-row">
+      @for (tag of merchant().tags; track tag) {
+        <arena-tag tone="neutral">{{ tag }}</arena-tag>
+      }
+      @if (!merchant().open) {
+        <arena-tag tone="warning">Cerrado ahora</arena-tag>
+      }
+    </div>
+
+    <p class="merchant-card__meta arena-row arena-row--baseline">
+      <span class="merchant-card__rating arena-num">
+        <i class="ph-fill ph-star" aria-hidden="true"></i>
+        {{ merchant().rating }}
+      </span>
+      <span class="merchant-card__reviews arena-num">{{ merchant().reviewCount }} reseñas</span>
+      <span class="merchant-card__delivery arena-num">Envío {{ delivery() }}</span>
+    </p>
+  </div>
+</arena-card>

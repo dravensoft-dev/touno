@@ -1,0 +1,78 @@
+<div class="arena-stack arena-stack--section">
+  <app-shipment-header [guia]="shipment().guia" [line]="shipment().content" [meta]="meta()" />
+
+  <div class="arena-row">
+    <app-status-tag [shipment]="shipment().state" />
+  </div>
+
+  <app-shipment-timeline [milestones]="shipment().milestones" />
+
+  <arena-key-value [rows]="facts()" />
+
+  <arena-card title="Compartir seguimiento" eyebrow="Para tu comprador">
+    <p class="arena-num">{{ shareUrl() }}</p>
+    <div action>
+      <arena-icon-button icon="ph-bold ph-copy" label="Copiar el enlace de seguimiento" />
+    </div>
+  </arena-card>
+
+  @if (driver(); as who) {
+    <arena-people-list label="Conductor asignado">
+      <arena-person-row
+        [name]="who.name"
+        [secondary]="who.plate + ' · ' + who.vehicle"
+        [figure]="who.rating.toString()"
+      >
+        <div action>
+          <arena-button variant="ghost" icon="ph-bold ph-phone">Llamar</arena-button>
+        </div>
+      </arena-person-row>
+    </arena-people-list>
+  }
+
+  @if (shipment().voucherPhoto) {
+    <arena-card title="Voucher de sucursal" eyebrow="Prueba del sello">
+      <arena-figure>
+        <i fallback class="ph ph-camera" aria-hidden="true"></i>
+      </arena-figure>
+    </arena-card>
+  }
+
+  <div class="arena-row">
+    <arena-button variant="danger" icon="ph-bold ph-warning-circle" (click)="openReport()">
+      Reportar un problema
+    </arena-button>
+  </div>
+
+  <arena-dialog
+    [open]="reporting()"
+    title="Reportar un problema"
+    eyebrow="Envío {{ shipment().guia }}"
+    (close)="closeReport()"
+  >
+    <div class="arena-stack">
+      <arena-radio-group
+        ariaLabel="Motivo del reporte"
+        [value]="reason()"
+        (change)="reason.set($event)"
+      >
+        <arena-radio value="retraso" label="Va con retraso" />
+        <arena-radio value="peso" label="El peso no coincide" />
+        <arena-radio value="dano" label="Llegó dañado" />
+        <arena-radio value="perdida" label="No aparece" />
+      </arena-radio-group>
+
+      <arena-textarea
+        label="Cuéntanos qué pasó"
+        placeholder="Lo que sepas ayuda a encontrarlo más rápido."
+        [value]="note()"
+        (change)="note.set($event)"
+      />
+    </div>
+
+    <div footer class="arena-row">
+      <arena-button variant="ghost" (click)="closeReport()">Cancelar</arena-button>
+      <arena-button variant="danger" (click)="closeReport()">Enviar el reporte</arena-button>
+    </div>
+  </arena-dialog>
+</div>

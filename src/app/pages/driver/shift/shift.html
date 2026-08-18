@@ -1,0 +1,78 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    [title]="me().name"
+    [subtitle]="me().plate + ' · ' + me().city"
+  >
+    <div actions>
+      <arena-switch
+        label="Disponible para carreras"
+        [state]="me().available"
+        (requestChange)="toggle()"
+      />
+    </div>
+  </arena-page-head>
+
+  @if (pendingOffers().length > 0) {
+    <arena-card title="Tienes ofertas de contratación" eyebrow="Sin responder" headingLevel="h2">
+      <p>
+        {{ pendingOffers().length }} negocio(s) quieren contratarte por un número fijo de carreras.
+        Nada corre hasta que aceptas.
+      </p>
+      <div action>
+        <arena-button variant="secondary" icon="ph-bold ph-handshake" (click)="toOffers()">
+          Ver ofertas
+        </arena-button>
+      </div>
+    </arena-card>
+  }
+
+  <arena-grid>
+    <arena-stat-card icon="ph-bold ph-hand-coins" label="Hoy" [value]="today()" />
+    <arena-stat-card icon="ph-bold ph-navigation-arrow" label="Carreras" [value]="ridesToday()" />
+    <arena-stat-card icon="ph-fill ph-star" label="Puntaje" [value]="rating()" tone="success" />
+  </arena-grid>
+
+  @if (running(); as ride) {
+    <arena-card
+      [title]="ride.guia ?? ride.orderCode ?? ride.id"
+      eyebrow="En curso"
+      headingLevel="h2"
+    >
+      <p>{{ ride.pickup.label }} → {{ ride.dropoff.label }}</p>
+      <arena-progress-bar
+        label="Tiempo de la carrera en curso"
+        [progressPercentage]="60"
+        tone="gold"
+      />
+      <p>Entregar antes de {{ before() }}</p>
+      <div action>
+        <arena-button icon="ph-bold ph-arrow-right" (click)="continueRide()"
+          >Continuar</arena-button
+        >
+      </div>
+    </arena-card>
+  } @else if (me().available) {
+    <arena-empty-state
+      icon="ph-bold ph-broadcast"
+      title="Buscando carreras cerca"
+      [message]="'Estás disponible en ' + zone() + '. Te avisamos apenas entre una.'"
+    />
+    <div class="arena-row">
+      <arena-spinner label="Buscando carreras" />
+    </div>
+  } @else {
+    <arena-empty-state
+      icon="ph-bold ph-moon"
+      title="Estás fuera de turno"
+      message="Ponte disponible para volver a recibir carreras."
+    />
+  }
+
+  <arena-select
+    label="Zona de trabajo"
+    [options]="zones()"
+    [value]="zone()"
+    (change)="zone.set($event)"
+  />
+</div>

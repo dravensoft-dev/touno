@@ -1,0 +1,525 @@
+{
+  "r-surface": {
+    "$type": "dimension",
+    "$value": "{r.md}",
+    "$description": "Cards take the brief's 10px corner."
+  },
+  "r-surface-floating": {
+    "$type": "dimension",
+    "$value": "{r.md}",
+    "$description": "A menu is a small card in this identity, so it keeps the card corner."
+  },
+  "r-control": {
+    "$type": "dimension",
+    "$value": {
+      "value": 8,
+      "unit": "px"
+    },
+    "$description": "The brief's button corner. The radius scale has no 8, so this is a literal."
+  },
+  "r-control-sm": {
+    "$type": "dimension",
+    "$value": "{r.sm}",
+    "$description": "Checkbox and segment, one step under the button."
+  },
+  "r-field": {
+    "$type": "dimension",
+    "$value": {
+      "value": 8,
+      "unit": "px"
+    },
+    "$description": "A field matches the button it sits beside."
+  },
+  "r-marker": {
+    "$type": "dimension",
+    "$value": "{r.pill}",
+    "$description": "Status pills and badges are fully round, as the brief draws them."
+  },
+  "r-media": {
+    "$type": "dimension",
+    "$value": "{r.md}",
+    "$description": "A photo takes the corner of the card that holds it."
+  },
+  "aspect-media": {
+    "$type": "number",
+    "$value": 1.5,
+    "$description": "Width over height: 3:2 landscape for covers, dishes and frozen maps."
+  },
+  "fit-media": {
+    "$type": "keyword",
+    "$value": "cover",
+    "$description": "Photos fill their frame; a parcel photo is evidence, not composition."
+  },
+  "overlay-media": {
+    "$type": "color",
+    "$value": "{color.base-100}",
+    "$description": "The page closing over a picture, which here is paper."
+  },
+  "fw-heading": {
+    "$type": "fontWeight",
+    "$value": "{fw.semibold}",
+    "$description": "The brief writes every title at 600."
+  },
+  "track-heading": {
+    "$type": "number",
+    "$value": "{ls.tight}",
+    "$extensions": {
+      "com.dravensoft.arena": {
+        "cssUnit": "em"
+      }
+    },
+    "$description": "The nearest step to the brief's -0.03em on large titles."
+  },
+  "lh-prose": {
+    "$type": "number",
+    "$value": "{lh.body}",
+    "$description": "Reads well at 15px and clears the 1.5 floor."
+  },
+  "lh-heading": {
+    "$type": "number",
+    "$value": "{lh.snug}",
+    "$description": "The brief's 1.04 falls under the floor of 1; this is the nearest legal step."
+  },
+  "measure-prose": {
+    "$type": "number",
+    "$value": 64,
+    "$extensions": {
+      "com.dravensoft.arena": {
+        "cssUnit": "ch"
+      }
+    },
+    "$description": "The brief's own 64ch reading column."
+  },
+  "ff-heading": {
+    "$type": "fontFamily",
+    "$value": "{font.display}",
+    "$description": "Archivo carries every title."
+  },
+  "ff-eyebrow": {
+    "$type": "fontFamily",
+    "$value": "{font.mono}",
+    "$description": "The brief's eyebrow is IBM Plex Mono, which is what makes it read as a system label."
+  },
+  "ff-label": {
+    "$type": "fontFamily",
+    "$value": "{font.display}",
+    "$description": "Field labels stay in the interface face."
+  },
+  "fw-eyebrow": {
+    "$type": "fontWeight",
+    "$value": "{fw.medium}",
+    "$description": "The eyebrow is small and uppercase; 500 is enough weight."
+  },
+  "fw-control": {
+    "$type": "fontWeight",
+    "$value": "{fw.semibold}",
+    "$description": "A button label carries the same weight as a title."
+  },
+  "tt-eyebrow": {
+    "$type": "keyword",
+    "$value": "uppercase",
+    "$description": "The brief's mono eyebrow is set in capitals."
+  },
+  "tt-label": {
+    "$type": "keyword",
+    "$value": "none",
+    "$description": "A tool read with one hand in the sun does not shout at the person reading it."
+  },
+  "track-eyebrow": {
+    "$type": "number",
+    "$value": "{ls.field-label}",
+    "$extensions": {
+      "com.dravensoft.arena": {
+        "cssUnit": "em"
+      }
+    },
+    "$description": "The brief's 0.14em on uppercase mono labels."
+  },
+  "track-label": {
+    "$type": "number",
+    "$value": "{ls.normal}",
+    "$extensions": {
+      "com.dravensoft.arena": {
+        "cssUnit": "em"
+      }
+    },
+    "$description": "Sentence-case labels need no extra tracking."
+  },
+  "step-eyebrow": {
+    "$type": "dimension",
+    "$value": "{dz.text-xs}",
+    "$description": "The brief's 11px eyebrow."
+  },
+  "step-title-surface": {
+    "$type": "dimension",
+    "$value": "{fs.lg}",
+    "$description": "The brief's 17px section name. Safe because the fs ladder is not re-answered."
+  },
+  "step-title-section": {
+    "$type": "dimension",
+    "$value": "{fs.h3}",
+    "$description": "One rung under the screen title."
+  },
+  "step-title-page": {
+    "$type": "dimension",
+    "$value": {
+      "value": 28,
+      "unit": "px"
+    },
+    "$description": "The brief's 28px screen title; no fs step is 28."
+  },
+  "step-title-hero": {
+    "$type": "dimension",
+    "$value": "{fs.h1}",
+    "$description": "The public landing is the only place a hero is drawn."
+  },
+  "pad-control-x": {
+    "$type": "dimension",
+    "$value": "{sp.5}",
+    "$description": "Reaches the brief's button proportions."
+  },
+  "pad-control-y": {
+    "$type": "dimension",
+    "$value": "{sp.3}",
+    "$description": "Height comes from density; this is the ink inside it."
+  },
+  "gap-control": {
+    "$type": "dimension",
+    "$value": "{sp.2}",
+    "$description": "An icon beside its label, and nothing else."
+  },
+  "gap-inline": {
+    "$type": "dimension",
+    "$value": "{sp.3}",
+    "$description": "Composition inside one control."
+  },
+  "gap-items": {
+    "$type": "dimension",
+    "$value": "{sp.4}",
+    "$description": "Items inside one surface."
+  },
+  "grid-min": {
+    "$type": "dimension",
+    "$value": {
+      "value": 280,
+      "unit": "px"
+    },
+    "$description": "A merchant card with a 3:2 cover and two lines of text."
+  },
+  "container-max": {
+    "$type": "dimension",
+    "$value": {
+      "value": 1180,
+      "unit": "px"
+    },
+    "$description": "The width of the brief's own canvas."
+  },
+  "gutter": {
+    "$type": "dimension",
+    "$value": "{sp.6}",
+    "$description": "The brief's 24px page padding."
+  },
+  "pad-surface": {
+    "$type": "dimension",
+    "$value": "{sp.5}",
+    "$description": "Card padding."
+  },
+  "fill-surface": {
+    "$type": "color",
+    "$value": "{color.base-200}",
+    "$description": "White is reserved for cards, so the card is base-200 and the page is base-100."
+  },
+  "fill-surface-floating": {
+    "$type": "color",
+    "$value": "{color.base-200}",
+    "$description": "A floating surface is the same card."
+  },
+  "fill-page": {
+    "$type": "color",
+    "$value": "{color.base-100}",
+    "$description": "Paper."
+  },
+  "fill-surface-sunken": {
+    "$type": "color",
+    "$value": "{color.base-100}",
+    "$description": "A well inside a white card is paper."
+  },
+  "fill-field": {
+    "$type": "color",
+    "$value": "{color.base-200}",
+    "$description": "A field sits on the card and shares its ground."
+  },
+  "fill-hover": {
+    "$type": "color",
+    "$value": "{color.base-100}",
+    "$description": "A hovered row drops to paper."
+  },
+  "fill-track": {
+    "$type": "color",
+    "$value": "{color.base-300}",
+    "$description": "Progress tracks and table heads take the hairline colour."
+  },
+  "ink-heading": {
+    "$type": "color",
+    "$value": "{color.base-content}",
+    "$description": "Ink."
+  },
+  "ink-body": {
+    "$type": "color",
+    "$value": "{color.base-content}",
+    "$description": "Ink, held back by its level."
+  },
+  "ink-eyebrow": {
+    "$type": "color",
+    "$value": "{color.neutral-content}",
+    "$description": "The brief's eyebrows are grey; an accent spent here is the accent the primary action was saving."
+  },
+  "ink-muted": {
+    "$type": "color",
+    "$value": "{color.base-content}",
+    "$description": "Ink, held further back by its level."
+  },
+  "edge-surface": {
+    "$type": "color",
+    "$value": "{color.base-300}",
+    "$description": "The hairline is the identity."
+  },
+  "edge-surface-floating": {
+    "$type": "color",
+    "$value": "{color.base-content}",
+    "$description": "With every shadow at zero, an ink hairline is what separates a menu from the card under it."
+  },
+  "edge-control-quiet": {
+    "$type": "color",
+    "$value": "{color.base-300}",
+    "$description": "The hairline again."
+  },
+  "edge-marker": {
+    "$type": "color",
+    "$value": "{color.base-300}",
+    "$description": "The hairline again."
+  },
+  "edge-control": {
+    "$type": "color",
+    "$value": "{color.base-300}",
+    "$description": "The hairline again."
+  },
+  "edge-field": {
+    "$type": "color",
+    "$value": "{color.base-300}",
+    "$description": "The hairline again."
+  },
+  "edge-separator": {
+    "$type": "color",
+    "$value": "{color.base-300}",
+    "$description": "The hairline again."
+  },
+  "bw-surface": {
+    "$type": "dimension",
+    "$value": "{bw}",
+    "$description": "One pixel. The brief expresses every edge at this width."
+  },
+  "bw-control": {
+    "$type": "dimension",
+    "$value": "{bw}",
+    "$description": "One pixel. The brief expresses every edge at this width."
+  },
+  "bw-field": {
+    "$type": "dimension",
+    "$value": "{bw}",
+    "$description": "One pixel. The brief expresses every edge at this width."
+  },
+  "bw-separator": {
+    "$type": "dimension",
+    "$value": "{bw}",
+    "$description": "One pixel. The brief expresses every edge at this width."
+  },
+  "bw-marker": {
+    "$type": "dimension",
+    "$value": "{bw}",
+    "$description": "One pixel. The brief expresses every edge at this width."
+  },
+  "shadow-surface-floating": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": {
+        "value": 0,
+        "unit": "px"
+      },
+      "offsetY": {
+        "value": 0,
+        "unit": "px"
+      },
+      "blur": {
+        "value": 0,
+        "unit": "px"
+      },
+      "spread": {
+        "value": 0,
+        "unit": "px"
+      },
+      "color": {
+        "colorSpace": "srgb",
+        "components": [0, 0, 0],
+        "alpha": 0
+      }
+    },
+    "$description": "The brief has no shadow anywhere; depth is the hairline border."
+  },
+  "shadow-surface-rest": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": {
+        "value": 0,
+        "unit": "px"
+      },
+      "offsetY": {
+        "value": 0,
+        "unit": "px"
+      },
+      "blur": {
+        "value": 0,
+        "unit": "px"
+      },
+      "spread": {
+        "value": 0,
+        "unit": "px"
+      },
+      "color": {
+        "colorSpace": "srgb",
+        "components": [0, 0, 0],
+        "alpha": 0
+      }
+    },
+    "$description": "The brief has no shadow anywhere; depth is the hairline border."
+  },
+  "shadow-surface-deep": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": {
+        "value": 0,
+        "unit": "px"
+      },
+      "offsetY": {
+        "value": 0,
+        "unit": "px"
+      },
+      "blur": {
+        "value": 0,
+        "unit": "px"
+      },
+      "spread": {
+        "value": 0,
+        "unit": "px"
+      },
+      "color": {
+        "colorSpace": "srgb",
+        "components": [0, 0, 0],
+        "alpha": 0
+      }
+    },
+    "$description": "The brief has no shadow anywhere; depth is the hairline border."
+  },
+  "shadow-control-raised": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": {
+        "value": 0,
+        "unit": "px"
+      },
+      "offsetY": {
+        "value": 0,
+        "unit": "px"
+      },
+      "blur": {
+        "value": 0,
+        "unit": "px"
+      },
+      "spread": {
+        "value": 0,
+        "unit": "px"
+      },
+      "color": {
+        "colorSpace": "srgb",
+        "components": [0, 0, 0],
+        "alpha": 0
+      }
+    },
+    "$description": "The brief has no shadow anywhere; depth is the hairline border."
+  },
+  "shadow-control-rest": {
+    "$type": "shadow",
+    "$value": {
+      "offsetX": {
+        "value": 0,
+        "unit": "px"
+      },
+      "offsetY": {
+        "value": 0,
+        "unit": "px"
+      },
+      "blur": {
+        "value": 0,
+        "unit": "px"
+      },
+      "spread": {
+        "value": 0,
+        "unit": "px"
+      },
+      "color": {
+        "colorSpace": "srgb",
+        "components": [0, 0, 0],
+        "alpha": 0
+      }
+    },
+    "$description": "The brief has no shadow anywhere; depth is the hairline border."
+  },
+  "lift-control": {
+    "$type": "dimension",
+    "$value": {
+      "value": 0,
+      "unit": "px"
+    },
+    "$description": "Nothing rises on hover; depth is borders."
+  },
+  "dur-hover": {
+    "$type": "duration",
+    "$value": "{dur.fast}",
+    "$description": "A hover answers immediately."
+  },
+  "dur-state": {
+    "$type": "duration",
+    "$value": "{dur.mid}",
+    "$description": "A state change is visible without being slow."
+  },
+  "ease-hover": {
+    "$type": "cubicBezier",
+    "$value": "{ease.out}",
+    "$description": "Out, so the end of the move is the calm part."
+  },
+  "ease-state": {
+    "$type": "cubicBezier",
+    "$value": "{ease.out}",
+    "$description": "The same curve, so nothing on screen moves two ways."
+  },
+  "press-scale": {
+    "$type": "number",
+    "$value": 0.99,
+    "$description": "The one gesture this identity permits."
+  },
+  "rhythm-group": {
+    "$type": "dimension",
+    "$value": "{sp.3}",
+    "$description": "A label and its field."
+  },
+  "rhythm-component": {
+    "$type": "dimension",
+    "$value": "{sp.5}",
+    "$description": "A card and the next card."
+  },
+  "rhythm-section": {
+    "$type": "dimension",
+    "$value": "{sp.12}",
+    "$description": "Between two sections; dense enough to scan a panel on a phone."
+  }
+}

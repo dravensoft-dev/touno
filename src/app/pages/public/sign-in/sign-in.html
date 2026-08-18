@@ -1,0 +1,28 @@
+<div class="sign-in">
+  <arena-unauth-card
+    headingLevel="h1"
+    eyebrow="Perfiles de la maqueta"
+    title="¿Con qué perfil quieres entrar?"
+  >
+    <div class="sign-in__roles arena-stack">
+      <p class="sign-in__lede">
+        Esta es una maqueta: no hay contraseña. Elige un perfil y te dejamos en su panel con datos
+        de ejemplo.
+      </p>
+
+      @for (profile of session.profiles; track profile.role) {
+        <arena-button
+          variant="secondary"
+          size="lg"
+          [icon]="profile.icon"
+          [full]="true"
+          (click)="enter(profile)"
+        >
+          {{ profile.label }} · {{ profile.name }}
+        </arena-button>
+      }
+    </div>
+
+    <p footer class="sign-in__footer">Puedes cambiar de perfil cuando quieras desde la cabecera.</p>
+  </arena-unauth-card>
+</div>

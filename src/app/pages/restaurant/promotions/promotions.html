@@ -1,0 +1,67 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Promociones"
+    subtitle="Cupones que empujan pedidos en las horas flojas."
+  >
+    <div actions>
+      <arena-button icon="ph-bold ph-plus" (click)="open()">Nuevo cupón</arena-button>
+    </div>
+  </arena-page-head>
+
+  @if (coupons().length > 0) {
+    <arena-grid>
+      @for (coupon of coupons(); track coupon.code) {
+        <arena-card [title]="coupon.code" eyebrow="Cupón" headingLevel="h2">
+          <p>{{ coupon.label }}</p>
+          <div class="arena-row">
+            <arena-tag [tone]="coupon.active ? 'success' : 'neutral'">
+              {{ coupon.active ? 'Activo' : 'Pausado' }}
+            </arena-tag>
+            <arena-tag tone="neutral">Vence {{ coupon.until }}</arena-tag>
+          </div>
+          <arena-progress-bar
+            [label]="'Usos de ' + coupon.code"
+            [progressPercentage]="coupon.usage"
+            [showPercentage]="true"
+          />
+          <div action>
+            <arena-switch
+              [label]="'Activar ' + coupon.code"
+              [state]="coupon.active"
+              (requestChange)="toggle(coupon.code)"
+            />
+          </div>
+        </arena-card>
+      }
+    </arena-grid>
+  } @else {
+    <arena-empty-state
+      icon="ph-bold ph-tag"
+      title="Todavía no hay cupones"
+      message="Crea uno para mover las horas flojas."
+    />
+  }
+
+  <arena-dialog [open]="creating()" title="Nuevo cupón" eyebrow="Promoción" (close)="close()">
+    <div class="arena-stack">
+      <arena-input
+        label="Código"
+        placeholder="COPA10"
+        [value]="code()"
+        (change)="code.set($event)"
+      />
+      <arena-input
+        type="number"
+        label="Descuento en bolivianos"
+        [value]="amount()"
+        (change)="amount.set($event)"
+      />
+    </div>
+
+    <div footer class="arena-row">
+      <arena-button variant="ghost" (click)="close()">Cancelar</arena-button>
+      <arena-button variant="secondary" (click)="close()">Crear cupón</arena-button>
+    </div>
+  </arena-dialog>
+</div>

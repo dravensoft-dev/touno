@@ -1,0 +1,103 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Pedidos en vivo"
+    [subtitle]="session.profile()?.name + ' · ' + session.profile()?.place"
+  >
+    <div actions class="arena-row">
+      <arena-switch
+        label="Restaurante abierto"
+        [state]="merchant()?.open ?? false"
+        [confirm]="true"
+        (requestChange)="toggleOpen()"
+      />
+      <arena-select
+        label="Tiempo de preparación"
+        [options]="prepOptions"
+        [value]="prep()"
+        (change)="prep.set($event)"
+      />
+    </div>
+  </arena-page-head>
+
+  @if (waiting() > 0) {
+    <arena-alert tone="warning" title="Tienes pedidos sin aceptar">
+      {{ waiting() }} pedido(s) esperan tu respuesta. Pasado el tiempo prometido el comprador ve el
+      retraso antes que tú.
+    </arena-alert>
+  }
+
+  <arena-board label="Pedidos del restaurante por estado" minColumn="15rem">
+    <arena-board-column
+      headingLevel="h2"
+      title="Nuevos"
+      [count]="fresh().length"
+      summary="Esperan tu respuesta"
+    >
+      @for (order of fresh(); track order.code) {
+        <app-order-card
+          [order]="order"
+          advanceLabel="Aceptar"
+          [rejectable]="true"
+          (advance)="accept($event)"
+          (reject)="askReject($event)"
+        />
+      }
+    </arena-board-column>
+
+    <arena-board-column
+      headingLevel="h2"
+      title="Preparando"
+      [count]="cooking().length"
+      summary="En cocina"
+    >
+      @for (order of cooking(); track order.code) {
+        <app-order-card [order]="order" advanceLabel="Listo" (advance)="finish($event)" />
+      }
+    </arena-board-column>
+
+    <arena-board-column
+      headingLevel="h2"
+      title="Listos"
+      [count]="ready().length"
+      summary="Esperan al conductor"
+    >
+      @for (order of ready(); track order.code) {
+        <app-order-card
+          [order]="order"
+          advanceLabel="Entregar al conductor"
+          (advance)="dispatch($event)"
+        />
+      }
+    </arena-board-column>
+
+    <arena-board-column
+      headingLevel="h2"
+      title="En camino"
+      [count]="onRoute().length"
+      summary="Con el conductor"
+    >
+      @for (order of onRoute(); track order.code) {
+        <app-order-card
+          [order]="order"
+          advanceLabel="Marcar entregado"
+          (advance)="deliver($event)"
+        />
+      }
+    </arena-board-column>
+  </arena-board>
+
+  <arena-confirm-dialog
+    [open]="rejecting() !== null"
+    title="Rechazar este pedido"
+    eyebrow="El comprador recibe el aviso"
+    confirmLabel="Rechazar el pedido"
+    cancelLabel="Volver"
+    [destructive]="true"
+    (cancel)="cancelReject()"
+    (confirm)="confirmReject()"
+  >
+    Rechazar deja al comprador sin su pedido y sin su dinero comprometido. Hazlo solo si no puedes
+    prepararlo.
+  </arena-confirm-dialog>
+</div>

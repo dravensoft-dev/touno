@@ -1,0 +1,41 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head headingLevel="h1" title="Carrera entrante" subtitle="Una sola decisión." />
+
+  @if (ride(); as one) {
+    <arena-figure>
+      <i fallback class="ph ph-map-trifold" aria-hidden="true"></i>
+    </arena-figure>
+
+    <arena-progress-bar
+      label="Tiempo para responder"
+      [progressPercentage]="60"
+      tone="gold"
+      [showPercentage]="false"
+    />
+
+    <arena-key-value [rows]="stops()" />
+
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Ganas por esta carrera"
+      [value]="earn()"
+      tone="success"
+    />
+
+    <div class="arena-row">
+      <arena-button size="lg" icon="ph-bold ph-check" (click)="accept()"
+        >Aceptar carrera</arena-button
+      >
+      <arena-button variant="ghost" size="lg" icon="ph-bold ph-x" (click)="reject()">
+        Rechazar
+      </arena-button>
+    </div>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-broadcast"
+      title="Ninguna carrera entrante"
+      message="Cuando entre una la verás aquí, con la ganancia antes del sí."
+    />
+  }
+</div>

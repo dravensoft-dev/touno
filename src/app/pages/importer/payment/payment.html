@@ -1,0 +1,45 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    [title]="'Pagar ' + total()"
+    subtitle="Recojo y encomienda en un solo cobro."
+  />
+
+  <arena-segmented-control
+    ariaLabel="Forma de pago"
+    [options]="methods"
+    [value]="method()"
+    (change)="pick($event)"
+  />
+
+  @switch (method()) {
+    @case ('qr') {
+      <app-qr-panel
+        reference="TY-PENDIENTE"
+        hint="Escanea con tu banco. El código vence en 09:41."
+      />
+    }
+    @case ('billetera') {
+      <arena-alert tone="info" title="Pago con billetera móvil">
+        Te llevamos a tu billetera y volvemos con el cobro confirmado. En la maqueta el paso se da
+        por hecho.
+      </arena-alert>
+    }
+    @default {
+      <arena-alert tone="warning" title="Que pague el destinatario">
+        La sucursal cobra al entregar. El envío sale igual, y el monto aparece en tu cuenta como
+        pendiente por cobrar.
+      </arena-alert>
+    }
+  }
+
+  <arena-key-value [rows]="breakdown()" [total]="totalRow()" />
+
+  <arena-alert tone="info" title="La guía se genera con el pago confirmado">
+    Hasta entonces el envío existe como borrador y ningún conductor lo ve.
+  </arena-alert>
+
+  <arena-button size="lg" icon="ph-bold ph-check" (click)="confirm()">
+    Confirmar y generar la guía
+  </arena-button>
+</div>

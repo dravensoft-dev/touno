@@ -1,0 +1,32 @@
+<arena-card>
+  <arena-figure>
+    @if (photo(); as source) {
+      <img media [src]="source" [alt]="product().name" loading="lazy" decoding="async" />
+    } @else {
+      <i fallback [class]="fallbackIcon()" aria-hidden="true"></i>
+    }
+  </arena-figure>
+
+  <div class="product-card__body arena-stack arena-stack--group">
+    <h3 class="product-card__name">{{ product().name }}</h3>
+    <p class="product-card__description">{{ product().description }}</p>
+
+    @if (!product().available) {
+      <div class="product-card__badge">
+        <arena-badge tone="warning">Sin stock</arena-badge>
+      </div>
+    }
+
+    <p class="product-card__price arena-row arena-row--between">
+      <span class="product-card__amount arena-num">{{ price() }}</span>
+      <arena-button
+        variant="ghost"
+        icon="ph-bold ph-plus"
+        [disabled]="!product().available"
+        (click)="addToCart()"
+      >
+        Agregar
+      </arena-button>
+    </p>
+  </div>
+</arena-card>

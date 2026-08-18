@@ -1,0 +1,34 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Entregá en sucursal"
+    subtitle="Paso 2 de 2 · en la oficina"
+  />
+
+  <app-pickup-code
+    [code]="code()"
+    label="Mostrá este código"
+    hint="La ventanilla lo compara con su pantalla."
+  />
+
+  <arena-key-value [rows]="facts()" />
+
+  <arena-alert tone="info" title="Funciona sin señal">
+    Si la oficina no tiene internet, el código de cuatro dígitos sirve igual: se sincroniza después.
+  </arena-alert>
+
+  <arena-button size="lg" icon="ph-bold ph-check" (click)="ask()">
+    Entregado a la oficina
+  </arena-button>
+
+  <arena-confirm-dialog
+    [open]="confirming()"
+    title="Confirmar la entrega en sucursal"
+    confirmLabel="Sí, lo entregué"
+    cancelLabel="Todavía no"
+    (cancel)="cancel()"
+    (confirm)="confirm()"
+  >
+    Con esto la carrera se cierra y el paquete pasa a manos de la sucursal.
+  </arena-confirm-dialog>
+</div>

@@ -1,0 +1,36 @@
+@import "./icons.generated.css";
+@import "./arena.generated.css";
+@import "./plugin.generated.css";
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-mono-latin-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/ibm-plex-mono-latin-600.woff2") format("woff2");
+}
+
+html {
+  background: var(--fill-page);
+}
+
+body {
+  margin: 0;
+  background: var(--fill-page);
+  color: var(--ink-body);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: var(--lh-prose);
+}
+
+router-outlet {
+  display: none;
+}

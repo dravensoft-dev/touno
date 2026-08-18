@@ -1,0 +1,16 @@
+.sign-in {
+  display: flex;
+  justify-content: center;
+}
+
+.sign-in__lede {
+  margin: 0;
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+  font-size: var(--fs-sm);
+}
+
+.sign-in__footer {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}

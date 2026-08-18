@@ -1,0 +1,48 @@
+.timeline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline__step {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--gap-items);
+  align-items: start;
+}
+
+.timeline__bullet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-lg);
+  font-size: var(--icon-lg);
+  line-height: 1;
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
+
+.is-reached .timeline__bullet {
+  color: var(--color-success);
+}
+
+.is-current .timeline__bullet {
+  color: var(--color-secondary);
+}
+
+.timeline__label {
+  font-weight: var(--fw-control);
+  color: var(--ink-heading);
+}
+
+.timeline__stamp {
+  font-size: var(--fs-xs);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
+
+.timeline__note {
+  padding: var(--gap-items);
+  border-inline-start: var(--bw-strong) solid var(--color-secondary);
+  background: color-mix(in oklab, var(--color-warning) var(--tint-soft), transparent);
+  font-size: var(--fs-sm);
+  color: var(--ink-body);
+}

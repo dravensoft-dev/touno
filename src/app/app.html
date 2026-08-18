@@ -1,0 +1,105 @@
+<arena-skip-link label="Saltar al contenido" />
+
+<arena-app-bar>
+  <a brand routerLink="/" class="shell-brand" [attr.aria-label]="siteName + ', inicio'">
+    <arena-app-logo size="sm" [name]="siteName">
+      <app-brand-mark mark />
+    </arena-app-logo>
+  </a>
+
+  <nav nav aria-label="Secciones de Touno" class="shell-nav arena-row">
+    @for (link of publicLinks; track link.path) {
+      <a
+        [routerLink]="link.path"
+        routerLinkActive="is-current"
+        [routerLinkActiveOptions]="{ exact: link.exact }"
+        class="shell-nav__link"
+      >
+        {{ link.label }}
+      </a>
+    }
+  </nav>
+
+  <div actions class="shell-actions arena-row">
+    @if (cart.count() > 0) {
+      <arena-button variant="ghost" icon="ph-bold ph-shopping-cart-simple" (click)="toCart()">
+        {{ cart.count() }}
+      </arena-button>
+    }
+    <app-theme-toggle />
+    @if (session.profile(); as who) {
+      <arena-button variant="ghost" icon="ph-bold ph-sign-out" (click)="leave()">
+        {{ who.name }}
+      </arena-button>
+    } @else {
+      <arena-button icon="ph-bold ph-user-circle" (click)="toSignIn()">Ingresar</arena-button>
+    }
+  </div>
+</arena-app-bar>
+
+@if (panel(); as area) {
+  <div class="shell-panel">
+    <div class="shell-panel__rail">
+      <arena-side-nav [ariaLabel]="area.label" [active]="activeId()" (nav)="go($event)">
+        @for (destination of area.destinations; track destination.id) {
+          <arena-side-nav-item
+            [id]="destination.id"
+            [label]="destination.label"
+            [icon]="destination.icon"
+            [href]="destination.path"
+          />
+        }
+      </arena-side-nav>
+    </div>
+
+    <div class="shell-panel__main arena-band">
+      <arena-main>
+        @if (unlocked()) {
+          <router-outlet />
+        } @else {
+          <arena-unauth-card headingLevel="h1" eyebrow="Acceso" [title]="gateTitle()">
+            <div class="shell-gate arena-stack">
+              <p class="shell-gate__lede">
+                Esta pantalla pertenece a un perfil de trabajo. Elige con cuál entrar y te dejamos
+                justo aquí.
+              </p>
+              <div class="shell-gate__roles arena-stack arena-stack--group">
+                @for (profile of session.profiles; track profile.role) {
+                  <arena-button
+                    [variant]="profile.role === area.role ? 'primary' : 'secondary'"
+                    [icon]="profile.icon"
+                    [full]="true"
+                    (click)="enter(profile.role)"
+                  >
+                    {{ profile.label }} · {{ profile.name }}
+                  </arena-button>
+                }
+              </div>
+            </div>
+          </arena-unauth-card>
+        }
+      </arena-main>
+    </div>
+  </div>
+
+  <div class="shell-panel__bar">
+    <arena-bottom-nav ariaLabel="Accesos rápidos" [active]="activeId()" (nav)="go($event)">
+      @for (destination of barDestinations(); track destination.id) {
+        <arena-bottom-nav-item
+          [id]="destination.id"
+          [label]="destination.label"
+          [icon]="destination.icon"
+          [href]="destination.path"
+        />
+      }
+    </arena-bottom-nav>
+  </div>
+} @else {
+  <div class="shell-public arena-band">
+    <arena-main>
+      <router-outlet />
+    </arena-main>
+  </div>
+
+  <app-site-footer />
+}

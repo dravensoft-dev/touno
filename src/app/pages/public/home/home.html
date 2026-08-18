@@ -1,0 +1,90 @@
+<app-structured-data key="website" [schema]="websiteSchema" />
+<app-structured-data key="organization" [schema]="businessSchema" />
+
+<div class="home arena-stack arena-stack--section">
+  <arena-hero
+    eyebrow="Comida y encomiendas, una sola red"
+    title="Saber dónde está, no solo cuánto falta"
+    lede="Pide a los restaurantes de tu ciudad y recibe lo que compraste a una importadora, con guía, hitos y un código de retiro. Cuando el paquete viaja en bus te lo decimos con las mismas letras con que damos una buena noticia."
+  >
+    <div actions class="arena-row">
+      <arena-button size="lg" icon="ph-bold ph-fork-knife" (click)="goTo('/restaurantes')">
+        Pedir comida
+      </arena-button>
+      <arena-button variant="ghost" size="lg" icon="ph-bold ph-package" (click)="goTo('/tiendas')">
+        Comprar a una importadora
+      </arena-button>
+    </div>
+  </arena-hero>
+
+  <arena-section
+    eyebrow="La promesa"
+    title="Tres cosas que no se negocian"
+    description="Lo que Touno resuelve en cada envío, sea un almuerzo o una caja de ropa."
+    rhythm="md"
+  >
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-qr-code"
+        label="Guía y código"
+        value="TY-####"
+        sub="Cada encomienda nace con su guía y con cuatro dígitos para retirarla."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-map-pin-area"
+        label="Hitos honestos"
+        value="6 pasos"
+        sub="Mientras el bus viaja no hay mapa en vivo, y la pantalla lo dice."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-hand-coins"
+        label="Un solo cobro"
+        value="Bs 0 sorpresa"
+        sub="Recojo y encomienda en un mismo pago, o lo cobra la sucursal al entregar."
+      />
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    eyebrow="Dónde operamos"
+    title="Ciudades con red propia"
+    description="Recojo urbano en el día y salidas interurbanas todos los días."
+    rhythm="md"
+  >
+    <arena-scroller label="Ciudades donde opera Touno">
+      @for (city of cities(); track city) {
+        <arena-scroller-item>
+          <p class="home-city">{{ city }}</p>
+        </arena-scroller-item>
+      }
+    </arena-scroller>
+  </arena-section>
+
+  <arena-section
+    id="restaurantes"
+    eyebrow="Comida"
+    title="Restaurantes cerca"
+    description="Aceptan pedidos ahora y despachan con conductores de la red."
+    rhythm="md"
+  >
+    <arena-grid>
+      @for (merchant of restaurants(); track merchant.slug) {
+        <app-merchant-card [merchant]="merchant" />
+      }
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    id="importadoras"
+    eyebrow="Encomiendas"
+    title="Importadoras que despachan hoy"
+    description="Compras aquí y el paquete sale con guía en la próxima salida."
+    rhythm="md"
+  >
+    <arena-grid>
+      @for (merchant of importers(); track merchant.slug) {
+        <app-merchant-card [merchant]="merchant" />
+      }
+    </arena-grid>
+  </arena-section>
+</div>

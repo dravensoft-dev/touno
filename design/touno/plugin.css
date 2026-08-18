@@ -1,0 +1,24 @@
+[data-arena-part="hero.title"] {
+  font-size: clamp(var(--fs-h2), 9vw, var(--step-title-hero));
+}
+
+[data-arena-part="page-head.title"] {
+  font-size: clamp(var(--fs-h3), 7vw, var(--step-title-page));
+}
+
+[data-arena-part="section.title"] {
+  font-size: clamp(var(--fs-h4), 6vw, var(--step-title-section));
+}
+
+[data-arena-part="tabs"] {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+[data-arena-part="tabs"]::-webkit-scrollbar {
+  display: none;
+}
+
+[data-arena-part="tabs.tab"] {
+  white-space: nowrap;
+}

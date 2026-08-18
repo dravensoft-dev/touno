@@ -1,0 +1,29 @@
+<arena-card [title]="order().code" [eyebrow]="order().buyer.name" [headingLevel]="headingLevel()">
+  <ul class="order-card__lines arena-stack arena-stack--group">
+    @for (line of order().lines; track line.productId) {
+      <li class="order-card__line">
+        <span class="order-card__qty arena-num">{{ line.qty }}×</span>
+        {{ line.name }}
+        @if (line.options.length > 0) {
+          <span class="order-card__options">{{ line.options.join(', ') }}</span>
+        }
+      </li>
+    }
+  </ul>
+
+  <p class="order-card__meta arena-row arena-row--between">
+    <span class="arena-num">{{ items() }} ítems · {{ total() }}</span>
+    <span class="arena-num">Promete {{ promised() }}</span>
+  </p>
+
+  <div class="order-card__actions arena-row">
+    @if (advanceLabel(); as label) {
+      <arena-button variant="secondary" icon="ph-bold ph-check" (click)="next()">{{
+        label
+      }}</arena-button>
+    }
+    @if (rejectable()) {
+      <arena-button variant="danger" icon="ph-bold ph-x" (click)="decline()">Rechazar</arena-button>
+    }
+  </div>
+</arena-card>

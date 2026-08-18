@@ -1,0 +1,10 @@
+.home-city {
+  margin: 0;
+  padding: var(--pad-control-y) var(--pad-control-x);
+  border: var(--bw-control) solid var(--edge-control);
+  border-radius: var(--r-marker);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-control);
+  white-space: nowrap;
+  color: var(--ink-heading);
+}

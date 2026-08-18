@@ -1,0 +1,59 @@
+.shell-brand {
+  display: inline-flex;
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell-nav__link {
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-control);
+  text-decoration: none;
+}
+
+.shell-nav__link:hover,
+.shell-nav__link.is-current {
+  color: var(--color-primary);
+}
+
+.shell-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--rhythm-section);
+  align-items: start;
+}
+
+.shell-panel__rail {
+  display: none;
+}
+
+.shell-panel__main {
+  min-width: 0;
+  padding-block-end: calc(var(--layout-bar) + var(--pad-safe-bottom) + var(--rhythm-section));
+}
+
+.shell-gate__lede {
+  margin: 0;
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
+
+@media (width >= 48rem) {
+  .shell-panel {
+    grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
+  }
+
+  .shell-panel__rail {
+    display: block;
+    position: sticky;
+    top: calc(var(--layout-bar) + var(--rhythm-component));
+    padding-inline-start: var(--gutter);
+  }
+
+  .shell-panel__main {
+    padding-block-end: 0;
+  }
+
+  .shell-panel__bar {
+    display: none;
+  }
+}

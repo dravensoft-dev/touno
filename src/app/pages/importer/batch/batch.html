@@ -1,0 +1,59 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Carga después de la transmisión"
+    subtitle="Pega tu lista de pedidos y creamos todos los envíos con un solo recojo."
+  />
+
+  <arena-textarea
+    label="Pega tu lista"
+    hint="Un pedido por línea: destinatario, ciudad, contenido, peso en kilos."
+    [value]="pasted()"
+    (change)="write($event)"
+  />
+
+  <div class="arena-row">
+    <arena-button variant="secondary" icon="ph-bold ph-stack" (click)="parse()">
+      Procesar la lista
+    </arena-button>
+  </div>
+
+  @if (parsed()) {
+    @if (broken().length > 0) {
+      <arena-alert tone="danger" title="Hay filas que no podemos crear">
+        {{ broken().length }} fila(s) no tienen ciudad de destino. Corrígelas y vuelve a procesar, o
+        crea solo las que están listas.
+      </arena-alert>
+    }
+
+    <arena-table label="Envíos pegados desde tu lista" [columns]="columns">
+      @for (row of rows(); track row.line) {
+        <tr arena-table-row>
+          <td arena-table-cell>{{ row.recipient }}</td>
+          <td arena-table-cell>{{ row.city || '—' }}</td>
+          <td arena-table-cell>{{ row.content }}</td>
+          <td arena-table-cell>{{ row.weightKg }} kg</td>
+          <td arena-table-cell>{{ row.problem ? '—' : price(row) }}</td>
+          <td arena-table-cell>
+            @if (row.problem) {
+              <arena-badge tone="warning">{{ row.problem }}</arena-badge>
+            } @else {
+              <arena-badge tone="success">Lista</arena-badge>
+            }
+          </td>
+        </tr>
+      }
+    </arena-table>
+
+    <arena-key-value [rows]="summary()" [total]="total()" />
+
+    <arena-button
+      size="lg"
+      icon="ph-bold ph-truck"
+      [disabled]="valid().length === 0"
+      (click)="create()"
+    >
+      Crear los {{ valid().length }} y pedir recojo
+    </arena-button>
+  }
+</div>

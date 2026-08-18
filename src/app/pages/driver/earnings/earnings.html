@@ -1,0 +1,53 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Ganancias"
+    subtitle="Lo que cobras y cuándo te llega. Sin descuentos escondidos."
+  />
+
+  <arena-segmented-control
+    ariaLabel="Semana"
+    [options]="weeks"
+    [value]="week()"
+    (change)="week.set($event)"
+  />
+
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-bank"
+      label="A cobrar el lunes"
+      [value]="total()"
+      tone="success"
+    />
+    <arena-stat-card icon="ph-bold ph-navigation-arrow" label="Carreras" [value]="rides()" />
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Promedio por carrera"
+      [value]="average()"
+    />
+  </arena-grid>
+
+  <arena-chart-card title="Ganancia por día">
+    <arena-bar-chart
+      label="Ganancia diaria de la semana en bolivianos"
+      [labels]="labels()"
+      [series]="series()"
+    />
+  </arena-chart-card>
+
+  <arena-table label="Detalle diario de ganancias" [columns]="columns">
+    @for (row of rows(); track row.day) {
+      <tr arena-table-row>
+        <td arena-table-cell>{{ row.label }}</td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ row.rides }}</span>
+        </td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ row.earn }}</span>
+        </td>
+      </tr>
+    }
+  </arena-table>
+
+  <arena-key-value [rows]="account()" />
+</div>

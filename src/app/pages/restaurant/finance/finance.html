@@ -1,0 +1,49 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Finanzas"
+    subtitle="Lo cobrado, lo que se queda Touno y lo que te llega el lunes."
+  />
+
+  <arena-grid>
+    <arena-stat-card icon="ph-bold ph-wallet" label="Bruto del periodo" [value]="gross()" />
+    <arena-stat-card
+      icon="ph-bold ph-scales"
+      label="Comisión"
+      [value]="commission()"
+      tone="warning"
+    />
+    <arena-stat-card icon="ph-bold ph-bank" label="A transferir" [value]="net()" tone="success" />
+  </arena-grid>
+
+  <arena-key-value [rows]="breakdown()" [total]="total()" />
+
+  <arena-table label="Liquidaciones del restaurante" [columns]="columns">
+    @for (row of settlements(); track row.id) {
+      <tr arena-table-row>
+        <td arena-table-cell>{{ row.period }}</td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ row.orders }}</span>
+        </td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ row.gross }}</span>
+        </td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ row.commission }}</span>
+        </td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ row.net }}</span>
+        </td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ row.paid }}</span>
+        </td>
+      </tr>
+    }
+  </arena-table>
+
+  <div class="arena-row">
+    <arena-button variant="ghost" icon="ph-bold ph-file-arrow-down">
+      Descargar liquidación
+    </arena-button>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Alta y recojo"
+    subtitle="Un solo formulario y un solo precio. La guía se genera cuando el pago está confirmado."
+  />
+
+  <div class="arena-stack">
+    <arena-input
+      label="Destinatario"
+      icon="ph-bold ph-user"
+      placeholder="Nombre y apellido"
+      [value]="draft.current().recipient"
+      (change)="draft.patch({ recipient: $event })"
+    />
+
+    <arena-input
+      type="tel"
+      label="Celular del destinatario"
+      icon="ph-bold ph-device-mobile"
+      placeholder="7712 4408"
+      [value]="draft.current().phone"
+      (change)="draft.patch({ phone: $event })"
+    />
+
+    <arena-select
+      label="Ciudad de destino"
+      placeholder="Elige una ciudad"
+      icon="ph-bold ph-map-pin"
+      [options]="cities()"
+      [value]="draft.current().city"
+      (change)="pickCity($event)"
+    />
+
+    <arena-textarea
+      label="Contenido"
+      placeholder="Caja de ropa, 3 kg"
+      [value]="draft.current().content"
+      (change)="draft.patch({ content: $event })"
+    />
+  </div>
+
+  @if (draft.current().city) {
+    <arena-radio-group
+      ariaLabel="Empresa de transporte"
+      [value]="draft.current().carrierId"
+      (change)="pickCarrier($event)"
+    >
+      @for (carrier of carriers(); track carrier.id) {
+        <arena-radio
+          [value]="carrier.id"
+          [label]="carrier.name"
+          [hint]="'Salidas ' + departuresOf(carrier.id)"
+        />
+      }
+    </arena-radio-group>
+  }
+
+  <arena-key-value [rows]="summary()" [total]="total()" />
+
+  <div class="arena-row">
+    <arena-button
+      size="lg"
+      icon="ph-bold ph-truck"
+      [disabled]="!draft.ready()"
+      (click)="toPayment()"
+    >
+      Pedir recojo
+    </arena-button>
+    <arena-button variant="ghost" size="lg">Guardar borrador</arena-button>
+  </div>
+</div>
