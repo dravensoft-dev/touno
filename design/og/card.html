@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../node_modules/@phosphor-icons/web/src/bold/style.css" />
+    <style>
+      @font-face {
+        font-family: 'Archivo';
+        src: url('../../public/fonts/archivo-latin.woff2') format('woff2');
+        font-weight: 400 900;
+        font-display: block;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+      }
+      body {
+        background: #f7f7f6;
+        font-family: 'Archivo', system-ui, sans-serif;
+        overflow: hidden;
+      }
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+      }
+      .layer {
+        position: absolute;
+        inset: 0;
+      }
+
+      .falling {
+        position: absolute;
+        font-size: 154px;
+        line-height: 1;
+        color: #14171a;
+        z-index: 2;
+      }
+      .falling--food {
+        left: 150px;
+        top: 138px;
+        transform: rotate(-26deg);
+      }
+      .falling--truck {
+        left: 876px;
+        top: 124px;
+        transform: rotate(24deg);
+      }
+
+      .trails {
+        z-index: 1;
+      }
+      .art {
+        z-index: 3;
+      }
+
+      .person {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 446px;
+        text-align: center;
+        font-size: 168px;
+        line-height: 1;
+        color: #14171a;
+        z-index: 4;
+      }
+
+      .wordmark {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 8px;
+        text-align: center;
+        font-size: 154px;
+        font-weight: 700;
+        letter-spacing: -0.045em;
+        line-height: 1;
+        color: #14171a;
+        z-index: 5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <svg class="layer trails" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+        <g
+          fill="none"
+          stroke="#14171a"
+          stroke-opacity="0.28"
+          stroke-width="9"
+          stroke-linecap="round"
+          stroke-dasharray="2 26"
+        >
+          <path d="M 314 296 Q 440 334 538 242" />
+          <path d="M 892 282 Q 764 326 662 240" />
+        </g>
+      </svg>
+
+      <i class="falling falling--food ph-bold ph-bowl-food"></i>
+      <i class="falling falling--truck ph-bold ph-truck"></i>
+
+      <svg class="layer art" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M 544 240 H 534 A 44 44 0 0 0 490 284 V 388 A 44 44 0 0 0 534 432 H 666 A 44 44 0 0 0 710 388 V 284 A 44 44 0 0 0 666 240 H 656"
+          fill="#f7f7f6"
+          stroke="#14171a"
+          stroke-width="18"
+          stroke-linecap="round"
+        />
+        <rect x="0" y="352" width="1200" height="18" fill="#e1901f" />
+        <circle cx="806" cy="361" r="46" fill="#f7f7f6" />
+        <circle cx="806" cy="361" r="34" fill="#e1901f" />
+      </svg>
+
+      <i class="person ph-bold ph-person"></i>
+      <p class="wordmark">Touno</p>
+    </div>
+  </body>
+</html>
