@@ -30,6 +30,10 @@ signal and exposes computed slices.
 - **A hiring offer is addressed.** `Hiring.accept()` throws when the driver answering is not the
   one the offer names, and only a `pendiente` offer transitions. That is the whole of the rule the
   product states: the business proposes, the driver decides.
+- **The feed is round-robin over the shops.** `foodFeed` and `parcelFeed` take one product from
+  every open merchant before taking a second from any, so neither the buyer's feed nor the four
+  products the landing previews belong to a single shop. Within one shop the order is featured first
+  and then most sold this month. `marketplace.spec.ts` holds both halves.
 - **`Order.shipmentGuia` is the bridge between the two verticals.** It is what makes "same cart,
   same tracking" true rather than claimed: a parcel order links to the shipment record the import
   shop dispatched, and the buyer's detail page draws the milestone timeline from it.

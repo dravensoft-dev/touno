@@ -1,4 +1,4 @@
-<arena-card>
+<arena-card [eyebrow]="merchant()?.name">
   <arena-figure>
     @if (photo(); as source) {
       <img media [src]="source" [alt]="product().name" loading="lazy" decoding="async" />

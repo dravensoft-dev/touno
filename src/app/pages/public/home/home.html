@@ -1,5 +1,6 @@
 <app-structured-data key="website" [schema]="websiteSchema" />
 <app-structured-data key="organization" [schema]="businessSchema" />
+<app-structured-data key="feed" [schema]="feedSchema()" />
 
 <div class="home arena-stack arena-stack--section">
   <arena-hero
@@ -58,6 +59,44 @@
         </arena-scroller-item>
       }
     </arena-scroller>
+  </arena-section>
+
+  <arena-section
+    id="feed-comida"
+    eyebrow="Lo más pedido"
+    title="Platos que salen hoy"
+    description="De los restaurantes que están abiertos ahora mismo, listos para tu pedido."
+    rhythm="md"
+  >
+    <arena-grid>
+      @for (item of foodPicks(); track item.product.id) {
+        <app-product-card
+          [product]="item.product"
+          [merchant]="item.merchant"
+          fallbackIcon="ph ph-fork-knife"
+          (add)="addToCart($event)"
+        />
+      }
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    id="feed-encomiendas"
+    eyebrow="En stock hoy"
+    title="Listo para despachar"
+    description="Lo que las importadoras tienen en stock para la próxima salida."
+    rhythm="md"
+  >
+    <arena-grid>
+      @for (item of parcelPicks(); track item.product.id) {
+        <app-product-card
+          [product]="item.product"
+          [merchant]="item.merchant"
+          fallbackIcon="ph ph-package"
+          (add)="addToCart($event)"
+        />
+      }
+    </arena-grid>
   </arena-section>
 
   <arena-section

@@ -19,7 +19,7 @@ export const PROFILES: readonly Profile[] = [
     name: 'Rosa Villca',
     place: 'Santa Cruz',
     icon: 'ph-bold ph-user-circle',
-    home: '/mis-pedidos',
+    home: '/feed',
     slug: 'rosa-villca',
   },
   {

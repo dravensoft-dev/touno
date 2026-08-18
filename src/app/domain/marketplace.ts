@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Merchant, MerchantKind, Product } from './marketplace.model';
+import { FeedItem, Merchant, MerchantKind, Product } from './marketplace.model';
 import { MERCHANTS } from './marketplace.data';
 import { PRODUCTS } from './products.data';
 
@@ -20,7 +20,42 @@ export class Marketplace {
       .slice(0, 6),
   );
 
+  readonly foodFeed = computed(() => this.feedOf('restaurante'));
+
+  readonly parcelFeed = computed(() => this.feedOf('importadora'));
+
   readonly cities = computed(() => [...new Set(this.all().map((one) => one.city))].sort());
+
+  private feedOf(kind: MerchantKind): readonly FeedItem[] {
+    const queues = this.all()
+      .filter((one) => one.kind === kind && one.open)
+      .sort((left, right) => right.rating - left.rating || left.name.localeCompare(right.name))
+      .map((merchant) =>
+        this.catalogOf(merchant.slug)
+          .filter((one) => one.available)
+          .sort(
+            (left, right) =>
+              Number(right.featured) - Number(left.featured) ||
+              right.soldThisMonth - left.soldThisMonth,
+          )
+          .map((product) => ({ product, merchant })),
+      );
+
+    const deepest = queues.reduce((most, queue) => Math.max(most, queue.length), 0);
+    const feed: FeedItem[] = [];
+
+    for (let round = 0; round < deepest; round += 1) {
+      for (const queue of queues) {
+        const item = queue[round];
+
+        if (item) {
+          feed.push(item);
+        }
+      }
+    }
+
+    return feed;
+  }
 
   byKind(kind: MerchantKind): readonly Merchant[] {
     return this.all().filter((one) => one.kind === kind);

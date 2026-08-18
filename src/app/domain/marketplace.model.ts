@@ -45,3 +45,8 @@ export interface Product {
   readonly variants: readonly Variant[];
   readonly addons: readonly Addon[];
 }
+
+export interface FeedItem {
+  readonly product: Product;
+  readonly merchant: Merchant;
+}

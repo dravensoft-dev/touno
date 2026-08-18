@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ArenaAction,
   ArenaActions,
   ArenaButton,
   ArenaGrid,
@@ -10,8 +11,11 @@ import {
   ArenaSection,
   ArenaStatCard,
 } from '@dravensoft/arena-angular';
+import { Cart } from '../../../domain/cart';
 import { Marketplace } from '../../../domain/marketplace';
+import { Product } from '../../../domain/marketplace.model';
 import { MerchantCard } from '../../../shared/merchant-card/merchant-card';
+import { ProductCard } from '../../../shared/product-card/product-card';
 import { StructuredData } from '../../../seo/structured-data';
 import {
   CONTACT_CITY,
@@ -27,6 +31,7 @@ import {
   host: { style: 'display: contents' },
   imports: [
     ArenaHero,
+    ArenaAction,
     ArenaActions,
     ArenaButton,
     ArenaSection,
@@ -35,6 +40,7 @@ import {
     ArenaScroller,
     ArenaScrollerItem,
     MerchantCard,
+    ProductCard,
     StructuredData,
   ],
   templateUrl: './home.html',
@@ -43,6 +49,8 @@ import {
 export class Home {
   private readonly router = inject(Router);
 
+  private readonly cart = inject(Cart);
+
   protected readonly marketplace = inject(Marketplace);
 
   protected readonly restaurants = computed(() => this.marketplace.restaurants().slice(0, 4));
@@ -50,6 +58,27 @@ export class Home {
   protected readonly importers = computed(() => this.marketplace.importers().slice(0, 4));
 
   protected readonly cities = computed(() => this.marketplace.cities());
+
+  protected readonly foodPicks = computed(() => this.marketplace.foodFeed().slice(0, 4));
+
+  protected readonly parcelPicks = computed(() => this.marketplace.parcelFeed().slice(0, 4));
+
+  protected readonly feedSchema = computed<Record<string, unknown>>(() => {
+    const items = [...this.foodPicks(), ...this.parcelPicks()];
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Lo que se está vendiendo hoy en Touno',
+      numberOfItems: items.length,
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: `${item.product.name} · ${item.merchant.name}`,
+        url: `${SITE_ORIGIN}/${item.merchant.kind === 'restaurante' ? 'restaurantes' : 'tiendas'}/${item.merchant.slug}`,
+      })),
+    };
+  });
 
   protected readonly websiteSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -71,6 +100,10 @@ export class Home {
     areaServed: { '@type': 'Country', name: CONTACT_COUNTRY },
     address: { '@type': 'PostalAddress', addressLocality: CONTACT_CITY, addressCountry: 'BO' },
   };
+
+  protected addToCart(product: Product): void {
+    this.cart.add(product);
+  }
 
   protected goTo(path: string): void {
     void this.router.navigateByUrl(path);

@@ -96,12 +96,12 @@ Spanish paths. Everything public is indexed; every panel is `noindex,follow`.
 | `/tarifas`                             | route tariffs                             |
 | `/conducir`                            | driver recruitment                        |
 
-| Behind the fake sign-in    |                                                                                               |
-| -------------------------- | --------------------------------------------------------------------------------------------- |
-| `/importadora/…`           | shipments, new shipment, payment, detail, batch, account, catalogue, drivers                  |
-| `/restaurante/…`           | live orders, history, menu, product, metrics, finance, promotions, reviews, drivers, settings |
-| `/conductor/…`             | shift, incoming ride, verified pickup, branch drop-off, earnings, hiring offers               |
-| `/carrito`, `/mis-pedidos` | the buyer's cart and orders                                                                   |
+| Behind the fake sign-in             |                                                                                               |
+| ----------------------------------- | --------------------------------------------------------------------------------------------- |
+| `/importadora/…`                    | shipments, new shipment, payment, detail, batch, account, catalogue, drivers                  |
+| `/restaurante/…`                    | live orders, history, menu, product, metrics, finance, promotions, reviews, drivers, settings |
+| `/conductor/…`                      | shift, incoming ride, verified pickup, branch drop-off, earnings, hiring offers               |
+| `/feed`, `/carrito`, `/mis-pedidos` | the buyer's feed, cart and orders                                                             |
 
 There is no password. `/ingresar` picks a profile, the role lives in a signal, and a panel whose
 role is not the current one renders an unauthenticated card with the four profiles in it.

@@ -1,0 +1,43 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Feed"
+    subtitle="Lo que los restaurantes y las importadoras de la red están vendiendo ahora mismo, en un solo lugar y con un solo carrito."
+  />
+
+  <arena-section
+    id="comida"
+    eyebrow="Comida"
+    title="Platos que salen hoy"
+    description="De los restaurantes que están abiertos en este momento. Agrega al carrito y pide sin salir de aquí."
+  >
+    <arena-grid>
+      @for (item of food(); track item.product.id) {
+        <app-product-card
+          [product]="item.product"
+          [merchant]="item.merchant"
+          fallbackIcon="ph ph-fork-knife"
+          (add)="addToCart($event)"
+        />
+      }
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    id="encomiendas"
+    eyebrow="Encomiendas"
+    title="Listo para despachar"
+    description="Lo que las importadoras tienen en stock. Sale con guía, código de retiro y seguimiento por hitos."
+  >
+    <arena-grid>
+      @for (item of parcels(); track item.product.id) {
+        <app-product-card
+          [product]="item.product"
+          [merchant]="item.merchant"
+          fallbackIcon="ph ph-package"
+          (add)="addToCart($event)"
+        />
+      }
+    </arena-grid>
+  </arena-section>
+</div>

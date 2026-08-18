@@ -29,6 +29,12 @@ body carries `.arena-stack .arena-stack--group` and nothing else about separatio
 markers `[media]` and `[fallback]` need `ArenaMedia` and `ArenaFallback` in the component's own
 `imports`; drop one and the slot renders nothing, with no error.
 
+`product-card` takes an optional `merchant`, and that is the whole of what makes it a feed card:
+the shop's name fills `ArenaCard`'s own `eyebrow`, so the attribution costs no markup and no class
+of ours. It takes no `href` even in the feed, because the card already holds the Agregar button and
+Arena's own note on `href` is that a control inside the anchor is a control inside a link. The shop
+is reached from the section around the card, never from the card.
+
 `merchant-card` takes a `headingLevel` so it can be `h2` on a listing page and `h3` inside a
 section, which is what keeps the document outline whole.
 

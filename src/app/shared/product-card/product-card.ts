@@ -8,7 +8,7 @@ import {
   ArenaFigure,
   ArenaMedia,
 } from '@dravensoft/arena-angular';
-import { Product } from '../../domain/marketplace.model';
+import { Merchant, Product } from '../../domain/marketplace.model';
 import { bs } from '../../domain/format';
 
 @Component({
@@ -23,6 +23,7 @@ export class ProductCard {
   private readonly location = inject(Location);
 
   readonly product = input.required<Product>();
+  readonly merchant = input<Merchant>();
   readonly fallbackIcon = input('ph ph-fork-knife');
 
   readonly add = output<Product>();

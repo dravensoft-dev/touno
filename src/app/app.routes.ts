@@ -213,6 +213,12 @@ export const routes: Routes = [
     data: PRIVATE,
   },
   {
+    path: 'feed',
+    title: 'Feed',
+    loadComponent: () => import('./pages/buyer/feed/feed').then((m) => m.Feed),
+    data: PRIVATE,
+  },
+  {
     path: 'carrito',
     title: 'Tu carrito',
     loadComponent: () => import('./pages/buyer/cart/cart').then((m) => m.BuyerCart),

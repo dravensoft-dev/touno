@@ -176,6 +176,13 @@ export const PANELS: readonly PanelArea[] = [
     label: 'Panel del comprador',
     destinations: [
       {
+        id: 'feed',
+        label: 'Feed',
+        icon: 'ph-bold ph-squares-four',
+        path: '/feed',
+        bar: true,
+      },
+      {
         id: 'tienda',
         label: 'Tienda',
         icon: 'ph-bold ph-storefront',
@@ -200,7 +207,7 @@ export const PANELS: readonly PanelArea[] = [
   },
 ];
 
-export const BUYER_PREFIXES: readonly string[] = ['/mis-pedidos', '/carrito'];
+export const BUYER_PREFIXES: readonly string[] = ['/feed', '/mis-pedidos', '/carrito'];
 
 function under(path: string, prefix: string): boolean {
   return path === prefix || path.startsWith(`${prefix}/`);
