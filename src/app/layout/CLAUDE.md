@@ -60,6 +60,11 @@ destination needs to appear in the bottom bar as well as the rail.
   true, and once put the public restaurant listing behind the merchant panel's gate.
 - **Never put `routerLink` on an `arena-side-nav-item` or an `arena-bottom-nav-item`.** They report
   `(nav)` with their own id; route from that handler with `router.navigateByUrl`.
+- **A destination's `href` is prepared, its path is not.** `app.ts` maps every destination through
+  `Location.prepareExternalUrl()` for the `href` the item renders, because `--base-href` reaches
+  `routerLink` and nothing else, and a rail item opened in a new tab under `/touno/` would
+  otherwise land on the host's root. `go()` still navigates with the raw path, which is what the
+  router wants. `app.spec.ts` holds both halves.
 - **`active` is an id, never a path**, and there is no route matcher. `activeIdIn()` does the
   comparison, longest path first so `/importadora/envios/nuevo` does not light `Envíos`.
 - **`router.url` is read through a `toSignal` bridge over `NavigationEnd`**, never in the template.

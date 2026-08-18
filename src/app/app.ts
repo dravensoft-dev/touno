@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
@@ -19,11 +20,15 @@ import {
 } from '@dravensoft/arena-angular';
 import { Cart } from './domain/cart';
 import { Role, Session } from './domain/session';
-import { PANELS, activeIdIn, panelFor } from './layout/panel-nav';
+import { Destination, PANELS, activeIdIn, panelFor } from './layout/panel-nav';
 import { SiteFooter } from './layout/site-footer/site-footer';
 import { ThemeToggle } from './layout/theme-toggle/theme-toggle';
 import { BrandMark } from './shared/brand-mark/brand-mark';
 import { SITE_NAME } from './seo/site';
+
+interface Reachable extends Destination {
+  readonly href: string;
+}
 
 interface PublicLink {
   readonly path: string;
@@ -76,6 +81,8 @@ const PUBLIC_LINKS: readonly PublicLink[] = [
 export class App {
   private readonly router = inject(Router);
 
+  private readonly location = inject(Location);
+
   protected readonly session = inject(Session);
 
   protected readonly cart = inject(Cart);
@@ -102,8 +109,15 @@ export class App {
     return panel ? activeIdIn(panel, this.url()) : undefined;
   });
 
-  protected readonly barDestinations = computed(
-    () => this.panel()?.destinations.filter((destination) => destination.bar) ?? [],
+  protected readonly destinations = computed<readonly Reachable[]>(() =>
+    (this.panel()?.destinations ?? []).map((destination) => ({
+      ...destination,
+      href: this.location.prepareExternalUrl(destination.path),
+    })),
+  );
+
+  protected readonly barDestinations = computed(() =>
+    this.destinations().filter((destination) => destination.bar),
   );
 
   protected readonly unlocked = computed(() => {
