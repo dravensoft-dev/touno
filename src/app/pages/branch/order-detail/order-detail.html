@@ -1,10 +1,104 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head headingLevel="h1" title="Pedido" subtitle="Quién lo lleva y cuánto falta." />
+@if (order(); as pedido) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head
+      headingLevel="h1"
+      [title]="pedido.code"
+      [subtitle]="pedido.buyer.name + ' · ' + buyerCity() + ' · ' + labelOf(pedido)"
+    >
+      <div actions>
+        <app-state-tag [order]="pedido.state" />
+      </div>
+    </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    @if (needsRider()) {
+      <arena-alert tone="warning" title="Este pedido espera que asignes un rider">
+        Mientras tanto el comprador ve «En espera de rider». Sólo aparecen los riders que aceptaron
+        trabajar con esta sucursal y que están en turno.
+      </arena-alert>
+
+      <arena-section
+        eyebrow="Asignar"
+        title="Quién lo lleva"
+        [description]="
+          leg() === 'interurbano'
+            ? 'Este tramo lo hace un camión, así que sólo se ofrecen riders interurbanos.'
+            : 'Reparto en ciudad, con moto o auto.'
+        "
+        rhythm="md"
+      >
+        <app-rider-picker [branchId]="branchId()" [leg]="leg()" (assign)="assign($event)" />
+      </arena-section>
+    }
+
+    @if (timeline(); as linea) {
+      @if (linea.waiting === 'carga') {
+        <arena-alert tone="info" title="Esperando a completar la carga">
+          Faltan {{ missing() }} pedidos para que salga el camión. El comprador ve el mismo número.
+        </arena-alert>
+      }
+
+      <arena-section
+        eyebrow="Paso a paso"
+        title="Cómo va el pedido"
+        [description]="eta()"
+        rhythm="md"
+      >
+        <app-order-timeline [timeline]="linea" [placeNames]="placeNames()" />
+      </arena-section>
+    }
+
+    @if (sheet(); as ficha) {
+      <app-custody-card [sheet]="ficha" title="Quién lo tiene ahora" />
+    }
+
+    @if (thread(); as hilo) {
+      <arena-section
+        eyebrow="Chat"
+        [title]="
+          weHoldIt()
+            ? 'El comprador te escribe a ti'
+            : 'La conversación la lleva ' + hilo.counterpartName
+        "
+        [description]="
+          weHoldIt()
+            ? 'Tienes el pedido en la sucursal, así que el chat del comprador llega aquí.'
+            : 'Ya no tienes el pedido en las manos, así que sólo lo lees.'
+        "
+        rhythm="md"
+      >
+        <app-order-chat
+          [thread]="hilo"
+          viewer="sucursal"
+          [disabled]="!weHoldIt()"
+          (send)="send($event)"
+        />
+      </arena-section>
+    }
+
+    <arena-key-value [rows]="facts()" [total]="total()" />
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver al tablero
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    @if (elsewhere()) {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-prohibit"
+        title="Ese pedido no es de esta sucursal"
+        message="Sólo ves los pedidos que salen de tu sucursal o que llegan a ella."
+      />
+    } @else {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-magnifying-glass"
+        title="No encontramos ese pedido"
+        message="Revisa el código o vuelve al tablero."
+      />
+    }
+  </div>
+}

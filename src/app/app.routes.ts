@@ -243,26 +243,27 @@ export const routes: Routes = [
     path: 'sucursal/carta',
     title: 'Carta',
     data: PRIVATE,
-    loadComponent: () => import('./pages/branch/menu/menu').then((m) => m.BranchMenu),
+    loadComponent: () => import('./pages/branch/stock/stock').then((m) => m.BranchStockPage),
   },
   {
     path: 'sucursal/carta/:id',
     title: 'Plato',
     data: PRIVATE,
-    loadComponent: () => import('./pages/branch/menu-item/menu-item').then((m) => m.BranchMenuItem),
+    loadComponent: () =>
+      import('./pages/branch/stock-item/stock-item').then((m) => m.BranchStockItem),
   },
   {
     path: 'sucursal/catalogo',
     title: 'Catálogo de la sucursal',
     data: PRIVATE,
-    loadComponent: () => import('./pages/branch/catalog/catalog').then((m) => m.BranchCatalog),
+    loadComponent: () => import('./pages/branch/stock/stock').then((m) => m.BranchStockPage),
   },
   {
     path: 'sucursal/catalogo/:id',
     title: 'Artículo',
     data: PRIVATE,
     loadComponent: () =>
-      import('./pages/branch/catalog-item/catalog-item').then((m) => m.BranchCatalogItem),
+      import('./pages/branch/stock-item/stock-item').then((m) => m.BranchStockItem),
   },
   {
     path: 'sucursal/historial',

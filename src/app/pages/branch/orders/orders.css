@@ -1,0 +1,20 @@
+.board-card__lines {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-body);
+}
+
+.board-card__total {
+  margin-inline-start: auto;
+  font-weight: var(--fw-control);
+  color: var(--ink-heading);
+}
+
+.board-card__away {
+  margin: 0;
+  font-family: var(--ff-eyebrow);
+  font-size: var(--step-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}

@@ -1,0 +1,60 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    [title]="title()"
+    [subtitle]="
+      'Los precios y los artículos son de la empresa. Lo que decides aquí es qué hay hoy en ' +
+      (branch()?.name ?? 'tu sucursal') +
+      '.'
+    "
+  />
+
+  @if (gone().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="
+        gone().length === 1
+          ? 'Un artículo está agotado en tu sucursal'
+          : gone().length + ' artículos están agotados en tu sucursal'
+      "
+    >
+      Dejan de ofrecerse aquí y siguen a la venta en las demás sucursales.
+    </arena-alert>
+  }
+
+  @if (categories().length > 0) {
+    <arena-tabs [ariaLabel]="'Categorías de ' + noun()" [value]="current()" (change)="pick($event)">
+      @for (category of categories(); track category) {
+        <arena-tab [value]="category" [label]="category">
+          <arena-table [label]="category" [columns]="columns">
+            @for (product of inCategory(category); track product.id) {
+              <tr arena-table-row [interactive]="true" (activate)="open(product)">
+                <td arena-table-cell>{{ product.name }}</td>
+                <td arena-table-cell>
+                  <span class="arena-num">{{ price(product) }}</span>
+                </td>
+                <td arena-table-cell>
+                  <span class="arena-num">{{ product.soldThisMonth }}</span>
+                </td>
+                <td arena-table-cell>
+                  <arena-switch
+                    [state]="has(product)"
+                    [label]="'Hay ' + product.name + ' hoy'"
+                    (requestChange)="toggle(product)"
+                  />
+                </td>
+              </tr>
+            }
+          </arena-table>
+        </arena-tab>
+      }
+    </arena-tabs>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-tag"
+      title="Nada publicado todavía"
+      [message]="'La empresa aún no publicó ' + noun() + '.'"
+    />
+  }
+</div>

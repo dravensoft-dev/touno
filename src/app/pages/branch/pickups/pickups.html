@@ -2,13 +2,125 @@
   <arena-page-head
     headingLevel="h1"
     title="Entregas"
-    subtitle="Lo que llegó a tu sucursal y espera a su comprador."
+    subtitle="Lo que llegó a esta sucursal y todavía no está en manos de su comprador."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (scanning(); as pedido) {
+    <arena-section
+      eyebrow="Mostrador"
+      [title]="'Escanear el código de ' + pedido.buyer.name"
+      description="Pide al comprador que abra su pedido y muestre el código. Si no coincide, no se entrega."
+      rhythm="md"
+    >
+      <app-scan-panel
+        title="Escanear el código"
+        hint="Apunta al código del comprador, o escríbelo si la cámara no coopera."
+        [simulated]="expected()"
+        (scanned)="onScanned($event)"
+      />
+      <div class="arena-row">
+        <arena-button variant="ghost" (click)="cancelScan()">Cancelar</arena-button>
+      </div>
+    </arena-section>
+  }
+
+  <arena-section
+    eyebrow="En mostrador"
+    title="Esperan a su comprador"
+    description="Ya avisamos a cada uno. Se entregan escaneando su código."
+    rhythm="md"
+  >
+    @if (waiting().length > 0) {
+      <arena-table label="Pedidos listos para recoger" [columns]="columns">
+        @for (row of rowsOf(waiting()); track row.order.code) {
+          <tr arena-table-row>
+            <td arena-table-cell>{{ row.order.code }}</td>
+            <td arena-table-cell>{{ row.order.buyer.name }}</td>
+            <td arena-table-cell>
+              <span class="arena-num">{{ row.arrived }}</span>
+            </td>
+            <td arena-table-cell>
+              <arena-button size="sm" (click)="startScan(row.order)">Escanear</arena-button>
+            </td>
+          </tr>
+        }
+      </arena-table>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-hand-arrow-down"
+        title="Nada en mostrador"
+        message="Cuando llegue un pedido de recojo lo vas a ver aquí."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="A domicilio"
+    title="Llegaron y hay que repartirlos"
+    description="El comprador pidió entrega en su puerta, así que necesitan un rider tuyo."
+    rhythm="md"
+  >
+    @if (toDeliver().length > 0) {
+      <arena-alert tone="warning" title="Esperan rider local">
+        Hasta que asignes a alguien, el comprador ve «En espera de rider».
+      </arena-alert>
+
+      <arena-table label="Pedidos por repartir" [columns]="columns">
+        @for (row of rowsOf(toDeliver()); track row.order.code) {
+          <tr arena-table-row>
+            <td arena-table-cell>{{ row.order.code }}</td>
+            <td arena-table-cell>{{ row.order.buyer.name }}</td>
+            <td arena-table-cell>
+              <span class="arena-num">{{ row.arrived }}</span>
+            </td>
+            <td arena-table-cell>
+              <arena-button size="sm" variant="secondary" (click)="open(row.order)">
+                Asignar rider
+              </arena-button>
+            </td>
+          </tr>
+        }
+      </arena-table>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-motorcycle"
+        title="Nada por repartir"
+        message="Todo lo que llegó ya salió o espera en mostrador."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Viene en camino"
+    title="Cargas que llegan a esta sucursal"
+    description="Camiones de otras sucursales de tu empresa."
+    rhythm="md"
+  >
+    @if (arriving().length > 0) {
+      <arena-table label="Cargas en ruta" [columns]="loadColumns">
+        @for (load of arriving(); track load.id) {
+          <tr arena-table-row>
+            <td arena-table-cell>{{ load.id }}</td>
+            <td arena-table-cell>{{ branchName(load.fromBranchId) }}</td>
+            <td arena-table-cell>{{ riderName(load.riderId) }}</td>
+            <td arena-table-cell>
+              <span class="arena-num">{{ load.orderCodes.length }}</span>
+            </td>
+            <td arena-table-cell>
+              <span class="arena-num">{{ load.arrivesAt.slice(11, 16) }}</span>
+            </td>
+          </tr>
+        }
+      </arena-table>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-truck"
+        title="Ningún camión en ruta hacia aquí"
+        message="Cuando salga una carga hacia tu ciudad la vas a ver en esta lista."
+      />
+    }
+  </arena-section>
 </div>

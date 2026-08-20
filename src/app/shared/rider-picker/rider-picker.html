@@ -1,0 +1,30 @@
+@if (candidates().length > 0) {
+  <arena-people-list [label]="label()">
+    @for (candidate of free(); track candidate.rider.id) {
+      <arena-person-row
+        [name]="candidate.rider.name"
+        [secondary]="candidate.secondary"
+        [figure]="candidate.rider.rating.toString()"
+      >
+        <arena-button action variant="secondary" (click)="pick(candidate.rider)">
+          Asignar
+        </arena-button>
+      </arena-person-row>
+    }
+
+    @for (candidate of busy(); track candidate.rider.id) {
+      <arena-person-row
+        [name]="candidate.rider.name"
+        [secondary]="candidate.secondary + ' · fuera de turno'"
+        [figure]="candidate.rider.rating.toString()"
+      />
+    }
+  </arena-people-list>
+} @else {
+  <arena-empty-state
+    headingLevel="h3"
+    icon="ph-bold ph-handshake"
+    title="Ningún rider trabaja con esta sucursal"
+    message="Un rider sólo aparece aquí cuando las dos partes aceptaron el acuerdo. Proponle uno desde el panel de la empresa."
+  />
+}

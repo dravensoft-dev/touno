@@ -1,14 +1,77 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Riders"
-    subtitle="Quién trabaja contigo y quién está libre ahora."
+    title="Riders de la sucursal"
+    subtitle="Sólo aparecen aquí los que aceptaron trabajar contigo, y a quienes tú aceptaste."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-handshake"
+      label="Con acuerdo activo"
+      [value]="working().length.toString()"
+      sub="Pueden recibir encargos de esta sucursal"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-power"
+      label="En turno ahora"
+      [value]="online().length.toString()"
+      sub="Disponibles para asignar en este momento"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-truck"
+      label="Interurbanos"
+      [value]="longHaul().length.toString()"
+      sub="Con camión, para las cargas entre ciudades"
+    />
+  </arena-grid>
+
+  @if (applying().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="
+        applying().length === 1
+          ? 'Un rider se postuló a esta sucursal'
+          : applying().length + ' riders se postularon a esta sucursal'
+      "
+    >
+      La empresa tiene que responderles. Hasta que acepte, no puedes asignarles nada.
+    </arena-alert>
+  }
+
+  <arena-section
+    eyebrow="Reparto en ciudad"
+    title="Moto y auto"
+    description="Los que llevan pedidos a la puerta del comprador."
+    rhythm="md"
+  >
+    @if (urban().length > 0) {
+      <app-rider-picker [branchId]="branchId()" leg="origen" label="Riders urbanos" />
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-motorcycle"
+        title="Ningún rider urbano todavía"
+        message="Sin al menos uno, esta sucursal no puede despachar a domicilio."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Entre ciudades"
+    title="Camión"
+    description="Los que llevan las cargas hacia las otras sucursales de tu empresa."
+    rhythm="md"
+  >
+    @if (longHaul().length > 0) {
+      <app-rider-picker [branchId]="branchId()" leg="interurbano" label="Riders interurbanos" />
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-truck"
+        title="Ningún camión trabaja con esta sucursal"
+        message="Sin uno, lo que se venda a otra ciudad se queda aquí."
+      />
+    }
+  </arena-section>
 </div>

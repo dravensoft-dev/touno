@@ -1,0 +1,33 @@
+@if (product(); as articulo) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head headingLevel="h1" [title]="articulo.name" [subtitle]="articulo.description" />
+
+    <arena-alert tone="info" title="El precio no se toca desde aquí">
+      El nombre, la descripción y el precio son de la empresa y rigen en todas sus sucursales. Lo
+      que decides tú es si hoy hay en {{ branch()?.name ?? 'tu sucursal' }}.
+    </arena-alert>
+
+    <arena-switch
+      [state]="available()"
+      [label]="'Hay ' + articulo.name + ' hoy en esta sucursal'"
+      (requestChange)="toggle()"
+    />
+
+    <arena-key-value [rows]="facts()" />
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    <arena-empty-state
+      headingLevel="h1"
+      icon="ph-bold ph-magnifying-glass"
+      title="No encontramos ese artículo"
+      message="Puede que la empresa lo haya quitado."
+    />
+  </div>
+}

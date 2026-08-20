@@ -1,14 +1,35 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Ajustes"
-    subtitle="Horario, dirección y si estás abierto."
+    [title]="branch()?.name ?? 'Ajustes'"
+    subtitle="Lo que puedes cambiar sin pedirle nada a la empresa."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
+  <arena-switch
+    [state]="open()"
+    label="Sucursal abierta y aceptando pedidos"
+    [confirm]="true"
+    (requestChange)="toggleOpen()"
   />
+
+  @if (!open()) {
+    <arena-alert tone="warning" title="Estás cerrada">
+      Tu sucursal no aparece en el feed y no puede recibir pedidos nuevos. Los que ya estaban en
+      curso siguen su camino.
+    </arena-alert>
+  }
+
+  @if (riders().length === 0) {
+    <arena-alert tone="warning" title="Ningún rider trabaja contigo">
+      Sin al menos un rider con acuerdo aceptado no vas a poder despachar. La propuesta la envía la
+      empresa, o el rider se postula.
+    </arena-alert>
+  }
+
+  <arena-alert tone="info" title="Lo que se cambia desde la empresa">
+    La dirección, el horario, el tiempo de preparación y el costo de envío los fija la empresa para
+    esta sucursal. Aquí los ves para confirmarlos.
+  </arena-alert>
+
+  <arena-key-value [rows]="facts()" />
 </div>

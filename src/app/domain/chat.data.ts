@@ -481,4 +481,36 @@ export const THREADS: readonly ChatThread[] = [
       },
     ],
   },
+  {
+    id: 'th-2214',
+    orderCode: 'TO-2214',
+    counterpart: { kind: 'sucursal', branchId: 'b-ale-la-paz', since: '2026-08-15T10:20:00' },
+    counterpartName: 'Ale La Paz',
+    messages: [
+      {
+        id: 'm-2214-1',
+        threadId: 'th-2214',
+        author: 'sistema',
+        authorName: 'Touno',
+        body: 'La carga salió de Ale Santa Cruz hacia La Paz con Hugo Barrientos. Ahora hablas con él.',
+        at: '2026-08-14T06:40:00',
+      },
+      {
+        id: 'm-2214-2',
+        threadId: 'th-2214',
+        author: 'sistema',
+        authorName: 'Touno',
+        body: 'Tu pedido llegó a Ale La Paz. Ahora hablas con Ale Quisbert, gerente de sucursal.',
+        at: '2026-08-15T10:20:00',
+      },
+      {
+        id: 'm-2214-3',
+        threadId: 'th-2214',
+        author: 'sucursal',
+        authorName: 'Ale Quisbert',
+        body: 'Tu paquete está en mostrador. Traé tu código y tu carnet.',
+        at: '2026-08-15T10:25:00',
+      },
+    ],
+  },
 ];

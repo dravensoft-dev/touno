@@ -5,10 +5,58 @@
     subtitle="Lo que ya cerró, con su desenlace."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-check-circle"
+      label="Entregados"
+      [value]="delivered().length.toString()"
+      sub="Cerrados escaneando el código del comprador"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-x-circle"
+      label="Rechazados"
+      [value]="rejected().length.toString()"
+      sub="No se cobró nada al comprador"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Cobrado"
+      [value]="takings()"
+      sub="Suma de los pedidos entregados"
+    />
+  </arena-grid>
+
+  <arena-segmented-control
+    ariaLabel="Filtrar el historial"
+    [options]="filters"
+    [value]="filter()"
+    (change)="pick($event)"
   />
+
+  @if (rows().length > 0) {
+    <arena-table label="Pedidos cerrados" [columns]="columns">
+      @for (row of rows(); track row.order.code) {
+        <tr arena-table-row [interactive]="true" (activate)="open(row.order)">
+          <td arena-table-cell>{{ row.order.code }}</td>
+          <td arena-table-cell>{{ row.order.buyer.name }}</td>
+          <td arena-table-cell>
+            <app-state-tag [order]="row.order.state" />
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.when }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.total }}</span>
+          </td>
+        </tr>
+      }
+    </arena-table>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-clock-counter-clockwise"
+      title="Nada cerrado todavía"
+      message="Cuando entregues o rechaces un pedido lo vas a ver aquí."
+    />
+  }
 </div>

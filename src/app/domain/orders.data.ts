@@ -493,6 +493,38 @@ export const ORDERS: readonly Order[] = [
       at: '2026-08-14T09:00:00',
     },
   },
+  {
+    code: 'TO-2214',
+    slug: 'to-2214',
+    scenario: 'interurbano-sucursal',
+    type: 'importadora',
+    companyId: 'c-ale',
+    originBranchId: 'b-ale-santa-cruz',
+    destinationBranchId: 'b-ale-la-paz',
+    buyer: { name: 'Nadia Choque', phone: '7355 8890', ci: '8890' },
+    buyerCityId: 'la-paz',
+    delivery: 'sucursal',
+    lines: [
+      { productId: 'al-zapatilla', name: 'Zapatilla urbana', qty: 1, unitBob: 380, options: [] },
+    ],
+    subtotalBob: 380,
+    deliveryBob: 0,
+    totalBob: 380,
+    state: 'listo-para-recojo',
+    placedAt: '2026-08-13T14:10:00',
+    promisedAt: '2026-08-15T12:00:00',
+    assignments: [
+      {
+        leg: 'interurbano',
+        riderId: 'r-hugo',
+        branchId: 'b-ale-santa-cruz',
+        assignedAt: '2026-08-14T06:30:00',
+      },
+    ],
+    custody: { kind: 'sucursal', branchId: 'b-ale-la-paz', since: '2026-08-15T10:20:00' },
+    loadId: 'cg-3303',
+    threadId: 'th-2214',
+  },
 ];
 
 export const COUPONS: readonly Coupon[] = [

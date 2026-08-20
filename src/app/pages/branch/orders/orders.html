@@ -1,14 +1,94 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Pedidos"
-    subtitle="Acepta, prepara y asigna un rider."
+    [title]="branch()?.name ?? 'Pedidos'"
+    [subtitle]="'Lo que se mueve hoy en ' + cityName() + '.'"
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (waiting().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="
+        waiting().length === 1
+          ? 'Un pedido espera rider'
+          : waiting().length + ' pedidos esperan rider'
+      "
+    >
+      <p>
+        El comprador ve «En espera de rider» hasta que asignes a alguien. Sólo puedes elegir entre
+        los riders que aceptaron trabajar con esta sucursal.
+      </p>
+      <arena-button action variant="secondary" (click)="openFirstWaiting()">
+        Asignar el primero
+      </arena-button>
+    </arena-alert>
+  }
+
+  @if (board().length > 0) {
+    <arena-board label="Pedidos en curso" minColumn="15rem">
+      @for (column of columns; track column.id) {
+        <arena-board-column
+          [title]="column.title"
+          [count]="inColumn(column).length"
+          [summary]="column.summary"
+        >
+          @for (order of inColumn(column); track order.code) {
+            <arena-card [title]="order.code" headingLevel="h3" [eyebrow]="card(order).when">
+              <div class="board-card arena-stack arena-stack--group">
+                <p class="board-card__lines">{{ card(order).lines }}</p>
+
+                <div class="board-card__meta arena-row arena-row--baseline">
+                  <app-state-tag [order]="order.state" />
+                  <span class="board-card__total arena-num">{{ card(order).total }}</span>
+                </div>
+
+                @if (card(order).away) {
+                  <p class="board-card__away">Viaja a otra ciudad</p>
+                }
+
+                <div class="board-card__actions arena-row">
+                  @switch (order.state) {
+                    @case ('nuevo') {
+                      <arena-button size="sm" (click)="accept(order)">Aceptar</arena-button>
+                      <arena-button size="sm" variant="ghost" (click)="askReject(order)">
+                        Rechazar
+                      </arena-button>
+                    }
+                    @case ('preparando') {
+                      <arena-button size="sm" (click)="ready(order)">Listo para salir</arena-button>
+                    }
+                    @default {
+                      <arena-button size="sm" variant="secondary" (click)="open(order)">
+                        Ver el pedido
+                      </arena-button>
+                    }
+                  }
+                </div>
+              </div>
+            </arena-card>
+          }
+        </arena-board-column>
+      }
+    </arena-board>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-tray"
+      title="Nada en curso"
+      message="Cuando entre un pedido lo vas a ver aquí, en la primera columna."
+    />
+  }
 </div>
+
+<arena-confirm-dialog
+  [open]="rejecting() !== null"
+  eyebrow="Rechazar"
+  [title]="'¿Rechazar ' + (rejecting()?.code ?? '') + '?'"
+  confirmLabel="Rechazar el pedido"
+  cancelLabel="Volver"
+  [destructive]="true"
+  (cancel)="cancelReject()"
+  (confirm)="confirmReject()"
+>
+  El comprador se entera al instante y no se le cobra nada. No se puede deshacer.
+</arena-confirm-dialog>
