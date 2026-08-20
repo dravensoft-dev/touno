@@ -49,6 +49,11 @@ Un rider no pertenece a Touno ni pertenece a una empresa. **Elige** para quién 
 elección puede ser por una sola sucursal o por un grupo de sucursales: alguien puede repartir para
 dos locales de un restaurante en su zona y para ninguno más.
 
+**Un rider es un solo tipo de usuario, aunque haya dos clases de viaje.** Quien va en moto o en
+auto reparte dentro de una ciudad; quien va en camión une dos ciudades llevando varios pedidos a la
+vez. Es la misma cuenta y la misma aplicación: lo que cambia es el trabajo que le llega, y lo
+decide su vehículo. En la sección 4 está contado por completo.
+
 ### El acuerdo es de dos partes
 
 Un rider **nunca** queda asignado a una sucursal sin que las dos partes hayan dicho que sí.
@@ -181,6 +186,9 @@ encargos recibes.
 
 ### Qué haces en Touno, paso a paso
 
+Los dos primeros pasos son iguales para todos. Del tercero en adelante, esto es el **reparto
+urbano**; si llevas camión, tu recorrido es el de la sección siguiente.
+
 1. **Entras en acuerdo con las sucursales para las que quieras trabajar.** Dos caminos, y valen
    los dos:
    - Te llega una **invitación** de una empresa, y la aceptas o la rechazas.
@@ -199,13 +207,19 @@ encargos recibes.
 
 ### Si llevas camión
 
-El recorrido es distinto en un punto: **no sales con un pedido, sales con una carga**.
+**No sales con un pedido, sales con una carga**, y **tú no escaneas ningún código**. Ésas son las
+dos diferencias, y la segunda importa: el código del comprador lo escanea quien se lo entrega en
+mano, y tú entregas a una sucursal, no a una persona.
 
 1. La sucursal de origen va poniendo pedidos en tu carga.
-2. **Esperas a que se complete.** Ves cuántos pedidos hay y cuántos faltan para salir.
-3. Sales, y durante el viaje el mapa te muestra a todos los compradores de esa carga.
+2. **Esperas a que se complete.** Ves cuántos pedidos llevas y cuántos faltan. **No puedes salir
+   hasta que esté llena**: es la razón de ser del viaje, llevar varios de una vez.
+3. **Sales.** En ese momento, todos los compradores de esa carga dejan de ver «En espera a más
+   pedidos» y empiezan a verte avanzar en su mapa. El chat de cada uno pasa a ti, y a cada uno se
+   le explica por qué.
 4. **Descargas en la sucursal de destino.** Ahí termina tu parte. Lo que pase después —que el
-   comprador lo recoja, o que otro rider se lo lleve a su casa— ya no es tuyo.
+   comprador lo recoja en mostrador, o que otro rider se lo lleve a su casa— ya no es tuyo, y el
+   chat pasa a quien corresponda.
 
 ### Qué pantallas tienes
 
@@ -232,7 +246,10 @@ El recorrido es distinto en un punto: **no sales con un pedido, sales con una ca
 - **No te asignas encargos tú mismo.** Los asigna el gerente de la sucursal.
 - **No trabajas para una sucursal sin acuerdo aceptado**, aunque estés al lado.
 - **No cierras un pedido sin escanear el código del comprador.** No hay forma de marcarlo entregado
-  a mano.
+  a mano. Si llevas camión no escaneas nunca: tu entrega es a una sucursal, y queda registrada
+  cuando ella recibe la carga.
+- **No decides cuándo sale tu camión.** Sale cuando se llena, y cuántos pedidos hacen falta lo fija
+  la empresa.
 
 ---
 
@@ -499,7 +516,10 @@ Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista 
 
 - **No hay pagos dentro de la aplicación.** El cobro está fuera de este alcance.
 - **No hay cuentas ni contraseñas.** Lo que existe hoy es una maqueta navegable: se entra eligiendo
-  un perfil, para poder recorrer y opinar.
+  un perfil, para poder recorrer y opinar. Verás **siete perfiles de ejemplo para seis tipos de
+  usuario**, porque hay dos riders: uno en moto y uno en camión. No son dos tipos de usuario
+  distintos — es el mismo perfil con distinto vehículo, y están los dos para que puedas ver las dos
+  clases de viaje sin cambiar de aplicación.
 - **No hay devoluciones ni cancelaciones** una vez que el pedido salió.
 - **No hay pedidos programados** para una hora futura.
 - **No hay calificación del rider por parte del comprador.**
