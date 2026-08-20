@@ -21,6 +21,7 @@ import { Shipping } from '../../../domain/shipping';
 import { bs, fechaHora } from '../../../domain/format';
 import { ShipmentHeader } from '../../../shared/shipment-header/shipment-header';
 import { ShipmentTimeline } from '../../../shared/shipment-timeline/shipment-timeline';
+import { Notices } from '../../../layout/notices';
 import { StatusTag } from '../../../shared/status-tag/status-tag';
 import { SITE_ORIGIN } from '../../../seo/site';
 
@@ -52,6 +53,7 @@ import { SITE_ORIGIN } from '../../../seo/site';
 export class ImporterShipmentDetail {
   private readonly shipping = inject(Shipping);
   private readonly drivers = inject(Drivers);
+  private readonly notices = inject(Notices);
 
   readonly guia = input.required<string>();
 
@@ -107,5 +109,10 @@ export class ImporterShipmentDetail {
 
   protected closeReport(): void {
     this.reporting.set(false);
+  }
+
+  protected sendReport(): void {
+    this.reporting.set(false);
+    this.notices.reportSent();
   }
 }

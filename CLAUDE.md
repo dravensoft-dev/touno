@@ -38,7 +38,7 @@ rules that hold across the tree, and the traps that already cost a session.
 
 ### Design system
 
-`@dravensoft/arena-angular` 10.0.1 carries the language; `arena.config.json` plus `design/touno/`
+`@dravensoft/arena-angular` 10.1.0 carries the language; `arena.config.json` plus `design/touno/`
 carry the skin. Hold these:
 
 - **No class of ours on an Arena element.** Put the class on a container we own and let the Arena
@@ -113,7 +113,7 @@ bun run build          # prerenders every route into dist/touno/browser
 bun run test           # Vitest
 bun run lint           # angular-eslint
 bun run format         # Prettier over the tree (format:check to verify only)
-bun run audit:arena    # arena-to-prod report over src and design, writes nothing
+bun run audit:arena    # arena-to-prod over src and design/touno, strict on the kinds we hold
 bun run serve:static   # serves the build on :4173
 ```
 
@@ -185,6 +185,25 @@ Each of these was paid for once. Do not rediscover them.
   against `noche`'s card. Arena's own dark ramp is kept because lightening those four destroys the
   CVD separation the same gate checks, and every Arena chart ships visible labels and an
   accessible table, which is the relief the report asks for.
+- **`audit:arena` fails the build, and it names the kinds it fails on.**
+  `--strict=audit,glyph,markers,restated,weight` is the set. `components` and `ramp` are left out
+  on purpose, and they are the two entries above this one: the first is a false positive over the
+  rhythm classes and the second is a measured decision. Holding all of them with a bare `--strict`
+  would make those two the price of holding the rest, so a new kind is added to the list only once
+  the tree is clean of it.
+- **`ArenaSideNavSection` cannot be prerendered, so the rail is flat.** Its `ngAfterContentInit`
+  guard spreads `host.nativeElement.children`, and the DOM `@angular/platform-server` ships returns
+  a collection with no `Symbol.iterator`, so every panel route dies with "children is not iterable"
+  and `bun run build` writes nothing. It is an Arena defect rather than a rule of this project;
+  until it is fixed, group the rail by ordering `panel-nav.ts`, not by drawing a section.
+- **A row's overflow menu lives inside an `interactive` row, and that is legal.** Arena's own rule
+  is that a press starting on a control inside an activation target runs that control, so the
+  `arena-icon-button` a menu hangs off never opens the row behind it. What the menu costs is a
+  column: an actions column takes `align: 'right'` and `mobileLayout: 'block'`, which is the card
+  mode Arena documents for exactly this cell.
+- **`ArenaMenuItem` carries no id, so a menu is dispatched on `label`.** That is Arena's own
+  design — `select` reports the whole item — so the labels are module constants shared by the
+  items array and the handler. Never inline a label string in one of the two.
 - **Ink from the page does not reach a dark band we drew.** A neutral `ArenaTag` inside the
   shipment header's ink surface is invisible, because the tag reads `--ink-body`. Keep status
   tags out of the dark band.
@@ -198,7 +217,7 @@ bun run build
 bun run test
 bun run lint
 bunx prettier --check .
-bunx arena-to-prod --src src --src design --audit
+bun run audit:arena
 ```
 
 Then check by hand, because nothing above checks them:

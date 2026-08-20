@@ -16,6 +16,9 @@ import {
   ArenaSideNav,
   ArenaSideNavItem,
   ArenaSkipLink,
+  ArenaToast,
+  ArenaToastHost,
+  ArenaToastQueue,
   ArenaUnauthCard,
 } from '@dravensoft/arena-angular';
 import { Cart } from './domain/cart';
@@ -71,6 +74,8 @@ const PUBLIC_LINKS: readonly PublicLink[] = [
     ArenaBottomNav,
     ArenaBottomNavItem,
     ArenaUnauthCard,
+    ArenaToastHost,
+    ArenaToast,
     BrandMark,
     ThemeToggle,
     SiteFooter,
@@ -86,6 +91,10 @@ export class App {
   protected readonly session = inject(Session);
 
   protected readonly cart = inject(Cart);
+
+  private readonly toasts = inject(ArenaToastQueue);
+
+  protected readonly notices = this.toasts.toasts;
 
   protected readonly siteName = SITE_NAME;
 
@@ -155,5 +164,9 @@ export class App {
 
   protected toSignIn(): void {
     void this.router.navigateByUrl('/ingresar');
+  }
+
+  protected dismiss(id: number): void {
+    this.toasts.dismiss(id);
   }
 }

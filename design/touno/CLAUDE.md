@@ -5,22 +5,22 @@ This directory is the project's answer to Arena's style kernel. `arena.config.js
 
 Two files, and nothing else belongs here:
 
-- `plugin.tokens.json` — the 72 roles, in DTCG form, each with a `$description`.
+- `plugin.tokens.json` — the 77 roles, in DTCG form, each with a `$description`.
 - `plugin.css` — the four motifs no role expresses.
 
 ## plugin.tokens.json
 
-- **Answer all 72 roles.** The root plugin has no fallback: an unanswered role is a custom property
+- **Answer all 77 roles.** The root plugin has no fallback: an unanswered role is a custom property
   with no value, which is invalid at computed-value time, so the declaration reading it is dropped.
   That is a missing border, not a plainer look. `arena-to-prod` refuses the build over it.
 - **A colour role takes a `{color.*}` alias and nothing else.** A literal resolves to one palette's
   value and inherits it into the other, so `papel` would bleed into `.arena-noche`.
 - **Write a `$description` on every entry.** `bin/style-plugin-rules.mjs` has a check that demands
   one; the consumer path does not call it today, and one wiring change makes it fatal.
-- **Four roles need a unit the type does not carry**, through
-  `$extensions."com.dravensoft.arena".cssUnit`: `track-heading`, `track-eyebrow` and `track-label`
-  take `em`; `measure-prose` takes `ch`. Forget it and the value emits as a bare number, which is
-  not a valid letter spacing, and it silently resolves to `normal`.
+- **Five roles need a unit the type does not carry**, through
+  `$extensions."com.dravensoft.arena".cssUnit`: `track-heading`, `track-eyebrow`, `track-label` and
+  `track-trail` take `em`; `measure-prose` takes `ch`. Forget it and the value emits as a bare
+  number, which is not a valid letter spacing, and it silently resolves to `normal`.
 - **The reading floors refuse the build.** `lh-heading` must be ≥ 1, which is why the brief's 1.04
   heading leading resolves to `{lh.snug}` and not to `{lh.tight}`; `lh-prose` must be ≥ 1.5;
   `measure-prose` must sit between 45 and 90.
@@ -31,7 +31,7 @@ Two files, and nothing else belongs here:
   scale, and `step-title-surface` aliases `{fs.lg}`. An aliased role freezes the value the step had
   when the plugin was generated, so if anyone ever re-answers `fs-lg`, `step-title-surface` has to
   become a literal `17px` in the same commit.
-- **Six keys here are not roles**: `rhythm-group`, `rhythm-component` and `rhythm-section`. They
+- **Three keys here are not roles**: `rhythm-group`, `rhythm-component` and `rhythm-section`. They
   are the ladder a plugin is allowed to re-answer, because they reach the page through classes
   rather than through a role.
 
@@ -54,8 +54,9 @@ Two files, and nothing else belongs here:
 
 ```bash
 bun run prepare:assets
-bunx arena-to-prod --src src --src design --audit
+bun run audit:arena
 ```
 
-Passing `--src design` is what puts this directory in scope. Then serve the app and look at it, in
-both palettes: no gate reads the rendered page.
+`arena-to-prod` takes no arguments: it resolves this directory from `stylePlugins` and walks it
+wherever it sits, so a plugin outside `src` needs no `--src` of its own. Then serve the app and
+look at it, in both palettes: no gate reads the rendered page.

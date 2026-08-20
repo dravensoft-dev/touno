@@ -22,6 +22,7 @@ import { Session } from '../../../domain/session';
 import { Driver } from '../../../domain/drivers.model';
 import { MerchantKind } from '../../../domain/marketplace.model';
 import { bs } from '../../../domain/format';
+import { Notices } from '../../../layout/notices';
 
 @Component({
   selector: 'app-hire-drivers',
@@ -48,6 +49,7 @@ export class HireDrivers {
   private readonly drivers = inject(Drivers);
   private readonly hiring = inject(Hiring);
   private readonly session = inject(Session);
+  private readonly notices = inject(Notices);
 
   readonly base = input.required<string>();
   readonly businessKind = input.required<MerchantKind>();
@@ -141,6 +143,7 @@ export class HireDrivers {
     });
 
     this.candidate.set(null);
+    this.notices.offerSent(driver.name);
   }
 
   protected openProfile(driver: Driver): void {

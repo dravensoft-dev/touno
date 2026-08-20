@@ -52,6 +52,16 @@
           <td arena-table-cell>
             <span class="arena-num">{{ row.total }}</span>
           </td>
+          <td arena-table-cell>
+            <arena-menu [items]="rowActions" align="end" (select)="runOn(row, $event)">
+              <arena-icon-button
+                trigger
+                variant="ghost"
+                icon="ph-bold ph-dots-three-vertical"
+                [label]="'Acciones del envío ' + row.guia"
+              />
+            </arena-menu>
+          </td>
         </tr>
       }
     </arena-table>

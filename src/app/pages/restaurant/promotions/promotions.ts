@@ -15,6 +15,7 @@ import {
   ArenaTag,
 } from '@dravensoft/arena-angular';
 import { Orders } from '../../../domain/orders';
+import { Notices } from '../../../layout/notices';
 import { Session } from '../../../domain/session';
 import { bs } from '../../../domain/format';
 
@@ -42,6 +43,7 @@ import { bs } from '../../../domain/format';
 export class RestaurantPromotions {
   private readonly orders = inject(Orders);
   private readonly session = inject(Session);
+  private readonly notices = inject(Notices);
 
   protected readonly creating = signal(false);
   protected readonly code = signal('');
@@ -67,5 +69,10 @@ export class RestaurantPromotions {
 
   protected close(): void {
     this.creating.set(false);
+  }
+
+  protected create(): void {
+    this.creating.set(false);
+    this.notices.couponCreated();
   }
 }

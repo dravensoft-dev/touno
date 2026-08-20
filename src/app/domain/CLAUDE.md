@@ -4,7 +4,9 @@ Every area follows the same three files: `<area>.model.ts` for the types, `<area
 typed module constant, and `<area>.ts` for the `providedIn: 'root'` service that holds it in a
 signal and exposes computed slices.
 
-`format.ts`, `session.ts`, `cart.ts`, `draft.ts` and `latency.ts` are the cross-cutting ones.
+`format.ts`, `session.ts`, `cart.ts`, `draft.ts`, `clipboard.ts` and `latency.ts` are the
+cross-cutting ones. `clipboard.ts` is the one that touches a browser API, and it answers a boolean
+rather than throwing, so the page that called it decides what the reader is told.
 
 ## Rules
 

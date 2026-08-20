@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  ArenaAction,
   ArenaActions,
   ArenaButton,
   ArenaGrid,
@@ -12,6 +11,7 @@ import {
   ArenaStatCard,
 } from '@dravensoft/arena-angular';
 import { Cart } from '../../../domain/cart';
+import { Notices } from '../../../layout/notices';
 import { Marketplace } from '../../../domain/marketplace';
 import { Product } from '../../../domain/marketplace.model';
 import { MerchantCard } from '../../../shared/merchant-card/merchant-card';
@@ -31,7 +31,6 @@ import {
   host: { style: 'display: contents' },
   imports: [
     ArenaHero,
-    ArenaAction,
     ArenaActions,
     ArenaButton,
     ArenaSection,
@@ -50,6 +49,7 @@ export class Home {
   private readonly router = inject(Router);
 
   private readonly cart = inject(Cart);
+  private readonly notices = inject(Notices);
 
   protected readonly marketplace = inject(Marketplace);
 
@@ -103,6 +103,7 @@ export class Home {
 
   protected addToCart(product: Product): void {
     this.cart.add(product);
+    this.notices.addedToCart(product.name);
   }
 
   protected goTo(path: string): void {

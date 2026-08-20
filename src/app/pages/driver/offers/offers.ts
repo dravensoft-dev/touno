@@ -11,6 +11,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { Drivers } from '../../../domain/drivers';
 import { Hiring } from '../../../domain/hiring';
+import { Notices } from '../../../layout/notices';
 import { Session } from '../../../domain/session';
 import { bs } from '../../../domain/format';
 import { OfferState } from '../../../domain/drivers.model';
@@ -42,6 +43,7 @@ export class DriverOffers {
   private readonly drivers = inject(Drivers);
   private readonly hiring = inject(Hiring);
   private readonly session = inject(Session);
+  private readonly notices = inject(Notices);
 
   protected readonly me = computed(
     () =>
@@ -65,9 +67,15 @@ export class DriverOffers {
 
   protected accept(id: string): void {
     this.hiring.accept(id, this.me().id);
+    this.notices.offerAccepted(this.businessOf(id));
   }
 
   protected reject(id: string): void {
     this.hiring.reject(id, this.me().id);
+    this.notices.offerRejected(this.businessOf(id));
+  }
+
+  private businessOf(id: string): string {
+    return this.offers().find((one) => one.id === id)?.businessName ?? 'el comercio';
   }
 }

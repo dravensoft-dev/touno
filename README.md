@@ -39,7 +39,7 @@ resolved across its four module groups, the driver and the buyer lighter but nav
 | Runtime and package manager | Bun 1.3                                                                   |
 | Build                       | `@angular/build` — Vite in dev, esbuild in build                          |
 | Rendering                   | `@angular/ssr`, `outputMode: "static"`: 117 prerendered routes, no server |
-| Design system               | `@dravensoft/arena-angular` 10.0.1, pinned exactly                        |
+| Design system               | `@dravensoft/arena-angular` 10.1.0, pinned exactly                        |
 | Icons                       | Phosphor, subset and self-hosted by `arena-to-prod`                       |
 | Tests                       | Vitest through `@angular/build:unit-test`                                 |
 
@@ -52,7 +52,7 @@ bun run build          # prerenders every route into dist/touno/browser
 bun run test           # Vitest
 bun run lint           # angular-eslint
 bun run format         # Prettier over the tree
-bun run audit:arena    # arena-to-prod report over src and design
+bun run audit:arena    # arena-to-prod over src and every declared style plugin, strict
 bun run serve:static   # serves the build on :4173
 ```
 

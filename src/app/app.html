@@ -103,3 +103,15 @@
 
   <app-site-footer />
 }
+
+<arena-toast-host>
+  @for (notice of notices(); track notice.id) {
+    <arena-toast
+      [title]="notice.title"
+      [message]="notice.message"
+      [tone]="notice.tone"
+      [dismissible]="notice.dismissible"
+      (close)="dismiss(notice.id)"
+    />
+  }
+</arena-toast-host>

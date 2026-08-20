@@ -5,7 +5,10 @@ import {
   ArenaAlert,
   ArenaButton,
   ArenaEmptyState,
+  ArenaIconButton,
   ArenaInput,
+  ArenaMenu,
+  ArenaMenuItem,
   ArenaPageHead,
   ArenaSegmentOption,
   ArenaSegmentedControl,
@@ -17,6 +20,8 @@ import {
 import { Session } from '../../../domain/session';
 import { Shipping } from '../../../domain/shipping';
 import { bs, hhmm } from '../../../domain/format';
+import { copyText } from '../../../domain/clipboard';
+import { Notices } from '../../../layout/notices';
 import { StatusTag } from '../../../shared/status-tag/status-tag';
 
 const COLUMNS: readonly ArenaTableColumn[] = [
@@ -26,6 +31,17 @@ const COLUMNS: readonly ArenaTableColumn[] = [
   { header: 'Estado' },
   { header: 'Llega', align: 'right' },
   { header: 'Total', align: 'right' },
+  { header: 'Acciones', align: 'right', mobileLayout: 'block' },
+];
+
+const OPEN_ROW = 'Ver el envío';
+const TRACK_ROW = 'Ver el seguimiento';
+const COPY_ROW = 'Copiar la guía';
+
+const ROW_ACTIONS: readonly ArenaMenuItem[] = [
+  { label: OPEN_ROW, icon: 'ph-bold ph-arrow-right' },
+  { label: TRACK_ROW, icon: 'ph-bold ph-map-pin-simple-area' },
+  { label: COPY_ROW, icon: 'ph-bold ph-copy' },
 ];
 
 const FILTERS: readonly ArenaSegmentOption[] = [
@@ -45,6 +61,8 @@ const FILTERS: readonly ArenaSegmentOption[] = [
     ArenaAlert,
     ArenaSegmentedControl,
     ArenaInput,
+    ArenaMenu,
+    ArenaIconButton,
     ArenaTable,
     ArenaTableRow,
     ArenaTableCell,
@@ -57,9 +75,11 @@ export class ImporterShipments {
   private readonly router = inject(Router);
   private readonly shipping = inject(Shipping);
   protected readonly session = inject(Session);
+  private readonly notices = inject(Notices);
 
   protected readonly columns = COLUMNS;
   protected readonly filters = FILTERS;
+  protected readonly rowActions = ROW_ACTIONS;
 
   protected readonly filter = signal('activos');
   protected readonly term = signal('');
@@ -121,5 +141,30 @@ export class ImporterShipments {
 
   protected create(): void {
     void this.router.navigateByUrl('/importadora/envios/nuevo');
+  }
+
+  protected runOn(
+    row: { readonly slug: string; readonly guia: string },
+    item: ArenaMenuItem,
+  ): void {
+    if (item.label === OPEN_ROW) {
+      this.open(row.slug);
+
+      return;
+    }
+
+    if (item.label === TRACK_ROW) {
+      void this.router.navigateByUrl(`/seguimiento/${row.slug}`);
+
+      return;
+    }
+
+    this.copy(row.guia);
+  }
+
+  private copy(guia: string): void {
+    void copyText(guia).then((done) =>
+      done ? this.notices.guiaCopied(guia) : this.notices.guiaNotCopied(guia),
+    );
   }
 }

@@ -145,10 +145,30 @@
     },
     "$description": "Sentence-case labels need no extra tracking."
   },
+  "track-trail": {
+    "$type": "number",
+    "$value": "{ls.normal}",
+    "$extensions": {
+      "com.dravensoft.arena": {
+        "cssUnit": "em"
+      }
+    },
+    "$description": "A crumb takes ff-label, which here is Archivo in sentence case, so the mono tracking the role is born at only loosens a proportional face."
+  },
   "step-eyebrow": {
     "$type": "dimension",
     "$value": "{dz.text-xs}",
     "$description": "The brief's 11px eyebrow."
+  },
+  "step-label": {
+    "$type": "dimension",
+    "$value": "{dz.text-xs}",
+    "$description": "Capitals and tracking are what make a 10px label read as a system label, and this identity gives up both: ff-label is Archivo, tt-label is none, track-label is normal. The step is what is left to carry the register, so a column header sits at the eyebrow's 11px and stays legible on a phone held in the sun."
+  },
+  "step-trail": {
+    "$type": "dimension",
+    "$value": "{dz.text-sm}",
+    "$description": "A crumb is chrome a reader passes on the way to the title, which is the 12px the brief spends on secondary control text."
   },
   "step-title-surface": {
     "$type": "dimension",
@@ -223,6 +243,11 @@
     "$type": "dimension",
     "$value": "{sp.5}",
     "$description": "Card padding."
+  },
+  "pad-surface-head": {
+    "$type": "dimension",
+    "$value": "{sp.4}",
+    "$description": "The air the head keeps over the rule under it. One step under the card's own padding, which lands it against the 18px above the eyebrow and reads as a head with room rather than a caption stuck to a line."
   },
   "fill-surface": {
     "$type": "color",
@@ -318,6 +343,11 @@
     "$type": "dimension",
     "$value": "{bw}",
     "$description": "One pixel. The brief expresses every edge at this width."
+  },
+  "bw-surface-head": {
+    "$type": "dimension",
+    "$value": "{bw}",
+    "$description": "One pixel, like every other edge here. With every shadow at zero the hairline is the only thing this identity has to say that a head is chrome and what follows it is content, and a panel of dense rows is exactly where that has to be said."
   },
   "bw-control": {
     "$type": "dimension",

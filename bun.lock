@@ -14,7 +14,7 @@
         "@angular/platform-server": "^22.1.0",
         "@angular/router": "^22.1.0",
         "@angular/ssr": "^22.1.4",
-        "@dravensoft/arena-angular": "10.0.1",
+        "@dravensoft/arena-angular": "10.1.0",
         "@phosphor-icons/web": "^2.1.2",
         "rxjs": "~7.8.0",
         "tslib": "^2.3.0",
@@ -140,7 +140,7 @@
 
     "@csstools/css-tokenizer": ["@csstools/css-tokenizer@4.0.0", "", {}, "sha512-QxULHAm7cNu72w97JUNCBFODFaXpbDg+dP8b/oWFAZ2MTRppA3U00Y2L1HqaS4J6yBqxwa/Y3nMBaxVKbB/NsA=="],
 
-    "@dravensoft/arena-angular": ["@dravensoft/arena-angular@10.0.1", "", { "dependencies": { "tslib": "^2.8.1" }, "peerDependencies": { "@angular/cdk": ">=20", "@angular/common": ">=20", "@angular/core": ">=20", "@angular/platform-browser": ">=20", "@angular/router": ">=20", "@phosphor-icons/web": "^2.1.2" }, "optionalPeers": ["@angular/router"], "bin": { "arena-to-prod": "bin/arena-to-prod.mjs" } }, "sha512-cKNJbP9+0XFtvt6xCqs9w9P7G2Ifa7AcOkl7EpsvPtEVwJUWN90jml7hl/EgyfTT9TO0ehSw2W6BD/z54H5CNA=="],
+    "@dravensoft/arena-angular": ["@dravensoft/arena-angular@10.1.0", "", { "dependencies": { "tslib": "^2.8.1" }, "peerDependencies": { "@angular/cdk": ">=20", "@angular/common": ">=20", "@angular/core": ">=20", "@angular/platform-browser": ">=20", "@angular/router": ">=20", "@phosphor-icons/web": "^2.1.2" }, "optionalPeers": ["@angular/router"], "bin": { "arena-to-prod": "bin/arena-to-prod.mjs" } }, "sha512-PaghgAZEXx5wxgFyN8lPNMioaUSjAkkD81/qbceJg1gzGKGi8LpCL80XJ13+YZ/2+lMERnHVYRt6Ag1pHAkZ5Q=="],
 
     "@emnapi/core": ["@emnapi/core@1.11.2", "", { "dependencies": { "@emnapi/wasi-threads": "1.2.2", "tslib": "^2.4.0" } }, "sha512-TC8MkTuZUtcTSiFeuC0ksCh9QIJ5+F21MvZ4Wn4ORfYaFJ/0dsiudv5tVkejgwZlwQ39jL9WWDe2lz8x0WglOA=="],
 

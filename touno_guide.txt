@@ -1,0 +1,67 @@
+Guía de touno
+
+Touno es una app de logística de última que combina servicios de
+entrega de platos de comida y mercadería de importadoras a compradores.
+la aplicación de este proyecto está aprobada para la primera versión del maquetado,
+sin embargo falta aterrizar el alcance específico que pretende alcanzar touno:
+la app tendrá estos grupos de usuarios.
+
+- Compradores (usuarios finales)
+- Riders (conductores de motocicletas/automóviles que transportarán los artículos)
+- Adminitrador de sucursal/Administrador de empresa de restaurantes
+- Administrador de sucursal/Adminsitrador de empresa de importadoras
+
+la estructura de touno es así:
+
+Touno maneja dos tipos de negocios actualmente: restaurantes e importadoras (se prevee aumentar más tipos de negocios en el futuro),
+todos los tipos de empresa están representados por dos entidades: empresa y sucursales
+es obligatorio que un negocio tenga una empresa y al menos una sucursal.
+- Empresa (entidad donde un gerente de empresa puede administrar todas sus sucursales y ajustar ajustes sobre las sucursales)
+- Sucursal (espacio con ubicación física donde se repartirán platos de comida/mercadería)
+
+Para que una sucursal pueda entregar pedidos, entran los usuarios riders:
+un rider tiene libertad total para elegir para cuál empresa trabajar, pero tiene que ser solicitado por una empresa:
+la empresa tiene que solicitar al rider que trabaje para ellos, y el rider tiene que aceptar,o viceversa. sin acuerdo de ambas partes, no se asigna un rider a trabajar para una empresa.
+
+las interacciones entre restaurantes y sucursales cambia con los raiders:
+para restaurantes:
+tanto la sucursal de restaurante como el comprador que hizo la compra deben ubicarse en la misma cuidad, cuando la sucursal acepta el pedido,
+asigna un rider para llevar el pedido: cuando el rider recoje el plato de comida, el comprador podrá ver un mapa en tiempo real donde verá el recorrido del rider,
+también tendrá un chat en tiempo real para comunicarse con él, cuando el rider lleva el pedido, generará un qr que deberá ser escaneado por el comprador para marcar la entrega como existosa.
+
+para importadoras:
+la sucursal de importadora puede estar en la misma ciuda o en una ciudad diferente del comprador, en caso de que sean ciudades diferentes. la importadora
+tiene que disponer de al menos una sucursal en la ciudad destino donde se encuentra el comprador:
+el flujo más simple es que el comprador y la sucursal se encuentren en la misma ciudad, en ese caso el flujo es el mismo que con los restaurantes,
+algo que olvidé mencionar es que, para todos los casos donde el comprador compre algo, el código qr para escanear lo preservará él, que será el código del pedido.
+en caso de que la sucursal se encuentre en una sucursal diferente, el flujo será así:
+- el comprador puede escojer si desea que la entrega del rider se haga en la ubicación que marque o simplemente que llegue a la sucursal de su ciudad.
+- si escoje sucursal, el sistema le marcará  cuando su pedido haya llegado a la sucursal de su ciudad, entonces el comprador tendrá que ir directamente a la ciudad para que el gerente de sucursal escanee su código
+y se marque la entrega como existosa.
+- si escoje entrega completa, cuando el pedido llegue a la sucursal de su ciudad, el gerente de sucursal escogerá uno de los riders que trabajan para esa sucursal para hacer el pedido.
+
+la estructura de línea de tiempo para pedidos en tiempo real es así:
+
+cuando el pedido esté hecho pero la sucursal todavía no haya asignado un rider, se mostrará "en espera de rider"
+
+restaurantes e importadoras:
+el mapa inicia cuando se asigna el rider y se acaba cuando el comprador escanea el qr.
+
+es posible que a un rider se le desconecte la señal de internet en medio de un viaje y no pueda mandar su ubicación constantemente, por eso,
+cuando el rider deje de mandar datos de su ubicación pasado un determinado tiempo: el mapa mostrará un punto donde diga "Última conexión registrada"
+que cambiará automáticamente cuando vuelva a tener señal
+
+cuando un comprador haga la compra a un restaurante, en la ficha de su pedido verá:
+- identificador/datos de la sucursal
+- nombre del rider encargado
+
+cuando haga compra importadora en otra ciudad y escoge recoger su pedido en sucursal local:
+- identificador/datos de la sucursal de origen
+- nombre del rider encargado de sucursal de origen
+- identificador/datos de la sucursal local
+
+cuando haga compra importadora en otra ciudad y escoge recoge entrega a domicilio:
+- identificador/datos de la sucursal
+- nombre del rider encargado ciudad de sucursal de origen
+- identificador/datos de la sucursal local
+- nombre del rider encargado de sucursal local

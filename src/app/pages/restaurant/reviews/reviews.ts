@@ -14,6 +14,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { Marketplace } from '../../../domain/marketplace';
 import { Orders } from '../../../domain/orders';
+import { Notices } from '../../../layout/notices';
 import { Session } from '../../../domain/session';
 import { fecha } from '../../../domain/format';
 
@@ -39,6 +40,7 @@ export class RestaurantReviews {
   private readonly orders = inject(Orders);
   private readonly marketplace = inject(Marketplace);
   private readonly session = inject(Session);
+  private readonly notices = inject(Notices);
 
   protected readonly drafts = signal<Record<string, string>>({});
 
@@ -79,5 +81,6 @@ export class RestaurantReviews {
   protected reply(slug: string): void {
     this.orders.reply(slug, this.draftOf(slug));
     this.write(slug, '');
+    this.notices.replyPublished();
   }
 }

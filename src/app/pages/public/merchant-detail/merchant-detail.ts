@@ -16,6 +16,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { ArenaMetadataService } from '@dravensoft/arena-angular/metadata';
 import { Cart } from '../../../domain/cart';
+import { Notices } from '../../../layout/notices';
 import { Marketplace } from '../../../domain/marketplace';
 import { MerchantKind, Product } from '../../../domain/marketplace.model';
 import { bs } from '../../../domain/format';
@@ -45,6 +46,7 @@ import { PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
 export class MerchantDetail {
   private readonly marketplace = inject(Marketplace);
   private readonly cart = inject(Cart);
+  private readonly notices = inject(Notices);
   private readonly metadata = inject(ArenaMetadataService);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
@@ -145,6 +147,7 @@ export class MerchantDetail {
 
   protected addToCart(product: Product): void {
     this.cart.add(product);
+    this.notices.addedToCart(product.name);
   }
 
   protected productsIn(category: string) {

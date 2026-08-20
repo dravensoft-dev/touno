@@ -1,8 +1,8 @@
 # src/app/layout — the shell
 
-`site-footer/`, `panel-nav.ts` and `theme-toggle/`. The shell itself is `App`, because the choice
-between the public chrome and a role panel is one decision and splitting it across two components
-would have meant two router outlets.
+`site-footer/`, `panel-nav.ts`, `notices.ts` and `theme-toggle/`. The shell itself is `App`, because
+the choice between the public chrome and a role panel is one decision and splitting it across two
+components would have meant two router outlets.
 
 ## One shell, two shapes
 
@@ -70,6 +70,26 @@ destination needs to appear in the bottom bar as well as the rail.
 - **`router.url` is read through a `toSignal` bridge over `NavigationEnd`**, never in the template.
   Reading the property directly appears to work and stops the moment a navigation reuses the
   component it is already showing.
+
+## Notices are raised from `notices.ts` and nowhere else
+
+`arena-toast-host` is mounted once in `app.html`, at the top level and outside the panel grid,
+because a fixed box inside a transformed ancestor scrolls away with it. `ArenaToastQueue` is
+Arena's own, provided in root, and it owns the clock; `App` only renders `toasts()` into the host
+and answers `(close)`.
+
+- **`Notices` holds the Spanish, one method per outcome.** It is the same rule `bs()` and
+  `status-tag` follow: an outcome is worded once, not re-worded in the five pages that raise it.
+  A page injects `Notices`, never `ArenaToastQueue`.
+- **A notice is for an outcome the page cannot show.** Adding to the cart, sending an offer,
+  publishing a reply, creating a coupon, sending a report: in each of those the reader stays put
+  and nothing on screen changes enough to say it worked. A row leaving a list already says so, so
+  it gets no notice.
+- **`tone: 'danger'` pins the notice**, and it ignores an explicit `persist: false`. That is why
+  the failed-copy notices are danger and the rest are not: a message the reader has to act on must
+  not go away on a timer, and one that only reports success must.
+- **It lives here rather than in `domain/`.** The queue is Arena's and the host is the shell's, so
+  the wording that feeds them belongs beside them. `domain/` stays free of anything that draws.
 
 ## The theme toggle
 
