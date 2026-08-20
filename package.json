@@ -15,6 +15,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "serve:static": "bunx http-server dist/touno/browser -p 4173 -c-1",
+    "sweep:overflow": "bun run scripts/overflow-sweep.ts",
     "lint": "ng lint",
     "postbuild": "bun run scripts/emit-404.ts"
   },
@@ -46,6 +47,7 @@
     "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^28.0.0",
+    "playwright-core": "^1.62.1",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "8.62.1",

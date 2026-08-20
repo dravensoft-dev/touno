@@ -272,10 +272,13 @@ bun run audit:arena
 
 Then check by hand, because nothing above checks them:
 
-- **No horizontal overflow from 320px up.** Sweep 320, 360, 390, 768, 1024 and 1440 across the
-  routes of all **seven** profiles: `documentElement.scrollWidth` must equal `clientWidth`, and
-  nothing outside a container that declares `overflow-x` may cross the viewport's right edge. The
-  route map and the chat thread are the two newest suspects.
+- **No horizontal overflow from 320px up.** `bun run serve:static`, then `bun run sweep:overflow`,
+  which walks all **seven** profiles at 320, 360, 390, 768, 1024 and 1440 and fails naming what
+  crossed the edge: `documentElement.scrollWidth` must equal `clientWidth`, and nothing outside a
+  container that declares `overflow-x` may cross the viewport's right edge. It reads the fixtures
+  rather than following links, because a table row navigates through `(activate)` and not an
+  `href`, so a link crawler never opens a detail page — where the route map and the chat thread,
+  the two newest suspects, actually live.
 - **No external font requests.** Nothing to `fonts.googleapis.com` or `fonts.gstatic.com`.
 - **The skip link is the first tab stop**, and it lands on the main region.
 - **Both palettes look right on the page**, including the brand mark, which inverts under `noche`,
