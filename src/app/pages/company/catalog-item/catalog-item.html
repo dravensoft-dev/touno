@@ -1,10 +1,57 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head headingLevel="h1" title="Artículo" subtitle="Nombre, precio y categoría." />
+@if (product(); as articulo) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head headingLevel="h1" [title]="articulo.name" [subtitle]="articulo.description" />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    <arena-alert tone="info" title="El precio rige en toda la marca">
+      Lo que escribas aquí vale para todas tus sucursales. Lo único que decide cada local es si hoy
+      tiene o se le acabó.
+    </arena-alert>
+
+    <arena-key-value [rows]="facts()" />
+
+    <arena-section
+      eyebrow="Dónde se vende"
+      [title]="selling().length + ' sucursales lo tienen hoy'"
+      description="Cada local lo marca por su cuenta, desde su propia pantalla."
+      rhythm="md"
+    >
+      <ul class="arena-stack arena-stack--group">
+        @for (branch of selling(); track branch.id) {
+          <li>{{ branch.name }} · {{ cityOf(branch.cityId) }}</li>
+        }
+      </ul>
+
+      @if (out().length > 0) {
+        <arena-alert tone="warning" title="Agotado en algunas sucursales">
+          @for (branch of out(); track branch.id) {
+            {{ branch.name }}
+          }
+        </arena-alert>
+      }
+    </arena-section>
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver al catálogo
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    @if (notMine()) {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-prohibit"
+        title="Ese artículo no es de tu empresa"
+        message="Sólo ves lo que tú publicas."
+      />
+    } @else {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-magnifying-glass"
+        title="No encontramos ese artículo"
+        message="Revisa el enlace o vuelve al catálogo."
+      />
+    }
+  </div>
+}

@@ -1,14 +1,80 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Sucursales"
-    subtitle="Todos tus locales, su ciudad y su estado."
+    [title]="company()?.name ?? 'Sucursales'"
+    subtitle="Toda empresa necesita al menos una sucursal, porque de una sucursal es de donde sale lo que vendes."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-buildings"
+      label="Sucursales"
+      [value]="branches().length.toString()"
+      [sub]="open().length + ' abiertas ahora'"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-map-pin-area"
+      label="Ciudades"
+      [value]="cities().length.toString()"
+      [sub]="isImporter() ? 'Sólo puedes vender a estas ciudades' : 'Donde tu marca atiende hoy'"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-motorcycle"
+      label="Sin riders"
+      [value]="stranded().length.toString()"
+      sub="Sucursales que no pueden despachar"
+    />
+  </arena-grid>
+
+  @if (stranded().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="
+        stranded().length === 1
+          ? 'Una sucursal no puede despachar'
+          : stranded().length + ' sucursales no pueden despachar'
+      "
+    >
+      Ningún rider aceptó trabajar con ellas, así que aceptan pedidos que después no puede llevar
+      nadie. Propón un acuerdo desde la pantalla de riders.
+    </arena-alert>
+  }
+
+  @if (isImporter() && unreachable().length > 0) {
+    <arena-alert tone="info" title="Dónde todavía no puedes vender">
+      Para vender a una ciudad necesitas una sucursal ahí, porque es donde llega el camión y donde
+      el comprador recoge o recibe. Te faltan:
+      @for (city of unreachable(); track city.id) {
+        {{ city.name }}
+      }
+    </arena-alert>
+  }
+
+  @if (branches().length > 0) {
+    <arena-table label="Tus sucursales" [columns]="columns">
+      @for (branch of branches(); track branch.id) {
+        <tr arena-table-row [interactive]="true" (activate)="open_(branch)">
+          <td arena-table-cell>
+            {{ branch.name }}
+            <span class="arena-num">· {{ facts(branch) }}</span>
+          </td>
+          <td arena-table-cell>{{ cityName(branch.cityId) }} · {{ branch.zone }}</td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ riders(branch) }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ running(branch) }}</span>
+          </td>
+          <td arena-table-cell>{{ stateOf(branch) }}</td>
+        </tr>
+      }
+    </arena-table>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-buildings"
+      title="Sin sucursales no hay negocio"
+      message="Toda empresa en Touno necesita al menos una."
+    />
+  }
 </div>

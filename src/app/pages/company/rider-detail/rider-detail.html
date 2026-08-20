@@ -1,14 +1,142 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Rider"
-    subtitle="Su perfil y el acuerdo que le propones."
-  />
+@if (rider(); as persona) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head
+      headingLevel="h1"
+      [title]="persona.name"
+      [subtitle]="
+        vehicleLabelOf() + ' · ' + cityOf(persona.cityId) + ' · ' + persona.zones.join(', ')
+      "
+    >
+      <div actions>
+        @if (agreement(); as acuerdo) {
+          <app-state-tag [agreement]="acuerdo.state" />
+        }
+      </div>
+    </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-star"
+        label="Calificación"
+        [value]="persona.rating.toString()"
+        [sub]="persona.tripsDone + ' viajes hechos'"
+      />
+      <arena-stat-card
+        icon="ph-bold ph-clock"
+        label="A tiempo"
+        [value]="onTime()"
+        sub="De sus últimos viajes"
+      />
+      <arena-stat-card
+        icon="ph-bold ph-check-circle"
+        label="Contigo"
+        [value]="delivered().toString()"
+        sub="Pedidos que cerró escaneando"
+      />
+    </arena-grid>
+
+    @if (answerable()) {
+      <arena-alert tone="warning" title="Se postuló y espera tu respuesta">
+        Él ya dijo que sí, para las sucursales que nombró. Aceptas o rechazas tú.
+      </arena-alert>
+
+      <div class="arena-row">
+        <arena-button size="lg" icon="ph-bold ph-check" (click)="accept()">
+          Aceptar su postulación
+        </arena-button>
+        <arena-button variant="danger" (click)="reject()">Rechazar</arena-button>
+      </div>
+    }
+
+    @if (waitingOnHim()) {
+      <arena-alert tone="info" title="Le propusiste y esperas su respuesta">
+        Hasta que conteste no puede recibir encargos. La decisión es suya y no hay forma de
+        apurarla.
+      </arena-alert>
+    }
+
+    @if (agreement()?.state === 'activo') {
+      <arena-alert tone="success" title="Trabajando contigo">
+        <p>{{ scopeLine() }}</p>
+        <arena-button action variant="danger" (click)="end()">Terminar el acuerdo</arena-button>
+      </arena-alert>
+    }
+
+    @if (proposable()) {
+      <arena-section
+        eyebrow="Proponer"
+        title="Para qué sucursales"
+        [description]="
+          range() === 'interurbano'
+            ? 'Lleva camión, así que puede cubrir la ruta entre cualquiera de tus sucursales.'
+            : 'Reparte en ciudad, así que sólo puede cubrir tus sucursales de ' +
+              cityOf(persona.cityId) +
+              '.'
+        "
+        rhythm="md"
+      >
+        <div class="arena-stack arena-stack--group">
+          @for (branch of reachable(); track branch.id) {
+            <arena-checkbox
+              [checked]="picked(branch.id)"
+              [label]="branch.name + ' · ' + cityOf(branch.cityId)"
+              (change)="toggleBranch(branch.id)"
+            />
+          }
+        </div>
+
+        @if (outOfReach().length > 0) {
+          <arena-alert tone="info" title="Sucursales fuera de su alcance">
+            No puede cubrir {{ outOfReach().length }} sucursales tuyas, porque están en otra ciudad
+            y él reparte con moto o auto.
+          </arena-alert>
+        }
+
+        <arena-input
+          label="Lo que le pagas por viaje"
+          type="number"
+          [hint]="'Él pide ' + hisRate() + '.'"
+          [value]="rate()"
+          (change)="onRate($event)"
+        />
+
+        <arena-button
+          size="lg"
+          icon="ph-bold ph-handshake"
+          [disabled]="!ready()"
+          (click)="propose()"
+        >
+          Enviar la propuesta
+        </arena-button>
+      </arena-section>
+    }
+
+    @if (!proposable() && agreement() === undefined) {
+      <arena-empty-state
+        headingLevel="h2"
+        icon="ph-bold ph-map-pin-simple-area"
+        title="No tienes sucursal donde él trabaja"
+        [message]="
+          'Reparte en ' + cityOf(persona.cityId) + ', y tu empresa no tiene ninguna sucursal ahí.'
+        "
+      />
+    }
+
+    <arena-key-value [rows]="facts()" />
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver a riders
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    <arena-empty-state
+      headingLevel="h1"
+      icon="ph-bold ph-magnifying-glass"
+      title="No encontramos ese rider"
+      message="Revisa el enlace o vuelve a la lista."
+    />
+  </div>
+}

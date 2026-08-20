@@ -1,14 +1,54 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Catálogo"
-    subtitle="Lo que vendes, con un precio para toda la marca."
+    [title]="noun()"
+    [subtitle]="'Un precio para toda la marca. Cada sucursal decide si hoy hay, pero ninguna cambia el precio.'"
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (shortages().length > 0) {
+    <arena-alert
+      tone="info"
+      [title]="
+        shortages().length === 1
+          ? 'Un artículo está agotado en una sucursal'
+          : shortages().length + ' artículos están agotados en alguna sucursal'
+      "
+    >
+      Lo marcó el local, y sólo afecta a ese local. Desde aquí no se toca.
+    </arena-alert>
+  }
+
+  @if (categories().length > 0) {
+    <arena-tabs [ariaLabel]="'Categorías de ' + noun()" [value]="current()" (change)="pick($event)">
+      @for (category of categories(); track category) {
+        <arena-tab [value]="category" [label]="category">
+          <arena-table [label]="category" [columns]="columns">
+            @for (product of inCategory(category); track product.id) {
+              <tr arena-table-row [interactive]="true" (activate)="open(product)">
+                <td arena-table-cell>{{ product.name }}</td>
+                <td arena-table-cell>
+                  <span class="arena-num">{{ price(product) }}</span>
+                </td>
+                <td arena-table-cell>
+                  <span class="arena-num">{{ product.soldThisMonth }}</span>
+                </td>
+                <td arena-table-cell>
+                  <span class="arena-num">
+                    {{ sellingIn(product) }} de {{ branches().length }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </arena-table>
+        </arena-tab>
+      }
+    </arena-tabs>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-tag"
+      title="Nada publicado todavía"
+      message="Sin artículos, tus sucursales no tienen qué vender."
+    />
+  }
 </div>

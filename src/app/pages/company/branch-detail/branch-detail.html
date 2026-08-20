@@ -1,14 +1,90 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Sucursal"
-    subtitle="Horario, dirección y ajustes de este local."
-  />
+@if (branch(); as sucursal) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head
+      headingLevel="h1"
+      [title]="sucursal.name"
+      [subtitle]="sucursal.address + ' · ' + sucursal.zone"
+    />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-tray"
+        label="En curso"
+        [value]="running().length.toString()"
+        sub="Pedidos que se están moviendo ahora"
+      />
+      <arena-stat-card
+        icon="ph-bold ph-motorcycle"
+        label="Riders"
+        [value]="riders().length.toString()"
+        sub="Con acuerdo aceptado para esta sucursal"
+      />
+      <arena-stat-card
+        icon="ph-bold ph-hand-coins"
+        label="Vendido"
+        [value]="takings()"
+        sub="Sin contar lo rechazado"
+      />
+    </arena-grid>
+
+    <arena-switch
+      [state]="sucursal.open"
+      label="Sucursal abierta y aceptando pedidos"
+      [confirm]="true"
+      (requestChange)="toggleOpen()"
+    />
+
+    @if (riders().length === 0) {
+      <arena-alert tone="warning" title="Esta sucursal no puede despachar">
+        <p>
+          Ningún rider aceptó trabajar con ella. Puede recibir pedidos, pero no habrá quién los
+          lleve. Propón un acuerdo y espera a que el rider acepte.
+        </p>
+        <arena-button action variant="secondary" (click)="toRiders()">
+          Proponer un acuerdo
+        </arena-button>
+      </arena-alert>
+    }
+
+    @if (leaving().length > 0) {
+      <arena-alert tone="info" title="Cargas saliendo de aquí">
+        Esta sucursal tiene {{ leaving().length }} cargas abiertas hacia otras ciudades.
+      </arena-alert>
+    }
+
+    <arena-key-value [rows]="facts()" />
+
+    <arena-section
+      eyebrow="Quién trabaja aquí"
+      title="Riders con acuerdo"
+      description="Los propone la empresa o se postulan ellos, y sólo entran si las dos partes aceptan."
+      rhythm="md"
+    >
+      <app-rider-picker [branchId]="sucursal.id" label="Riders de esta sucursal" />
+    </arena-section>
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver a sucursales
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    @if (notMine()) {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-prohibit"
+        title="Esa sucursal no es de tu empresa"
+        message="Sólo ves las sucursales que administras."
+      />
+    } @else {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-magnifying-glass"
+        title="No encontramos esa sucursal"
+        message="Revisa el enlace o vuelve a la lista."
+      />
+    }
+  </div>
+}

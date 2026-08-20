@@ -210,4 +210,16 @@ export const AGREEMENTS: readonly RiderAgreement[] = [
     sentAt: '2026-08-15T10:40:00',
     validUntil: '2026-08-29',
   },
+  {
+    id: 'ag-518',
+    riderId: 'r-ivan',
+    companyId: 'c-ale',
+    branchIds: ['b-ale-la-paz'],
+    initiatedBy: 'rider',
+    state: 'pendiente',
+    perTripBob: 22,
+    message: 'Tengo auto, me sirve para las cajas grandes que llegan de otras ciudades.',
+    sentAt: '2026-08-15T08:55:00',
+    validUntil: '2026-08-31',
+  },
 ];

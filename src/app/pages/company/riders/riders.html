@@ -2,13 +2,145 @@
   <arena-page-head
     headingLevel="h1"
     title="Riders"
-    subtitle="Con quién trabajas y a qué sucursales lo asignaste."
+    subtitle="Un rider entra a trabajar contigo sólo si las dos partes dicen que sí. Propones tú, o se postula él."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (applications().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="
+        applications().length === 1
+          ? 'Un rider se postuló y espera tu respuesta'
+          : applications().length + ' riders se postularon y esperan tu respuesta'
+      "
+    >
+      Ellos ya dijeron que sí. Hasta que contestes no pueden recibir encargos de tus sucursales.
+    </arena-alert>
+  }
+
+  <arena-section
+    eyebrow="Te escribieron"
+    title="Postulaciones por responder"
+    description="Riders que pidieron trabajar con sucursales tuyas."
+    rhythm="md"
+  >
+    @if (applications().length > 0) {
+      <arena-people-list label="Postulaciones pendientes">
+        @for (agreement of applications(); track agreement.id) {
+          <arena-person-row
+            [name]="riderOf(agreement)?.name ?? ''"
+            [secondary]="line(agreement)"
+            [figure]="(riderOf(agreement)?.rating ?? 0).toString()"
+          >
+            <div action class="arena-row">
+              <arena-button size="sm" (click)="accept(agreement)">Aceptar</arena-button>
+              <arena-button size="sm" variant="danger" (click)="reject(agreement)">
+                Rechazar
+              </arena-button>
+            </div>
+          </arena-person-row>
+        }
+      </arena-people-list>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-envelope-simple"
+        title="Ninguna postulación pendiente"
+        message="Cuando un rider pida trabajar contigo la vas a ver aquí."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Les propusiste"
+    title="Esperando su respuesta"
+    description="Tú ya dijiste que sí. La decisión es de ellos."
+    rhythm="md"
+  >
+    @if (invited().length > 0) {
+      <arena-people-list label="Propuestas enviadas">
+        @for (agreement of invited(); track agreement.id) {
+          <arena-person-row
+            [name]="riderOf(agreement)?.name ?? ''"
+            [secondary]="line(agreement)"
+            [figure]="(riderOf(agreement)?.rating ?? 0).toString()"
+          >
+            <app-state-tag action [agreement]="agreement.state" />
+          </arena-person-row>
+        }
+      </arena-people-list>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-paper-plane-tilt"
+        title="No enviaste ninguna propuesta"
+        message="Busca abajo un rider que trabaje en tus ciudades."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Trabajando"
+    [title]="working().length + ' acuerdos activos'"
+    description="Cada uno alcanza sólo las sucursales que nombra."
+    rhythm="md"
+  >
+    @if (working().length > 0) {
+      <arena-people-list label="Riders trabajando contigo">
+        @for (agreement of working(); track agreement.id) {
+          <arena-person-row
+            [name]="riderOf(agreement)?.name ?? ''"
+            [secondary]="line(agreement)"
+            [figure]="(riderOf(agreement)?.rating ?? 0).toString()"
+          >
+            <arena-button action size="sm" variant="secondary" (click)="open(agreement.riderId)">
+              Ver
+            </arena-button>
+          </arena-person-row>
+        }
+      </arena-people-list>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-handshake"
+        title="Todavía nadie trabaja contigo"
+        message="Sin al menos un rider por sucursal, tus locales aceptan pedidos que nadie puede llevar."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Buscar"
+    title="Riders en tus ciudades"
+    description="Sólo aparecen los que trabajan donde tú tienes sucursal."
+    rhythm="md"
+  >
+    <arena-input
+      label="Buscar por nombre o zona"
+      placeholder="Miraflores"
+      [value]="term()"
+      (change)="onTerm($event)"
+    />
+
+    @if (available().length > 0) {
+      <arena-people-list label="Riders disponibles">
+        @for (rider of available(); track rider.id) {
+          <arena-person-row
+            [name]="rider.name"
+            [secondary]="profile(rider) + ' · ' + rangeOf(rider)"
+            [figure]="rider.rating.toString()"
+          >
+            <arena-button action size="sm" (click)="open(rider.id)">Proponer acuerdo</arena-button>
+          </arena-person-row>
+        }
+      </arena-people-list>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-magnifying-glass"
+        title="Nadie más por aquí"
+        message="Ya tienes acuerdo o propuesta con todos los riders de tus ciudades."
+      />
+    }
+  </arena-section>
 </div>

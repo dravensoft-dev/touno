@@ -1,14 +1,75 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Pedidos"
-    subtitle="Todo lo que se mueve en tus sucursales."
-  />
+    title="Pedidos de la empresa"
+    subtitle="Todo lo que se mueve en tus sucursales, junto y comparable."
+  >
+    <div actions>
+      <arena-select
+        label="Sucursal"
+        [options]="options()"
+        [value]="branchFilter()"
+        (change)="pick($event)"
+      />
+    </div>
+  </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-tray"
+      label="En curso"
+      [value]="live().length.toString()"
+      sub="Sin cerrar todavía"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-hourglass"
+      label="Esperando rider"
+      [value]="waiting().length.toString()"
+      sub="Aceptados y sin quién los lleve"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Vendido"
+      [value]="takings()"
+      sub="Sin contar lo rechazado"
+    />
+  </arena-grid>
+
+  @if (waiting().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="waiting().length + ' pedidos esperan que alguna sucursal asigne un rider'"
+    >
+      Tú no puedes asignarlos: eso lo hace el gerente de cada sucursal. Lo que sí puedes es mirar si
+      a esa sucursal le faltan riders con acuerdo.
+    </arena-alert>
+  }
+
+  @if (rows().length > 0) {
+    <arena-table label="Pedidos de la empresa" [columns]="columns">
+      @for (row of rows(); track row.order.code) {
+        <tr arena-table-row [interactive]="true" (activate)="open(row.order.slug)">
+          <td arena-table-cell>{{ row.order.code }}</td>
+          <td arena-table-cell>{{ row.branch }}</td>
+          <td arena-table-cell>{{ row.order.buyer.name }} · {{ row.city }}</td>
+          <td arena-table-cell>
+            <app-state-tag [order]="row.order.state" />
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.placed }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.total }}</span>
+          </td>
+        </tr>
+      }
+    </arena-table>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-tray"
+      title="Nada por aquí"
+      message="Esta sucursal todavía no tiene pedidos."
+    />
+  }
 </div>

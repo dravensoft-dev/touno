@@ -1,14 +1,23 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Ajustes"
-    subtitle="Lo que rige para todas tus sucursales."
+    [title]="company()?.name ?? 'Ajustes'"
+    subtitle="Lo que rige para toda la marca."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  <arena-alert tone="info" title="Lo que decide cada sucursal">
+    Si está abierta y qué tiene hoy lo marca el gerente de cada local, desde su propia pantalla.
+    Desde aquí no se toca, y es a propósito: quien está en el mostrador sabe antes que tú que se
+    acabó el pollo.
+  </arena-alert>
+
+  @if (isImporter()) {
+    <arena-alert tone="info" title="Cuándo sale un camión">
+      Una carga sale cuando junta {{ minLoad() }} pedidos. Ese número es el que el comprador ve como
+      «faltan tantos» mientras espera, así que subirlo llena mejor el camión y hace esperar más a la
+      gente.
+    </arena-alert>
+  }
+
+  <arena-key-value [rows]="facts()" />
 </div>

@@ -2,13 +2,75 @@
   <arena-page-head
     headingLevel="h1"
     title="Finanzas"
-    subtitle="Lo cobrado y lo liquidado, por sucursal."
+    subtitle="Lo liquidado por sucursal, con la misma vara para todas."
   />
 
-  <arena-empty-state
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Neto"
+      [value]="money(net())"
+      sub="Lo que te queda después de la comisión"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-receipt"
+      label="Comisión"
+      [value]="money(commission())"
+      sub="Lo que cobra Touno"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-clock"
+      label="Por cobrar"
+      [value]="money(pending())"
+      sub="Liquidaciones sin pagar todavía"
+    />
+  </arena-grid>
+
+  <arena-chart-card
+    title="Vendido por sucursal"
+    description="La misma medida en todos tus locales, que es lo que hace comparable la marca."
     headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  >
+    <arena-bar-chart
+      label="Vendido por sucursal"
+      [labels]="labels()"
+      [series]="series()"
+      valuePrefix="Bs "
+    />
+  </arena-chart-card>
+
+  @if (settlements().length > 0) {
+    <arena-table label="Liquidaciones" [columns]="columns">
+      @for (row of settlements(); track row.id) {
+        <tr arena-table-row>
+          <td arena-table-cell>{{ row.period }}</td>
+          <td arena-table-cell>{{ branchName(row.branchId) }}</td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.orders }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ money(row.grossBob) }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ money(row.commissionBob) }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ money(row.netBob) }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ paid(row.paidAt) }}</span>
+          </td>
+        </tr>
+      }
+    </arena-table>
+
+    <arena-key-value [rows]="summary()" [total]="total()" />
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-wallet"
+      title="Sin liquidaciones todavía"
+      message="La primera llega al cerrar la quincena."
+    />
+  }
 </div>
