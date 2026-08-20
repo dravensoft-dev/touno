@@ -1,0 +1,86 @@
+.map {
+  margin: 0;
+}
+
+.map__frame {
+  position: relative;
+  border: var(--bw-surface) solid var(--edge-surface);
+  border-radius: var(--r-media);
+  background: var(--fill-surface-sunken);
+  overflow: hidden;
+}
+
+.map__canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: var(--aspect-media);
+}
+
+.map__street {
+  stroke: var(--fill-track);
+  stroke-width: var(--bw-separator);
+  stroke-linecap: square;
+}
+
+.map__street--avenida {
+  stroke: var(--edge-separator);
+  stroke-width: var(--bw-surface);
+}
+
+.map__route {
+  fill: none;
+  stroke: var(--edge-control-quiet);
+  stroke-width: calc(var(--bw-surface) * 3);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.map__route--done {
+  stroke: var(--color-primary);
+}
+
+.map__origin {
+  fill: var(--fill-surface);
+  stroke: var(--ink-muted);
+  stroke-width: var(--bw-control);
+}
+
+.map__pin {
+  fill: var(--ink-heading);
+  stroke: none;
+}
+
+.map__rider {
+  fill: var(--color-secondary);
+  stroke: var(--fill-surface);
+  stroke-width: var(--bw-control);
+}
+
+.map__lost {
+  fill: none;
+  stroke: var(--color-secondary);
+  stroke-width: var(--bw-control);
+  stroke-dasharray: 3 2;
+}
+
+.map__flag {
+  position: absolute;
+  inset-block-end: var(--sp-2);
+  inset-inline-start: var(--sp-2);
+  inset-inline-end: var(--sp-2);
+  margin: 0;
+  padding: var(--sp-1) var(--sp-2);
+  border: var(--bw-surface) solid var(--edge-surface);
+  border-radius: var(--r-control-sm);
+  background: var(--fill-surface);
+  color: var(--ink-body);
+  font-size: var(--fs-sm);
+  text-align: center;
+}
+
+.map__summary {
+  margin: 0;
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+  font-size: var(--fs-sm);
+}

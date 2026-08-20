@@ -1,0 +1,80 @@
+<figure class="map arena-stack arena-stack--group">
+  <div class="map__frame">
+    <svg
+      class="map__canvas"
+      [attr.viewBox]="viewBox()"
+      role="img"
+      [attr.aria-label]="label()"
+      focusable="false"
+    >
+      @for (street of streets(); track $index) {
+        <line
+          [class]="'map__street map__street--' + street.rank"
+          [attr.x1]="street.from.x"
+          [attr.y1]="street.from.y"
+          [attr.x2]="street.to.x"
+          [attr.y2]="street.to.y"
+          vector-effect="non-scaling-stroke"
+        />
+      }
+
+      @if (line()) {
+        <polyline class="map__route" [attr.points]="line()" vector-effect="non-scaling-stroke" />
+      }
+
+      @if (travelled() && !stale()) {
+        <polyline
+          class="map__route map__route--done"
+          [attr.points]="travelled()"
+          vector-effect="non-scaling-stroke"
+        />
+      }
+
+      <circle
+        class="map__origin"
+        [attr.cx]="origin().x"
+        [attr.cy]="origin().y"
+        r="2.6"
+        vector-effect="non-scaling-stroke"
+      />
+
+      <path
+        class="map__pin"
+        [attr.d]="
+          'M ' +
+          destination().x +
+          ' ' +
+          (destination().y + 1) +
+          ' l -3.2 -5 a 3.7 3.7 0 1 1 6.4 0 Z'
+        "
+        vector-effect="non-scaling-stroke"
+      />
+
+      @if (rider(); as at) {
+        @if (stale()) {
+          <circle
+            class="map__lost"
+            [attr.cx]="at.x"
+            [attr.cy]="at.y"
+            r="4"
+            vector-effect="non-scaling-stroke"
+          />
+        } @else {
+          <circle
+            class="map__rider"
+            [attr.cx]="at.x"
+            [attr.cy]="at.y"
+            r="3.2"
+            vector-effect="non-scaling-stroke"
+          />
+        }
+      }
+    </svg>
+
+    @if (rider() && stale()) {
+      <p class="map__flag arena-num">{{ lastSeenText() }}</p>
+    }
+  </div>
+
+  <figcaption class="map__summary">{{ summary() }}</figcaption>
+</figure>
