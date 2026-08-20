@@ -1,14 +1,50 @@
+<app-structured-data [key]="'lista-' + type()" [schema]="schema()" />
+
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Comercios"
-    subtitle="Elige el comercio y la sucursal que te queda cerca."
-  />
+    [title]="restaurant() ? 'Restaurantes' : 'Importadoras'"
+    [subtitle]="
+      restaurant()
+        ? 'Pide a la sucursal que te queda cerca. La comida sale de tu ciudad y llega con un rider que trabaja para ese local.'
+        : 'Compra a una importadora de tu ciudad, o de otra si tiene sucursal en la tuya. Eliges si te lo llevan o lo recoges en mostrador.'
+    "
+  >
+    <div actions class="arena-row">
+      <arena-select
+        label="Ciudad"
+        [options]="cities()"
+        [value]="city()"
+        (change)="pickCity($event)"
+      />
+      <arena-input
+        label="Buscar"
+        placeholder="Nombre o zona"
+        [value]="term()"
+        (change)="onTerm($event)"
+      />
+    </div>
+  </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (branches().length > 0) {
+    <arena-grid>
+      @for (branch of branches(); track branch.id) {
+        @if (companyOf(branch.id); as company) {
+          <app-branch-card
+            [branch]="branch"
+            [company]="company"
+            [cityName]="geography.nameOf(branch.cityId)"
+            headingLevel="h2"
+          />
+        }
+      }
+    </arena-grid>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-magnifying-glass"
+      title="Nada por aquí"
+      message="Prueba con otra ciudad o busca por otro nombre."
+    />
+  }
 </div>

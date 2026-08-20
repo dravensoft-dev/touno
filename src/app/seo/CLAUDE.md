@@ -20,16 +20,35 @@ be checked**, because the default was moved.
 
 ## Which schema goes on which route
 
-| Route                       | Schema                         | Written by                     |
-| --------------------------- | ------------------------------ | ------------------------------ |
-| `/`                         | `WebSite` and `Organization`   | `pages/public/home`            |
-| `/restaurantes`, `/tiendas` | `ItemList`                     | `pages/public/merchants`       |
-| `/restaurantes/:slug`       | `Restaurant` with `makesOffer` | `pages/public/merchant-detail` |
-| `/tiendas/:slug`            | `Store` with `makesOffer`      | the same component             |
-| `/seguimiento/:guia`        | `ParcelDelivery`               | `pages/public/tracking`        |
-| every route with crumbs     | `BreadcrumbList`               | `ArenaBreadcrumbs`, on its own |
+| Route                           | Schema                                          | Written by                     |
+| ------------------------------- | ----------------------------------------------- | ------------------------------ |
+| `/`                             | `WebSite` and `Organization`                    | `pages/public/home`            |
+| `/restaurantes`, `/tiendas`     | `ItemList` of empresas                          | `pages/public/companies`       |
+| `/restaurantes/:empresa`        | `Restaurant` with `department` and `makesOffer` | `pages/public/company`         |
+| `/tiendas/:empresa`             | `Store` with `department` and `makesOffer`      | the same component             |
+| `/:vertical/:empresa/:sucursal` | `Restaurant` / `Store` as a `LocalBusiness`     | `pages/public/branch`          |
+| `/riders`                       | `WebPage`                                       | `pages/public/ride-with-us`    |
+| every route with crumbs         | `BreadcrumbList`                                | `ArenaBreadcrumbs`, on its own |
 
 Do not hand-write a `BreadcrumbList`; Arena already emits it.
+
+## The sucursal page is the indexable surface
+
+Retiring the public waybill tracking took twelve `noindex`-shaped pages out of the sitemap. What
+replaced them is eighteen sucursal pages, and they are the better trade: a `LocalBusiness` with a
+street address, opening hours and a city is the page a local search actually wants from a delivery
+business, where a tracking page was only ever useful to the one person holding the code.
+
+- **No `geo` and no `hasMap`, ever.** A `GeoPoint` in this tree is a position in the map component's
+  viewBox, not a latitude and a longitude. Emitting it as one would be a fabricated fact in
+  structured data. `pages/public/branch/branch.spec.ts` fails if either key appears.
+- **`makesOffer` carries what that sucursal has, not the empresa's whole catalogue**, because the
+  availability belongs to the local and a crawler should not be told otherwise.
+- **`parentOrganization` points every sucursal at its empresa**, which is what makes the two levels
+  legible to a crawler rather than eighteen unrelated shops.
+- `openingHoursSpecification` needs day codes (`Mo`, `Tu`, …); the map from the fixtures' Spanish
+  day ranges lives in `pages/public/branch/branch.ts` and a range with no entry emits an empty list
+  rather than a wrong one.
 
 ## StructuredData
 

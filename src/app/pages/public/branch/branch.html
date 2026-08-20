@@ -1,14 +1,86 @@
+<app-structured-data [key]="'sucursal-' + empresa() + '-' + sucursal()" [schema]="schema()" />
+
 <div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Sucursal"
-    subtitle="Dirección, horario y lo que vende esta sucursal."
+  <arena-breadcrumbs
+    ngSkipHydration
+    ariaLabel="Dónde estás"
+    [items]="crumbs()"
+    (navigate)="goTo($event)"
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  <arena-page-head
+    headingLevel="h1"
+    [title]="branch().name"
+    [subtitle]="branch().address + ' · ' + cityName() + ' · ' + branch().zone"
+  >
+    <div actions>
+      @if (branch().open) {
+        <arena-badge tone="success">Abierta ahora</arena-badge>
+      } @else {
+        <arena-badge tone="warning">Cerrada ahora</arena-badge>
+      }
+    </div>
+  </arena-page-head>
+
+  @if (!restaurant()) {
+    <arena-alert tone="info" title="Si estás en otra ciudad">
+      {{ company().name }} puede mandarte lo que compres aquí, siempre que tenga sucursal en tu
+      ciudad. Viaja en camión y al llegar eliges si te lo llevan a la puerta o lo recoges en
+      mostrador.
+    </arena-alert>
+  }
+
+  <arena-key-value [rows]="facts()" />
+
+  <arena-section
+    eyebrow="Lo que vende"
+    [title]="restaurant() ? 'Carta de esta sucursal' : 'Catálogo de esta sucursal'"
+    description="Sólo lo que este local tiene hoy. Otra sucursal puede tener cosas distintas."
+    rhythm="md"
+  >
+    @if (categories().length > 0) {
+      <arena-tabs ariaLabel="Categorías">
+        @for (category of categories(); track category) {
+          <arena-tab [value]="category" [label]="category">
+            <arena-grid>
+              @for (product of inCategory(category); track product.id) {
+                <app-product-card
+                  [product]="product"
+                  [fallbackIcon]="fallbackIcon()"
+                  [available]="branch().open"
+                  (add)="addToCart($event)"
+                />
+              }
+            </arena-grid>
+          </arena-tab>
+        }
+      </arena-tabs>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-tag"
+        title="Sin nada disponible hoy"
+        message="Esta sucursal marcó todo como agotado."
+      />
+    }
+  </arena-section>
+
+  @if (siblings().length > 0) {
+    <arena-section
+      eyebrow="Otras sucursales"
+      [title]="'También en ' + siblings().length + ' lugares más'"
+      description="De la misma empresa, con el mismo catálogo y sus propios horarios."
+      rhythm="md"
+    >
+      <ul class="arena-stack arena-stack--group">
+        @for (other of siblings(); track other.branch.id) {
+          <li>
+            <a [href]="other.href" (click)="openSibling($event, other.path)">
+              {{ other.branch.name }} · {{ other.cityName }}
+            </a>
+          </li>
+        }
+      </ul>
+    </arena-section>
+  }
 </div>

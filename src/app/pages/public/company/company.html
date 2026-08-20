@@ -1,14 +1,42 @@
+<app-structured-data [key]="'empresa-' + empresa()" [schema]="schema()" />
+
 <div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Empresa"
-    subtitle="Todas las sucursales de esta empresa."
+  <arena-breadcrumbs
+    ngSkipHydration
+    ariaLabel="Dónde estás"
+    [items]="crumbs()"
+    (navigate)="goTo($event)"
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  <arena-page-head headingLevel="h1" [title]="company().name" [subtitle]="company().summary" />
+
+  @if (!restaurant()) {
+    <arena-alert tone="info" title="Cómo llega lo que compras aquí">
+      Si tienes una sucursal de {{ company().name }} en tu ciudad, puedes comprar desde cualquiera
+      de las otras: el paquete viaja en camión hasta la tuya y ahí eliges si te lo llevan a la
+      puerta o lo recoges en mostrador.
+    </arena-alert>
+  }
+
+  <arena-key-value [rows]="facts()" />
+
+  <arena-section
+    eyebrow="Dónde atiende"
+    [title]="branches().length + ' sucursales'"
+    description="Cada una con su dirección, su horario y lo que tiene hoy."
+    rhythm="md"
+  >
+    <arena-grid>
+      @for (branch of branches(); track branch.id) {
+        @if (companyOf(branch.id); as owner) {
+          <app-branch-card
+            [branch]="branch"
+            [company]="owner"
+            [cityName]="geography.nameOf(branch.cityId)"
+            headingLevel="h3"
+          />
+        }
+      }
+    </arena-grid>
+  </arena-section>
 </div>

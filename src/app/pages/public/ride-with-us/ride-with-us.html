@@ -1,14 +1,96 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Maneja con Touno"
-    subtitle="Eliges para quién trabajas, y el acuerdo es de dos partes."
-  />
+<app-structured-data key="riders" [schema]="schema" />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+<div class="arena-stack arena-stack--section">
+  <arena-hero
+    eyebrow="Riders"
+    title="Tú eliges para quién trabajas"
+    lede="Con tu moto, tu auto o tu camión. Una empresa te invita o tú te postulas, y hasta que las dos partes acepten nadie te asigna nada. Puedes trabajar para una sola sucursal o para un grupo, y para varias empresas a la vez."
+  >
+    <div actions class="arena-row">
+      <arena-button size="lg" icon="ph-bold ph-handshake" (click)="goTo('/ingresar')">
+        Entrar como rider
+      </arena-button>
+      <arena-button variant="ghost" size="lg" icon="ph-bold ph-storefront" (click)="goTo('/')">
+        Ver los comercios
+      </arena-button>
+    </div>
+  </arena-hero>
+
+  <arena-section
+    eyebrow="Cómo funciona"
+    title="El acuerdo es de dos partes, siempre"
+    description="Es la única forma de entrar a trabajar con una sucursal, y no hay atajo."
+    rhythm="md"
+  >
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-handshake"
+        label="Nadie te asigna sin tu sí"
+        value="Dos firmas"
+        sub="La empresa propone o tú te postulas; la otra parte acepta. Sin eso, no hay asignación."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-map-pin-simple-area"
+        label="Alcance que eliges"
+        value="Por sucursal"
+        sub="Una sola sucursal o un grupo. No te atan a la empresa entera."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-hand-coins"
+        label="La plata por delante"
+        value="Antes del sí"
+        sub="Ves cuánto ganas antes de aceptar el encargo, no después."
+      />
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    eyebrow="Tu vehículo"
+    title="Lo que manejas decide el trabajo que te llega"
+    description="No hay dos tipos de cuenta ni dos aplicaciones: es el mismo panel."
+    rhythm="md"
+  >
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-motorcycle"
+        label="Moto o auto"
+        value="Reparto en ciudad"
+        sub="De la sucursal a la puerta del comprador, dentro de tu ciudad."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-truck"
+        label="Camión"
+        value="Carga interurbana"
+        sub="Varios pedidos a la vez entre sucursales de una misma empresa."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-buildings"
+        label="Dónde hay trabajo"
+        [value]="branches().toString() + ' sucursales'"
+        [sub]="'Repartidas en ' + cities() + ' ciudades de Bolivia.'"
+      />
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    eyebrow="Si algo sale mal"
+    title="Perder señal no te deja mal parado"
+    description="El comprador ve tu última conexión con la hora, no un mapa congelado ni un rider que desapareció. Cuando recuperas señal, el mapa se mueve solo."
+    rhythm="md"
+  >
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-wifi-slash"
+        label="Sin señal"
+        value="Última conexión"
+        sub="Con la hora, para que nadie piense que te detuviste."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-qr-code"
+        label="Tu constancia"
+        value="El escaneo"
+        sub="Escaneas el código del comprador al entregar, y eso prueba que entregaste."
+      />
+    </arena-grid>
+  </arena-section>
 </div>
