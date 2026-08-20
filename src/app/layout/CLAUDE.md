@@ -16,6 +16,28 @@ sits between them, and `panelFor(router.url)` decides:
 `router-outlet { display: none }` in `src/styles.css` is the mirror rule: the outlet draws nothing
 but is still a flex item.
 
+## Four roles, seven profiles, two blind panels
+
+The **role** is the access level and the **profile** adds the vertical. That split is the whole
+reason `/empresa` and `/sucursal` can be blind to whether the business is a restaurant or an import
+shop: the gate keys on `panel.role`, and the rail keys on the profile's `businessType`. Six roles
+would have meant four management panels instead of two.
+
+Seven profiles over four roles, and two of them are riders — one on a moto, one on a truck —
+because the vehicle decides the work and not the account. They share one panel and see different
+things in it.
+
+`Destination.type` is the entire mechanism. Only two destinations carry one, `carta` and
+`catalogo`, and `destinationsFor()` drops the ones that do not match. **Signed out, `businessType()`
+is `undefined` and both drop** — which is what the prerender writes and what the first client render
+reproduces, so hydration agrees. The filter lives in `app.ts` rather than in `panelFor()` because it
+depends on the session and `panelFor()` is pure.
+
+The gate offers **only the profiles whose role opens that panel** — two on each management panel,
+one elsewhere — with the first `primary` and the rest `secondary`, plus a ghost link to
+`/ingresar`. Seven buttons with two primaries would have broken "one primary accent per view", and
+seven greyed-out ones make the reader hunt.
+
 ## The gate is a render decision, not a redirect
 
 ```
@@ -25,7 +47,7 @@ but is still a flex item.
 A `CanActivateFn` returning a `UrlTree` during hydration navigates away from a page Angular has
 already claimed, which is what NG0500 is made of. Two consequences, both deliberate:
 
-- **the role is never persisted**, so a reload of a panel route finds no role and the server and
+- **the profile is never persisted**, so a reload of a panel route finds none and the server and
   the first client render agree exactly;
 - **every panel route still prerenders**, to the unauthenticated card, which is the right thing to
   hand a crawler on a `noindex` route.
@@ -47,7 +69,7 @@ Show/hide is a discrete decision at first paint, which is exactly the case the s
 **Why a literal `48rem`**: a media query cannot read a `var()`, so it restates `--bp-md`. If Arena
 moves that breakpoint, this number has to follow.
 
-Both navigation landmarks are named apart — "Panel de la importadora" and "Accesos rápidos" — and
+Both navigation landmarks are named apart — "Panel de la sucursal" and "Accesos rápidos" — and
 the hidden one is `display: none`, which takes it out of the accessibility tree, so a screen reader
 never meets both.
 
@@ -57,7 +79,10 @@ never meets both.
 destination needs to appear in the bottom bar as well as the rail.
 
 - **`panelFor()` matches on a segment boundary.** `'/restaurantes'.startsWith('/restaurante')` is
-  true, and once put the public restaurant listing behind the merchant panel's gate.
+  true, and once put the public restaurant listing behind a panel's gate. The trap now exists three
+  times: that pair is gone, but `/rider` sits against the public `/riders`, and the public
+  `/restaurantes/:empresa/:sucursal` is three segments deep under a prefix a panel could plausibly
+  claim. `panel-nav.spec.ts` holds all of them.
 - **Never put `routerLink` on an `arena-side-nav-item` or an `arena-bottom-nav-item`.** They report
   `(nav)` with their own id; route from that handler with `router.navigateByUrl`.
 - **A destination's `href` is prepared, its path is not.** `app.ts` maps every destination through
@@ -66,7 +91,10 @@ destination needs to appear in the bottom bar as well as the rail.
   otherwise land on the host's root. `go()` still navigates with the raw path, which is what the
   router wants. `app.spec.ts` holds both halves.
 - **`active` is an id, never a path**, and there is no route matcher. `activeIdIn()` does the
-  comparison, longest path first so `/importadora/envios/nuevo` does not light `Envíos`.
+  comparison, longest path first, so `/sucursal/pedidos/to-1042` lights `Pedidos` and nothing else.
+- **`go()` resolves against the filtered destinations**, not the panel's whole table. Routing to a
+  destination the current vertical does not have would be routing to a screen the rail never
+  offered.
 - **`router.url` is read through a `toSignal` bridge over `NavigationEnd`**, never in the template.
   Reading the property directly appears to work and stops the moment a navigation reuses the
   component it is already showing.
@@ -79,12 +107,15 @@ Arena's own, provided in root, and it owns the clock; `App` only renders `toasts
 and answers `(close)`.
 
 - **`Notices` holds the Spanish, one method per outcome.** It is the same rule `bs()` and
-  `status-tag` follow: an outcome is worded once, not re-worded in the five pages that raise it.
+  `state-tag` follow: an outcome is worded once, not re-worded in the five pages that raise it.
   A page injects `Notices`, never `ArenaToastQueue`.
-- **A notice is for an outcome the page cannot show.** Adding to the cart, sending an offer,
-  publishing a reply, creating a coupon, sending a report: in each of those the reader stays put
-  and nothing on screen changes enough to say it worked. A row leaving a list already says so, so
-  it gets no notice.
+- **A notice is for an outcome the page cannot show.** Adding to the cart,
+  sending a proposal, answering one, assigning a rider, marking an article gone: in each of those
+  the reader stays put and nothing on screen changes enough to say it worked. A row leaving a list
+  already says so, so it gets no notice.
+- **`codeMismatch()` is danger and it is pinned.** A scanned code that belongs to another order is
+  the one notice in this tree the reader must act on, because the alternative is handing a parcel
+  to the wrong person.
 - **`tone: 'danger'` pins the notice**, and it ignores an explicit `persist: false`. That is why
   the failed-copy notices are danger and the rest are not: a message the reader has to act on must
   not go away on a timer, and one that only reports success must.

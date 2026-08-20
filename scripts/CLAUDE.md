@@ -3,8 +3,10 @@
 Three dependency-free Bun TypeScript files, using only `node:fs` and `node:path`. They import the
 app's own fixtures so nothing is stated twice.
 
-- `generate-sitemap.ts` — writes `public/sitemap.xml` from `MERCHANTS` and the publicly trackable
-  `SHIPMENTS`, plus the five static public routes. Runs in `prepare:assets`.
+- `generate-sitemap.ts` — writes `public/sitemap.xml` from `COMPANIES` and `BRANCHES`, plus the four
+  static public routes. Runs in `prepare:assets`. **The count it prints must equal the number of
+  prerendered pages carrying `index,follow`**; they are 30 and 30 today, and a mismatch means either
+  a public route was added without a sitemap entry or a panel route lost its `PRIVATE` marker.
 - `emit-404.ts` — copies the prerendered `404/index.html` up to `404.html`, because a static host
   serves the not-found page from the root. Exits 1 if the route was not prerendered.
 - `pages-preview.ts` — the GitHub Pages step. Sets every `robots` meta to `noindex,nofollow`,

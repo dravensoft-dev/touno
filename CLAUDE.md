@@ -1,11 +1,28 @@
 # Touno
 
-A working mock-up of a last-mile logistics marketplace for Bolivia: food from restaurants and
-parcels from import shops on one network, one cart and one tracking story. Angular 22 prerendered
-to static HTML, skinned with Arena.
+A working mock-up of a last-mile logistics marketplace for Bolivia: food from restaurant branches
+and goods from import shops on one network, one cart, one code and one tracking story. Angular 22
+prerendered to static HTML, skinned with Arena.
 
-`README.md` documents the decisions and their reasoning. This file is the working contract: the
-rules that hold across the tree, and the traps that already cost a session.
+**`TOUNO_STRUC.md` is the product.** It describes the business by user group, in Spanish, for the
+people who will use Touno rather than for the people who build it, and it is the document changes
+are argued against. `README.md` documents the decisions and their reasoning. This file is the
+working contract: the rules that hold across the tree, and the traps that already cost a session.
+
+## The model, in one screen
+
+- A business is an **empresa** and **at least one sucursal**. The empresa owns the catalogue, the
+  prices and the agreements; the sucursal owns the address, the hours, whether it is open and what
+  it has today. That split is the whole reason there are two management panels.
+- A **rider** is a free agent. He joins a sucursal only through a **`RiderAgreement` both sides
+  accepted**, scoped to named `branchIds`. His **vehicle decides the work**: `camion` carries
+  interurban loads, everything else delivers in a city.
+- An **order** is one entity for both verticals. Its `scenario` picks which milestones it has, so a
+  plate of food and a parcel crossing three cities are the same record read two ways.
+- The **order code is the buyer's** from the moment of purchase, and it is the only thing that
+  closes a delivery. A rider scans it at a door; a gerente de sucursal scans it at a counter.
+- The buyer has **one chat thread per order**, and its counterpart **follows physical custody**.
+  Every hand-over writes a system line saying why the counterpart changed.
 
 ## Rules
 
@@ -21,7 +38,9 @@ rules that hold across the tree, and the traps that already cost a session.
 - **All code is English**: identifiers, types, file names, commit messages, test names, and every
   string that is not shown to a person.
 - **All documentation is English too**, which is where this project differs from Fragancia: both
-  `README.md` and every `CLAUDE.md` are written in English.
+  `README.md` and every `CLAUDE.md` are written in English. **`TOUNO_STRUC.md` is the one
+  exception and it is deliberate**: it is written for the Bolivian business that will use Touno and
+  comment on it, not for whoever builds it, so it is in Spanish.
 - **Spanish is for two things only**: app route paths (`/importadora/envios`) and user-facing UI
   copy. Arena's own rule says copy must be English; this project overrides it deliberately,
   because the business speaks Spanish. Do not "fix" Spanish copy.
@@ -68,13 +87,16 @@ carry the skin. Hold these:
 
 ### Money, codes and hours
 
-- **Every figure a person would dictate or copy by hand goes in the mono face**: waybill codes,
+- **Every figure a person would dictate or copy by hand goes in the mono face**: order codes,
   amounts, times, dates, plates. Put `.arena-num` on the element that holds it.
 - **`mono: true` on an `ArenaTableColumn` is for identifiers only.** It carries the mono face _and_
   the identifier ink, so a money column set that way reads as a code. Money and time columns take
   `align: 'right'` and a `<span class="arena-num">` in the cell.
 - `bs()` in `src/app/domain/format.ts` is the only place a boliviano is formatted. Bolivian
   convention is dotted thousands and a comma decimal: `Bs 2.730,50`.
+- **Nothing reads the wall clock.** `src/app/domain/clock.ts` exports a literal `NOW`, and every
+  "hace cuatro minutos", every ETA and every waiting count is derived from it. `Date.now()` writes
+  different HTML on the server than on the first client render, which is NG0500.
 
 ### Fonts
 
@@ -86,7 +108,9 @@ carry the skin. Hold these:
 
 ### SEO
 
-SEO is a first-class requirement, not a finishing pass. A new public route is not done until it has:
+SEO is a first-class requirement, not a finishing pass. The indexable surface is the marketplace,
+the empresa pages and **one page per sucursal**, which is what replaced the retired public parcel
+tracking. A new public route is not done until it has:
 
 - a `title` and an `arenaRouteMeta` `description` (or an `ArenaMetadataService.apply()` call when
   the metadata is a fact about the record, not about the route);
@@ -157,14 +181,20 @@ Each of these was paid for once. Do not rediscover them.
   `document.defaultView.matchMedia`, and the DOM `@angular/platform-server` ships has
   `defaultView` and no `matchMedia`, so the optional chain does not save you. `theme-toggle.ts`
   resolves the service inside `afterNextRender` and renders identical markup on both sides.
-- **The role lives in memory only, and the theme persists.** A guard returning a `UrlTree` during
-  hydration is NG0500, so the panel gate is a render decision (`@if (unlocked())`) rather than a
-  redirect, and the role is deliberately not in `localStorage` so server and first client render
-  agree. The theme _is_ persisted, and may be, because its class sits on `<html>`, which
+- **The profile lives in memory only, and the theme persists.** A guard returning a `UrlTree`
+  during hydration is NG0500, so the panel gate is a render decision (`@if (unlocked())`) rather
+  than a redirect, and the profile is deliberately not in `localStorage` so server and first client
+  render agree. The theme _is_ persisted, and may be, because its class sits on `<html>`, which
   hydration never claims.
 - **A panel prefix must match on a segment boundary.** `'/restaurantes'.startsWith('/restaurante')`
-  is true, and it once put the public restaurant listing behind the merchant panel's gate.
-  `panelFor()` in `layout/panel-nav.ts` compares `path === prefix || path.startsWith(prefix + '/')`.
+  is true, and it once put the public restaurant listing behind a panel gate. The same trap now
+  exists twice more: `/rider` against the public `/riders`, and `/sucursal` against nothing yet but
+  one route away from it. `panelFor()` in `layout/panel-nav.ts` compares
+  `path === prefix || path.startsWith(prefix + '/')`, and `panel-nav.spec.ts` holds all three.
+- **The vertical filter is applied in `app.ts`, not in `panelFor()`.** It depends on the session
+  and `panelFor()` is pure. Signed out, `businessType()` is `undefined` and **both** `carta` and
+  `catalogo` drop from the rail — which is what the prerender writes and what the first client
+  render reproduces, so hydration agrees.
 - **`ArenaSwitch` reports `requestChange` with no payload.** The host owns the state, so the
   handler flips the value it already holds; binding `$event` is a type error.
 - **`ArenaTableRow` and `ArenaTableCell` are attribute selectors on real elements**,
@@ -172,6 +202,12 @@ Each of these was paid for once. Do not rediscover them.
   form compiles to "not a known element" _and_ "the directive is unused" at the same time.
 - **`ArenaCard`'s slot is `action`, singular**, and `ArenaPageHead`'s is `actions`. A marker
   written without its directive in `imports` renders nothing, silently.
+- **`ArenaPageHead` has no `eyebrow` and no `lede`.** It takes `title` and `subtitle`. Both wrong
+  names were written across 32 pages as plain attributes, which renders and does nothing at all;
+  only binding one (`[lede]`) ever raised an error. When a page head looks bare, check the names.
+- **`ArenaSection` refuses an empty `title` at runtime**, and it throws rather than degrading. A
+  computed title that is `''` for some states — an ETA on a closed order, say — takes down the page
+  for exactly those records. Put the varying string in `description`.
 - **An `@else` block with more than one root node cannot fill a projection slot.** Wrap the block's
   content in one container of your own.
 - **`--bp-*` does not resolve during prerender**, so `arenaViewportBelow` always returns the wide
@@ -187,26 +223,40 @@ Each of these was paid for once. Do not rediscover them.
   accessible table, which is the relief the report asks for.
 - **`audit:arena` fails the build, and it names the kinds it fails on.**
   `--strict=audit,glyph,markers,restated,weight` is the set. `components` and `ramp` are left out
-  on purpose, and they are the two entries above this one: the first is a false positive over the
-  rhythm classes and the second is a measured decision. Holding all of them with a bare `--strict`
-  would make those two the price of holding the rest, so a new kind is added to the list only once
-  the tree is clean of it.
+  on purpose, and they are the two entries above this one.
+- **The style plugin answers exactly 77 roles and no more.** Adding a role of your own — map stroke
+  widths, say — is refused. Derive with `calc()` over an existing token inside the component's own
+  stylesheet, which is what `shared/route-map` does.
+- **An SVG presentation attribute cannot read a `var()`.** Colour in `route-map` and `order-code`
+  comes from CSS classes, and every stroke carries `vector-effect="non-scaling-stroke"` so
+  `stroke-width` is a real length rather than a viewBox unit, which is not a token.
+- **Nothing may draw from `Math.random()`.** `order-code` seeds its modules from the order code
+  itself, so the same order draws the same square on the server and in the browser.
 - **`ArenaSideNavSection` cannot be prerendered, so the rail is flat.** Its `ngAfterContentInit`
   guard spreads `host.nativeElement.children`, and the DOM `@angular/platform-server` ships returns
   a collection with no `Symbol.iterator`, so every panel route dies with "children is not iterable"
-  and `bun run build` writes nothing. It is an Arena defect rather than a rule of this project;
-  until it is fixed, group the rail by ordering `panel-nav.ts`, not by drawing a section.
+  and `bun run build` writes nothing. Group the rail by ordering `panel-nav.ts`, not by drawing a
+  section. `/empresa` and `/sucursal` both have six or more destinations and the temptation is
+  real.
 - **A row's overflow menu lives inside an `interactive` row, and that is legal.** Arena's own rule
-  is that a press starting on a control inside an activation target runs that control, so the
-  `arena-icon-button` a menu hangs off never opens the row behind it. What the menu costs is a
-  column: an actions column takes `align: 'right'` and `mobileLayout: 'block'`, which is the card
-  mode Arena documents for exactly this cell.
+  is that a press starting on a control inside an activation target runs that control. What the
+  menu costs is a column: an actions column takes `align: 'right'` and `mobileLayout: 'block'`.
 - **`ArenaMenuItem` carries no id, so a menu is dispatched on `label`.** That is Arena's own
   design — `select` reports the whole item — so the labels are module constants shared by the
   items array and the handler. Never inline a label string in one of the two.
-- **Ink from the page does not reach a dark band we drew.** A neutral `ArenaTag` inside the
-  shipment header's ink surface is invisible, because the tag reads `--ink-body`. Keep status
+- **Ink from the page does not reach a dark band we drew.** A neutral `ArenaTag` inside
+  `shared/order-header`'s ink surface is invisible, because the tag reads `--ink-body`. Keep status
   tags out of the dark band.
+- **Arena input and textarea report `change` carrying the string**, not `valueChange` carrying an
+  event. `arena-button` takes no `label`. `arena-progress-bar` takes `progressPercentage`, not
+  `value` and `max`. `arena-tabs` takes `value` and reports `change`; its tabs take `value`, not
+  `id`. `arena-breadcrumbs` takes `items` and reports `navigate`. `danger` is a button _variant_,
+  which is how Arena enforces that danger is never filled.
+- **An `output` may not be named after a DOM event.** `copy` is one; `angular-eslint` refuses it.
+- **A page reached by id must check the record is the reader's.** `/sucursal/pedidos/:codigo`
+  refuses an order belonging to another sucursal, `/rider/encargos/:codigo` one not assigned to
+  that rider, `/empresa/sucursales/:id` one of another empresa. Loading by slug alone means every
+  panel is a directory of everyone else's records.
 
 ## Verification checklist
 
@@ -223,8 +273,14 @@ bun run audit:arena
 Then check by hand, because nothing above checks them:
 
 - **No horizontal overflow from 320px up.** Sweep 320, 360, 390, 768, 1024 and 1440 across the
-  routes of all four roles: `documentElement.scrollWidth` must equal `clientWidth`, and nothing
-  outside a container that declares `overflow-x` may cross the viewport's right edge.
+  routes of all **seven** profiles: `documentElement.scrollWidth` must equal `clientWidth`, and
+  nothing outside a container that declares `overflow-x` may cross the viewport's right edge. The
+  route map and the chat thread are the two newest suspects.
 - **No external font requests.** Nothing to `fonts.googleapis.com` or `fonts.gstatic.com`.
 - **The skip link is the first tab stop**, and it lands on the main region.
-- **Both palettes look right on the page**, including the brand mark, which inverts under `noche`.
+- **Both palettes look right on the page**, including the brand mark, which inverts under `noche`,
+  and the route map in both its live and its `stale` state.
+- **Walk the four order journeys end to end**, switching profiles as the parcel changes hands:
+  restaurant in one city · importadora in one city · another city with counter pickup, where the
+  gerente scans · another city to the door, where custody goes rider → sucursal → rider and the
+  chat says so twice.

@@ -34,7 +34,7 @@ Do not hand-write a `BreadcrumbList`; Arena already emits it.
 
 ## The sucursal page is the indexable surface
 
-Retiring the public waybill tracking took twelve `noindex`-shaped pages out of the sitemap. What
+Retiring the public parcel tracking took twelve `noindex`-shaped pages out of the sitemap. What
 replaced them is eighteen sucursal pages, and they are the better trade: a `LocalBusiness` with a
 street address, opening hours and a city is the page a local search actually wants from a delivery
 business, where a tracking page was only ever useful to the one person holding the code.
@@ -55,8 +55,8 @@ business, where a tracking page was only ever useful to the one person holding t
 - `<app-structured-data key="…" [schema]="…" />` writes a `<script type="application/ld+json">`
   into `document.head`, tagged `data-schema="{key}"`.
 - **The key is what keeps a re-render from duplicating it.** A key that varies with the record —
-  `'merchant-' + slug` — is what makes a client-side navigation between two detail pages replace
-  the script instead of stacking two.
+  `'sucursal-' + empresa + '-' + sucursal` — is what makes a client-side navigation between two
+  sucursales replace the script instead of stacking two.
 - `serialize()` escapes every `<` so no payload can close the script tag. Keep that.
 - **`ArenaMetadataService.apply()` prefixes `SITE_ORIGIN` onto `canonical`** — pass a path, never
   an absolute URL. JSON-LD is the opposite: every `url` there is absolute.
