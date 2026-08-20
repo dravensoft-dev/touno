@@ -1,0 +1,31 @@
+.custody {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.custody__party {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--gap-items);
+  align-items: start;
+}
+
+.custody__icon {
+  color: var(--ink-eyebrow);
+}
+
+.custody__body {
+  min-inline-size: 0;
+}
+
+.custody__title {
+  font-weight: var(--fw-control);
+  color: var(--ink-heading);
+}
+
+.custody__subtitle,
+.custody__meta {
+  font-size: var(--fs-sm);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}

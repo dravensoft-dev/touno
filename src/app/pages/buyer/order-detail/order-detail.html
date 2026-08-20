@@ -1,28 +1,15 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    [title]="order().code"
-    [subtitle]="merchant()?.name + ' · ' + order().address"
-  >
-    <div actions>
-      <app-status-tag [order]="order().state" />
-    </div>
-  </arena-page-head>
+    eyebrow="Comprador"
+    title="Pedido"
+    lede="El mapa, el chat, tu código y quién responde por él."
+  />
 
-  <arena-key-value [rows]="facts()" [total]="total()" />
-
-  @if (shipment(); as parcel) {
-    <arena-alert tone="info" title="Esto viaja como encomienda">
-      Sigue los hitos abajo. Mientras el bus viaja no hay ubicación en vivo, y te avisamos cuando
-      llegue a la terminal.
-    </arena-alert>
-
-    <app-shipment-timeline [milestones]="parcel.milestones" />
-
-    @if (arrived()) {
-      <app-pickup-code [code]="parcel.pickupCode" hint="Muéstralo con tu cédula en ventanilla." />
-    }
-  } @else {
-    <arena-activity-feed label="Qué pasó con tu pedido" [items]="feed()" />
-  }
+  <arena-empty-state
+    headingLevel="h2"
+    icon="ph-bold ph-hammer"
+    title="En construcción"
+    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
+  />
 </div>

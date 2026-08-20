@@ -17,7 +17,7 @@ export class SignIn {
   protected readonly session = inject(Session);
 
   protected enter(profile: Profile): void {
-    this.session.enter(profile.role);
+    this.session.enter(profile.id);
     void this.router.navigateByUrl(profile.home);
   }
 }

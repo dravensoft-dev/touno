@@ -6,7 +6,7 @@
   <arena-hero
     eyebrow="Comida y encomiendas, una sola red"
     title="Saber dónde está, no solo cuánto falta"
-    lede="Pide a los restaurantes de tu ciudad y recibe lo que compraste a una importadora, con guía, hitos y un código de retiro. Cuando el paquete viaja en bus te lo decimos con las mismas letras con que damos una buena noticia."
+    lede="Pide a la sucursal que te queda cerca, mira a tu rider avanzar en el mapa y escríbele por el chat del pedido. Al recibir, le muestras tu código: es tuyo desde que compraste y nadie más puede cerrar tu pedido con él."
   >
     <div actions class="arena-row">
       <arena-button size="lg" icon="ph-bold ph-fork-knife" (click)="goTo('/restaurantes')">
@@ -27,21 +27,21 @@
     <arena-grid>
       <arena-stat-card
         icon="ph-bold ph-qr-code"
-        label="Guía y código"
-        value="TY-####"
-        sub="Cada encomienda nace con su guía y con cuatro dígitos para retirarla."
+        label="Tu código"
+        value="Uno por pedido"
+        sub="Lo recibes al comprar y te lo escanean al entregar. No hay otro."
       />
       <arena-stat-card
         icon="ph-bold ph-map-pin-area"
-        label="Hitos honestos"
-        value="6 pasos"
-        sub="Mientras el bus viaja no hay mapa en vivo, y la pantalla lo dice."
+        label="Mapa en vivo"
+        value="Sin llamar"
+        sub="Y si tu rider pierde señal, marcamos su última conexión con la hora."
       />
       <arena-stat-card
-        icon="ph-bold ph-hand-coins"
-        label="Un solo cobro"
-        value="Bs 0 sorpresa"
-        sub="Recojo y encomienda en un mismo pago, o lo cobra la sucursal al entregar."
+        icon="ph-bold ph-chat-circle"
+        label="Un solo chat"
+        value="Con quien lo lleva"
+        sub="Cambia de persona cuando cambia de manos, y te dice por qué."
       />
     </arena-grid>
   </arena-section>
@@ -53,9 +53,9 @@
     rhythm="md"
   >
     <arena-scroller label="Ciudades donde opera Touno">
-      @for (city of cities(); track city) {
+      @for (city of cities(); track city.id) {
         <arena-scroller-item>
-          <p class="home-city">{{ city }}</p>
+          <p class="home-city">{{ city.name }}</p>
         </arena-scroller-item>
       }
     </arena-scroller>
@@ -72,9 +72,9 @@
       @for (item of foodPicks(); track item.product.id) {
         <app-product-card
           [product]="item.product"
-          [merchant]="item.merchant"
+          [branch]="item.branch"
           fallbackIcon="ph ph-fork-knife"
-          (add)="addToCart($event)"
+          (add)="addToCart(item)"
         />
       }
     </arena-grid>
@@ -91,9 +91,9 @@
       @for (item of parcelPicks(); track item.product.id) {
         <app-product-card
           [product]="item.product"
-          [merchant]="item.merchant"
+          [branch]="item.branch"
           fallbackIcon="ph ph-package"
-          (add)="addToCart($event)"
+          (add)="addToCart(item)"
         />
       }
     </arena-grid>
@@ -102,13 +102,19 @@
   <arena-section
     id="restaurantes"
     eyebrow="Comida"
-    title="Restaurantes cerca"
-    description="Aceptan pedidos ahora y despachan con conductores de la red."
+    title="Sucursales de restaurante"
+    description="Sucursales abiertas ahora, con riders que trabajan para ellas."
     rhythm="md"
   >
     <arena-grid>
-      @for (merchant of restaurants(); track merchant.slug) {
-        <app-merchant-card [merchant]="merchant" />
+      @for (branch of restaurants(); track branch.id) {
+        @if (companyOf(branch.id); as company) {
+          <app-branch-card
+            [branch]="branch"
+            [company]="company"
+            [cityName]="geography.nameOf(branch.cityId)"
+          />
+        }
       }
     </arena-grid>
   </arena-section>
@@ -116,13 +122,19 @@
   <arena-section
     id="importadoras"
     eyebrow="Encomiendas"
-    title="Importadoras que despachan hoy"
-    description="Compras aquí y el paquete sale con guía en la próxima salida."
+    title="Sucursales de importadora"
+    description="Compras aquí y sale en la próxima carga hacia tu ciudad."
     rhythm="md"
   >
     <arena-grid>
-      @for (merchant of importers(); track merchant.slug) {
-        <app-merchant-card [merchant]="merchant" />
+      @for (branch of importers(); track branch.id) {
+        @if (companyOf(branch.id); as company) {
+          <app-branch-card
+            [branch]="branch"
+            [company]="company"
+            [cityName]="geography.nameOf(branch.cityId)"
+          />
+        }
       }
     </arena-grid>
   </arena-section>

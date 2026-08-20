@@ -1,54 +1,15 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
+    eyebrow="Comprador"
     title="Tu carrito"
-    subtitle="Comida y encomiendas en el mismo pedido, cada una con su propio seguimiento."
+    lede="Lo que llevas, agrupado por sucursal."
   />
 
-  @if (rows().length > 0) {
-    @if (mixed()) {
-      <arena-alert tone="info" title="Llevas comida y encomienda a la vez">
-        La comida llega hoy con un conductor de tu ciudad. La encomienda sale con guía en la próxima
-        salida y la retiras en sucursal con tu código.
-      </arena-alert>
-    }
-
-    <arena-table label="Productos en el carrito" [columns]="columns">
-      @for (row of rows(); track row.productId) {
-        <tr arena-table-row>
-          <td arena-table-cell>{{ row.name }}</td>
-          <td arena-table-cell>{{ row.merchant }}</td>
-          <td arena-table-cell>
-            <span class="arena-num">{{ row.qty }}</span>
-          </td>
-          <td arena-table-cell>
-            <span class="arena-num">{{ row.subtotal }}</span>
-          </td>
-          <td arena-table-cell>
-            <arena-icon-button
-              icon="ph-bold ph-trash"
-              [label]="'Quitar ' + row.name"
-              (click)="cart.remove(row.productId)"
-            />
-          </td>
-        </tr>
-      }
-    </arena-table>
-
-    <arena-key-value [rows]="summary()" [total]="total()" />
-
-    <arena-button size="lg" icon="ph-bold ph-check" (click)="checkout()">
-      Confirmar el pedido
-    </arena-button>
-  } @else {
-    <arena-empty-state
-      headingLevel="h2"
-      icon="ph-bold ph-shopping-cart-simple"
-      title="Tu carrito está vacío"
-      message="Agrega algo desde un restaurante o una importadora."
-    />
-    <div class="arena-row">
-      <arena-button variant="secondary" (click)="browse()">Ver comercios</arena-button>
-    </div>
-  }
+  <arena-empty-state
+    headingLevel="h2"
+    icon="ph-bold ph-hammer"
+    title="En construcción"
+    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
+  />
 </div>

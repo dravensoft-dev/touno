@@ -1,4 +1,4 @@
-<arena-card [eyebrow]="merchant()?.name">
+<arena-card [eyebrow]="branch()?.name">
   <arena-figure>
     @if (photo(); as source) {
       <img media [src]="source" [alt]="product().name" loading="lazy" decoding="async" />
@@ -11,7 +11,7 @@
     <h3 class="product-card__name">{{ product().name }}</h3>
     <p class="product-card__description">{{ product().description }}</p>
 
-    @if (!product().available) {
+    @if (!available()) {
       <div class="product-card__badge">
         <arena-badge tone="warning">Sin stock</arena-badge>
       </div>
@@ -22,7 +22,7 @@
       <arena-button
         variant="ghost"
         icon="ph-bold ph-plus"
-        [disabled]="!product().available"
+        [disabled]="!available()"
         (click)="addToCart()"
       >
         Agregar

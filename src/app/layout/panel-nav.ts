@@ -1,3 +1,4 @@
+import { BusinessType } from '../domain/businesses.model';
 import { Role } from '../domain/session';
 
 export interface Destination {
@@ -6,6 +7,7 @@ export interface Destination {
   readonly icon: string;
   readonly path: string;
   readonly bar: boolean;
+  readonly type?: BusinessType;
 }
 
 export interface PanelArea {
@@ -17,155 +19,143 @@ export interface PanelArea {
 
 export const PANELS: readonly PanelArea[] = [
   {
-    role: 'importadora',
-    prefix: '/importadora',
-    label: 'Panel de la importadora',
+    role: 'gerente-empresa',
+    prefix: '/empresa',
+    label: 'Panel de la empresa',
     destinations: [
       {
-        id: 'envios',
-        label: 'Envíos',
-        icon: 'ph-bold ph-package',
-        path: '/importadora/envios',
+        id: 'sucursales',
+        label: 'Sucursales',
+        icon: 'ph-bold ph-buildings',
+        path: '/empresa/sucursales',
         bar: true,
       },
       {
-        id: 'nuevo',
-        label: 'Nuevo',
-        icon: 'ph-bold ph-plus-circle',
-        path: '/importadora/envios/nuevo',
-        bar: true,
-      },
-      {
-        id: 'lote',
-        label: 'Lote',
-        icon: 'ph-bold ph-stack',
-        path: '/importadora/lote',
+        id: 'pedidos',
+        label: 'Pedidos',
+        icon: 'ph-bold ph-tray',
+        path: '/empresa/pedidos',
         bar: true,
       },
       {
         id: 'catalogo',
         label: 'Catálogo',
         icon: 'ph-bold ph-tag',
-        path: '/importadora/catalogo',
-        bar: false,
-      },
-      {
-        id: 'conductores',
-        label: 'Conductores',
-        icon: 'ph-bold ph-steering-wheel',
-        path: '/importadora/conductores',
-        bar: false,
-      },
-      {
-        id: 'cuenta',
-        label: 'Cuenta',
-        icon: 'ph-bold ph-chart-bar',
-        path: '/importadora/cuenta',
-        bar: true,
-      },
-    ],
-  },
-  {
-    role: 'restaurante',
-    prefix: '/restaurante',
-    label: 'Panel del restaurante',
-    destinations: [
-      {
-        id: 'pedidos',
-        label: 'Pedidos',
-        icon: 'ph-bold ph-tray',
-        path: '/restaurante/pedidos',
+        path: '/empresa/catalogo',
         bar: true,
       },
       {
-        id: 'carta',
-        label: 'Carta',
-        icon: 'ph-bold ph-list-bullets',
-        path: '/restaurante/carta',
-        bar: true,
-      },
-      {
-        id: 'historial',
-        label: 'Historial',
-        icon: 'ph-bold ph-clock-counter-clockwise',
-        path: '/restaurante/historial',
-        bar: false,
-      },
-      {
-        id: 'metricas',
-        label: 'Métricas',
-        icon: 'ph-bold ph-chart-line',
-        path: '/restaurante/metricas',
+        id: 'riders',
+        label: 'Riders',
+        icon: 'ph-bold ph-motorcycle',
+        path: '/empresa/riders',
         bar: true,
       },
       {
         id: 'finanzas',
         label: 'Finanzas',
         icon: 'ph-bold ph-wallet',
-        path: '/restaurante/finanzas',
+        path: '/empresa/finanzas',
         bar: false,
-      },
-      {
-        id: 'promociones',
-        label: 'Promociones',
-        icon: 'ph-bold ph-megaphone',
-        path: '/restaurante/promociones',
-        bar: false,
-      },
-      {
-        id: 'resenas',
-        label: 'Reseñas',
-        icon: 'ph-bold ph-star',
-        path: '/restaurante/resenas',
-        bar: false,
-      },
-      {
-        id: 'conductores',
-        label: 'Conductores',
-        icon: 'ph-bold ph-steering-wheel',
-        path: '/restaurante/conductores',
-        bar: true,
       },
       {
         id: 'ajustes',
         label: 'Ajustes',
         icon: 'ph-bold ph-gear',
-        path: '/restaurante/ajustes',
+        path: '/empresa/ajustes',
         bar: false,
       },
     ],
   },
   {
-    role: 'conductor',
-    prefix: '/conductor',
-    label: 'Panel del conductor',
+    role: 'gerente-sucursal',
+    prefix: '/sucursal',
+    label: 'Panel de la sucursal',
+    destinations: [
+      {
+        id: 'pedidos',
+        label: 'Pedidos',
+        icon: 'ph-bold ph-tray',
+        path: '/sucursal/pedidos',
+        bar: true,
+      },
+      {
+        id: 'carta',
+        label: 'Carta',
+        icon: 'ph-bold ph-list-bullets',
+        path: '/sucursal/carta',
+        bar: true,
+        type: 'restaurante',
+      },
+      {
+        id: 'catalogo',
+        label: 'Catálogo',
+        icon: 'ph-bold ph-tag',
+        path: '/sucursal/catalogo',
+        bar: true,
+        type: 'importadora',
+      },
+      {
+        id: 'entregas',
+        label: 'Entregas',
+        icon: 'ph-bold ph-hand-arrow-down',
+        path: '/sucursal/entregas',
+        bar: true,
+      },
+      {
+        id: 'riders',
+        label: 'Riders',
+        icon: 'ph-bold ph-motorcycle',
+        path: '/sucursal/riders',
+        bar: false,
+      },
+      {
+        id: 'historial',
+        label: 'Historial',
+        icon: 'ph-bold ph-clock-counter-clockwise',
+        path: '/sucursal/historial',
+        bar: false,
+      },
+      {
+        id: 'ajustes',
+        label: 'Ajustes',
+        icon: 'ph-bold ph-gear',
+        path: '/sucursal/ajustes',
+        bar: false,
+      },
+    ],
+  },
+  {
+    role: 'rider',
+    prefix: '/rider',
+    label: 'Panel del rider',
     destinations: [
       {
         id: 'turno',
         label: 'Turno',
-        icon: 'ph-bold ph-steering-wheel',
-        path: '/conductor/turno',
+        icon: 'ph-bold ph-power',
+        path: '/rider/turno',
         bar: true,
       },
       {
-        id: 'carreras',
-        label: 'Carreras',
+        id: 'encargos',
+        label: 'Encargos',
         icon: 'ph-bold ph-navigation-arrow',
-        path: '/conductor/carreras',
+        path: '/rider/encargos',
         bar: true,
       },
       {
-        id: 'ofertas',
-        label: 'Ofertas',
+        id: 'acuerdos',
+        label: 'Acuerdos',
         icon: 'ph-bold ph-handshake',
-        path: '/conductor/ofertas',
+        path: '/rider/acuerdos',
         bar: true,
       },
       {
         id: 'ganancias',
         label: 'Ganancias',
         icon: 'ph-bold ph-hand-coins',
-        path: '/conductor/ganancias',
+        path: '/rider/ganancias',
         bar: true,
       },
     ],
@@ -207,7 +197,7 @@ export const PANELS: readonly PanelArea[] = [
   },
 ];
 
-export const BUYER_PREFIXES: readonly string[] = ['/feed', '/mis-pedidos', '/carrito'];
+export const BUYER_PREFIXES: readonly string[] = ['/feed', '/carrito', '/mis-pedidos'];
 
 function under(path: string, prefix: string): boolean {
   return path === prefix || path.startsWith(`${prefix}/`);
@@ -221,6 +211,13 @@ export function panelFor(url: string): PanelArea | undefined {
   }
 
   return PANELS.find((panel) => under(path, panel.prefix));
+}
+
+export function destinationsFor(
+  panel: PanelArea,
+  type: BusinessType | undefined,
+): readonly Destination[] {
+  return panel.destinations.filter((one) => one.type === undefined || one.type === type);
 }
 
 export function activeIdIn(panel: PanelArea, url: string): string | undefined {

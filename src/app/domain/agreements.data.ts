@@ -185,4 +185,17 @@ export const AGREEMENTS: readonly RiderAgreement[] = [
     validUntil: '2026-12-31',
     settledAt: '2026-07-18T18:02:00',
   },
+  {
+    id: 'ag-516',
+    riderId: 'r-marco',
+    companyId: 'c-ale',
+    branchIds: ['b-ale-la-paz'],
+    initiatedBy: 'rider',
+    state: 'activo',
+    perTripBob: 17,
+    message: 'Puedo cubrir los repartos que llegan de otras ciudades.',
+    sentAt: '2026-08-08T09:14:00',
+    validUntil: '2026-12-31',
+    settledAt: '2026-08-08T15:30:00',
+  },
 ];

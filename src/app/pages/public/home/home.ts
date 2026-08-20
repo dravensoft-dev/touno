@@ -10,11 +10,14 @@ import {
   ArenaSection,
   ArenaStatCard,
 } from '@dravensoft/arena-angular';
+import { Businesses } from '../../../domain/businesses';
+import { pathOfType } from '../../../domain/businesses.model';
 import { Cart } from '../../../domain/cart';
+import { Catalog } from '../../../domain/catalog';
+import { FeedItem } from '../../../domain/catalog.model';
+import { Geography } from '../../../domain/geography';
 import { Notices } from '../../../layout/notices';
-import { Marketplace } from '../../../domain/marketplace';
-import { Product } from '../../../domain/marketplace.model';
-import { MerchantCard } from '../../../shared/merchant-card/merchant-card';
+import { BranchCard } from '../../../shared/branch-card/branch-card';
 import { ProductCard } from '../../../shared/product-card/product-card';
 import { StructuredData } from '../../../seo/structured-data';
 import {
@@ -38,7 +41,7 @@ import {
     ArenaStatCard,
     ArenaScroller,
     ArenaScrollerItem,
-    MerchantCard,
+    BranchCard,
     ProductCard,
     StructuredData,
   ],
@@ -47,21 +50,26 @@ import {
 })
 export class Home {
   private readonly router = inject(Router);
-
   private readonly cart = inject(Cart);
   private readonly notices = inject(Notices);
 
-  protected readonly marketplace = inject(Marketplace);
+  protected readonly businesses = inject(Businesses);
+  protected readonly catalog = inject(Catalog);
+  protected readonly geography = inject(Geography);
 
-  protected readonly restaurants = computed(() => this.marketplace.restaurants().slice(0, 4));
+  protected readonly restaurants = computed(() =>
+    this.catalog.sellingBranches('restaurante').slice(0, 4),
+  );
 
-  protected readonly importers = computed(() => this.marketplace.importers().slice(0, 4));
+  protected readonly importers = computed(() =>
+    this.catalog.sellingBranches('importadora').slice(0, 4),
+  );
 
-  protected readonly cities = computed(() => this.marketplace.cities());
+  protected readonly cities = computed(() => this.geography.all());
 
-  protected readonly foodPicks = computed(() => this.marketplace.foodFeed().slice(0, 4));
+  protected readonly foodPicks = computed(() => this.catalog.foodFeed().slice(0, 4));
 
-  protected readonly parcelPicks = computed(() => this.marketplace.parcelFeed().slice(0, 4));
+  protected readonly parcelPicks = computed(() => this.catalog.parcelFeed().slice(0, 4));
 
   protected readonly feedSchema = computed<Record<string, unknown>>(() => {
     const items = [...this.foodPicks(), ...this.parcelPicks()];
@@ -74,8 +82,8 @@ export class Home {
       itemListElement: items.map((item, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        name: `${item.product.name} · ${item.merchant.name}`,
-        url: `${SITE_ORIGIN}/${item.merchant.kind === 'restaurante' ? 'restaurantes' : 'tiendas'}/${item.merchant.slug}`,
+        name: `${item.product.name} · ${item.branch.name}`,
+        url: `${SITE_ORIGIN}/${pathOfType(item.company.type)}/${item.company.slug}/${item.branch.slug}`,
       })),
     };
   });
@@ -101,9 +109,13 @@ export class Home {
     address: { '@type': 'PostalAddress', addressLocality: CONTACT_CITY, addressCountry: 'BO' },
   };
 
-  protected addToCart(product: Product): void {
-    this.cart.add(product);
-    this.notices.addedToCart(product.name);
+  protected companyOf(branchId: string) {
+    return this.businesses.companyOfBranch(branchId);
+  }
+
+  protected addToCart(item: FeedItem): void {
+    this.cart.add(item.product, item.branch.id);
+    this.notices.addedToCart(item.product.name);
   }
 
   protected goTo(path: string): void {

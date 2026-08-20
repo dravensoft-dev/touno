@@ -1,49 +1,15 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
+    eyebrow="Comprador"
     title="Mis pedidos"
-    subtitle="Comida y encomiendas en la misma lista."
+    lede="Todo lo que pediste, con su estado ahora mismo."
   />
 
-  <arena-segmented-control
-    ariaLabel="Filtrar pedidos"
-    [options]="filters"
-    [value]="filter()"
-    (change)="filter.set($event)"
+  <arena-empty-state
+    headingLevel="h2"
+    icon="ph-bold ph-hammer"
+    title="En construcción"
+    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
   />
-
-  @if (rows().length > 0) {
-    <arena-table label="Pedidos del comprador" [columns]="columns">
-      @for (row of rows(); track row.code) {
-        <tr arena-table-row interactive (click)="open(row.slug)">
-          <td arena-table-cell>{{ row.code }}</td>
-          <td arena-table-cell>{{ row.merchant }}</td>
-          <td arena-table-cell><app-status-tag [order]="row.state" /></td>
-          <td arena-table-cell>
-            <span class="arena-num">{{ row.placed }}</span>
-          </td>
-          <td arena-table-cell>
-            <span class="arena-num">{{ row.total }}</span>
-          </td>
-          <td arena-table-cell>
-            <arena-menu [items]="row.actions" align="end" (select)="runOn(row, $event)">
-              <arena-icon-button
-                trigger
-                variant="ghost"
-                icon="ph-bold ph-dots-three-vertical"
-                [label]="'Acciones del pedido ' + row.code"
-              />
-            </arena-menu>
-          </td>
-        </tr>
-      }
-    </arena-table>
-  } @else {
-    <arena-empty-state
-      headingLevel="h2"
-      icon="ph-bold ph-package"
-      title="Nada en este filtro"
-      message="Cambia el filtro o haz tu primer pedido."
-    />
-  }
 </div>

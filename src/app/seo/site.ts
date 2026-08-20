@@ -2,7 +2,7 @@ export const SITE_ORIGIN = 'https://touno.bo';
 export const SITE_NAME = 'Touno';
 export const SITE_TAGLINE = 'Logística de última milla';
 export const SITE_DESCRIPTION =
-  'Touno mueve comida y encomiendas en Bolivia: pide a restaurantes de tu ciudad, recibe paquetes de importadoras con guía y código de retiro, y sigue cada paso sin llamar a nadie.';
+  'Touno mueve comida y encomiendas en Bolivia: pide a la sucursal que te queda cerca, sigue a tu rider en el mapa, escríbele por el chat del pedido y recibe con tu propio código.';
 export const SITE_IMAGE = `${SITE_ORIGIN}/og/touno.png`;
 export const SITE_LOCALE = 'es_BO';
 export const CONTACT_PHONE = '68518043';
@@ -13,4 +13,3 @@ export const CONTACT_INSTAGRAM_URL = 'https://www.instagram.com/touno.bo';
 export const CONTACT_CITY = 'La Paz';
 export const CONTACT_COUNTRY = 'Bolivia';
 export const PRICE_CURRENCY = 'BOB';
-export const TRACKING_PATH = '/seguimiento';

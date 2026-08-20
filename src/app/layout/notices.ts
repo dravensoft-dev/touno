@@ -3,104 +3,93 @@ import { ArenaToastQueue } from '@dravensoft/arena-angular';
 
 @Injectable({ providedIn: 'root' })
 export class Notices {
-  private readonly queue = inject(ArenaToastQueue);
+  private readonly toasts = inject(ArenaToastQueue);
 
-  addedToCart(product: string): void {
-    this.queue.raise({
-      title: 'Agregado al carrito',
-      message: `${product} ya está en tu pedido.`,
-      tone: 'success',
-      dismissible: true,
-    });
-  }
-
-  guiaCopied(guia: string): void {
-    this.queue.raise({
-      title: 'Guía copiada',
-      message: `${guia} quedó en el portapapeles.`,
-      tone: 'success',
-      dismissible: true,
-    });
-  }
-
-  guiaNotCopied(guia: string): void {
-    this.queue.raise({
-      title: 'No pudimos copiar la guía',
-      message: `Cópiala a mano: ${guia}.`,
-      tone: 'danger',
-      dismissible: true,
-    });
+  addedToCart(name: string): void {
+    this.toasts.raise({ title: 'Agregado al carrito', message: name, tone: 'success' });
   }
 
   codeCopied(code: string): void {
-    this.queue.raise({
-      title: 'Código copiado',
-      message: `${code} quedó en el portapapeles.`,
-      tone: 'success',
-      dismissible: true,
-    });
+    this.toasts.raise({ title: 'Código copiado', message: code, tone: 'success' });
   }
 
-  codeNotCopied(code: string): void {
-    this.queue.raise({
+  codeNotCopied(): void {
+    this.toasts.raise({
       title: 'No pudimos copiar el código',
-      message: `Cópialo a mano: ${code}.`,
+      message: 'Cópialo a mano de la pantalla.',
       tone: 'danger',
-      dismissible: true,
     });
   }
 
-  offerSent(driver: string): void {
-    this.queue.raise({
-      title: 'Oferta enviada',
-      message: `${driver} la verá en su panel de conductor.`,
+  orderPlaced(code: string): void {
+    this.toasts.raise({
+      title: 'Pedido confirmado',
+      message: `Guarda tu código ${code}. Es lo que te escanean al recibir.`,
       tone: 'success',
-      dismissible: true,
     });
   }
 
-  offerAccepted(business: string): void {
-    this.queue.raise({
-      title: 'Oferta aceptada',
-      message: `${business} ya puede asignarte carreras.`,
+  riderAssigned(name: string): void {
+    this.toasts.raise({ title: 'Rider asignado', message: name, tone: 'success' });
+  }
+
+  orderScanned(code: string): void {
+    this.toasts.raise({ title: 'Entrega confirmada', message: code, tone: 'success' });
+  }
+
+  codeMismatch(): void {
+    this.toasts.raise({
+      title: 'Ese código no es de este pedido',
+      message: 'Pide al comprador que abra su pedido en la aplicación.',
+      tone: 'danger',
+    });
+  }
+
+  agreementSent(): void {
+    this.toasts.raise({
+      title: 'Propuesta enviada',
+      message: 'Queda esperando la respuesta de la otra parte.',
       tone: 'success',
-      dismissible: true,
     });
   }
 
-  offerRejected(business: string): void {
-    this.queue.raise({
-      title: 'Oferta rechazada',
-      message: `Le avisamos a ${business} y sale de tus pendientes.`,
+  agreementAccepted(): void {
+    this.toasts.raise({
+      title: 'Acuerdo aceptado',
+      message: 'Ya pueden trabajar juntos.',
+      tone: 'success',
+    });
+  }
+
+  agreementRejected(): void {
+    this.toasts.raise({
+      title: 'Acuerdo rechazado',
+      message: 'La otra parte fue avisada.',
       tone: 'neutral',
-      dismissible: true,
     });
   }
 
-  replyPublished(): void {
-    this.queue.raise({
-      title: 'Respuesta publicada',
-      message: 'La reseña ya la muestra debajo del comentario.',
+  messageSent(): void {
+    this.toasts.raise({
+      title: 'Mensaje enviado',
+      message: 'Le llega al instante.',
       tone: 'success',
-      dismissible: true,
     });
   }
 
-  reportSent(): void {
-    this.queue.raise({
-      title: 'Reporte enviado',
-      message: 'El equipo de Touno lo revisa y te escribe por el envío.',
-      tone: 'neutral',
-      dismissible: true,
-    });
-  }
-
-  couponCreated(): void {
-    this.queue.raise({
-      title: 'Cupón creado',
-      message: 'Ya se aplica a los pedidos que entren por tu carta.',
+  loadDeparted(): void {
+    this.toasts.raise({
+      title: 'La carga salió',
+      message: 'Los compradores ya ven el camión en su mapa.',
       tone: 'success',
-      dismissible: true,
+    });
+  }
+
+  availabilityChanged(name: string, available: boolean): void {
+    this.toasts.raise({
+      title: available ? 'Disponible otra vez' : 'Marcado como agotado',
+      message: `${name} · sólo en tu sucursal`,
+      tone: 'success',
     });
   }
 }

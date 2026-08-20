@@ -1,7 +1,7 @@
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { MERCHANTS } from '../src/app/domain/marketplace.data';
-import { SHIPMENTS } from '../src/app/domain/shipping.data';
+import { BRANCHES, COMPANIES } from '../src/app/domain/businesses.data';
+import { pathOfType } from '../src/app/domain/businesses.model';
 import { SITE_ORIGIN } from '../src/app/seo/site';
 
 interface SitemapEntry {
@@ -14,18 +14,21 @@ const entries: SitemapEntry[] = [
   { path: '/', priority: '1.0', changefreq: 'daily' },
   { path: '/restaurantes', priority: '0.9', changefreq: 'daily' },
   { path: '/tiendas', priority: '0.9', changefreq: 'daily' },
-  { path: '/tarifas', priority: '0.7', changefreq: 'weekly' },
-  { path: '/conducir', priority: '0.6', changefreq: 'monthly' },
-  ...MERCHANTS.map((merchant) => ({
-    path: `/${merchant.kind === 'restaurante' ? 'restaurantes' : 'tiendas'}/${merchant.slug}`,
+  { path: '/riders', priority: '0.6', changefreq: 'monthly' },
+  ...COMPANIES.map((company) => ({
+    path: `/${pathOfType(company.type)}/${company.slug}`,
     priority: '0.8',
     changefreq: 'daily',
   })),
-  ...SHIPMENTS.filter((shipment) => shipment.publicTracking).map((shipment) => ({
-    path: `/seguimiento/${shipment.slug}`,
-    priority: '0.4',
-    changefreq: 'hourly',
-  })),
+  ...BRANCHES.map((branch) => {
+    const company = COMPANIES.find((one) => one.id === branch.companyId);
+
+    return {
+      path: `/${pathOfType(company?.type ?? 'restaurante')}/${company?.slug}/${branch.slug}`,
+      priority: '0.7',
+      changefreq: 'daily',
+    };
+  }),
 ];
 
 const lastmod = new Date().toISOString().slice(0, 10);

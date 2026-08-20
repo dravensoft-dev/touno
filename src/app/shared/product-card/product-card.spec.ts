@@ -1,40 +1,41 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { Merchant, Product } from '../../domain/marketplace.model';
+import { Branch } from '../../domain/businesses.model';
+import { Product } from '../../domain/catalog.model';
 import { ProductCard } from './product-card';
 
-const MERCHANT: Merchant = {
-  slug: 'pollos-copacabana',
-  name: 'Pollos Copacabana',
-  kind: 'restaurante',
-  city: 'La Paz',
+const BRANCH: Branch = {
+  id: 'b-copacabana-miraflores',
+  slug: 'miraflores',
+  companyId: 'c-copacabana',
+  name: 'Copacabana Miraflores',
+  cityId: 'la-paz',
   zone: 'Miraflores',
-  summary: 'Pollo broaster y salteñas.',
-  rating: 4.7,
-  reviewCount: 1284,
+  address: 'Av. Busch 1420',
+  phone: '2 224 8810',
+  point: { x: 34, y: 41 },
+  hours: [{ days: 'Lunes a domingo', opens: '11:00', closes: '22:30' }],
   open: true,
   prepMinutes: 25,
   deliveryBob: 8,
-  categories: ['Pollo'],
-  tags: ['Pollo'],
+  managerName: 'Delia Mamani',
 };
 
 const PRODUCT: Product = {
-  id: 'pc-broaster-1-4',
-  merchantSlug: 'pollos-copacabana',
+  id: 'pc-cuarto-pollo',
+  companyId: 'c-copacabana',
   category: 'Pollo',
-  name: 'Broaster 1/4 con papas',
-  description: 'Presa de pollo broaster, papas fritas y ensalada de la casa.',
-  priceBob: 32,
-  available: true,
+  name: 'Cuarto de pollo con papas',
+  description: 'Presa de pollo broaster, papas fritas y llajua.',
+  priceBob: 38,
   featured: true,
-  soldThisMonth: 412,
+  soldThisMonth: 906,
   variants: [],
   addons: [],
 };
 
-function render(merchant?: Merchant): ComponentFixture<ProductCard> {
+function render(inputs: Record<string, unknown> = {}): ComponentFixture<ProductCard> {
   TestBed.configureTestingModule({
     providers: [provideRouter([]), { provide: APP_BASE_HREF, useValue: '/' }],
   });
@@ -43,8 +44,8 @@ function render(merchant?: Merchant): ComponentFixture<ProductCard> {
 
   fixture.componentRef.setInput('product', PRODUCT);
 
-  if (merchant) {
-    fixture.componentRef.setInput('merchant', merchant);
+  for (const [key, value] of Object.entries(inputs)) {
+    fixture.componentRef.setInput(key, value);
   }
 
   fixture.detectChanges();
@@ -52,29 +53,33 @@ function render(merchant?: Merchant): ComponentFixture<ProductCard> {
   return fixture;
 }
 
-function names(fixture: ComponentFixture<ProductCard>, shop: string): boolean {
-  const host: HTMLElement = fixture.nativeElement;
-
-  return (host.textContent ?? '').includes(shop);
-}
-
 describe('ProductCard', () => {
-  it('names the shop when the product travels in the feed', () => {
-    expect(names(render(MERCHANT), MERCHANT.name)).toBe(true);
+  it('names the sucursal when the product travels in the feed', () => {
+    const host: HTMLElement = render({ branch: BRANCH }).nativeElement;
+
+    expect(host.textContent).toContain('Copacabana Miraflores');
   });
 
-  it('names no shop inside the shop own page', () => {
-    expect(names(render(), MERCHANT.name)).toBe(false);
+  it('names no sucursal inside the sucursal own page', () => {
+    const host: HTMLElement = render().nativeElement;
+
+    expect(host.textContent).not.toContain('Copacabana Miraflores');
   });
 
   it('reports the product the buyer added', () => {
-    const fixture = render(MERCHANT);
-    const host: HTMLElement = fixture.nativeElement;
+    const fixture = render({ branch: BRANCH });
     const added: Product[] = [];
 
     fixture.componentInstance.add.subscribe((product) => added.push(product));
-    host.querySelector('button')?.click();
+    fixture.nativeElement.querySelector('button')?.click();
 
     expect(added).toEqual([PRODUCT]);
+  });
+
+  it('says a sucursal ran out, because availability belongs to the local', () => {
+    const host: HTMLElement = render({ branch: BRANCH, available: false }).nativeElement;
+
+    expect(host.textContent).toContain('Sin stock');
+    expect(host.querySelector('button')?.hasAttribute('disabled')).toBe(true);
   });
 });

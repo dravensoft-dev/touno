@@ -1,50 +1,39 @@
 import { Injectable, computed, signal } from '@angular/core';
+import { DeliveryChoice } from './orders.model';
 
-export interface Draft {
-  readonly recipient: string;
-  readonly phone: string;
-  readonly city: string;
-  readonly content: string;
-  readonly weightKg: number;
-  readonly carrierId: string;
-  readonly departure: string;
-  readonly payer: 'remitente' | 'destinatario';
-  readonly pickupBob: number;
-  readonly freightBob: number;
+export interface CheckoutDraft {
+  readonly delivery: DeliveryChoice;
+  readonly address: string;
+  readonly destinationBranchId: string;
+  readonly note: string;
 }
 
-const EMPTY: Draft = {
-  recipient: '',
-  phone: '',
-  city: '',
-  content: '',
-  weightKg: 1,
-  carrierId: 'bolivar',
-  departure: '14:00',
-  payer: 'remitente',
-  pickupBob: 15,
-  freightBob: 50,
+const EMPTY: CheckoutDraft = {
+  delivery: 'domicilio',
+  address: '',
+  destinationBranchId: '',
+  note: '',
 };
 
 @Injectable({ providedIn: 'root' })
-export class ShipmentDraft {
-  private readonly draft = signal<Draft>(EMPTY);
+export class Checkout {
+  private readonly state = signal<CheckoutDraft>(EMPTY);
 
-  readonly current = this.draft.asReadonly();
-
-  readonly totalBob = computed(() => this.draft().pickupBob + this.draft().freightBob);
+  readonly current = this.state.asReadonly();
 
   readonly ready = computed(() => {
-    const draft = this.draft();
+    const draft = this.state();
 
-    return draft.recipient.trim() !== '' && draft.city !== '' && draft.content.trim() !== '';
+    return draft.delivery === 'sucursal'
+      ? draft.destinationBranchId !== ''
+      : draft.address.trim() !== '';
   });
 
-  patch(change: Partial<Draft>): void {
-    this.draft.update((current) => ({ ...current, ...change }));
+  patch(change: Partial<CheckoutDraft>): void {
+    this.state.update((one) => ({ ...one, ...change }));
   }
 
   reset(): void {
-    this.draft.set(EMPTY);
+    this.state.set(EMPTY);
   }
 }

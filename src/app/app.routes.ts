@@ -1,295 +1,292 @@
 import { Routes } from '@angular/router';
 import { arenaRouteMeta } from '@dravensoft/arena-angular/metadata';
-import { SITE_DESCRIPTION, SITE_NAME } from './seo/site';
+import { SITE_DESCRIPTION } from './seo/site';
 
 const PRIVATE = arenaRouteMeta({ robots: 'noindex,follow' });
 
 export const routes: Routes = [
   {
     path: '',
-    title: `${SITE_NAME} · Comida y encomiendas en Bolivia`,
-    loadComponent: () => import('./pages/public/home/home').then((m) => m.Home),
+    title: 'Touno · Comida y encomiendas en Bolivia',
     data: arenaRouteMeta({ description: SITE_DESCRIPTION, type: 'website' }),
+    loadComponent: () => import('./pages/public/home/home').then((m) => m.Home),
   },
   {
     path: 'restaurantes',
     title: 'Restaurantes',
-    loadComponent: () => import('./pages/public/merchants/merchants').then((m) => m.Merchants),
     data: {
-      kind: 'restaurante',
+      type: 'restaurante',
       ...arenaRouteMeta({
         description:
-          'Restaurantes que reciben pedidos ahora en La Paz, Santa Cruz, Cochabamba, Oruro y Sucre.',
+          'Restaurantes de La Paz, Santa Cruz, Cochabamba, Oruro y Sucre, con la sucursal que te queda cerca.',
       }),
     },
+    loadComponent: () => import('./pages/public/companies/companies').then((m) => m.Companies),
   },
   {
-    path: 'restaurantes/:slug',
-    loadComponent: () =>
-      import('./pages/public/merchant-detail/merchant-detail').then((m) => m.MerchantDetail),
-    data: { kind: 'restaurante' },
+    path: 'restaurantes/:empresa',
+    loadComponent: () => import('./pages/public/company/company').then((m) => m.CompanyDetail),
+    data: { type: 'restaurante' },
+  },
+  {
+    path: 'restaurantes/:empresa/:sucursal',
+    loadComponent: () => import('./pages/public/branch/branch').then((m) => m.BranchDetail),
+    data: { type: 'restaurante' },
   },
   {
     path: 'tiendas',
     title: 'Importadoras',
-    loadComponent: () => import('./pages/public/merchants/merchants').then((m) => m.Merchants),
     data: {
-      kind: 'importadora',
+      type: 'importadora',
       ...arenaRouteMeta({
         description:
-          'Importadoras que despachan el mismo día, con guía, código de retiro y seguimiento por hitos.',
+          'Importadoras con sucursal en tu ciudad: compra desde otra ciudad y recibe en tu puerta o recoge en mostrador.',
       }),
     },
+    loadComponent: () => import('./pages/public/companies/companies').then((m) => m.Companies),
   },
   {
-    path: 'tiendas/:slug',
+    path: 'tiendas/:empresa',
+    loadComponent: () => import('./pages/public/company/company').then((m) => m.CompanyDetail),
+    data: { type: 'importadora' },
+  },
+  {
+    path: 'tiendas/:empresa/:sucursal',
+    loadComponent: () => import('./pages/public/branch/branch').then((m) => m.BranchDetail),
+    data: { type: 'importadora' },
+  },
+  {
+    path: 'riders',
+    title: 'Maneja con Touno',
+    data: arenaRouteMeta({
+      description:
+        'Trabaja con tu moto, tu auto o tu camión. Eliges para qué sucursales trabajas y el acuerdo lo firman las dos partes.',
+    }),
     loadComponent: () =>
-      import('./pages/public/merchant-detail/merchant-detail').then((m) => m.MerchantDetail),
-    data: { kind: 'importadora' },
-  },
-  {
-    path: 'seguimiento/:guia',
-    loadComponent: () => import('./pages/public/tracking/tracking').then((m) => m.Tracking),
-  },
-  {
-    path: 'tarifas',
-    title: 'Tarifas por ruta',
-    loadComponent: () => import('./pages/public/tariffs/tariffs').then((m) => m.Tariffs),
-    data: arenaRouteMeta({
-      description:
-        'Cuánto cuesta enviar una encomienda entre ciudades de Bolivia, con el recojo incluido.',
-    }),
-  },
-  {
-    path: 'conducir',
-    title: 'Conducir con Touno',
-    loadComponent: () => import('./pages/public/drive/drive').then((m) => m.Drive),
-    data: arenaRouteMeta({
-      description:
-        'Cómo se contrata a un conductor en Touno: por carreras, con tarifa fija y aceptación del conductor.',
-    }),
+      import('./pages/public/ride-with-us/ride-with-us').then((m) => m.RideWithUs),
   },
   {
     path: 'ingresar',
     title: 'Ingresar',
+    data: PRIVATE,
     loadComponent: () => import('./pages/public/sign-in/sign-in').then((m) => m.SignIn),
-    data: PRIVATE,
   },
-  {
-    path: 'restaurante/pedidos',
-    title: 'Pedidos en vivo',
-    loadComponent: () =>
-      import('./pages/restaurant/live-orders/live-orders').then((m) => m.RestaurantLiveOrders),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/historial',
-    title: 'Historial',
-    loadComponent: () =>
-      import('./pages/restaurant/history/history').then((m) => m.RestaurantHistory),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/carta',
-    title: 'Carta',
-    loadComponent: () => import('./pages/restaurant/menu/menu').then((m) => m.RestaurantMenu),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/carta/:id',
-    title: 'Producto',
-    loadComponent: () =>
-      import('./pages/restaurant/menu-item/menu-item').then((m) => m.RestaurantMenuItem),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/metricas',
-    title: 'Métricas',
-    loadComponent: () =>
-      import('./pages/restaurant/metrics/metrics').then((m) => m.RestaurantMetrics),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/finanzas',
-    title: 'Finanzas',
-    loadComponent: () =>
-      import('./pages/restaurant/finance/finance').then((m) => m.RestaurantFinance),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/promociones',
-    title: 'Promociones',
-    loadComponent: () =>
-      import('./pages/restaurant/promotions/promotions').then((m) => m.RestaurantPromotions),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/resenas',
-    title: 'Reseñas',
-    loadComponent: () =>
-      import('./pages/restaurant/reviews/reviews').then((m) => m.RestaurantReviews),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/ajustes',
-    title: 'Ajustes',
-    loadComponent: () =>
-      import('./pages/restaurant/settings/settings').then((m) => m.RestaurantSettings),
-    data: PRIVATE,
-  },
-  {
-    path: 'restaurante/conductores',
-    title: 'Contratar conductores',
-    loadComponent: () =>
-      import('./pages/hiring/hire-drivers/hire-drivers').then((m) => m.HireDrivers),
-    data: { base: '/restaurante/conductores', businessKind: 'restaurante', ...PRIVATE },
-  },
-  {
-    path: 'restaurante/conductores/:id',
-    title: 'Perfil del conductor',
-    loadComponent: () =>
-      import('./pages/hiring/driver-profile/driver-profile').then((m) => m.DriverProfile),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/envios',
-    title: 'Envíos',
-    loadComponent: () =>
-      import('./pages/importer/shipments/shipments').then((m) => m.ImporterShipments),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/envios/nuevo',
-    title: 'Alta y recojo',
-    loadComponent: () =>
-      import('./pages/importer/new-shipment/new-shipment').then((m) => m.ImporterNewShipment),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/envios/nuevo/pago',
-    title: 'Cobro único',
-    loadComponent: () => import('./pages/importer/payment/payment').then((m) => m.ImporterPayment),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/envios/:guia',
-    title: 'Detalle del envío',
-    loadComponent: () =>
-      import('./pages/importer/shipment-detail/shipment-detail').then(
-        (m) => m.ImporterShipmentDetail,
-      ),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/lote',
-    title: 'Envíos en lote',
-    loadComponent: () => import('./pages/importer/batch/batch').then((m) => m.ImporterBatch),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/cuenta',
-    title: 'Cuenta y cobros',
-    loadComponent: () => import('./pages/importer/account/account').then((m) => m.ImporterAccount),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/catalogo',
-    title: 'Catálogo publicado',
-    loadComponent: () => import('./pages/importer/catalog/catalog').then((m) => m.ImporterCatalog),
-    data: PRIVATE,
-  },
-  {
-    path: 'importadora/conductores',
-    title: 'Contratar conductores',
-    loadComponent: () =>
-      import('./pages/hiring/hire-drivers/hire-drivers').then((m) => m.HireDrivers),
-    data: { base: '/importadora/conductores', businessKind: 'importadora', ...PRIVATE },
-  },
-  {
-    path: 'importadora/conductores/:id',
-    title: 'Perfil del conductor',
-    loadComponent: () =>
-      import('./pages/hiring/driver-profile/driver-profile').then((m) => m.DriverProfile),
-    data: PRIVATE,
-  },
+
   {
     path: 'feed',
     title: 'Feed',
-    loadComponent: () => import('./pages/buyer/feed/feed').then((m) => m.Feed),
     data: PRIVATE,
+    loadComponent: () => import('./pages/buyer/feed/feed').then((m) => m.Feed),
   },
   {
     path: 'carrito',
     title: 'Tu carrito',
-    loadComponent: () => import('./pages/buyer/cart/cart').then((m) => m.BuyerCart),
     data: PRIVATE,
+    loadComponent: () => import('./pages/buyer/cart/cart').then((m) => m.BuyerCart),
+  },
+  {
+    path: 'carrito/entrega',
+    title: 'Cómo quieres recibirlo',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/buyer/checkout/checkout').then((m) => m.CheckoutPage),
   },
   {
     path: 'mis-pedidos',
     title: 'Mis pedidos',
-    loadComponent: () => import('./pages/buyer/orders/orders').then((m) => m.BuyerOrders),
     data: PRIVATE,
+    loadComponent: () => import('./pages/buyer/orders/orders').then((m) => m.BuyerOrders),
   },
   {
     path: 'mis-pedidos/:codigo',
     title: 'Detalle del pedido',
+    data: PRIVATE,
     loadComponent: () =>
       import('./pages/buyer/order-detail/order-detail').then((m) => m.BuyerOrderDetail),
-    data: PRIVATE,
   },
+
   {
-    path: 'conductor/turno',
+    path: 'rider/turno',
     title: 'Turno',
-    loadComponent: () => import('./pages/driver/shift/shift').then((m) => m.DriverShift),
     data: PRIVATE,
+    loadComponent: () => import('./pages/rider/shift/shift').then((m) => m.RiderShift),
   },
   {
-    path: 'conductor/carreras',
-    title: 'Carrera entrante',
-    loadComponent: () => import('./pages/driver/incoming/incoming').then((m) => m.DriverIncoming),
+    path: 'rider/encargos',
+    title: 'Encargos',
     data: PRIVATE,
+    loadComponent: () => import('./pages/rider/jobs/jobs').then((m) => m.RiderJobs),
   },
   {
-    path: 'conductor/carreras/:id/recojo',
-    title: 'Recojo verificado',
-    loadComponent: () => import('./pages/driver/pickup/pickup').then((m) => m.DriverPickup),
+    path: 'rider/encargos/:codigo/escanear',
+    title: 'Escanear el código',
     data: PRIVATE,
+    loadComponent: () => import('./pages/rider/scan/scan').then((m) => m.RiderScan),
   },
   {
-    path: 'conductor/carreras/:id/entrega',
-    title: 'Entrega en oficina',
-    loadComponent: () => import('./pages/driver/dropoff/dropoff').then((m) => m.DriverDropoff),
+    path: 'rider/encargos/:codigo',
+    title: 'Encargo',
     data: PRIVATE,
-  },
-  {
-    path: 'conductor/ganancias',
-    title: 'Ganancias',
-    loadComponent: () => import('./pages/driver/earnings/earnings').then((m) => m.DriverEarnings),
-    data: PRIVATE,
-  },
-  {
-    path: 'conductor/ofertas',
-    title: 'Ofertas de contratación',
-    loadComponent: () => import('./pages/driver/offers/offers').then((m) => m.DriverOffers),
-    data: PRIVATE,
-  },
-  {
-    path: 'conductor/ofertas/:id',
-    title: 'Oferta de contratación',
     loadComponent: () =>
-      import('./pages/driver/offer-detail/offer-detail').then((m) => m.DriverOfferDetail),
-    data: PRIVATE,
+      import('./pages/rider/job-detail/job-detail').then((m) => m.RiderJobDetail),
   },
+  {
+    path: 'rider/cargas/:id',
+    title: 'Carga',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/rider/load/load').then((m) => m.RiderLoad),
+  },
+  {
+    path: 'rider/acuerdos',
+    title: 'Acuerdos',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/rider/agreements/agreements').then((m) => m.RiderAgreements),
+  },
+  {
+    path: 'rider/acuerdos/:id',
+    title: 'Acuerdo',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/rider/agreement-detail/agreement-detail').then((m) => m.RiderAgreementDetail),
+  },
+  {
+    path: 'rider/ganancias',
+    title: 'Ganancias',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/rider/earnings/earnings').then((m) => m.RiderEarnings),
+  },
+
+  {
+    path: 'empresa/sucursales',
+    title: 'Sucursales',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/company/branches/branches').then((m) => m.CompanyBranches),
+  },
+  {
+    path: 'empresa/sucursales/:id',
+    title: 'Sucursal',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/company/branch-detail/branch-detail').then((m) => m.CompanyBranchDetail),
+  },
+  {
+    path: 'empresa/pedidos',
+    title: 'Pedidos de la empresa',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/company/orders/orders').then((m) => m.CompanyOrders),
+  },
+  {
+    path: 'empresa/catalogo',
+    title: 'Catálogo',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/company/catalog/catalog').then((m) => m.CompanyCatalog),
+  },
+  {
+    path: 'empresa/catalogo/:id',
+    title: 'Artículo',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/company/catalog-item/catalog-item').then((m) => m.CompanyCatalogItem),
+  },
+  {
+    path: 'empresa/riders',
+    title: 'Riders de la empresa',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/company/riders/riders').then((m) => m.CompanyRiders),
+  },
+  {
+    path: 'empresa/riders/:id',
+    title: 'Rider',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/company/rider-detail/rider-detail').then((m) => m.CompanyRiderDetail),
+  },
+  {
+    path: 'empresa/finanzas',
+    title: 'Finanzas',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/company/finance/finance').then((m) => m.CompanyFinance),
+  },
+  {
+    path: 'empresa/ajustes',
+    title: 'Ajustes de la empresa',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/company/settings/settings').then((m) => m.CompanySettings),
+  },
+
+  {
+    path: 'sucursal/pedidos',
+    title: 'Pedidos de la sucursal',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/orders/orders').then((m) => m.BranchOrders),
+  },
+  {
+    path: 'sucursal/pedidos/:codigo',
+    title: 'Pedido',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/branch/order-detail/order-detail').then((m) => m.BranchOrderDetail),
+  },
+  {
+    path: 'sucursal/entregas',
+    title: 'Entregas',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/pickups/pickups').then((m) => m.BranchPickups),
+  },
+  {
+    path: 'sucursal/riders',
+    title: 'Riders de la sucursal',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/riders/riders').then((m) => m.BranchRiders),
+  },
+  {
+    path: 'sucursal/carta',
+    title: 'Carta',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/menu/menu').then((m) => m.BranchMenu),
+  },
+  {
+    path: 'sucursal/carta/:id',
+    title: 'Plato',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/menu-item/menu-item').then((m) => m.BranchMenuItem),
+  },
+  {
+    path: 'sucursal/catalogo',
+    title: 'Catálogo de la sucursal',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/catalog/catalog').then((m) => m.BranchCatalog),
+  },
+  {
+    path: 'sucursal/catalogo/:id',
+    title: 'Artículo',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/branch/catalog-item/catalog-item').then((m) => m.BranchCatalogItem),
+  },
+  {
+    path: 'sucursal/historial',
+    title: 'Historial',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/history/history').then((m) => m.BranchHistory),
+  },
+  {
+    path: 'sucursal/ajustes',
+    title: 'Ajustes de la sucursal',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/branch/settings/settings').then((m) => m.BranchSettings),
+  },
+
   {
     path: '404',
     title: 'Página no encontrada',
-    loadComponent: () => import('./pages/public/not-found/not-found').then((m) => m.NotFound),
     data: PRIVATE,
+    loadComponent: () => import('./pages/public/not-found/not-found').then((m) => m.NotFound),
   },
   {
     path: '**',
     title: 'Página no encontrada',
-    loadComponent: () => import('./pages/public/not-found/not-found').then((m) => m.NotFound),
     data: PRIVATE,
+    loadComponent: () => import('./pages/public/not-found/not-found').then((m) => m.NotFound),
   },
 ];

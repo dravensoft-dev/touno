@@ -1,0 +1,16 @@
+<arena-card [title]="title()" [headingLevel]="headingLevel()">
+  <ol class="custody arena-stack arena-stack--group">
+    @for (party of sheet().parties; track party.role) {
+      <li class="custody__party">
+        <i class="custody__icon" [class]="party.icon" aria-hidden="true"></i>
+        <span class="custody__body arena-stack">
+          <span class="custody__title">{{ party.title }}</span>
+          <span class="custody__subtitle">{{ party.subtitle }}</span>
+          @if (party.meta) {
+            <span class="custody__meta arena-num">{{ party.meta }}</span>
+          }
+        </span>
+      </li>
+    }
+  </ol>
+</arena-card>

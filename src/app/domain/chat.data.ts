@@ -259,7 +259,7 @@ export const THREADS: readonly ChatThread[] = [
         id: 'm-2203-3',
         threadId: 'th-2203',
         author: 'comprador',
-        authorName: 'Rosa Villca',
+        authorName: 'Marcela Áñez',
         body: '¿Cuándo sale más o menos?',
         at: '2026-08-15T12:30:00',
       },

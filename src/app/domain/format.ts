@@ -8,11 +8,11 @@ export function bs(amount: number): string {
   return `${negative ? '-' : ''}Bs ${grouped},${fraction}`;
 }
 
-export function guia(slug: string): string {
+export function codeOf(slug: string): string {
   return slug.toUpperCase();
 }
 
-export function slugOfGuia(code: string): string {
+export function slugOfCode(code: string): string {
   return code.toLowerCase();
 }
 
@@ -33,10 +33,25 @@ export function fechaHora(iso: string): string {
   return `${fecha(iso)} · ${hhmm(iso)}`;
 }
 
-export function kg(weight: number): string {
-  return `${String(weight).replace('.', ',')} kg`;
-}
-
 export function porcentaje(value: number): string {
   return `${value} %`;
+}
+
+export function minutos(count: number): string {
+  return `${count} min`;
+}
+
+export function restante(minutesLeft: number): string {
+  if (minutesLeft <= 0) {
+    return 'Debería estar llegando';
+  }
+
+  if (minutesLeft < 60) {
+    return `Faltan ${minutesLeft} min`;
+  }
+
+  const hours = Math.floor(minutesLeft / 60);
+  const rest = minutesLeft % 60;
+
+  return rest === 0 ? `Faltan ${hours} h` : `Faltan ${hours} h ${rest} min`;
 }

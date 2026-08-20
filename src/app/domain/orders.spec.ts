@@ -1,0 +1,260 @@
+import { TestBed } from '@angular/core/testing';
+import { Agreements } from './agreements';
+import { Businesses } from './businesses';
+import { Catalog } from './catalog';
+import { Chat } from './chat';
+import { Loads } from './loads';
+import { Orders } from './orders';
+import { Riders } from './riders';
+import { Order, OrderScenario, isInterurban, movingLeg } from './orders.model';
+import { rangeOf } from './riders.model';
+
+describe('Orders', () => {
+  let orders: Orders;
+  let businesses: Businesses;
+  let catalog: Catalog;
+  let riders: Riders;
+  let agreements: Agreements;
+  let loads: Loads;
+  let chat: Chat;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    orders = TestBed.inject(Orders);
+    businesses = TestBed.inject(Businesses);
+    catalog = TestBed.inject(Catalog);
+    riders = TestBed.inject(Riders);
+    agreements = TestBed.inject(Agreements);
+    loads = TestBed.inject(Loads);
+    chat = TestBed.inject(Chat);
+  });
+
+  function interurban(): readonly Order[] {
+    return orders.all().filter((one) => isInterurban(one.scenario));
+  }
+
+  it('keeps a code unique and its slug the lowercase form', () => {
+    const codes = orders.all().map((one) => one.code);
+
+    expect(codes.length).toBeGreaterThan(0);
+    expect(new Set(codes).size).toBe(codes.length);
+
+    for (const order of orders.all()) {
+      expect(order.slug).toBe(order.code.toLowerCase());
+      expect(orders.bySlug(order.slug)?.code).toBe(order.code);
+    }
+  });
+
+  it('reaches all four scenarios, so every timeline is drawable', () => {
+    const seen = new Set(orders.all().map((one) => one.scenario));
+
+    for (const scenario of [
+      'restaurante',
+      'importadora-local',
+      'interurbano-domicilio',
+      'interurbano-sucursal',
+    ] as OrderScenario[]) {
+      expect(seen.has(scenario)).toBe(true);
+    }
+  });
+
+  it('adds up to the total it charges, over lines that exist', () => {
+    for (const order of orders.all()) {
+      const lines = order.lines.reduce((sum, one) => sum + one.qty * one.unitBob, 0);
+
+      expect(order.lines.length).toBeGreaterThan(0);
+      expect(order.subtotalBob).toBe(lines);
+      expect(order.totalBob).toBe(order.subtotalBob + order.deliveryBob);
+
+      for (const line of order.lines) {
+        expect(catalog.byId(line.productId)?.companyId).toBe(order.companyId);
+      }
+    }
+  });
+
+  it('sits a restaurant order in the same city as its sucursal, which is the guide rule', () => {
+    for (const order of orders.all().filter((one) => !isInterurban(one.scenario))) {
+      expect(businesses.cityOf(order.originBranchId)).toBe(order.buyerCityId);
+      expect(order.destinationBranchId).toBeUndefined();
+    }
+  });
+
+  it('needs a sucursal in the buyer city before it will sell across cities', () => {
+    expect(interurban().length).toBeGreaterThan(0);
+
+    for (const order of interurban()) {
+      expect(businesses.hasBranchIn(order.companyId, order.buyerCityId)).toBe(true);
+      expect(businesses.cityOf(order.destinationBranchId ?? '')).toBe(order.buyerCityId);
+      expect(businesses.cityOf(order.originBranchId)).not.toBe(order.buyerCityId);
+      expect(businesses.branchById(order.originBranchId)?.companyId).toBe(order.companyId);
+      expect(businesses.branchById(order.destinationBranchId ?? '')?.companyId).toBe(
+        order.companyId,
+      );
+    }
+  });
+
+  it('asks for an address only when something is coming to the door', () => {
+    for (const order of orders.all()) {
+      if (order.delivery === 'sucursal') {
+        expect(order.address).toBeUndefined();
+        expect(order.scenario).toBe('interurbano-sucursal');
+      } else {
+        expect(order.address).toBeDefined();
+      }
+    }
+  });
+
+  it('carries both interurban endings, so the buyer choice is reachable', () => {
+    expect(interurban().some((one) => one.delivery === 'domicilio')).toBe(true);
+    expect(interurban().some((one) => one.delivery === 'sucursal')).toBe(true);
+  });
+
+  it('puts a truck on the interurban leg and a moto on the local one', () => {
+    for (const order of orders.all()) {
+      for (const assignment of order.assignments) {
+        const rider = riders.byId(assignment.riderId);
+
+        expect(rider).toBeDefined();
+        expect(rangeOf(rider?.vehicle ?? 'moto')).toBe(
+          assignment.leg === 'interurbano' ? 'interurbano' : 'urbano',
+        );
+      }
+    }
+  });
+
+  it('assigns a rider only to a sucursal an agreement covers, on the leg being moved now', () => {
+    const moving = orders
+      .all()
+      .map((one) => ({ order: one, leg: movingLeg(one.state) }))
+      .filter((one) => one.leg !== undefined);
+
+    expect(moving.length).toBeGreaterThan(0);
+
+    for (const { order, leg } of moving) {
+      const assignment = orders.legOf(order, leg!);
+
+      expect(assignment).toBeDefined();
+      expect(agreements.covers(assignment!.riderId, assignment!.branchId)).toBe(true);
+    }
+  });
+
+  it('lets a finished leg outlive the agreement that authorised it', () => {
+    for (const order of orders.all()) {
+      for (const assignment of order.assignments) {
+        if (assignment.leg === movingLeg(order.state)) {
+          continue;
+        }
+
+        const held = agreements
+          .ofRider(assignment.riderId)
+          .filter((one) => one.state !== 'pendiente' && one.state !== 'rechazado');
+
+        expect(held.some((one) => one.branchIds.includes(assignment.branchId))).toBe(true);
+      }
+    }
+  });
+
+  it('hands custody to whoever is holding it, and to nobody else', () => {
+    for (const order of orders.all()) {
+      if (order.custody.kind === 'rider') {
+        expect(riders.byId(order.custody.riderId ?? '')).toBeDefined();
+        expect(order.assignments.some((one) => one.riderId === order.custody.riderId)).toBe(true);
+      } else {
+        expect(businesses.branchById(order.custody.branchId ?? '')).toBeDefined();
+      }
+    }
+  });
+
+  it('gives every order exactly one chat thread, pointed at the same custodian', () => {
+    for (const order of orders.all()) {
+      const thread = chat.byId(order.threadId);
+
+      expect(thread?.orderCode).toBe(order.code);
+      expect(thread?.counterpart.kind).toBe(order.custody.kind);
+      expect(thread?.counterpart.riderId).toBe(order.custody.riderId);
+      expect(thread?.counterpart.branchId).toBe(order.custody.branchId);
+    }
+
+    expect(chat.all().length).toBe(orders.all().length);
+  });
+
+  it('rides in a load that names it back, and only when it crosses cities', () => {
+    for (const order of orders.all()) {
+      if (order.loadId) {
+        const load = loads.byId(order.loadId);
+
+        expect(isInterurban(order.scenario)).toBe(true);
+        expect(load?.orderCodes).toContain(order.code);
+        expect(load?.fromBranchId).toBe(order.originBranchId);
+        expect(load?.toBranchId).toBe(order.destinationBranchId);
+      }
+    }
+  });
+
+  it('records who read the code, and records it only once delivered', () => {
+    const delivered = orders.all().filter((one) => one.state === 'entregado');
+
+    expect(delivered.length).toBeGreaterThan(0);
+
+    for (const order of orders.all()) {
+      if (order.state === 'entregado') {
+        expect(order.scannedAt).toBeDefined();
+        expect(
+          riders.byId(order.scannedBy ?? '') ?? businesses.branchById(order.scannedBy ?? ''),
+        ).toBeDefined();
+      } else {
+        expect(order.scannedAt).toBeUndefined();
+      }
+    }
+  });
+
+  it('is scanned by a rider at a door and by a sucursal at a counter', () => {
+    const byRider = orders
+      .all()
+      .filter((one) => one.scannedBy && riders.byId(one.scannedBy) !== undefined);
+    const byBranch = orders
+      .all()
+      .filter((one) => one.scannedBy && businesses.branchById(one.scannedBy) !== undefined);
+
+    expect(byRider.length).toBeGreaterThan(0);
+    expect(byBranch.length).toBeGreaterThan(0);
+    expect(byBranch.every((one) => one.delivery === 'sucursal')).toBe(true);
+  });
+
+  it('finds a buyer own orders by the phone that placed them', () => {
+    const mine = orders.ofBuyer('7712 4408');
+
+    expect(mine.length).toBeGreaterThan(1);
+    expect(mine.every((one) => one.buyer.name === 'Rosa Villca')).toBe(true);
+  });
+
+  it('lists what a sucursal has to act on, from either end of the trip', () => {
+    expect(orders.ofBranch('b-ale-la-paz').map((one) => one.code)).toContain('TO-2203');
+    expect(orders.ofBranch('b-ale-la-paz').map((one) => one.code)).toContain('TO-2205');
+    expect(orders.toCollect('b-andes-la-paz').map((one) => one.code)).toEqual(['TO-2206']);
+  });
+
+  it('assigns a rider, takes custody with him, and then closes on the scan', () => {
+    orders.assign('to-1042', 'origen', 'r-marco', 'b-copacabana-sopocachi');
+
+    const assigned = orders.bySlug('to-1042');
+
+    expect(assigned?.state).toBe('en-camino');
+    expect(assigned?.custody.kind).toBe('rider');
+    expect(assigned?.custody.riderId).toBe('r-marco');
+
+    orders.scan('to-1042', 'r-marco');
+
+    expect(orders.bySlug('to-1042')?.state).toBe('entregado');
+    expect(orders.bySlug('to-1042')?.scannedBy).toBe('r-marco');
+  });
+
+  it('replaces a leg rather than stacking two riders on it', () => {
+    orders.assign('to-2205', 'local', 'r-noemi', 'b-ale-la-paz');
+
+    const legs = orders.bySlug('to-2205')?.assignments.filter((one) => one.leg === 'local') ?? [];
+
+    expect(legs.length).toBe(1);
+    expect(legs[0].riderId).toBe('r-noemi');
+  });
+});

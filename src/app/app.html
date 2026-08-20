@@ -64,16 +64,19 @@
                 justo aquí.
               </p>
               <div class="shell-gate__roles arena-stack arena-stack--group">
-                @for (profile of session.profiles; track profile.role) {
+                @for (profile of gateProfiles(); track profile.id; let first = $first) {
                   <arena-button
-                    [variant]="profile.role === area.role ? 'primary' : 'secondary'"
+                    [variant]="first ? 'primary' : 'secondary'"
                     [icon]="profile.icon"
                     [full]="true"
-                    (click)="enter(profile.role)"
+                    (click)="enter(profile.id)"
                   >
                     {{ profile.label }} · {{ profile.name }}
                   </arena-button>
                 }
+                <arena-button variant="ghost" [full]="true" (click)="toSignIn()">
+                  Ver todos los perfiles
+                </arena-button>
               </div>
             </div>
           </arena-unauth-card>

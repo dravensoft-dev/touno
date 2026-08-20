@@ -1,9 +1,11 @@
-import { Injectable, computed, signal } from '@angular/core';
-import { Product } from './marketplace.model';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { Businesses } from './businesses';
+import { Product } from './catalog.model';
 
 export interface CartLine {
   readonly productId: string;
-  readonly merchantSlug: string;
+  readonly branchId: string;
+  readonly companyId: string;
   readonly name: string;
   readonly unitBob: number;
   readonly qty: number;
@@ -11,37 +13,49 @@ export interface CartLine {
 
 @Injectable({ providedIn: 'root' })
 export class Cart {
+  private readonly businesses = inject(Businesses);
+
   private readonly lines = signal<readonly CartLine[]>([]);
 
   readonly all = this.lines.asReadonly();
 
-  readonly count = computed(() => this.all().reduce((sum, line) => sum + line.qty, 0));
+  readonly count = computed(() => this.all().reduce((sum, one) => sum + one.qty, 0));
 
   readonly subtotalBob = computed(() =>
-    this.all().reduce((sum, line) => sum + line.unitBob * line.qty, 0),
+    this.all().reduce((sum, one) => sum + one.qty * one.unitBob, 0),
   );
 
-  readonly merchants = computed(() => [...new Set(this.all().map((line) => line.merchantSlug))]);
+  readonly branches = computed(() => [...new Set(this.all().map((one) => one.branchId))]);
 
-  readonly deliveryBob = computed(() => this.merchants().length * 8);
+  readonly deliveryBob = computed(() =>
+    this.branches().reduce(
+      (sum, one) => sum + (this.businesses.branchById(one)?.deliveryBob ?? 0),
+      0,
+    ),
+  );
 
   readonly totalBob = computed(() => this.subtotalBob() + this.deliveryBob());
 
-  add(product: Product): void {
-    this.lines.update((current) => {
-      const existing = current.find((line) => line.productId === product.id);
+  readonly companies = computed(() => [...new Set(this.all().map((one) => one.companyId))]);
 
-      if (existing) {
-        return current.map((line) =>
-          line.productId === product.id ? { ...line, qty: line.qty + 1 } : line,
-        );
+  linesOf(branchId: string): readonly CartLine[] {
+    return this.all().filter((one) => one.branchId === branchId);
+  }
+
+  add(product: Product, branchId: string): void {
+    this.lines.update((list) => {
+      const held = list.find((one) => one.productId === product.id && one.branchId === branchId);
+
+      if (held) {
+        return list.map((one) => (one === held ? { ...one, qty: one.qty + 1 } : one));
       }
 
       return [
-        ...current,
+        ...list,
         {
           productId: product.id,
-          merchantSlug: product.merchantSlug,
+          branchId,
+          companyId: product.companyId,
           name: product.name,
           unitBob: product.priceBob,
           qty: 1,
@@ -50,8 +64,10 @@ export class Cart {
     });
   }
 
-  remove(productId: string): void {
-    this.lines.update((current) => current.filter((line) => line.productId !== productId));
+  remove(productId: string, branchId: string): void {
+    this.lines.update((list) =>
+      list.filter((one) => !(one.productId === productId && one.branchId === branchId)),
+    );
   }
 
   clear(): void {
