@@ -2,13 +2,136 @@
   <arena-page-head
     headingLevel="h1"
     title="Acuerdos"
-    subtitle="Invitaciones que te llegaron y postulaciones que enviaste."
+    subtitle="Eliges tú para quién trabajas. Nadie te asigna nada sin que aceptes."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (invitations().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="
+        invitations().length === 1
+          ? 'Una empresa espera tu respuesta'
+          : invitations().length + ' empresas esperan tu respuesta'
+      "
+    >
+      Hasta que contestes no te pueden mandar trabajo, ni ellas ni nadie.
+    </arena-alert>
+  }
+
+  <arena-section
+    eyebrow="Te invitaron"
+    title="Propuestas que te llegaron"
+    description="Una empresa te quiere en sus sucursales. Aceptas o rechazas tú."
+    rhythm="md"
+  >
+    @if (invitations().length > 0) {
+      <arena-grid>
+        @for (agreement of invitations(); track agreement.id) {
+          <arena-card
+            [title]="companyName(agreement)"
+            headingLevel="h3"
+            [eyebrow]="scope(agreement)"
+          >
+            <div class="arena-stack arena-stack--group">
+              <app-state-tag [agreement]="agreement.state" />
+              <p class="arena-num">{{ rate(agreement) }}</p>
+              @if (agreement.message) {
+                <p>{{ agreement.message }}</p>
+              }
+              <arena-button (click)="open(agreement)">Ver y responder</arena-button>
+            </div>
+          </arena-card>
+        }
+      </arena-grid>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-envelope-simple"
+        title="Ninguna invitación pendiente"
+        message="Cuando una empresa te proponga trabajar con ella, la vas a ver aquí."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Te postulaste"
+    title="Propuestas que enviaste"
+    description="Esperan a que la empresa conteste. Tú ya dijiste que sí."
+    rhythm="md"
+  >
+    @if (sent().length > 0) {
+      <arena-grid>
+        @for (agreement of sent(); track agreement.id) {
+          <arena-card
+            [title]="companyName(agreement)"
+            headingLevel="h3"
+            [eyebrow]="scope(agreement)"
+          >
+            <div class="arena-stack arena-stack--group">
+              <app-state-tag [agreement]="agreement.state" />
+              <p class="arena-num">{{ rate(agreement) }}</p>
+              <arena-button variant="secondary" (click)="open(agreement)">Ver</arena-button>
+            </div>
+          </arena-card>
+        }
+      </arena-grid>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-paper-plane-tilt"
+        title="No enviaste ninguna"
+        message="Puedes postularte a las sucursales que te queden de paso."
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Trabajando"
+    [title]="active().length + ' acuerdos activos'"
+    description="Estas sucursales te pueden mandar encargos."
+    rhythm="md"
+  >
+    @if (active().length > 0) {
+      <arena-grid>
+        @for (agreement of active(); track agreement.id) {
+          <arena-card
+            [title]="companyName(agreement)"
+            headingLevel="h3"
+            [eyebrow]="scope(agreement)"
+          >
+            <div class="arena-stack arena-stack--group">
+              <app-state-tag [agreement]="agreement.state" />
+              <p class="arena-num">{{ rate(agreement) }}</p>
+              <arena-button variant="secondary" (click)="open(agreement)">Ver</arena-button>
+            </div>
+          </arena-card>
+        }
+      </arena-grid>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-handshake"
+        title="Todavía no trabajas para nadie"
+        message="Sin un acuerdo aceptado por las dos partes no puedes recibir encargos."
+      />
+    }
+  </arena-section>
+
+  @if (closed().length > 0) {
+    <arena-section
+      eyebrow="Cerrados"
+      [title]="closed().length + ' acuerdos que ya no corren'"
+      description="Rechazados, terminados o vencidos."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        @for (agreement of closed(); track agreement.id) {
+          <p class="arena-row arena-row--between">
+            <span>{{ companyName(agreement) }} · {{ scope(agreement) }}</span>
+            <app-state-tag [agreement]="agreement.state" />
+          </p>
+        }
+      </div>
+    </arena-section>
+  }
 </div>

@@ -2,13 +2,103 @@
   <arena-page-head
     headingLevel="h1"
     title="Encargos"
-    subtitle="Lo que tus sucursales te están ofreciendo ahora."
+    [subtitle]="
+      range() === 'interurbano'
+        ? 'Llevas cargas entre ciudades, así que aquí ves tus cargas y no repartos sueltos.'
+        : 'Repartos en ciudad de las sucursales que trabajan contigo.'
+    "
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (!online()) {
+    <arena-alert tone="info" title="Estás fuera de turno">
+      Puedes terminar lo que ya tienes encima, pero no te van a asignar nada nuevo.
+    </arena-alert>
+  }
+
+  @if (range() === 'interurbano') {
+    <arena-section
+      eyebrow="Tus cargas"
+      title="Lo que llevas entre ciudades"
+      description="Una carga sale cuando se completa. Hasta entonces el comprador ve cuántos pedidos faltan."
+      rhythm="md"
+    >
+      @if (myLoads().length > 0) {
+        <arena-grid>
+          @for (load of myLoads(); track load.id) {
+            <arena-card
+              [title]="branchName(load.fromBranchId) + ' → ' + branchName(load.toBranchId)"
+              headingLevel="h3"
+              [eyebrow]="load.id"
+            >
+              <div class="arena-stack arena-stack--group">
+                <app-state-tag [load]="load.state" />
+                <p class="arena-num">{{ load.orderCodes.length }} de {{ load.capacity }} pedidos</p>
+                <arena-button variant="secondary" (click)="openLoad(load.id)">
+                  Ver la carga
+                </arena-button>
+              </div>
+            </arena-card>
+          }
+        </arena-grid>
+      } @else {
+        <arena-empty-state
+          headingLevel="h3"
+          icon="ph-bold ph-truck"
+          title="Ninguna carga abierta"
+          message="Cuando una sucursal empiece a juntar pedidos para tu ruta, la vas a ver aquí."
+        />
+      }
+    </arena-section>
+  }
+
+  <arena-section
+    eyebrow="Ahora"
+    title="Lo que llevas encima"
+    description="Desde que lo recoges, el comprador te ve en su mapa y puede escribirte."
+    rhythm="md"
+  >
+    @if (mine().length > 0) {
+      <arena-grid>
+        @for (order of mine(); track order.code) {
+          <arena-card [title]="order.code" headingLevel="h3" [eyebrow]="card(order).when">
+            <div class="arena-stack arena-stack--group">
+              <app-state-tag [order]="order.state" />
+              <p>De {{ card(order).from }}</p>
+              <p>A {{ card(order).to }}</p>
+              @if (card(order).long) {
+                <p>Tramo interurbano</p>
+              }
+              <p class="arena-num">Ganas {{ card(order).earn }}</p>
+              <arena-button (click)="open(order)">Abrir el encargo</arena-button>
+            </div>
+          </arena-card>
+        }
+      </arena-grid>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-navigation-arrow"
+        title="Nada encima ahora"
+        message="Cuando una de tus sucursales te asigne un pedido, aparece aquí."
+      />
+    }
+  </arena-section>
+
+  @if (done().length > 0) {
+    <arena-section
+      eyebrow="Hoy"
+      [title]="done().length + ' entregados'"
+      description="Cerrados escaneando el código del comprador."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        @for (order of done(); track order.code) {
+          <p class="arena-row arena-row--between">
+            <span class="arena-num">{{ order.code }}</span>
+            <span>{{ order.buyer.name }}</span>
+          </p>
+        }
+      </div>
+    </arena-section>
+  }
 </div>

@@ -1,14 +1,88 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Carga"
-    subtitle="Los pedidos que llevas y lo que falta para salir."
-  />
+@if (load(); as carga) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head headingLevel="h1" [title]="carga.id" subtitle="Tu carga interurbana.">
+      <div actions>
+        <app-state-tag [load]="carga.state" />
+      </div>
+    </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    @if (filling()) {
+      @if (full()) {
+        <arena-alert tone="success" title="La carga está completa">
+          Ya puedes salir. Al salir, cada comprador deja de ver «En espera a más pedidos» y empieza
+          a verte avanzar en su mapa.
+        </arena-alert>
+      } @else {
+        <arena-alert tone="warning" title="En espera a más pedidos">
+          Faltan {{ missing() }} pedidos para completar la carga. Cada comprador ve el mismo número
+          en su pedido, así que nadie está esperando a ciegas.
+        </arena-alert>
+      }
+
+      <arena-progress-bar
+        [progressPercentage]="filledPct()"
+        [label]="carga.orderCodes.length + ' de ' + carga.capacity + ' pedidos'"
+        [showLabel]="true"
+      />
+    }
+
+    <arena-key-value [rows]="facts()" />
+
+    @if (carried().length > 0) {
+      <arena-table label="Pedidos en esta carga" [columns]="columns">
+        @for (order of carried(); track order.code) {
+          <tr arena-table-row>
+            <td arena-table-cell>{{ order.code }}</td>
+            <td arena-table-cell>{{ order.buyer.name }}</td>
+            <td arena-table-cell>{{ endingOf(order.code) }}</td>
+            <td arena-table-cell>
+              <span class="arena-num">{{ order.totalBob }}</span>
+            </td>
+          </tr>
+        }
+      </arena-table>
+    }
+
+    @if (ghosts() > 0) {
+      <arena-alert tone="info" title="Y otros paquetes">
+        La carga lleva {{ ghosts() }} bultos más de la misma sucursal que no salen de esta maqueta.
+      </arena-alert>
+    }
+
+    @if (filling()) {
+      <arena-button
+        size="lg"
+        icon="ph-bold ph-truck"
+        [full]="true"
+        [disabled]="!full()"
+        (click)="depart()"
+      >
+        Salir con la carga
+      </arena-button>
+    }
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver a encargos
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    @if (notMine()) {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-prohibit"
+        title="Esa carga no es tuya"
+        message="Sólo ves las cargas que conduces tú."
+      />
+    } @else {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-magnifying-glass"
+        title="No encontramos esa carga"
+        message="Revisa el código o vuelve a tus encargos."
+      />
+    }
+  </div>
+}

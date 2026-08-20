@@ -1,14 +1,59 @@
 <div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Escanear el código"
-    subtitle="Pide al comprador su código del pedido."
-  />
+  @if (delivered()) {
+    <arena-page-head
+      headingLevel="h1"
+      title="Entregado"
+      subtitle="Quedó registrado con la hora. No hace falta nada más."
+    />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-check-circle"
+      title="El código coincidió"
+      message="El comprador ya lo ve como entregado en su pedido."
+    />
+
+    <div class="arena-row">
+      <arena-button (click)="back()">Volver a encargos</arena-button>
+    </div>
+  } @else if (order(); as pedido) {
+    <arena-page-head
+      headingLevel="h1"
+      title="Escanear el código"
+      [subtitle]="'Pide su código a ' + pedido.buyer.name + '. Es lo único que cierra el pedido.'"
+    />
+
+    <arena-alert tone="info" title="El código es del comprador">
+      Lo tiene desde que compró y nadie más puede cerrar su pedido con él. Si no coincide, no
+      entregues.
+    </arena-alert>
+
+    <app-scan-panel
+      title="Escanear el código"
+      hint="Apunta al código que te muestra, o escríbelo si la cámara no coopera."
+      [simulated]="pedido.code"
+      (scanned)="onScanned($event)"
+    />
+
+    <arena-key-value [rows]="facts()" />
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver
+      </arena-button>
+    </div>
+  } @else {
+    <arena-page-head headingLevel="h1" title="Escanear" subtitle="Nada que entregar aquí." />
+
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-prohibit"
+      title="Este encargo no es tuyo, o ya no lo llevas"
+      message="Sólo puedes escanear el código de un pedido que tengas encima ahora mismo."
+    />
+
+    <div class="arena-row">
+      <arena-button variant="ghost" (click)="back()">Volver a encargos</arena-button>
+    </div>
+  }
 </div>

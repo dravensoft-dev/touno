@@ -198,4 +198,16 @@ export const AGREEMENTS: readonly RiderAgreement[] = [
     validUntil: '2026-12-31',
     settledAt: '2026-08-08T15:30:00',
   },
+  {
+    id: 'ag-517',
+    riderId: 'r-marco',
+    companyId: 'c-illimani',
+    branchIds: ['b-illimani-san-miguel'],
+    initiatedBy: 'empresa',
+    state: 'pendiente',
+    perTripBob: 19,
+    message: 'Cenas de jueves a domingo, entre las 19:00 y las 23:00.',
+    sentAt: '2026-08-15T10:40:00',
+    validUntil: '2026-08-29',
+  },
 ];

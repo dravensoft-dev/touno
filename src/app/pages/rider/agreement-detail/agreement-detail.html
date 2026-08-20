@@ -1,14 +1,76 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Acuerdo"
-    subtitle="Las sucursales que cubre y lo que paga."
-  />
+@if (agreement(); as acuerdo) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head
+      headingLevel="h1"
+      [title]="companyName()"
+      [subtitle]="
+        branches().length === 1
+          ? 'Para ' + branches()[0].name
+          : 'Para ' + branches().length + ' sucursales'
+      "
+    >
+      <div actions>
+        <app-state-tag [agreement]="acuerdo.state" />
+      </div>
+    </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    @if (acuerdo.message) {
+      <arena-alert tone="info" title="Lo que te dicen">{{ acuerdo.message }}</arena-alert>
+    }
+
+    @if (answerable()) {
+      <arena-alert tone="warning" title="Esperan tu respuesta">
+        Si aceptas, estas sucursales te podrán asignar encargos. Si no, no pasa nada: la decisión es
+        tuya y puedes rechazarla sin explicar por qué.
+      </arena-alert>
+    }
+
+    @if (waitingOnThem()) {
+      <arena-alert tone="info" title="Esperas la respuesta de la empresa">
+        Tú ya dijiste que sí. Hasta que ellos contesten no puedes recibir encargos de estas
+        sucursales.
+      </arena-alert>
+    }
+
+    @if (acuerdo.state === 'activo') {
+      <arena-alert tone="success" title="Acuerdo en marcha">
+        Estas sucursales te pueden mandar encargos mientras estés en turno.
+      </arena-alert>
+    }
+
+    <arena-key-value [rows]="facts()" />
+
+    @if (answerable()) {
+      <div class="arena-row">
+        <arena-button size="lg" icon="ph-bold ph-check" (click)="accept()">
+          Aceptar el acuerdo
+        </arena-button>
+        <arena-button variant="danger" (click)="reject()">Rechazar</arena-button>
+      </div>
+    }
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver a acuerdos
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    @if (notMine()) {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-prohibit"
+        title="Ese acuerdo no es tuyo"
+        message="Sólo ves los acuerdos en los que apareces tú."
+      />
+    } @else {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-magnifying-glass"
+        title="No encontramos ese acuerdo"
+        message="Puede que ya no exista."
+      />
+    }
+  </div>
+}

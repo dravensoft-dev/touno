@@ -1,14 +1,102 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    title="Encargo"
-    subtitle="El mapa, el chat y el escaneo del código."
-  />
+@if (order(); as pedido) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head
+      headingLevel="h1"
+      [title]="pedido.code"
+      [subtitle]="pedido.buyer.name + ' · ' + eta()"
+    >
+      <div actions>
+        <app-state-tag [order]="pedido.state" />
+      </div>
+    </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    @if (!carrying()) {
+      <arena-alert tone="info" title="Este tramo ya no es tuyo">
+        Lo llevaste, pero ahora está en otras manos. Puedes leer la conversación y nada más.
+      </arena-alert>
+    }
+
+    @if (track(); as recorrido) {
+      <arena-section
+        eyebrow="Tu ruta"
+        title="Hacia dónde vas"
+        [description]="stale() ? 'Estás sin señal: seguimos mostrando tu último punto.' : eta()"
+        rhythm="md"
+      >
+        <app-route-map
+          [label]="'Tu recorrido hacia ' + (pedido.address ?? 'la sucursal de destino')"
+          [origin]="recorrido.from"
+          [destination]="recorrido.to"
+          [route]="recorrido.route"
+          [streets]="streets()"
+          [rider]="recorrido.pings[recorrido.pings.length - 1].point"
+          [stale]="stale()"
+          [lastSeenAt]="recorrido.lastPingAt"
+          riderLabel="Tú"
+        />
+      </arena-section>
+    }
+
+    @if (stale()) {
+      <arena-alert tone="warning" title="Sin señal">
+        El comprador ve tu última conexión con la hora, no un mapa congelado. Cuando recuperes señal
+        el mapa se mueve solo, sin que hagas nada.
+      </arena-alert>
+    }
+
+    <arena-key-value [rows]="facts()" />
+
+    @if (thread(); as hilo) {
+      <arena-section
+        eyebrow="Chat"
+        [title]="'Hablas con ' + pedido.buyer.name"
+        description="Le llega al instante, dentro de su pedido."
+        rhythm="md"
+      >
+        <app-order-chat
+          [thread]="hilo"
+          viewer="rider"
+          [disabled]="!carrying()"
+          (send)="send($event)"
+        />
+      </arena-section>
+    }
+
+    @if (carrying()) {
+      <arena-section
+        eyebrow="Al llegar"
+        title="Escanea su código"
+        description="Es lo único que cierra el pedido. No hay forma de marcarlo entregado a mano."
+        rhythm="md"
+      >
+        <arena-button size="lg" icon="ph-bold ph-qr-code" [full]="true" (click)="toScan()">
+          Escanear el código
+        </arena-button>
+      </arena-section>
+    }
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver a encargos
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    @if (notMine()) {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-prohibit"
+        title="Ese encargo no es tuyo"
+        message="Sólo ves los pedidos que alguna sucursal te asignó."
+      />
+    } @else {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-magnifying-glass"
+        title="No encontramos ese encargo"
+        message="Revisa el código o vuelve a tu lista."
+      />
+    }
+  </div>
+}

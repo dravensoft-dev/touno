@@ -1,10 +1,66 @@
 <div class="arena-stack arena-stack--section">
-  <arena-page-head headingLevel="h1" title="Ganancias" subtitle="Lo que llevas ganado, por día." />
-
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
+  <arena-page-head
+    headingLevel="h1"
+    title="Ganancias"
+    subtitle="Lo que te pagan tus acuerdos, por día y por empresa."
   />
+
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Esta semana"
+      [value]="total()"
+      sub="Suma de los seis días"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-navigation-arrow"
+      label="Viajes"
+      [value]="trips().toString()"
+      sub="Encargos completados"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-divide"
+      label="Promedio"
+      [value]="average()"
+      sub="Por viaje, esta semana"
+    />
+  </arena-grid>
+
+  <arena-chart-card
+    title="Por día"
+    description="Lo ganado cada día de la semana."
+    headingLevel="h2"
+  >
+    <arena-bar-chart
+      label="Ganancia por día"
+      [labels]="labels()"
+      [series]="series()"
+      valuePrefix="Bs "
+    />
+  </arena-chart-card>
+
+  <arena-table label="Detalle por día" [columns]="columns">
+    @for (payout of payouts(); track payout.day) {
+      <tr arena-table-row>
+        <td arena-table-cell>{{ payout.label }} · {{ dayOf(payout.day) }}</td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ payout.trips }}</span>
+        </td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ money(payout.earnBob) }}</span>
+        </td>
+      </tr>
+    }
+  </arena-table>
+
+  @if (byCompany().length > 0) {
+    <arena-key-value [rows]="byCompany()" />
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-handshake"
+      title="Sin acuerdos activos"
+      message="Sin un acuerdo aceptado por las dos partes no hay tarifa que cobrar."
+    />
+  }
 </div>

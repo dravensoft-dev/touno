@@ -1,14 +1,121 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    title="Turno"
-    subtitle="Ponte disponible y mira lo que llevas hoy."
+    [title]="rider()?.name ?? 'Turno'"
+    [subtitle]="
+      vehicle() +
+      ' · ' +
+      (rider()?.plate ?? '') +
+      ' · ' +
+      (range() === 'interurbano' ? 'cargas entre ciudades' : 'reparto en ciudad')
+    "
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
+  <arena-switch
+    [state]="online()"
+    label="Estoy en turno y acepto encargos"
+    (requestChange)="toggle()"
   />
+
+  @if (!online()) {
+    <arena-alert tone="info" title="Estás fuera de turno">
+      Tus sucursales no te ven disponible, así que no te van a asignar nada. Nadie puede ponerte un
+      encargo sin que estés en turno.
+    </arena-alert>
+  }
+
+  @if (waitingOnMe().length > 0) {
+    <arena-alert
+      tone="warning"
+      [title]="
+        waitingOnMe().length === 1
+          ? 'Una empresa quiere trabajar contigo'
+          : waitingOnMe().length + ' empresas quieren trabajar contigo'
+      "
+    >
+      <p>Nadie te asigna nada hasta que respondas. La decisión es tuya.</p>
+      <arena-button action variant="secondary" (click)="toAgreements()">
+        Ver las propuestas
+      </arena-button>
+    </arena-alert>
+  }
+
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Esta semana"
+      [value]="earnings()"
+      sub="Lo que llevas ganado"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-package"
+      label="Viajes hechos"
+      [value]="(rider()?.tripsDone ?? 0).toString()"
+      sub="Desde que empezaste"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-clock"
+      label="A tiempo"
+      [value]="onTime()"
+      sub="Lo que ven las empresas al proponerte un acuerdo"
+    />
+  </arena-grid>
+
+  @if (running().length > 0) {
+    <arena-section
+      eyebrow="Ahora mismo"
+      title="Lo que llevas encima"
+      description="El comprador te ve avanzar en su mapa y puede escribirte."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        @for (order of running(); track order.code) {
+          <div class="arena-row arena-row--between">
+            <span class="arena-num">{{ order.code }}</span>
+            <app-state-tag [order]="order.state" />
+            <arena-button size="sm" variant="secondary" (click)="toJobs()">Abrirlo</arena-button>
+          </div>
+        }
+      </div>
+    </arena-section>
+  }
+
+  @if (load(); as carga) {
+    <arena-section
+      eyebrow="Interurbano"
+      title="Tu carga"
+      description="Sale cuando se complete, no antes."
+      rhythm="md"
+    >
+      <div class="arena-row arena-row--between">
+        <span class="arena-num">{{ carga.orderCodes.length }} de {{ carga.capacity }} pedidos</span>
+        <app-state-tag [load]="carga.state" />
+        <arena-button size="sm" variant="secondary" (click)="toLoad(carga.id)">
+          Ver la carga
+        </arena-button>
+      </div>
+    </arena-section>
+  }
+
+  <arena-section
+    eyebrow="Para quién trabajas"
+    [title]="branches().length + ' sucursales, ' + companies() + ' empresas'"
+    description="Sólo estas te pueden mandar trabajo, y todas lo aceptaste tú."
+    rhythm="md"
+  >
+    @if (branches().length > 0) {
+      <ul class="arena-stack arena-stack--group">
+        @for (branch of branches(); track branch.id) {
+          <li>{{ branch.name }} · {{ cityOf(branch.cityId) }}</li>
+        }
+      </ul>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-handshake"
+        title="Todavía no trabajas para nadie"
+        message="Postúlate a las sucursales que te convengan, o espera a que una empresa te invite."
+      />
+    }
+  </arena-section>
 </div>

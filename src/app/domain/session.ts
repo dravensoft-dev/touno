@@ -40,6 +40,16 @@ export const PROFILES: readonly Profile[] = [
     riderId: 'r-marco',
   },
   {
+    id: 'p-rider-camion',
+    role: 'rider',
+    label: 'Rider con camión',
+    name: 'Hugo Barrientos',
+    place: 'Interurbano · 1150 CMX',
+    icon: 'ph-bold ph-truck',
+    home: '/rider/turno',
+    riderId: 'r-hugo',
+  },
+  {
     id: 'p-empresa-restaurante',
     role: 'gerente-empresa',
     label: 'Gerente de empresa · restaurante',
