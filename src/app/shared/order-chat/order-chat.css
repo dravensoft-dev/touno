@@ -1,0 +1,70 @@
+.chat__lines {
+  display: grid;
+  gap: var(--rhythm-group);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat__line {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.chat__line--mine {
+  justify-content: flex-end;
+}
+
+.chat__bubble {
+  max-inline-size: min(100%, calc(var(--measure-prose) / 2));
+  padding: var(--pad-control-y) var(--pad-control-x);
+  border: var(--bw-surface) solid var(--edge-surface);
+  border-radius: var(--r-surface);
+  background: var(--fill-surface);
+}
+
+.chat__line--mine .chat__bubble {
+  background: var(--fill-surface-sunken);
+}
+
+.chat__author {
+  margin: 0;
+  font-family: var(--ff-eyebrow);
+  font-size: var(--step-eyebrow);
+  font-weight: var(--fw-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}
+
+.chat__body {
+  margin: 0;
+  color: var(--ink-body);
+}
+
+.chat__at {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
+
+.chat__note {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-items);
+  text-align: center;
+}
+
+.chat__note::before,
+.chat__note::after {
+  content: "";
+  flex: 1;
+  block-size: var(--bw-separator);
+  background: var(--edge-separator);
+}
+
+.chat__note-text {
+  flex: 0 1 auto;
+  font-size: var(--fs-xs);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}

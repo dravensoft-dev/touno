@@ -1,0 +1,34 @@
+<div class="chat arena-stack arena-stack--component">
+  <ol class="chat__lines">
+    @for (line of lines(); track line.message.id) {
+      @if (line.system) {
+        <li class="chat__note">
+          <span class="chat__note-text">{{ line.message.body }}</span>
+        </li>
+      } @else {
+        <li class="chat__line" [class.chat__line--mine]="line.mine">
+          <div class="chat__bubble">
+            <p class="chat__author">{{ line.message.authorName }}</p>
+            <p class="chat__body">{{ line.message.body }}</p>
+            <p class="chat__at arena-num">{{ line.at }}</p>
+          </div>
+        </li>
+      }
+    }
+  </ol>
+
+  @if (!disabled()) {
+    <div class="chat__composer arena-stack arena-stack--group">
+      <arena-textarea
+        [label]="'Escribir a ' + thread().counterpartName"
+        placeholder="Escribe tu mensaje"
+        [rows]="2"
+        [value]="draft()"
+        (change)="onDraft($event)"
+      />
+      <arena-button icon="ph-bold ph-paper-plane-tilt" [full]="true" (click)="submit()">
+        Enviar
+      </arena-button>
+    </div>
+  }
+</div>

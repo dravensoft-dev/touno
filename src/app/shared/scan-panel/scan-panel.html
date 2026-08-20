@@ -1,0 +1,28 @@
+<div class="scan arena-stack arena-stack--component">
+  <div class="scan__viewer" role="img" aria-label="Visor de la cámara para escanear el código">
+    <span class="scan__bracket scan__bracket--tl"></span>
+    <span class="scan__bracket scan__bracket--tr"></span>
+    <span class="scan__bracket scan__bracket--bl"></span>
+    <span class="scan__bracket scan__bracket--br"></span>
+  </div>
+
+  <div class="scan__actions arena-stack arena-stack--group">
+    <p class="scan__hint">{{ hint() }}</p>
+    <arena-button icon="ph-bold ph-qr-code" [full]="true" [loading]="busy()" (click)="scan()">
+      {{ title() }}
+    </arena-button>
+  </div>
+
+  <div class="scan__manual arena-stack arena-stack--group">
+    <arena-input
+      label="O escribe el código"
+      hint="Sirve cuando la cámara no coopera."
+      placeholder="TO-1042"
+      [value]="typed()"
+      (change)="onTyped($event)"
+    />
+    <arena-button variant="secondary" [full]="true" [disabled]="busy()" (click)="confirm()">
+      Confirmar con el código
+    </arena-button>
+  </div>
+</div>

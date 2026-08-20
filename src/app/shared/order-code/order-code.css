@@ -1,0 +1,57 @@
+.order-code {
+  align-items: center;
+  text-align: center;
+}
+
+.order-code__caption {
+  margin: 0;
+  font-family: var(--ff-eyebrow);
+  font-size: var(--step-eyebrow);
+  font-weight: var(--fw-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}
+
+.order-code__frame {
+  inline-size: 100%;
+  max-inline-size: calc(var(--grid-min) - var(--sp-6));
+  padding: var(--sp-4);
+  border: var(--bw-surface) solid var(--edge-surface);
+  border-radius: var(--r-control);
+  background: var(--fill-surface);
+}
+
+.order-code__canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 1;
+}
+
+.order-code__module,
+.order-code__pupil {
+  fill: var(--ink-heading);
+}
+
+.order-code__finder {
+  fill: none;
+  stroke: var(--ink-heading);
+  stroke-width: var(--bw-strong);
+}
+
+.order-code__value {
+  margin: 0;
+  align-items: center;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-control);
+  letter-spacing: var(--track-eyebrow);
+  color: var(--ink-heading);
+}
+
+.order-code__hint {
+  margin: 0;
+  max-inline-size: var(--measure-prose);
+  font-size: var(--fs-sm);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}

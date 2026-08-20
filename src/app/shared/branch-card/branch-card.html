@@ -1,0 +1,37 @@
+<arena-card [href]="href()" (click)="open()">
+  <arena-figure>
+    @if (cover(); as source) {
+      <img media [src]="source" [alt]="branch().name" loading="lazy" decoding="async" />
+    } @else {
+      <i fallback [class]="fallbackIcon()" aria-hidden="true"></i>
+    }
+  </arena-figure>
+
+  <div class="branch-card__body arena-stack arena-stack--group">
+    <p class="branch-card__place">{{ cityName() }} · {{ branch().zone }}</p>
+    @if (headingLevel() === 'h2') {
+      <h2 class="branch-card__name">{{ branch().name }}</h2>
+    } @else {
+      <h3 class="branch-card__name">{{ branch().name }}</h3>
+    }
+    <p class="branch-card__address">{{ branch().address }}</p>
+
+    <div class="branch-card__tags arena-row">
+      @for (tag of company().tags; track tag) {
+        <arena-tag tone="neutral">{{ tag }}</arena-tag>
+      }
+      @if (!branch().open) {
+        <arena-tag tone="warning">Cerrada ahora</arena-tag>
+      }
+    </div>
+
+    <p class="branch-card__meta arena-row arena-row--baseline">
+      <span class="branch-card__rating arena-num">
+        <i class="ph-fill ph-star" aria-hidden="true"></i>
+        {{ company().rating }}
+      </span>
+      <span class="branch-card__prep arena-num">{{ branch().prepMinutes }} min</span>
+      <span class="branch-card__delivery arena-num">Envío {{ delivery() }}</span>
+    </p>
+  </div>
+</arena-card>

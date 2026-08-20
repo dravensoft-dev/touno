@@ -1,0 +1,53 @@
+<div class="order-code arena-stack arena-stack--group">
+  <p class="order-code__caption">{{ caption() }}</p>
+
+  <div class="order-code__frame">
+    <svg
+      class="order-code__canvas"
+      [attr.viewBox]="'-1 -1 ' + (grid + 2) + ' ' + (grid + 2)"
+      role="img"
+      [attr.aria-label]="'Código QR del pedido ' + code()"
+      focusable="false"
+    >
+      @for (module of modules(); track module.x + '-' + module.y) {
+        <rect
+          class="order-code__module"
+          [attr.x]="module.x"
+          [attr.y]="module.y"
+          width="1"
+          height="1"
+        />
+      }
+
+      @for (corner of corners; track corner.x + '-' + corner.y) {
+        <rect
+          class="order-code__finder"
+          [attr.x]="corner.x + 0.5"
+          [attr.y]="corner.y + 0.5"
+          [attr.width]="finder - 1"
+          [attr.height]="finder - 1"
+          vector-effect="non-scaling-stroke"
+        />
+        <rect
+          class="order-code__pupil"
+          [attr.x]="corner.x + 2"
+          [attr.y]="corner.y + 2"
+          [attr.width]="finder - 4"
+          [attr.height]="finder - 4"
+        />
+      }
+    </svg>
+  </div>
+
+  <p class="order-code__value arena-row">
+    <span class="arena-num">{{ code() }}</span>
+    <arena-icon-button
+      icon="ph-bold ph-copy"
+      label="Copiar el código del pedido"
+      variant="ghost"
+      (click)="send()"
+    />
+  </p>
+
+  <p class="order-code__hint">{{ hint() }}</p>
+</div>

@@ -1,0 +1,51 @@
+.scan__viewer {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 1;
+  max-inline-size: var(--grid-min);
+  margin-inline: auto;
+  border: var(--bw-surface) solid var(--edge-surface);
+  border-radius: var(--r-media);
+  background: var(--fill-surface-sunken);
+}
+
+.scan__bracket {
+  position: absolute;
+  inline-size: var(--sp-8);
+  block-size: var(--sp-8);
+  border: var(--bw-strong) solid var(--color-secondary);
+}
+
+.scan__bracket--tl {
+  inset-block-start: var(--sp-4);
+  inset-inline-start: var(--sp-4);
+  border-inline-end: none;
+  border-block-end: none;
+}
+
+.scan__bracket--tr {
+  inset-block-start: var(--sp-4);
+  inset-inline-end: var(--sp-4);
+  border-inline-start: none;
+  border-block-end: none;
+}
+
+.scan__bracket--bl {
+  inset-block-end: var(--sp-4);
+  inset-inline-start: var(--sp-4);
+  border-inline-end: none;
+  border-block-start: none;
+}
+
+.scan__bracket--br {
+  inset-block-end: var(--sp-4);
+  inset-inline-end: var(--sp-4);
+  border-inline-start: none;
+  border-block-start: none;
+}
+
+.scan__hint {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
