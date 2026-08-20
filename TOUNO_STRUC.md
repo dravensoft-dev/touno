@@ -514,6 +514,14 @@ tiempo se guarda ni qué pasa después. Es una decisión que nos gustaría tomar
 
 Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista de promesas.
 
+- **La maqueta deja operar, pero todavía no administrar.** Puedes hacer todo lo que ocurre en un
+  día de trabajo: abrir y cerrar una sucursal, marcar que se acabó un artículo, ponerte en turno,
+  proponer un acuerdo y aceptarlo o rechazarlo, asignar un rider, escribir por el chat, escanear un
+  código y sacar un camión. Lo que todavía no se puede es **crear o editar los registros de fondo**:
+  los precios y los artículos del catálogo, la dirección y el horario de una sucursal, y **cuántos
+  pedidos tiene que juntar una carga antes de salir**. Esos datos se ven en pantalla, se explica de
+  quién son, y por ahora vienen puestos. Si al recorrerla te falta un formulario, es esto y no un
+  olvido.
 - **No hay pagos dentro de la aplicación.** El cobro está fuera de este alcance.
 - **No hay cuentas ni contraseñas.** Lo que existe hoy es una maqueta navegable: se entra eligiendo
   un perfil, para poder recorrer y opinar. Verás **siete perfiles de ejemplo para seis tipos de
