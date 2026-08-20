@@ -1,0 +1,28 @@
+.cart-basket__head {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-items);
+  align-items: baseline;
+}
+
+.cart-basket__name {
+  font-family: var(--ff-heading);
+  font-size: var(--step-title-surface);
+  font-weight: var(--fw-heading);
+  color: var(--ink-heading);
+}
+
+.cart-basket__city {
+  font-family: var(--ff-eyebrow);
+  font-size: var(--step-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}
+
+.cart-basket__delivery {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}

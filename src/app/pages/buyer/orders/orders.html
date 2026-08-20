@@ -1,15 +1,46 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    eyebrow="Comprador"
     title="Mis pedidos"
-    lede="Todo lo que pediste, con su estado ahora mismo."
+    subtitle="Cada uno con su código y su estado ahora mismo."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
+  <arena-segmented-control
+    ariaLabel="Filtrar pedidos"
+    [options]="filters"
+    [value]="filter()"
+    (change)="pick($event)"
   />
+
+  @if (rows().length > 0) {
+    <arena-table label="Tus pedidos" [columns]="columns">
+      @for (row of rows(); track row.order.code) {
+        <tr arena-table-row [interactive]="true" (activate)="open(row.order)">
+          <td arena-table-cell>{{ row.order.code }}</td>
+          <td arena-table-cell>
+            {{ row.origin }}
+            @if (row.travels) {
+              · viaja a tu ciudad
+            }
+          </td>
+          <td arena-table-cell>
+            <app-state-tag [order]="row.order.state" />
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.placed }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ row.total }}</span>
+          </td>
+        </tr>
+      }
+    </arena-table>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-package"
+      title="Nada por aquí todavía"
+      message="Cuando hagas un pedido lo vas a ver en esta lista, con su código."
+    />
+  }
 </div>

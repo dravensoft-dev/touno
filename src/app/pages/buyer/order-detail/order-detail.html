@@ -1,15 +1,107 @@
-<div class="arena-stack arena-stack--section">
-  <arena-page-head
-    headingLevel="h1"
-    eyebrow="Comprador"
-    title="Pedido"
-    lede="El mapa, el chat, tu código y quién responde por él."
-  />
+@if (order(); as pedido) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head
+      headingLevel="h1"
+      [title]="pedido.code"
+      [subtitle]="
+        pedido.delivery === 'sucursal'
+          ? 'Lo recoges en tu sucursal de ' + cityName()
+          : 'Llega a ' + pedido.address
+      "
+    >
+      <div actions>
+        <app-state-tag [order]="pedido.state" />
+      </div>
+    </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
-</div>
+    @if (timeline(); as linea) {
+      @if (linea.waiting === 'rider') {
+        <arena-alert tone="warning" title="En espera de rider">
+          La sucursal ya aceptó tu pedido y está buscando quién lo lleve. En cuanto asigne a alguien
+          se abre el mapa y puedes escribirle.
+        </arena-alert>
+      }
+
+      @if (linea.waiting === 'carga') {
+        <arena-alert tone="warning" title="En espera a más pedidos">
+          Tu pedido está en la sucursal esperando a que salga el camión hacia {{ cityName() }}.
+          Faltan {{ missing() }} pedidos para completar la carga.
+        </arena-alert>
+      }
+
+      @if (showMap()) {
+        <arena-section eyebrow="En vivo" title="Dónde está ahora" [description]="eta()" rhythm="md">
+          @if (track(); as recorrido) {
+            <app-route-map
+              [label]="mapLabel()"
+              [origin]="recorrido.from"
+              [destination]="recorrido.to"
+              [route]="recorrido.route"
+              [streets]="streets()"
+              [rider]="recorrido.pings[recorrido.pings.length - 1].point"
+              [stale]="stale()"
+              [lastSeenAt]="recorrido.lastPingAt"
+              [riderLabel]="carrier()?.name ?? 'Tu rider'"
+            />
+          }
+        </arena-section>
+      }
+
+      <arena-section eyebrow="Paso a paso" title="Cómo va tu pedido" rhythm="md">
+        <app-order-timeline [timeline]="linea" [placeNames]="placeNames()" />
+      </arena-section>
+    }
+
+    @if (sheet(); as ficha) {
+      <app-custody-card [sheet]="ficha" />
+    }
+
+    @if (thread(); as hilo) {
+      <arena-section
+        eyebrow="Chat"
+        [title]="'Hablas con ' + hilo.counterpartName"
+        description="Siempre es quien tiene tu pedido en las manos. Cuando cambia de manos, la conversación te lo dice."
+        rhythm="md"
+      >
+        <app-order-chat
+          [thread]="hilo"
+          viewer="comprador"
+          [disabled]="pedido.state === 'entregado' || pedido.state === 'rechazado'"
+          (send)="send($event)"
+        />
+      </arena-section>
+    }
+
+    @if (pedido.state !== 'rechazado') {
+      <arena-section
+        eyebrow="Tu código"
+        title="Lo que te escanean al entregar"
+        [description]="
+          pedido.delivery === 'sucursal'
+            ? 'Muéstralo en mostrador junto con tu carnet.'
+            : 'Muéstralo al rider cuando llegue.'
+        "
+        rhythm="md"
+      >
+        <app-order-code [code]="pedido.code" (copied)="copy($event)" />
+      </arena-section>
+    }
+
+    <arena-key-value [rows]="facts()" [total]="total()" />
+
+    <div class="arena-row">
+      <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
+        Volver a mis pedidos
+      </arena-button>
+    </div>
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    <arena-empty-state
+      headingLevel="h1"
+      icon="ph-bold ph-magnifying-glass"
+      title="No encontramos ese pedido"
+      message="Revisa el código o vuelve a tu lista de pedidos."
+    />
+  </div>
+}

@@ -1,15 +1,84 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    eyebrow="Confirmación"
     title="Cómo quieres recibirlo"
-    lede="Elige entre entrega a domicilio y recojo en sucursal."
+    subtitle="Tu código del pedido se genera al confirmar, y es lo que te escanean al entregar."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (cart.all().length > 0) {
+    @if (interurban()) {
+      <arena-radio-group
+        label="Lo que viene de otra ciudad"
+        ariaLabel="Cómo quieres recibir lo que viene de otra ciudad"
+        name="entrega"
+        [value]="checkout.current().delivery"
+        (change)="pickDelivery($event)"
+      >
+        <arena-radio
+          value="domicilio"
+          label="Entrega a domicilio"
+          [hint]="
+            'Llega a la sucursal de ' +
+            homeCityName() +
+            ' y desde ahí un rider te lo lleva a la dirección que marques.'
+          "
+        />
+        <arena-radio
+          value="sucursal"
+          label="Recojo en sucursal"
+          [hint]="
+            'Te avisamos cuando llegue a la sucursal de ' +
+            homeCityName() +
+            ' y vas a recogerlo. El gerente escanea tu código en mostrador.'
+          "
+        />
+      </arena-radio-group>
+    }
+
+    @if (interurban() && checkout.current().delivery === 'sucursal') {
+      <arena-select
+        label="Sucursal donde lo recoges"
+        [options]="localBranches()"
+        [value]="checkout.current().destinationBranchId"
+        (change)="setBranch($event)"
+      />
+
+      <arena-alert tone="info" title="Vas tú a buscarlo">
+        Cuando llegue te avisamos. Lleva tu código del pedido y tu carnet.
+      </arena-alert>
+    } @else {
+      <div class="arena-stack arena-stack--group">
+        <arena-input
+          label="Dirección de entrega"
+          hint="Calle, número y una referencia que ayude al rider."
+          placeholder="Calle 5 de Obrajes 120"
+          [value]="checkout.current().address"
+          (change)="setAddress($event)"
+        />
+
+        @if (interurban()) {
+          <arena-alert tone="info" title="Llega en dos tramos">
+            Primero viaja en camión hasta la sucursal de {{ homeCityName() }}. Cuando llegue, esa
+            sucursal te asigna un rider y él te lo lleva a la puerta.
+          </arena-alert>
+        }
+      </div>
+    }
+
+    <arena-key-value [rows]="summary()" [total]="total()" />
+
+    <div class="arena-row">
+      <arena-button size="lg" icon="ph-bold ph-check" [disabled]="!ready()" (click)="confirm()">
+        Confirmar el pedido
+      </arena-button>
+      <arena-button variant="ghost" (click)="back()">Volver al carrito</arena-button>
+    </div>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-shopping-cart-simple"
+      title="No hay nada que confirmar"
+      message="Tu carrito está vacío."
+    />
+  }
 </div>

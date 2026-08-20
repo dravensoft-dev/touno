@@ -1,15 +1,71 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    eyebrow="Comprador"
     title="Tu carrito"
-    lede="Lo que llevas, agrupado por sucursal."
+    subtitle="Un envío por sucursal, porque cada sucursal despacha lo suyo."
   />
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  @if (cart.all().length > 0) {
+    @if (interurban().length > 0) {
+      <arena-alert tone="info" title="Algo viene de otra ciudad">
+        Lo que sale de otra ciudad viaja en camión con varios pedidos y llega a la sucursal de la
+        tuya. En el siguiente paso eliges si te lo llevan a tu puerta o lo recoges en mostrador.
+      </arena-alert>
+    }
+
+    @for (basket of baskets(); track basket.branchId) {
+      <div class="cart-basket arena-stack arena-stack--group">
+        <p class="cart-basket__head">
+          <span class="cart-basket__name">{{ basket.branchName }}</span>
+          <span class="cart-basket__city">
+            {{ basket.cityName }}
+            @if (basket.awayFromHome) {
+              · viaja a tu ciudad
+            }
+          </span>
+        </p>
+
+        <arena-table [label]="'Productos de ' + basket.branchName" [columns]="columns">
+          @for (line of basket.lines; track line.productId) {
+            <tr arena-table-row>
+              <td arena-table-cell>{{ line.name }}</td>
+              <td arena-table-cell>
+                <span class="arena-num">{{ line.qty }}</span>
+              </td>
+              <td arena-table-cell>
+                <span class="arena-num">{{ line.subtotal }}</span>
+              </td>
+              <td arena-table-cell>
+                <arena-icon-button
+                  icon="ph-bold ph-trash"
+                  [label]="'Quitar ' + line.name"
+                  (click)="remove(line)"
+                />
+              </td>
+            </tr>
+          }
+        </arena-table>
+
+        <p class="cart-basket__delivery arena-num">
+          Envío desde esta sucursal {{ basket.deliveryBob }}
+        </p>
+      </div>
+    }
+
+    <arena-key-value [rows]="summary()" [total]="total()" />
+
+    <arena-button size="lg" icon="ph-bold ph-arrow-right" (click)="toDelivery()">
+      Elegir cómo recibirlo
+    </arena-button>
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-shopping-cart-simple"
+      title="Tu carrito está vacío"
+      message="Agrega algo desde una sucursal de restaurante o de importadora."
+    />
+    <div class="arena-row">
+      <arena-button variant="secondary" (click)="browse()">Ver comercios</arena-button>
+    </div>
+  }
 </div>

@@ -1,15 +1,80 @@
 <div class="arena-stack arena-stack--section">
   <arena-page-head
     headingLevel="h1"
-    eyebrow="Comprador"
-    title="Feed"
-    lede="Lo que puedes pedir ahora mismo en tu ciudad."
-  />
+    title="Lo que puedes pedir hoy"
+    [subtitle]="
+      'Sucursales abiertas ahora en ' +
+      cityName() +
+      '. La comida sale de tu ciudad; una importadora de otra ciudad sólo aparece si tiene sucursal aquí.'
+    "
+  >
+    <div actions>
+      <arena-select
+        label="Ciudad"
+        [options]="cities()"
+        [value]="city()"
+        (change)="pickCity($event)"
+      />
+    </div>
+  </arena-page-head>
 
-  <arena-empty-state
-    headingLevel="h2"
-    icon="ph-bold ph-hammer"
-    title="En construcción"
-    message="Esta pantalla ya tiene su ruta y sus datos. El contenido llega en el siguiente paso."
-  />
+  <arena-section
+    eyebrow="Comida"
+    title="De un restaurante de tu ciudad"
+    description="Llega a tu puerta con un rider de la sucursal que lo prepara."
+    rhythm="md"
+  >
+    @if (food().length > 0) {
+      <arena-grid>
+        @for (item of food(); track item.branch.id + item.product.id) {
+          <app-product-card
+            [product]="item.product"
+            [branch]="item.branch"
+            fallbackIcon="ph ph-fork-knife"
+            (add)="addToCart(item)"
+          />
+        }
+      </arena-grid>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-fork-knife"
+        title="Ningún restaurante abierto aquí"
+        [message]="'Todavía no hay sucursales de restaurante atendiendo en ' + cityName() + '.'"
+      />
+    }
+  </arena-section>
+
+  <arena-section
+    eyebrow="Encomiendas"
+    title="De una importadora que llega hasta aquí"
+    [description]="
+      'Hay ' +
+      reachable().length +
+      ' importadoras que además despachan desde otra ciudad hacia ' +
+      cityName() +
+      '.'
+    "
+    rhythm="md"
+  >
+    @if (parcels().length > 0) {
+      <arena-grid>
+        @for (item of parcels(); track item.branch.id + item.product.id) {
+          <app-product-card
+            [product]="item.product"
+            [branch]="item.branch"
+            fallbackIcon="ph ph-package"
+            (add)="addToCart(item)"
+          />
+        }
+      </arena-grid>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-package"
+        title="Ninguna importadora abierta aquí"
+        [message]="'Todavía no hay sucursales de importadora atendiendo en ' + cityName() + '.'"
+      />
+    }
+  </arena-section>
 </div>
