@@ -5,7 +5,6 @@ import {
   ArenaEmptyState,
   ArenaGrid,
   ArenaPageHead,
-  ArenaSection,
   ArenaStatCard,
   ArenaTable,
   ArenaTableCell,
@@ -34,7 +33,6 @@ const COLUMNS: readonly ArenaTableColumn[] = [
   host: { style: 'display: contents' },
   imports: [
     ArenaPageHead,
-    ArenaSection,
     ArenaGrid,
     ArenaStatCard,
     ArenaAlert,

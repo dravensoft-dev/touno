@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
+  ArenaActions,
   ArenaEmptyState,
   ArenaGrid,
   ArenaPageHead,
@@ -21,7 +22,15 @@ import { ProductCard } from '../../../shared/product-card/product-card';
   selector: 'app-feed',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { style: 'display: contents' },
-  imports: [ArenaPageHead, ArenaSection, ArenaGrid, ArenaSelect, ArenaEmptyState, ProductCard],
+  imports: [
+    ArenaPageHead,
+    ArenaActions,
+    ArenaSection,
+    ArenaGrid,
+    ArenaSelect,
+    ArenaEmptyState,
+    ProductCard,
+  ],
   templateUrl: './feed.html',
 })
 export class Feed {

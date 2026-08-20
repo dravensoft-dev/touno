@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ArenaAction,
   ArenaAlert,
   ArenaButton,
   ArenaEmptyState,
@@ -30,6 +31,7 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
     ArenaSection,
     ArenaPeopleList,
     ArenaPersonRow,
+    ArenaAction,
     ArenaButton,
     ArenaInput,
     ArenaAlert,

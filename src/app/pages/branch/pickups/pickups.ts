@@ -21,7 +21,6 @@ import { Order } from '../../../domain/orders.model';
 import { fechaHora } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 import { ScanPanel } from '../../../shared/scan-panel/scan-panel';
-import { StateTag } from '../../../shared/state-tag/state-tag';
 
 const COLUMNS: readonly ArenaTableColumn[] = [
   { header: 'Pedido', mono: true },
@@ -52,7 +51,6 @@ const LOAD_COLUMNS: readonly ArenaTableColumn[] = [
     ArenaButton,
     ArenaEmptyState,
     ScanPanel,
-    StateTag,
   ],
   templateUrl: './pickups.html',
 })

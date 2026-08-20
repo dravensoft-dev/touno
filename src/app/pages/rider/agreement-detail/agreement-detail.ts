@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ArenaActions,
   ArenaAlert,
   ArenaButton,
   ArenaEmptyState,
@@ -20,7 +21,15 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
   selector: 'app-rider-agreement-detail',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { style: 'display: contents' },
-  imports: [ArenaPageHead, ArenaKeyValue, ArenaAlert, ArenaButton, ArenaEmptyState, StateTag],
+  imports: [
+    ArenaPageHead,
+    ArenaActions,
+    ArenaKeyValue,
+    ArenaAlert,
+    ArenaButton,
+    ArenaEmptyState,
+    StateTag,
+  ],
   templateUrl: './agreement-detail.html',
 })
 export class RiderAgreementDetail {

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ArenaActions,
   ArenaAlert,
   ArenaEmptyState,
   ArenaGrid,
@@ -35,6 +36,7 @@ const COLUMNS: readonly ArenaTableColumn[] = [
   host: { style: 'display: contents' },
   imports: [
     ArenaPageHead,
+    ArenaActions,
     ArenaGrid,
     ArenaStatCard,
     ArenaSelect,

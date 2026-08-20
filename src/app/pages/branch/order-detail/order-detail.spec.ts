@@ -137,4 +137,10 @@ describe('BranchOrderDetail', () => {
     expect(host.textContent).toContain('Rosa Villca');
     expect(host.textContent).toContain('Entrega a domicilio');
   });
+
+  it('draws the state tag the page head projects, which needs ArenaActions imported', () => {
+    expect(
+      render('to-1041').nativeElement.querySelector('arena-page-head app-state-tag'),
+    ).not.toBeNull();
+  });
 });

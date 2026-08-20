@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ArenaActions,
   ArenaAlert,
   ArenaButton,
   ArenaEmptyState,
@@ -33,6 +34,7 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
   host: { style: 'display: contents' },
   imports: [
     ArenaPageHead,
+    ArenaActions,
     ArenaSection,
     ArenaAlert,
     ArenaKeyValue,

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
+  ArenaActions,
   ArenaAlert,
-  ArenaAvatar,
   ArenaButton,
   ArenaCheckbox,
   ArenaEmptyState,
@@ -32,10 +32,10 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
   host: { style: 'display: contents' },
   imports: [
     ArenaPageHead,
+    ArenaActions,
     ArenaSection,
     ArenaGrid,
     ArenaStatCard,
-    ArenaAvatar,
     ArenaCheckbox,
     ArenaInput,
     ArenaKeyValue,
