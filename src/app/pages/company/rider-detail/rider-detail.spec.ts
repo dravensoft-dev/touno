@@ -18,7 +18,7 @@ function render(
 
   const fixture = TestBed.createComponent(CompanyRiderDetail);
 
-  fixture.componentRef.setInput('id', slug);
+  fixture.componentRef.setInput('slug', slug);
   fixture.detectChanges();
 
   return fixture;

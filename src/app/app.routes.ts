@@ -195,7 +195,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/company/riders/riders').then((m) => m.CompanyRiders),
   },
   {
-    path: 'empresa/riders/:id',
+    path: 'empresa/riders/:slug',
     title: 'Rider',
     data: PRIVATE,
     loadComponent: () =>

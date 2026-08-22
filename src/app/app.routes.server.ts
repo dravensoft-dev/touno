@@ -95,9 +95,9 @@ export const serverRoutes: ServerRoute[] = [
     getPrerenderParams: () => Promise.resolve(PRODUCTS.map((one) => ({ id: one.id }))),
   },
   {
-    path: 'empresa/riders/:id',
+    path: 'empresa/riders/:slug',
     renderMode: RenderMode.Prerender,
-    getPrerenderParams: () => Promise.resolve(RIDERS.map((one) => ({ id: one.slug }))),
+    getPrerenderParams: () => Promise.resolve(RIDERS.map((one) => ({ slug: one.slug }))),
   },
   {
     path: 'sucursal/pedidos/:codigo',

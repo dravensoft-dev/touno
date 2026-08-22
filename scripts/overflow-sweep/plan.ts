@@ -143,7 +143,7 @@ function companyRoutes(companyId: string): readonly PlannedRoute[] {
       mine: (one) => one.companyId === companyId,
     }),
     ...open({
-      pattern: '/empresa/riders/:id',
+      pattern: '/empresa/riders/:slug',
       all: RIDERS,
       pathOf: (one) => `/empresa/riders/${one.slug}`,
       mine: () => true,

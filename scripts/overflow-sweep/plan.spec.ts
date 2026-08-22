@@ -82,7 +82,7 @@ describe('sweepPlan', () => {
   });
 
   it('reaches a rider of the empresa by slug, because the page resolves by slug', () => {
-    const planned = withPattern('p-empresa-restaurante', '/empresa/riders/:id');
+    const planned = withPattern('p-empresa-restaurante', '/empresa/riders/:slug');
     const slugs = new Set(RIDERS.map((one) => one.slug));
 
     expect(planned.length).toBeGreaterThan(0);

@@ -27,6 +27,24 @@ Said out loud on both catalogue screens. That split is the reason there are two 
 rather than one, and it is the first thing to check when someone asks why a screen is in this lane
 and not the other.
 
+## The catalogue is `catalogo` here for both verticals, and `/empresa/carta` does not exist
+
+The sucursal serves `/sucursal/carta` and `/sucursal/catalogo` from one component under two nouns,
+because a counter speaks the local's language. This lane does not split: one `/empresa/catalogo`,
+one `/empresa/catalogo/:id`, labelled "Catálogo" whatever the empresa sells. Reading the split as
+symmetric is how five product pages were swept against the 404 for a while. Making the restaurant's
+empresa read "Carta" is a product change carrying two routes and their prerender params, not a
+label edit.
+
+## `/empresa/riders/:slug` carries a slug, and now says so
+
+Every other `:id` in the tree carries a real id: `empresa/sucursales/:id`, `empresa/catalogo/:id`,
+`rider/cargas/:id`. This one resolves through `Riders.bySlug`, because `marco-quispe` is what a
+gerente would paste into a chat and `r-marco` is not. It was called `:id` until the parameter was
+renamed to match what it holds — while it lied, the overflow sweep spent ten pages measuring the
+not-found state. `app.routes.spec.ts` holds every dynamic route to the names it declares and
+refuses one the static output would not prerender.
+
 ## This lane does not operate
 
 No accepting a pedido, no assigning a rider, no answering a chat. When something is stuck, the

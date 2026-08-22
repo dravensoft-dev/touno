@@ -57,7 +57,7 @@ export class CompanyRiderDetail {
   protected readonly businesses = inject(Businesses);
   protected readonly riders = inject(Riders);
 
-  readonly id = input('');
+  readonly slug = input('');
 
   protected readonly chosen = signal<readonly string[]>([]);
 
@@ -65,7 +65,7 @@ export class CompanyRiderDetail {
 
   protected readonly companyId = computed(() => this.session.companyId() ?? '');
 
-  protected readonly rider = computed(() => this.riders.bySlug(this.id()));
+  protected readonly rider = computed(() => this.riders.bySlug(this.slug()));
 
   protected readonly range = computed(() => rangeOf(this.rider()?.vehicle ?? 'moto'));
 
