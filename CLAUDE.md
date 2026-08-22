@@ -57,7 +57,7 @@ working contract: the rules that hold across the tree, and the traps that alread
 
 ### Design system
 
-`@dravensoft/arena-angular` 10.1.0 carries the language; `arena.config.json` plus `design/touno/`
+`@dravensoft/arena-angular` 10.2.2 carries the language; `arena.config.json` plus `design/touno/`
 carry the skin. Hold these:
 
 - **No class of ours on an Arena element.** Put the class on a container we own and let the Arena

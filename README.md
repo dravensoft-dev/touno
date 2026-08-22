@@ -42,7 +42,7 @@ moment of purchase.
 | Runtime and package manager | Bun 1.3                                                                   |
 | Build                       | `@angular/build` — Vite in dev, esbuild in build                          |
 | Rendering                   | `@angular/ssr`, `outputMode: "static"`: 244 prerendered routes, no server |
-| Design system               | `@dravensoft/arena-angular` 10.1.0, pinned exactly                        |
+| Design system               | `@dravensoft/arena-angular` 10.2.2, pinned exactly                        |
 | Icons                       | Phosphor, subset and self-hosted by `arena-to-prod`                       |
 | Tests                       | Vitest through `@angular/build:unit-test` — 278 across 31 files           |
 
