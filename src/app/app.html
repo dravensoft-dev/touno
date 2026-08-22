@@ -2,9 +2,14 @@
 
 <arena-app-bar>
   <a brand routerLink="/" class="shell-brand" [attr.aria-label]="siteName + ', inicio'">
-    <arena-app-logo size="sm" [name]="siteName">
-      <app-brand-mark mark />
-    </arena-app-logo>
+    <span class="shell-brand__narrow">
+      <app-brand-mark />
+    </span>
+    <span class="shell-brand__wide">
+      <arena-app-logo size="md" [name]="siteName">
+        <app-brand-mark mark />
+      </arena-app-logo>
+    </span>
   </a>
 
   <nav nav aria-label="Secciones de Touno" class="shell-nav arena-row">

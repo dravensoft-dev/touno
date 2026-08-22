@@ -29,6 +29,27 @@ describe('App', () => {
 
     expect(host.querySelector(`main#${ARENA_MAIN_ID}`)).not.toBeNull();
   });
+
+  it('draws both brand branches, so the markup never depends on the width', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const host: HTMLElement = fixture.nativeElement;
+    const brand = host.querySelector('a.shell-brand');
+
+    expect(brand?.getAttribute('aria-label')).toBe('Touno, inicio');
+    expect(brand?.querySelector('.shell-brand__narrow app-brand-mark')).not.toBeNull();
+    expect(brand?.querySelector('.shell-brand__wide arena-app-logo app-brand-mark')).not.toBeNull();
+  });
+
+  it('leaves the app bar in place on the first render, which is what the prerender wrote', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const host: HTMLElement = fixture.nativeElement;
+
+    expect(host.classList.contains('shell-bar-away')).toBe(false);
+  });
 });
 
 describe('App panel destinations', () => {

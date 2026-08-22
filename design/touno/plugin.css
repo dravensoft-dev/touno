@@ -22,3 +22,33 @@
 [data-arena-part="tabs.tab"] {
   white-space: nowrap;
 }
+
+[data-arena-part="app-bar"] {
+  transition: translate var(--dur-mid) var(--ease-out);
+}
+
+.shell-bar-away [data-arena-part="app-bar"] {
+  translate: 0 -100%;
+}
+
+[data-arena-part="app-bar"]:focus-within {
+  translate: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-arena-part="app-bar"] {
+    transition: none;
+  }
+}
+
+@media (width < 22.5rem) {
+  [data-arena-part="app-bar.band"] {
+    --dz-ctl-h: var(--dz-ctl-h-sm);
+  }
+
+  [data-arena-part="app-bar.band"],
+  [data-arena-part="app-bar.nav"],
+  [data-arena-part="app-bar.actions"] {
+    gap: var(--sp-2);
+  }
+}

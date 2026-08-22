@@ -46,9 +46,21 @@ Two files, and nothing else belongs here:
   order at its head, so an ordinary selector wins with no `!important`.
 - What this file legitimately holds: the `clamp()` over `hero.title`, `page-head.title` and
   `section.title`, because `fs` steps are fixed pixels and a 44px title overflows a 320px phone;
-  and the horizontal scroll on the tablist, because four category tabs do not fit a 320px screen
+  the horizontal scroll on the tablist, because four category tabs do not fit a 320px screen
   and a tab strip that scrolls inside itself is the only fix that does not need a width the
-  prerender cannot know. **The ceiling of every `clamp()` stays the role**, so desktop does not move.
+  prerender cannot know; and the two things the app bar needs, below. **The ceiling of every
+  `clamp()` stays the role**, so desktop does not move.
+- **The app bar's motif is a translate, and the state is the app's.** `app-bar` takes
+  `transition: translate` and `translate: 0 -100%` under `.shell-bar-away`, which `App` binds on
+  its own host — the plugin owns the part hook and nothing else, because only this file may select
+  one. `:focus-within` re-answers it to `none`, so a bar holding keyboard focus cannot be scrolled
+  off screen. `src/app/layout/CLAUDE.md` carries the reasoning.
+- **`app-bar.band` is where the narrowest phone buys its last ten pixels.** Under
+  `@media (width < 22.5rem)` the band, the nav and the actions take `--sp-2` for their gap and the
+  band re-answers `--dz-ctl-h` as `--dz-ctl-h-sm`. It is scoped to the band by inheritance rather
+  than re-answered on `:root`, so nothing else in the app re-densifies; 44px is still the thumb
+  target Arena's comfortable density argues for. Without it the cart action wrapped the bar into
+  two rows at 320.
 
 ## After a change here
 

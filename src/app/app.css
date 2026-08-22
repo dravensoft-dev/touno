@@ -1,5 +1,6 @@
 .shell-brand {
   display: inline-flex;
+  align-items: center;
   color: inherit;
   text-decoration: none;
 }
@@ -17,11 +18,18 @@
   color: var(--color-primary);
 }
 
+.shell-brand__narrow {
+  display: block;
+  width: var(--logo-mark-sm);
+  height: var(--logo-mark-sm);
+}
+
 .shell-nav__menu,
 .shell-actions__narrow {
   display: contents;
 }
 
+.shell-brand__wide,
 .shell-actions__wide {
   display: none;
 }
@@ -52,11 +60,13 @@
     display: inline;
   }
 
+  .shell-brand__narrow,
   .shell-nav__menu,
   .shell-actions__narrow {
     display: none;
   }
 
+  .shell-brand__wide,
   .shell-actions__wide {
     display: contents;
   }

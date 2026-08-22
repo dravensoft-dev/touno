@@ -71,11 +71,50 @@ moves that breakpoint, this number has to follow.
 
 The same query decides the top bar, because at a phone width the three public links do not fit
 beside the brand and the account action: below it they are `display: none` and an `arena-menu` on a
-`ph-list` trigger carries them, and "Ingresar" is drawn as an `arena-icon-button` rather than a
-labelled one; above it the links come back and the menu goes. **Both branches are always in the
+`ph-list` trigger carries them, "Ingresar" is drawn as an `arena-icon-button` rather than a labelled
+one, and the brand is **the mark alone**; above it the links come back, the menu goes and the mark
+is joined by the wordmark in an `arena-app-logo size="md"`. **Both branches are always in the
 markup and CSS picks one**, which is the same reason the width decision is a query at all. The menu
 is dispatched on the label — `ArenaMenuItem` carries no id — so `PUBLIC_LINKS` in `app.ts` is the
 one place a section's label is written, and `MENU_LINKS` is derived from it.
+
+**The wordmark is what the phone cannot afford, and the cart is why.** `arena-app-bar`'s band is
+`flex-wrap: wrap`, so a bar that stops fitting becomes two rows in silence rather than overflowing —
+which is why no overflow check ever caught it. The cart action only exists while `cart.count() > 0`,
+so the bar held one row until the reader added an article and two rows afterwards. This project runs
+Arena's **comfortable** density, so every control in the bar is 48px, and `--gap-items` is 16: at
+320px the band has 288px and the filled narrow bar wanted 298. The mark alone is 30px against the
+`sm` lock-up's 95, and that is where the ten pixels came from. `.shell-brand__narrow` is the box
+that gives the SVG its size and it reads `--logo-mark-sm`, so the mark stays exactly the size
+`size="sm"` drew it. The anchor keeps its `aria-label`, and `BrandMark`'s host is `aria-hidden`, so
+the link is named "Touno, inicio" in both branches whatever it draws.
+
+Two more pixels come from the style plugin, under the `22.5rem` query rather than this one, because
+they are the bar's own spacing and not a layout: the band, the nav and the actions take `--sp-2`
+for their gap, and the band re-answers `--dz-ctl-h` as `--dz-ctl-h-sm`. **44px still clears the
+44px thumb target** Arena's comfortable density exists to meet, which is the whole reason that step
+is takeable. Without them a two-digit count wrapped the bar again at 320.
+
+## The bar gets out of the way
+
+`scroll-away.ts` is the decision and it is a pure function: `nextBarScroll(held, y)` answers where
+the bar should be, and `scroll-away.spec.ts` holds its four rules — present at or under
+`REVEAL_ABOVE`, away on a move down past `SETTLE_PX`, back on a move up past it, and unchanged for
+anything smaller, so momentum never flickers the bar.
+
+- **The listener only exists in the browser.** It is registered inside `afterNextRender`, the same
+  move `theme-toggle.ts` makes and for the same reason: there is no `window` during prerender. The
+  signal starts at `AT_TOP`, so the prerendered HTML and the first client render carry the same
+  class list and hydration agrees.
+- **It runs outside the zone.** `NgZone.runOutsideAngular` plus `{ passive: true }`, so a scroll
+  does not run change detection per event; setting the signal is what schedules the tick.
+  `DestroyRef.onDestroy` takes it back off, because `App` is created and destroyed per spec.
+- **A navigation puts the bar back.** `NavigationEnd` resets to `{ away: false, at: window.scrollY }`,
+  so a restored scroll position does not read as a jump.
+- **The rule that moves it lives in `design/touno/plugin.css`**, because `arena-app-bar` is an
+  Arena element: no class of ours may go on it, and `data-arena-part` is the contract. `App` owns
+  the state and binds `[class.shell-bar-away]` on its own host; the plugin owns the part.
+  `:focus-within` pins the bar open, so keyboard focus is never scrolled off screen.
 
 The second query is `@media (width < 22.5rem)` in `src/styles.css`, and it changes no layout: it
 re-answers `--gutter` as `--sp-4`, so the page padding steps from 24px to 16px on the narrowest

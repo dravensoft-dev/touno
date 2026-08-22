@@ -27,6 +27,7 @@ import type { ArenaMenuItem } from '@dravensoft/arena-angular';
 import { Cart } from './domain/cart';
 import { Profile, Role, Session } from './domain/session';
 import { Destination, activeIdIn, destinationsFor, panelFor } from './layout/panel-nav';
+import { scrollAway } from './layout/scroll-away';
 import { SiteFooter } from './layout/site-footer/site-footer';
 import { ThemeToggle } from './layout/theme-toggle/theme-toggle';
 import { BrandMark } from './shared/brand-mark/brand-mark';
@@ -64,7 +65,10 @@ const MENU_LINKS: readonly ArenaMenuItem[] = PUBLIC_LINKS.map((link) => ({
 @Component({
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'arena-shell arena-stack arena-stack--section' },
+  host: {
+    class: 'arena-shell arena-stack arena-stack--section',
+    '[class.shell-bar-away]': 'barAway()',
+  },
   imports: [
     RouterOutlet,
     RouterLink,
@@ -111,6 +115,8 @@ export class App {
   protected readonly publicLinks = PUBLIC_LINKS;
 
   protected readonly menuLinks = MENU_LINKS;
+
+  protected readonly barAway = scrollAway();
 
   protected readonly url = toSignal(
     this.router.events.pipe(
