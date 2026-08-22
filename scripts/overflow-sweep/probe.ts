@@ -11,7 +11,12 @@ export interface NavigateCommand {
   readonly maxMs: number;
 }
 
-export type ProbeCommand = SettleCommand | NavigateCommand;
+export interface MeasureCommand {
+  readonly kind: 'measure';
+  readonly culprits: number;
+}
+
+export type ProbeCommand = SettleCommand | NavigateCommand | MeasureCommand;
 
 export interface Settled {
   readonly kind: 'settled';
@@ -20,7 +25,17 @@ export interface Settled {
   readonly signature: string;
 }
 
-export type ProbeResult = Settled;
+export interface Measured {
+  readonly kind: 'measured';
+  readonly over: number;
+  readonly culprits: readonly string[];
+}
+
+export type ProbeResult = Settled | Measured;
+
+export function pageProbe(command: SettleCommand | NavigateCommand): Promise<Settled>;
+export function pageProbe(command: MeasureCommand): Promise<Measured>;
+export function pageProbe(command: ProbeCommand): Promise<ProbeResult>;
 
 export function pageProbe(command: ProbeCommand): Promise<ProbeResult> {
   const root = document.documentElement;
@@ -69,6 +84,69 @@ export function pageProbe(command: ProbeCommand): Promise<ProbeResult> {
 
       requestAnimationFrame(tick);
     });
+
+  if (command.kind === 'measure') {
+    const viewport = root.clientWidth;
+    const over = root.scrollWidth - viewport;
+
+    if (over <= 0) {
+      return Promise.resolve({ kind: 'measured', over: 0, culprits: [] });
+    }
+
+    const describe = (element: Element): string => {
+      const parts: string[] = [];
+
+      for (
+        let node: Element | null = element;
+        node && parts.length < 4;
+        node = node.parentElement
+      ) {
+        const classes = [...node.classList].slice(0, 2).join('.');
+
+        parts.unshift(
+          classes ? `${node.tagName.toLowerCase()}.${classes}` : node.tagName.toLowerCase(),
+        );
+      }
+
+      return parts.join(' > ');
+    };
+
+    const scoped = (element: Element): boolean => {
+      for (
+        let node = element.parentElement;
+        node && node !== document.body;
+        node = node.parentElement
+      ) {
+        const overflowX = getComputedStyle(node).overflowX;
+
+        if (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'hidden') {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
+    const named = new Set<string>();
+
+    for (const element of document.querySelectorAll('body *')) {
+      const shape = element.getBoundingClientRect();
+
+      if (shape.width === 0 && shape.height === 0) {
+        continue;
+      }
+
+      if (shape.right > viewport + 1 && !scoped(element)) {
+        named.add(`${describe(element)} right=${Math.round(shape.right)}`);
+      }
+    }
+
+    return Promise.resolve({
+      kind: 'measured',
+      over,
+      culprits: [...named].slice(0, command.culprits),
+    });
+  }
 
   if (command.kind === 'navigate') {
     const trim = (path: string): string => (path.length > 1 ? path.replace(/\/$/, '') : path);

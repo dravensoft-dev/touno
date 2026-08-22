@@ -1,7 +1,14 @@
 import { existsSync } from 'node:fs';
 import { PlannedProfile, sweepPlan } from './overflow-sweep/plan';
 import { inPool } from './overflow-sweep/pool';
-import { ProbeCommand, Settled, pageProbe } from './overflow-sweep/probe';
+import {
+  MeasureCommand,
+  Measured,
+  NavigateCommand,
+  Settled,
+  SettleCommand,
+  pageProbe,
+} from './overflow-sweep/probe';
 import { SeenPages } from './overflow-sweep/seen';
 
 const BASE = process.env['SWEEP_BASE'] ?? 'http://localhost:4173';
@@ -16,6 +23,7 @@ const BROWSERS = [
 
 const WIDEST = WIDTHS[WIDTHS.length - 1] ?? 1440;
 const WORKERS = Math.max(1, Number(process.env['SWEEP_WORKERS'] ?? 4));
+const MEASURE: MeasureCommand = { kind: 'measure', culprits: 6 };
 
 const STILL_FRAMES = 2;
 const COLD_MS = 2500;
@@ -27,62 +35,6 @@ interface Finding {
   readonly width: number;
   readonly over: number;
   readonly culprits: readonly string[];
-}
-
-function measure() {
-  const root = document.documentElement;
-  const viewport = root.clientWidth;
-  const over = root.scrollWidth - viewport;
-
-  if (over <= 0) {
-    return { over: 0, culprits: [] as string[] };
-  }
-
-  const describe = (element: Element): string => {
-    const parts: string[] = [];
-
-    for (let node: Element | null = element; node && parts.length < 4; node = node.parentElement) {
-      const classes = [...node.classList].slice(0, 2).join('.');
-
-      parts.unshift(
-        classes ? `${node.tagName.toLowerCase()}.${classes}` : node.tagName.toLowerCase(),
-      );
-    }
-
-    return parts.join(' > ');
-  };
-
-  const scoped = (element: Element): boolean => {
-    for (
-      let node = element.parentElement;
-      node && node !== document.body;
-      node = node.parentElement
-    ) {
-      const overflowX = getComputedStyle(node).overflowX;
-
-      if (overflowX === 'auto' || overflowX === 'scroll' || overflowX === 'hidden') {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  const culprits = new Set<string>();
-
-  for (const element of document.querySelectorAll('body *')) {
-    const box = element.getBoundingClientRect();
-
-    if (box.width === 0 && box.height === 0) {
-      continue;
-    }
-
-    if (box.right > viewport + 1 && !scoped(element)) {
-      culprits.add(`${describe(element)} right=${Math.round(box.right)}`);
-    }
-  }
-
-  return { over, culprits: [...culprits].slice(0, 6) };
 }
 
 const { chromium } = await import('playwright-core');
@@ -124,11 +76,28 @@ async function walk(target: PlannedProfile): Promise<Walked> {
   let visited = 0;
   let measured = 0;
 
-  const settle = async (where: string, command: ProbeCommand): Promise<Settled> => {
+  const settle = async (
+    where: string,
+    command: SettleCommand | NavigateCommand,
+  ): Promise<Settled> => {
     const result = await page.evaluate(pageProbe, command);
+
+    if (result.kind !== 'settled') {
+      throw new Error(`overflow-sweep: the probe answered ${result.kind} to a wait`);
+    }
 
     if (result.timedOut) {
       impatient.push(`${where} never held still inside ${command.maxMs}ms`);
+    }
+
+    return result;
+  };
+
+  const measure = async (): Promise<Measured> => {
+    const result = await page.evaluate(pageProbe, MEASURE);
+
+    if (result.kind !== 'measured') {
+      throw new Error(`overflow-sweep: the probe answered ${result.kind} to a measurement`);
     }
 
     return result;
@@ -168,7 +137,7 @@ async function walk(target: PlannedProfile): Promise<Walked> {
         maxMs: WARM_MS,
       });
 
-      const result = await page.evaluate(measure);
+      const result = await measure();
 
       measured++;
 

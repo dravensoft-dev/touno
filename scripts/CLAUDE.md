@@ -43,6 +43,12 @@ root its own schema names.
   `STILL_FRAMES` frames. The fixed `waitForTimeout(260)` and `waitForTimeout(140)` it replaced were
   4-5x longer than the page actually needs — measured at 54ms after a route change and 38ms after a
   viewport change — and they were 85% of a 348-second run.
+- **Everything the sweep runs inside the browser is one function, and it is under test.** Waiting,
+  the page signature and the overflow measurement are all commands of `pageProbe`, so there is one
+  thing to serialize and one thing to test. jsdom cannot lay anything out, so `measure.spec.ts`
+  stubs `getBoundingClientRect` and the two width properties of `documentElement`: what is under
+  test is the walk, the `overflow-x` carve-out and the sentence it writes, not the browser's
+  layout. The measurement had never once fired in anger, because every run of the sweep is green.
 - **`pageProbe` is serialized into the page by `toString()`, so it must be self-contained.** It may
   not call another module's function, read a module constant or close over anything. That is why it
   is one function switching on a command rather than one export per job, and why its helpers are
