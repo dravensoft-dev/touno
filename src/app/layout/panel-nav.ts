@@ -195,6 +195,34 @@ export const PANELS: readonly PanelArea[] = [
       },
     ],
   },
+  {
+    role: 'operador',
+    prefix: '/plataforma',
+    label: 'Panel de Touno',
+    destinations: [
+      {
+        id: 'tarifas',
+        label: 'Tarifas',
+        icon: 'ph-bold ph-percent',
+        path: '/plataforma/tarifas',
+        bar: true,
+      },
+      {
+        id: 'clima',
+        label: 'Clima',
+        icon: 'ph-bold ph-cloud-rain',
+        path: '/plataforma/clima',
+        bar: true,
+      },
+      {
+        id: 'red',
+        label: 'Red',
+        icon: 'ph-bold ph-graph',
+        path: '/plataforma/red',
+        bar: true,
+      },
+    ],
+  },
 ];
 
 export const BUYER_PREFIXES: readonly string[] = ['/feed', '/carrito', '/mis-pedidos'];

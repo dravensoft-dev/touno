@@ -2,11 +2,24 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { NOW } from './clock';
 import { Riders } from './riders';
 import { Rider } from './riders.model';
-import { AgreementDraft, AgreementSide, RiderAgreement } from './agreements.model';
+import { Platform } from './platform';
+import {
+  AgreementDraft,
+  AgreementSide,
+  PEAK_REASONS,
+  PeakAsk,
+  PeakRefusal,
+  RiderAgreement,
+  canTakePeak,
+  kindLabel,
+  peakRefusal,
+  pointsPending,
+} from './agreements.model';
 import { AGREEMENTS } from './agreements.data';
 
 @Injectable({ providedIn: 'root' })
 export class Agreements {
+  private readonly platform = inject(Platform);
   private readonly riders = inject(Riders);
 
   private readonly agreementList = signal<readonly RiderAgreement[]>(AGREEMENTS);
@@ -39,6 +52,39 @@ export class Agreements {
     return this.ofRider(riderId).filter((one) => one.state === 'activo');
   }
 
+  fulfilledFor(riderId: string): readonly RiderAgreement[] {
+    return this.ofRider(riderId).filter((one) => one.state === 'cumplido');
+  }
+
+  pointsPendingOf(riderId: string): number {
+    return pointsPending(this.ofRider(riderId));
+  }
+
+  refusalFor(riderId: string, ask: PeakAsk, exceptId?: string): PeakRefusal | undefined {
+    return peakRefusal(this.ofRider(riderId), ask, exceptId);
+  }
+
+  reasonFor(riderId: string, ask: PeakAsk): string | undefined {
+    const refusal = this.refusalFor(riderId, ask);
+
+    return refusal ? PEAK_REASONS[refusal] : undefined;
+  }
+
+  canTakePeakFor(riderId: string, ask: PeakAsk): boolean {
+    return canTakePeak(this.ofRider(riderId), ask);
+  }
+
+  chargeable(riderId: string, branchId: string): RiderAgreement | undefined {
+    return [...this.activeFor(riderId)]
+      .filter((one) => one.branchIds.includes(branchId) && one.pointsLeft > 0)
+      .sort(
+        (left, right) =>
+          Number(right.kind === 'hora-pico') - Number(left.kind === 'hora-pico') ||
+          left.pointsLeft - right.pointsLeft ||
+          left.id.localeCompare(right.id),
+      )[0];
+  }
+
   awaiting(side: AgreementSide, actorId: string): readonly RiderAgreement[] {
     return this.pending().filter(
       (one) => one.initiatedBy !== side && this.actorOf(one, side) === actorId,
@@ -67,6 +113,26 @@ export class Agreements {
   }
 
   propose(draft: AgreementDraft): RiderAgreement {
+    if (draft.branchIds.length === 0) {
+      throw new Error('El reclutamiento no cubre ninguna sucursal');
+    }
+
+    const minimum = this.platform.minCareerPoints();
+
+    if (draft.points < minimum) {
+      throw new Error(
+        `Un ${kindLabel(draft.kind).toLowerCase()} no puede dar menos de ${minimum} puntos de carrera`,
+      );
+    }
+
+    if (draft.kind === 'hora-pico') {
+      const refusal = this.refusalFor(draft.riderId, draft);
+
+      if (refusal) {
+        throw new Error(PEAK_REASONS[refusal]);
+      }
+    }
+
     this.sequence += 1;
 
     const agreement: RiderAgreement = {
@@ -75,8 +141,12 @@ export class Agreements {
       companyId: draft.companyId,
       branchIds: draft.branchIds,
       initiatedBy: draft.initiatedBy,
+      originBranchId: draft.originBranchId,
+      kind: draft.kind,
       state: 'pendiente',
       perTripBob: draft.perTripBob,
+      points: draft.points,
+      pointsLeft: draft.points,
       message: draft.message,
       sentAt: NOW,
       validUntil: '2026-12-31',
@@ -105,6 +175,24 @@ export class Agreements {
     );
   }
 
+  spend(riderId: string, branchId: string): RiderAgreement | undefined {
+    const target = this.chargeable(riderId, branchId);
+
+    if (!target) {
+      return undefined;
+    }
+
+    const left = target.pointsLeft - 1;
+    const next: RiderAgreement =
+      left === 0
+        ? { ...target, pointsLeft: 0, state: 'cumplido', settledAt: NOW }
+        : { ...target, pointsLeft: left };
+
+    this.agreementList.update((list) => list.map((one) => (one.id === target.id ? next : one)));
+
+    return next;
+  }
+
   private actorOf(agreement: RiderAgreement, side: AgreementSide): string {
     return side === 'rider' ? agreement.riderId : agreement.companyId;
   }
@@ -131,6 +219,14 @@ export class Agreements {
 
     if (this.actorOf(agreement, side) !== actorId) {
       throw new Error(`El acuerdo ${id} no está dirigido a ${actorId}`);
+    }
+
+    if (state === 'activo' && agreement.kind === 'hora-pico') {
+      const refusal = this.refusalFor(agreement.riderId, agreement, agreement.id);
+
+      if (refusal) {
+        throw new Error(PEAK_REASONS[refusal]);
+      }
     }
 
     this.agreementList.update((list) =>

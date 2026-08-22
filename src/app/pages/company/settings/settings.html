@@ -20,4 +20,81 @@
   }
 
   <arena-key-value [rows]="facts()" />
+
+  <arena-section
+    eyebrow="Tarifas"
+    title="El recargo por clima"
+    description="Touno fija un mínimo universal. Tú puedes subirlo para tus sucursales, nunca bajarlo."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      <arena-input
+        label="Recargo por clima desfavorable"
+        type="number"
+        [hint]="'El mínimo de Touno es ' + weatherFloorName() + ', y no se puede bajar de ahí.'"
+        [value]="weatherValue()"
+        (change)="onWeather($event)"
+      />
+
+      @if (!weatherReady()) {
+        <arena-alert tone="warning" title="Por debajo del mínimo de Touno">
+          No puedes cobrar menos de {{ weatherFloorName() }} por clima. Es una tarifa universal, y
+          lo que cobras de más va al rider.
+        </arena-alert>
+      }
+
+      <arena-button
+        icon="ph-bold ph-cloud-rain"
+        [disabled]="!weatherReady()"
+        (click)="saveWeather()"
+      >
+        Guardar el recargo
+      </arena-button>
+    </div>
+  </arena-section>
+
+  <arena-section
+    eyebrow="Cobros"
+    title="La tarjeta de la empresa"
+    description="Hace falta para pagar a la tarjeta de un rider que eligió cobrar así."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      <arena-alert tone="info" title="Tu tarjeta hoy">
+        {{ cardName() }}. Esta maqueta guarda la marca, los últimos cuatro dígitos, el titular y el
+        vencimiento, y nada más. Sin ella, a tus riders les llega el depósito de siempre.
+      </arena-alert>
+
+      <arena-input
+        label="Marca"
+        placeholder="Visa"
+        [value]="draft().brand"
+        (change)="onBrand($event)"
+      />
+      <arena-input
+        label="Últimos cuatro dígitos"
+        placeholder="8820"
+        hint="Cuatro dígitos. No pedimos el número completo."
+        [value]="draft().last4"
+        (change)="onLast4($event)"
+      />
+      <arena-input label="Titular" [value]="draft().holder" (change)="onHolder($event)" />
+      <arena-input
+        label="Vencimiento"
+        placeholder="04/30"
+        hint="Mes y año, así: 04/30."
+        [value]="draft().expires"
+        (change)="onExpires($event)"
+      />
+
+      <div class="arena-row">
+        <arena-button icon="ph-bold ph-credit-card" [disabled]="!readyCard()" (click)="saveCard()">
+          Guardar la tarjeta
+        </arena-button>
+        @if (card()) {
+          <arena-button variant="danger" (click)="removeCard()">Quitar la tarjeta</arena-button>
+        }
+      </div>
+    </div>
+  </arena-section>
 </div>

@@ -79,12 +79,18 @@ export class RiderScan {
       return;
     }
 
-    this.orders.scan(order.slug, this.riderId());
+    const spent = this.orders.scan(order.slug, this.riderId());
     this.chat.note(
       order.threadId,
       `${this.riders.nameOf(this.riderId())} escaneó tu código. Pedido entregado.`,
     );
     this.notices.orderScanned(order.code);
+
+    if (spent?.state === 'cumplido') {
+      this.notices.recruitmentFulfilled();
+    } else if (spent) {
+      this.notices.pointSpent(spent.pointsLeft);
+    }
   }
 
   protected back(): void {

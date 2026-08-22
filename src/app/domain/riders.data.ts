@@ -15,6 +15,8 @@ export const RIDERS: readonly Rider[] = [
     online: true,
     ratePerTripBob: 15,
     account: 'BNB ····4471',
+    payoutMethod: 'tarjeta',
+    card: { brand: 'Visa', last4: '4471', holder: 'Marco Quispe', expires: '09/29' },
     phone: '7712 6690',
   },
   {
@@ -31,6 +33,7 @@ export const RIDERS: readonly Rider[] = [
     online: true,
     ratePerTripBob: 16,
     account: 'BCP ····1180',
+    payoutMethod: 'automatico',
     phone: '7365 4402',
   },
   {
@@ -47,6 +50,7 @@ export const RIDERS: readonly Rider[] = [
     online: false,
     ratePerTripBob: 22,
     account: 'Unión ····8830',
+    payoutMethod: 'automatico',
     phone: '6884 2213',
   },
   {
@@ -63,6 +67,7 @@ export const RIDERS: readonly Rider[] = [
     online: true,
     ratePerTripBob: 18,
     account: 'BNB ····2204',
+    payoutMethod: 'automatico',
     phone: '7008 9911',
   },
   {
@@ -79,6 +84,7 @@ export const RIDERS: readonly Rider[] = [
     online: true,
     ratePerTripBob: 17,
     account: 'BCP ····7742',
+    payoutMethod: 'automatico',
     phone: '7112 3388',
   },
   {
@@ -95,6 +101,7 @@ export const RIDERS: readonly Rider[] = [
     online: true,
     ratePerTripBob: 15,
     account: 'Unión ····5519',
+    payoutMethod: 'automatico',
     phone: '7644 1205',
   },
   {
@@ -111,6 +118,7 @@ export const RIDERS: readonly Rider[] = [
     online: false,
     ratePerTripBob: 20,
     account: 'BNB ····6031',
+    payoutMethod: 'automatico',
     phone: '7291 7744',
   },
   {
@@ -127,6 +135,7 @@ export const RIDERS: readonly Rider[] = [
     online: true,
     ratePerTripBob: 14,
     account: 'BCP ····3318',
+    payoutMethod: 'automatico',
     phone: '7355 6602',
   },
   {
@@ -143,6 +152,7 @@ export const RIDERS: readonly Rider[] = [
     online: true,
     ratePerTripBob: 240,
     account: 'BNB ····9004',
+    payoutMethod: 'automatico',
     phone: '7188 4471',
   },
   {
@@ -159,6 +169,7 @@ export const RIDERS: readonly Rider[] = [
     online: false,
     ratePerTripBob: 260,
     account: 'Unión ····2277',
+    payoutMethod: 'automatico',
     phone: '7444 0813',
   },
 ];

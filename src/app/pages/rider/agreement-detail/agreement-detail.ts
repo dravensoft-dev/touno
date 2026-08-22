@@ -13,6 +13,7 @@ import { Agreements } from '../../../domain/agreements';
 import { Businesses } from '../../../domain/businesses';
 import { Geography } from '../../../domain/geography';
 import { Session } from '../../../domain/session';
+import { PEAK_REASONS, kindLabel } from '../../../domain/agreements.model';
 import { bs, fecha } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 import { StateTag } from '../../../shared/state-tag/state-tag';
@@ -55,11 +56,41 @@ export class RiderAgreementDetail {
 
   protected readonly notMine = computed(() => this.found() !== undefined && !this.agreement());
 
+  protected readonly blocked = computed(() => {
+    const agreement = this.agreement();
+
+    if (!agreement || agreement.kind !== 'hora-pico' || agreement.state !== 'pendiente') {
+      return undefined;
+    }
+
+    const refusal = this.agreements.refusalFor(
+      agreement.riderId,
+      {
+        companyId: agreement.companyId,
+        branchIds: agreement.branchIds,
+        originBranchId: agreement.originBranchId,
+      },
+      agreement.id,
+    );
+
+    return refusal ? PEAK_REASONS[refusal] : undefined;
+  });
+
   protected readonly answerable = computed(() => {
     const agreement = this.agreement();
 
-    return agreement?.state === 'pendiente' && agreement.initiatedBy === 'empresa';
+    return (
+      agreement?.state === 'pendiente' &&
+      agreement.initiatedBy === 'empresa' &&
+      this.blocked() === undefined
+    );
   });
+
+  protected readonly peak = computed(() => this.agreement()?.kind === 'hora-pico');
+
+  protected readonly pointsPending = computed(() =>
+    this.agreements.pointsPendingOf(this.riderId()),
+  );
 
   protected readonly waitingOnThem = computed(() => {
     const agreement = this.agreement();
@@ -88,7 +119,16 @@ export class RiderAgreementDetail {
 
     return [
       { term: 'Empresa', value: this.companyName() },
+      { term: 'Clase', value: kindLabel(agreement.kind) },
       { term: 'Por viaje', value: bs(agreement.perTripBob), numeric: true },
+      {
+        term: 'Puntos de carrera',
+        value:
+          agreement.state === 'activo' || agreement.state === 'cumplido'
+            ? `${agreement.pointsLeft} de ${agreement.points}`
+            : `${agreement.points}`,
+        numeric: true,
+      },
       { term: 'Lo propuso', value: agreement.initiatedBy === 'empresa' ? 'La empresa' : 'Tú' },
       { term: 'Enviado', value: fecha(agreement.sentAt), numeric: true },
       { term: 'Vence', value: fecha(agreement.validUntil), numeric: true },

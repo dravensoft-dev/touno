@@ -104,7 +104,26 @@ describe('CheckoutPage', () => {
     TestBed.inject(Checkout).patch({ address: 'Calle Los Cusis 310' });
     fixture.detectChanges();
 
+    expect(confirm()?.hasAttribute('disabled')).toBe(true);
+
+    TestBed.inject(Checkout).patch({ zoneName: 'Obrajes' });
+    fixture.detectChanges();
+
     expect(confirm()?.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('asks for the zone the distance is measured to, and only for a delivery to a door', () => {
+    const host: HTMLElement = withCart('al-jean', 'b-ale-santa-cruz').nativeElement;
+
+    expect(host.textContent).toContain('Tu zona');
+    expect(host.textContent).toContain('se mide entre la sucursal y tu zona');
+  });
+
+  it('shows the buyer every term of what is charged, not one envio line', () => {
+    const host: HTMLElement = withCart('al-jean', 'b-ale-santa-cruz').nativeElement;
+
+    expect(host.textContent).toContain('Comisión de Touno');
+    expect(host.textContent).toContain('Envío por distancia');
   });
 
   it('refuses a counter pickup until a sucursal is chosen', () => {

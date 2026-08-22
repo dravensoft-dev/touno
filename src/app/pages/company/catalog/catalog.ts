@@ -75,7 +75,7 @@ export class CompanyCatalog {
   }
 
   protected price(product: Product): string {
-    return bs(product.priceBob);
+    return product.priceScope === 'sucursal' ? 'Por sucursal' : bs(product.priceBob);
   }
 
   protected sellingIn(product: Product): number {

@@ -1,6 +1,7 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { Agreements } from '../../../domain/agreements';
 import { Chat } from '../../../domain/chat';
 import { Loads } from '../../../domain/loads';
 import { Orders } from '../../../domain/orders';
@@ -21,6 +22,13 @@ function render(id: string, profileId = 'p-rider-camion'): ComponentFixture<Ride
   fixture.detectChanges();
 
   return fixture;
+}
+
+function scanWith(fixture: ComponentFixture<RiderLoad>, code: string): void {
+  const panel = fixture.debugElement.query((one) => one.name === 'app-scan-panel');
+
+  panel.componentInstance.scanned.emit(code);
+  fixture.detectChanges();
 }
 
 function depart(fixture: ComponentFixture<RiderLoad>) {
@@ -94,5 +102,55 @@ describe('RiderLoad', () => {
     const fixture = render('cg-3303');
 
     expect(depart(fixture)).toBeUndefined();
+  });
+
+  it('offers the reception scan only on a load that is on the road', () => {
+    expect(render('cg-3301').nativeElement.querySelector('app-scan-panel')).toBeNull();
+    expect(render('cg-3306').nativeElement.querySelector('app-scan-panel')).not.toBeNull();
+  });
+
+  it('says out loud that the code it scans is the load one and never a buyer one', () => {
+    const host: HTMLElement = render('cg-3306').nativeElement;
+
+    expect(host.textContent).toContain('No escaneas el código de ningún comprador');
+    expect(host.textContent).toContain('punto de carrera');
+  });
+
+  it('unloads nothing when the code belongs to another load', () => {
+    const fixture = render('cg-3306');
+    const loads = TestBed.inject(Loads);
+
+    scanWith(fixture, 'RC-3302');
+
+    expect(loads.byId('cg-3306')?.state).toBe('en-ruta');
+  });
+
+  it('receives the load, ends each parcel by what its buyer chose, and hands the chat over', () => {
+    const fixture = render('cg-3306');
+    const loads = TestBed.inject(Loads);
+    const orders = TestBed.inject(Orders);
+    const chat = TestBed.inject(Chat);
+
+    scanWith(fixture, 'RC-3306');
+
+    expect(loads.byId('cg-3306')?.state).toBe('descargado');
+    expect(loads.byId('cg-3306')?.receivedAt).toBeDefined();
+    expect(orders.bySlug('to-2215')?.state).toBe('en-sucursal-destino');
+    expect(orders.bySlug('to-2216')?.state).toBe('listo-para-recojo');
+
+    const thread = chat.byId(orders.bySlug('to-2215')?.threadId ?? '');
+
+    expect(thread?.counterpart.kind).toBe('sucursal');
+    expect(thread?.counterpart.branchId).toBe('b-ale-la-paz');
+  });
+
+  it('spends one career point for the whole load, not one per parcel', () => {
+    const fixture = render('cg-3306');
+    const agreements = TestBed.inject(Agreements);
+    const before = agreements.byId('ag-506')?.pointsLeft ?? 0;
+
+    scanWith(fixture, 'RC-3306');
+
+    expect(agreements.byId('ag-506')?.pointsLeft).toBe(before - 1);
   });
 });

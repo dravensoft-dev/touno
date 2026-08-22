@@ -5,6 +5,7 @@ export interface CheckoutDraft {
   readonly delivery: DeliveryChoice;
   readonly address: string;
   readonly destinationBranchId: string;
+  readonly zoneName: string;
   readonly note: string;
 }
 
@@ -12,6 +13,7 @@ const EMPTY: CheckoutDraft = {
   delivery: 'domicilio',
   address: '',
   destinationBranchId: '',
+  zoneName: '',
   note: '',
 };
 
@@ -26,7 +28,7 @@ export class Checkout {
 
     return draft.delivery === 'sucursal'
       ? draft.destinationBranchId !== ''
-      : draft.address.trim() !== '';
+      : draft.address.trim() !== '' && draft.zoneName !== '';
   });
 
   patch(change: Partial<CheckoutDraft>): void {

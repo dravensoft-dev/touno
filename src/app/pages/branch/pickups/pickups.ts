@@ -18,8 +18,10 @@ import { Orders } from '../../../domain/orders';
 import { Riders } from '../../../domain/riders';
 import { Session } from '../../../domain/session';
 import { Order } from '../../../domain/orders.model';
+import { TruckLoad } from '../../../domain/loads.model';
 import { fechaHora } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
+import { OrderCode } from '../../../shared/order-code/order-code';
 import { ScanPanel } from '../../../shared/scan-panel/scan-panel';
 
 const COLUMNS: readonly ArenaTableColumn[] = [
@@ -35,6 +37,7 @@ const LOAD_COLUMNS: readonly ArenaTableColumn[] = [
   { header: 'Rider' },
   { header: 'Pedidos', align: 'right' },
   { header: 'Llega', align: 'right' },
+  { header: 'Código de recepción', align: 'right', mobileLayout: 'block' },
 ];
 
 @Component({
@@ -50,6 +53,7 @@ const LOAD_COLUMNS: readonly ArenaTableColumn[] = [
     ArenaTableCell,
     ArenaButton,
     ArenaEmptyState,
+    OrderCode,
     ScanPanel,
   ],
   templateUrl: './pickups.html',
@@ -67,6 +71,8 @@ export class BranchPickups {
 
   protected readonly columns = COLUMNS;
   protected readonly loadColumns = LOAD_COLUMNS;
+
+  protected readonly showing = signal<TruckLoad | null>(null);
 
   protected readonly branchId = computed(() => this.session.branchId() ?? '');
 
@@ -97,6 +103,14 @@ export class BranchPickups {
 
   protected branchName(id: string): string {
     return this.businesses.branchById(id)?.name ?? '';
+  }
+
+  protected showCode(load: TruckLoad): void {
+    this.showing.set(load);
+  }
+
+  protected hideCode(): void {
+    this.showing.set(null);
   }
 
   protected startScan(order: Order): void {

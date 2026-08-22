@@ -47,12 +47,17 @@
         </arena-table>
 
         <p class="cart-basket__delivery arena-num">
-          Envío desde esta sucursal {{ basket.deliveryBob }}
+          Envío desde esta sucursal, desde {{ basket.deliveryBob }}
         </p>
       </div>
     }
 
     <arena-key-value [rows]="summary()" [total]="total()" />
+
+    <arena-alert tone="info" title="El envío se termina de calcular en el siguiente paso">
+      Se mide entre la sucursal y la zona que elijas, así que aquí ves el mínimo. La comisión de
+      Touno es el 15 % de lo que cuestan los productos.
+    </arena-alert>
 
     <arena-button size="lg" icon="ph-bold ph-arrow-right" (click)="toDelivery()">
       Elegir cómo recibirlo

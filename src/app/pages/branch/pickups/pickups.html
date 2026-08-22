@@ -99,6 +99,11 @@
     rhythm="md"
   >
     @if (arriving().length > 0) {
+      <arena-alert tone="info" title="Al llegar, el rider escanea tu código de recepción">
+        Es un código por carga, no por pedido. Muéstraselo cuando descargue: con ese escaneo la
+        carga queda recibida, los compradores son avisados y su chat pasa a ti.
+      </arena-alert>
+
       <arena-table label="Cargas en ruta" [columns]="loadColumns">
         @for (load of arriving(); track load.id) {
           <tr arena-table-row>
@@ -111,9 +116,26 @@
             <td arena-table-cell>
               <span class="arena-num">{{ load.arrivesAt.slice(11, 16) }}</span>
             </td>
+            <td arena-table-cell>
+              <arena-button size="sm" variant="secondary" (click)="showCode(load)">
+                Mostrar el código
+              </arena-button>
+            </td>
           </tr>
         }
       </arena-table>
+
+      @if (showing(); as carga) {
+        <app-order-code
+          [code]="carga.receiptCode"
+          caption="Código de recepción de la carga"
+          hint="Muéstraselo al rider que descarga. Cierra la carga entera, no un pedido."
+        />
+
+        <div class="arena-row">
+          <arena-button variant="ghost" (click)="hideCode()">Ocultar el código</arena-button>
+        </div>
+      }
     } @else {
       <arena-empty-state
         headingLevel="h3"

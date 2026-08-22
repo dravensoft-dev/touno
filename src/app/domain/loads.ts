@@ -57,6 +57,20 @@ export class Loads {
     this.loadList.update((list) => list.map((one) => (one.id === id ? { ...one, state } : one)));
   }
 
+  byReceiptCode(code: string): TruckLoad | undefined {
+    return this.all().find((one) => one.receiptCode === code);
+  }
+
+  receive(id: string): void {
+    this.loadList.update((list) =>
+      list.map((one) =>
+        one.id === id && one.state === 'en-ruta'
+          ? { ...one, state: 'descargado', receivedAt: NOW }
+          : one,
+      ),
+    );
+  }
+
   depart(id: string): void {
     this.loadList.update((list) =>
       list.map((one) =>

@@ -16,16 +16,22 @@ sits between them, and `panelFor(router.url)` decides:
 `router-outlet { display: none }` in `src/styles.css` is the mirror rule: the outlet draws nothing
 but is still a flex item.
 
-## Four roles, seven profiles, two blind panels
+## Five roles, eight profiles, two blind panels
 
 The **role** is the access level and the **profile** adds the vertical. That split is the whole
 reason `/empresa` and `/sucursal` can be blind to whether the business is a restaurant or an import
 shop: the gate keys on `panel.role`, and the rail keys on the profile's `businessType`. Six roles
 would have meant four management panels instead of two.
 
-Seven profiles over four roles, and two of them are riders — one on a moto, one on a truck —
+Eight profiles over five roles, and two of them are riders — one on a moto, one on a truck —
 because the vehicle decides the work and not the account. They share one panel and see different
-things in it.
+things in it. The eighth is the **operador de Touno**, who holds no `companyId`, no `branchId` and
+no `riderId`: he answers for the platform, not for a record, and his rail carries no `type`, so
+`destinationsFor()` never filters him.
+
+**His prefix is `/plataforma` and not `/touno`.** The Pages artefact is built with
+`--base-href=/touno/` and every destination goes through `prepareExternalUrl()`, so `/touno` would
+write the segment twice into each `href`.
 
 `Destination.type` is the entire mechanism. Only two destinations carry one, `carta` and
 `catalogo`, and `destinationsFor()` drops the ones that do not match. **Signed out, `businessType()`
@@ -35,8 +41,11 @@ depends on the session and `panelFor()` is pure.
 
 The gate offers **only the profiles whose role opens that panel** — two on each management panel,
 one elsewhere — with the first `primary` and the rest `secondary`, plus a ghost link to
-`/ingresar`. Seven buttons with two primaries would have broken "one primary accent per view", and
-seven greyed-out ones make the reader hunt.
+`/ingresar`. Eight buttons with two primaries would have broken "one primary accent per view", and
+eight greyed-out ones make the reader hunt.
+
+**`GATE_NOUN` is a `Record<Role, string>` and that is deliberate**: adding a role does not compile
+until the gate has a noun for it.
 
 ## The gate is a render decision, not a redirect
 
@@ -132,10 +141,11 @@ never meets both.
 destination needs to appear in the bottom bar as well as the rail.
 
 - **`panelFor()` matches on a segment boundary.** `'/restaurantes'.startsWith('/restaurante')` is
-  true, and once put the public restaurant listing behind a panel's gate. The trap now exists three
-  times: that pair is gone, but `/rider` sits against the public `/riders`, and the public
-  `/restaurantes/:empresa/:sucursal` is three segments deep under a prefix a panel could plausibly
-  claim. `panel-nav.spec.ts` holds all of them.
+  true, and once put the public restaurant listing behind a panel's gate. The trap now exists four
+  times: that pair is gone, but `/rider` sits against the public `/riders`, `/plataforma` sits
+  against a plural nobody has written yet, and the public `/restaurantes/:empresa/:sucursal` is
+  three segments deep under a prefix a panel could plausibly claim. `panel-nav.spec.ts` holds all
+  of them.
 - **Never put `routerLink` on an `arena-side-nav-item` or an `arena-bottom-nav-item`.** They report
   `(nav)` with their own id; route from that handler with `router.navigateByUrl`.
 - **A destination's `href` is prepared, its path is not.** `app.ts` maps every destination through

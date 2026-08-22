@@ -84,8 +84,11 @@ export interface Order {
   readonly address?: string;
   readonly delivery: DeliveryChoice;
   readonly lines: readonly OrderLine[];
+  readonly zoneName?: string;
   readonly subtotalBob: number;
-  readonly deliveryBob: number;
+  readonly commissionBob: number;
+  readonly distanceBob: number;
+  readonly weatherBob: number;
   readonly totalBob: number;
   readonly state: OrderState;
   readonly placedAt: string;

@@ -11,6 +11,8 @@ import {
   ArenaKeyValue,
   ArenaKeyValueRow,
   ArenaPageHead,
+  ArenaRadio,
+  ArenaRadioGroup,
   ArenaSection,
   ArenaStatCard,
 } from '@dravensoft/arena-angular';
@@ -19,8 +21,10 @@ import { Businesses } from '../../../domain/businesses';
 import { Geography } from '../../../domain/geography';
 import { Orders } from '../../../domain/orders';
 import { Riders } from '../../../domain/riders';
+import { Platform } from '../../../domain/platform';
 import { Session } from '../../../domain/session';
 import { Branch } from '../../../domain/businesses.model';
+import { RecruitmentKind, kindLabel } from '../../../domain/agreements.model';
 import { rangeOf, vehicleLabel } from '../../../domain/riders.model';
 import { bs, porcentaje } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
@@ -38,6 +42,8 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
     ArenaStatCard,
     ArenaCheckbox,
     ArenaInput,
+    ArenaRadioGroup,
+    ArenaRadio,
     ArenaKeyValue,
     ArenaAlert,
     ArenaButton,
@@ -50,6 +56,7 @@ export class CompanyRiderDetail {
   private readonly router = inject(Router);
   private readonly geography = inject(Geography);
   private readonly orders = inject(Orders);
+  private readonly platform = inject(Platform);
   private readonly notices = inject(Notices);
   private readonly session = inject(Session);
 
@@ -103,7 +110,46 @@ export class CompanyRiderDetail {
     () => this.agreement() === undefined && this.reachable().length > 0,
   );
 
-  protected readonly ready = computed(() => this.chosen().length > 0 && Number(this.rate()) > 0);
+  protected readonly kind = signal<RecruitmentKind>('normal');
+
+  protected readonly points = signal('');
+
+  protected readonly minPoints = computed(() => this.platform.minCareerPoints());
+
+  protected readonly pointsBob = computed(() =>
+    this.points() === '' ? this.minPoints() : Number(this.points()),
+  );
+
+  protected readonly peak = computed(() => this.kind() === 'hora-pico');
+
+  protected readonly peakReason = computed(() => {
+    const rider = this.rider();
+
+    if (!rider) {
+      return undefined;
+    }
+
+    return this.agreements.reasonFor(rider.id, {
+      companyId: this.companyId(),
+      branchIds: this.chosen(),
+    });
+  });
+
+  protected readonly pointsPending = computed(() =>
+    this.agreements.pointsPendingOf(this.rider()?.id ?? ''),
+  );
+
+  protected readonly ready = computed(() => {
+    if (this.chosen().length === 0 || Number(this.rate()) <= 0) {
+      return false;
+    }
+
+    if (this.pointsBob() < this.minPoints()) {
+      return false;
+    }
+
+    return !this.peak() || this.peakReason() === undefined;
+  });
 
   protected readonly delivered = computed(() => {
     const rider = this.rider();
@@ -124,7 +170,9 @@ export class CompanyRiderDetail {
 
     const names = agreement.branchIds.map((id) => this.businesses.branchById(id)?.name ?? '');
 
-    return `Cubre ${names.join(', ')} a ${bs(agreement.perTripBob)} por viaje.`;
+    return `${kindLabel(agreement.kind)}. Cubre ${names.join(', ')} a ${bs(
+      agreement.perTripBob,
+    )} por viaje, y le quedan ${agreement.pointsLeft} de ${agreement.points} puntos de carrera.`;
   });
 
   protected vehicleLabelOf(): string {
@@ -162,6 +210,18 @@ export class CompanyRiderDetail {
     this.rate.set(value);
   }
 
+  protected onPoints(value: string): void {
+    this.points.set(value);
+  }
+
+  protected pickKind(value: string): void {
+    this.kind.set(value as RecruitmentKind);
+  }
+
+  protected kindOf(kind: RecruitmentKind): string {
+    return kindLabel(kind);
+  }
+
   protected cityOf(cityId: string): string {
     return this.geography.nameOf(cityId);
   }
@@ -178,11 +238,15 @@ export class CompanyRiderDetail {
       companyId: this.companyId(),
       branchIds: this.chosen(),
       initiatedBy: 'empresa',
+      kind: this.kind(),
       perTripBob: Number(this.rate()),
+      points: this.pointsBob(),
     });
 
     this.chosen.set([]);
     this.rate.set('');
+    this.points.set('');
+    this.kind.set('normal');
     this.notices.agreementSent();
   }
 

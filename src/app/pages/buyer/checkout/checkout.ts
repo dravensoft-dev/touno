@@ -14,13 +14,13 @@ import {
   ArenaSelectOption,
 } from '@dravensoft/arena-angular';
 import { Businesses } from '../../../domain/businesses';
+import { fareRows, fareTotalRow } from '../../../shared/fare-rows';
 import { Cart } from '../../../domain/cart';
 import { Checkout } from '../../../domain/draft';
 import { Geography } from '../../../domain/geography';
 import { Orders } from '../../../domain/orders';
 import { Session } from '../../../domain/session';
 import { DeliveryChoice } from '../../../domain/orders.model';
-import { bs } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 
 @Component({
@@ -52,6 +52,12 @@ export class CheckoutPage {
   protected readonly checkout = inject(Checkout);
 
   protected readonly homeCity = computed(() => {
+    const chosen = this.session.cityId();
+
+    if (chosen) {
+      return chosen;
+    }
+
     const phone = this.session.buyerPhone();
     const mine = phone ? this.orders.ofBuyer(phone) : [];
 
@@ -78,29 +84,30 @@ export class CheckoutPage {
     }),
   );
 
+  protected readonly zones = computed<readonly ArenaSelectOption[]>(() =>
+    this.geography.zonesOf(this.homeCity()).map((one) => ({ value: one.name, label: one.name })),
+  );
+
   protected readonly chosenBranchName = computed(() => {
     const id = this.checkout.current().destinationBranchId;
 
     return id ? (this.businesses.branchById(id)?.name ?? '') : '';
   });
 
-  protected readonly summary = computed<readonly ArenaKeyValueRow[]>(() => [
-    { term: 'Productos', value: bs(this.cart.subtotalBob()), numeric: true },
-    { term: 'Envíos', value: bs(this.cart.deliveryBob()), numeric: true },
-  ]);
+  protected readonly summary = computed<readonly ArenaKeyValueRow[]>(() =>
+    fareRows(this.cart.fare()),
+  );
 
-  protected readonly total = computed<ArenaKeyValueRow>(() => ({
-    term: 'Total',
-    value: bs(this.cart.totalBob()),
-    numeric: true,
-  }));
+  protected readonly total = computed<ArenaKeyValueRow>(() => fareTotalRow(this.cart.fare()));
 
   protected readonly ready = computed(() => {
-    if (!this.interurban()) {
-      return this.checkout.current().address.trim() !== '';
+    const draft = this.checkout.current();
+
+    if (this.interurban() && draft.delivery === 'sucursal') {
+      return draft.destinationBranchId !== '';
     }
 
-    return this.checkout.ready();
+    return draft.address.trim() !== '' && draft.zoneName !== '';
   });
 
   protected pickDelivery(choice: string): void {
@@ -109,6 +116,10 @@ export class CheckoutPage {
 
   protected setAddress(address: string): void {
     this.checkout.patch({ address });
+  }
+
+  protected setZone(zoneName: string): void {
+    this.checkout.patch({ zoneName });
   }
 
   protected setBranch(destinationBranchId: string): void {

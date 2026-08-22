@@ -1,9 +1,14 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Branch, BusinessType, Company } from './businesses.model';
+import { Card } from './payments.model';
+import { Platform } from './platform';
+import { atLeast } from './platform.model';
 import { BRANCHES, COMPANIES } from './businesses.data';
 
 @Injectable({ providedIn: 'root' })
 export class Businesses {
+  private readonly platform = inject(Platform);
+
   private readonly companyList = signal<readonly Company[]>(COMPANIES);
   private readonly branchList = signal<readonly Branch[]>(BRANCHES);
 
@@ -73,9 +78,53 @@ export class Businesses {
     return this.companyOfBranch(branchId)?.type;
   }
 
+  deliveryFeeOf(branchId: string): number {
+    return atLeast(this.branchById(branchId)?.deliveryBob ?? 0, this.platform.minDeliveryFeeBob());
+  }
+
+  weatherFeeOf(companyId: string): number {
+    return atLeast(this.companyById(companyId)?.weatherFeeBob ?? 0, this.platform.weatherFeeBob());
+  }
+
   setOpen(branchId: string, open: boolean): void {
     this.branchList.update((list) =>
       list.map((one) => (one.id === branchId ? { ...one, open } : one)),
+    );
+  }
+
+  setDeliveryFee(branchId: string, deliveryBob: number): void {
+    const floor = this.platform.minDeliveryFeeBob();
+
+    if (deliveryBob < floor) {
+      throw new Error(`La tarifa de ${branchId} no puede bajar de ${floor}`);
+    }
+
+    this.branchList.update((list) =>
+      list.map((one) => (one.id === branchId ? { ...one, deliveryBob } : one)),
+    );
+  }
+
+  setWeatherFee(companyId: string, weatherFeeBob: number): void {
+    const floor = this.platform.weatherFeeBob();
+
+    if (weatherFeeBob < floor) {
+      throw new Error(`La tarifa de clima de ${companyId} no puede bajar de ${floor}`);
+    }
+
+    this.companyList.update((list) =>
+      list.map((one) => (one.id === companyId ? { ...one, weatherFeeBob } : one)),
+    );
+  }
+
+  setCompanyCard(companyId: string, card: Card | undefined): void {
+    this.companyList.update((list) =>
+      list.map((one) => (one.id === companyId ? { ...one, card } : one)),
+    );
+  }
+
+  setBranchCard(branchId: string, card: Card | undefined): void {
+    this.branchList.update((list) =>
+      list.map((one) => (one.id === branchId ? { ...one, card } : one)),
     );
   }
 }

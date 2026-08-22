@@ -1,0 +1,33 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Clima por ciudad"
+    subtitle="Mientras una ciudad esté marcada, cada pedido a domicilio que llegue ahí paga el recargo."
+  />
+
+  <arena-alert tone="info" title="Qué cambia al marcar una ciudad">
+    El recargo de {{ fee() }} se suma sólo a los pedidos a domicilio, y va completo al rider. Un
+    pedido con recojo en mostrador no lo paga, porque nadie salió a la lluvia por él. Ahora mismo
+    hay {{ adverse().length }} ciudades marcadas.
+  </arena-alert>
+
+  <arena-table label="Ciudades de la red" [columns]="columns">
+    @for (city of geography.all(); track city.id) {
+      <tr arena-table-row>
+        <td arena-table-cell>{{ city.name }}</td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ city.zones.length }}</span>
+        </td>
+        <td arena-table-cell>{{ labelOf(city) }}</td>
+        <td arena-table-cell>
+          <arena-switch
+            [state]="isAdverse(city)"
+            [label]="'Clima desfavorable en ' + city.name"
+            [confirm]="true"
+            (requestChange)="toggle(city)"
+          />
+        </td>
+      </tr>
+    }
+  </arena-table>
+</div>

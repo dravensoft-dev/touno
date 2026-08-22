@@ -1,0 +1,36 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Tarifas universales"
+    subtitle="Lo que rige para todas las empresas de Touno. Una empresa puede subir su piso, nunca bajarlo."
+  />
+
+  <arena-alert tone="warning" title="Esto lo pagan compradores reales">
+    La comisión es de Touno. El envío por distancia y el recargo por clima son del rider. Subir un
+    piso aquí sube el precio final de todos los pedidos a domicilio de la red.
+  </arena-alert>
+
+  <arena-key-value [rows]="facts()" />
+
+  <arena-section
+    eyebrow="Uno por uno"
+    title="Cambiar un valor"
+    description="Las tarifas por unidad se miden sobre el plano esquemático del mapa, que no son kilómetros."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      @for (knob of knobs; track knob.key) {
+        <arena-input
+          [label]="knob.label"
+          type="number"
+          [hint]="knob.hint"
+          [value]="valueOf(knob)"
+          (change)="onValue(knob, $event)"
+        />
+        <arena-button variant="secondary" [disabled]="!ready(knob)" (click)="save(knob)">
+          Guardar {{ knob.label }}
+        </arena-button>
+      }
+    </div>
+  </arena-section>
+</div>

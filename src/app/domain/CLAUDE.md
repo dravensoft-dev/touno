@@ -5,8 +5,10 @@ typed module constant, and `<area>.ts` for the `providedIn: 'root'` service that
 signal and exposes computed slices.
 
 `clock.ts`, `format.ts`, `session.ts`, `cart.ts`, `draft.ts`, `clipboard.ts` and `latency.ts` are
-the cross-cutting ones, plus `timeline.ts`, which is pure functions rather than a service because a
-timeline is derived from an order and never stored. `clipboard.ts` is the one that touches a
+the cross-cutting ones, plus `timeline.ts` and `pricing.ts`, which are pure functions rather than
+services because a timeline and a fare are both derived from an order and never stored.
+`payments.model.ts` is a model with no data and no service of its own: a card belongs to a rider or
+to a business, so it lives beside neither. `clipboard.ts` is the one that touches a
 browser API, and it answers a boolean rather than throwing, so the page that called it decides what
 the reader is told.
 
@@ -28,6 +30,16 @@ the reader is told.
 - **A `GeoPoint` is not a coordinate.** It is a position in the map component's `0 0 100 100`
   viewBox. Naming it after geography was a convenience; filling it with real latitudes would imply
   a map we cannot draw and a `geo` node in JSON-LD we cannot honour.
+- **There are two schematic planes and they do not share a scale.** A `Zone.point` and a
+  `Branch.point` sit in their city's plane; a `City.point` sits in a national one. `pricing.ts`
+  therefore charges them at two separate rates, and the copy says "unidades del plano" and never a
+  kilometre.
+- **A service that reads a floor reads it with `Math.max`, and a service that writes one throws.**
+  `Businesses.setDeliveryFee` and `setWeatherFee` refuse a value under `Platform`'s, and
+  `deliveryFeeOf`/`weatherFeeOf` clamp on the way out, so raising the universal floor lifts every
+  empresa that had raised less without invalidating a stored row.
+- **`Platform` injects nothing and must stay that way.** `Businesses -> Platform`,
+  `Agreements -> Platform` and `Orders -> Agreements` are all safe only while it is a leaf.
 
 ## Facts the fixtures carry, and the tests that hold them
 
@@ -41,6 +53,17 @@ the reader is told.
 - **A rider is bound to a sucursal only by an agreement both sides accepted.** `agreements.ts`
   throws three times and the three throws are the rule: you cannot answer your own proposal, one
   addressed to someone else, or one already answered.
+- **A reclutamiento carries points, and the hora pico rules are throws too.** `propose()` refuses
+  under Touno's minimum, a sucursal scoping outside itself, a second hora pico, one from an empresa
+  that already recruited this rider that way, and one to a rider who still owes points. `settle()`
+  re-checks the last three on accept, because the rider could have taken a normal recruitment in
+  between. `spend()` charges the hora pico first, then the one with fewest points left, then by id
+  — never `Math.random()`.
+- **`cumplido` is a real state and it stops binding.** `covers()` filters on `activo`, so the scan
+  that spends the last point drops the rider out of `ridersOf()` in the same update. `ag-516` is
+  left at one point on purpose, so that transition is walkable and not only asserted.
+- **A `TruckLoad` has a `receiptCode` and it is not an order code.** `RC-####` against `TO-####`,
+  one per load, and `loads.spec.ts` holds both the uniqueness and the prefix.
 - **An expiring agreement does not rewrite history.** A load still filling or still moving, and an
   assignment on the leg being moved _now_, need an agreement active now. A finished leg does not.
   `movingLeg()` in `orders.model.ts` states which leg that is, and `loads.spec.ts` and
@@ -63,6 +86,12 @@ the reader is told.
   `catalog.spec.ts` holds it.
 - **`BranchStock` is an override list.** A product is on sale unless a sucursal took it off, so
   turning it back on removes the row. Ninety rows of "yes" would be a table that says nothing.
+- **`BranchPrice` is the same shape for the same reason.** A product charges its brand price unless
+  its `priceScope` is `sucursal` and that sucursal has a row, and setting the scope back to `marca`
+  drops every row. `al-campera` is the one article priced per sucursal.
+- **An order stores its fare and `orders.spec.ts` recomputes it.** The four amounts are
+  denormalised, so the spec rebuilds each one from the order's own branch, zone, city and weather
+  and compares. Editing an amount by hand without its inputs fails loudly.
 
 ## Fixtures are for walking, not only for consistency
 

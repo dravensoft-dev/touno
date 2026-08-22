@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ArenaToastQueue } from '@dravensoft/arena-angular';
+import { PayoutMethod, methodLabel } from '../domain/payments.model';
 
 @Injectable({ providedIn: 'root' })
 export class Notices {
@@ -35,6 +36,30 @@ export class Notices {
 
   orderScanned(code: string): void {
     this.toasts.raise({ title: 'Entrega confirmada', message: code, tone: 'success' });
+  }
+
+  pointSpent(left: number): void {
+    this.toasts.raise({
+      title: 'Un punto de carrera menos',
+      message: `Te quedan ${left} en ese reclutamiento.`,
+      tone: 'success',
+    });
+  }
+
+  recruitmentFulfilled(): void {
+    this.toasts.raise({
+      title: 'Reclutamiento cumplido',
+      message: 'Gastaste el último punto. Quedas libre para un reclutamiento de hora pico.',
+      tone: 'success',
+    });
+  }
+
+  loadReceived(): void {
+    this.toasts.raise({
+      title: 'Carga recibida',
+      message: 'La sucursal de destino ya tiene los pedidos, y sus compradores fueron avisados.',
+      tone: 'success',
+    });
   }
 
   codeMismatch(): void {
@@ -81,6 +106,72 @@ export class Notices {
     this.toasts.raise({
       title: 'La carga salió',
       message: 'Los compradores ya ven el camión en su mapa.',
+      tone: 'success',
+    });
+  }
+
+  priceSaved(name: string): void {
+    this.toasts.raise({
+      title: 'Precio guardado',
+      message: `${name} · tus sucursales ya lo cobran así`,
+      tone: 'success',
+    });
+  }
+
+  universalChanged(label: string): void {
+    this.toasts.raise({
+      title: 'Valor universal actualizado',
+      message: `${label} rige desde ahora para toda la red.`,
+      tone: 'success',
+    });
+  }
+
+  weatherChanged(city: string, adverse: boolean): void {
+    if (adverse) {
+      this.toasts.raise({
+        title: 'Clima desfavorable',
+        message: `${city} paga el recargo en cada entrega a domicilio.`,
+        tone: 'gold',
+      });
+
+      return;
+    }
+
+    this.toasts.raise({
+      title: 'Clima normal',
+      message: `${city} deja de pagar el recargo.`,
+      tone: 'success',
+    });
+  }
+
+  feeRaised(): void {
+    this.toasts.raise({
+      title: 'Tarifa actualizada',
+      message: 'Rige desde el próximo pedido de tus sucursales.',
+      tone: 'success',
+    });
+  }
+
+  cardSaved(): void {
+    this.toasts.raise({
+      title: 'Tarjeta registrada',
+      message: 'Guardamos la marca y los últimos cuatro dígitos, nada más.',
+      tone: 'success',
+    });
+  }
+
+  cardRemoved(): void {
+    this.toasts.raise({
+      title: 'Tarjeta quitada',
+      message: 'Vuelves a cobrar por depósito automático.',
+      tone: 'neutral',
+    });
+  }
+
+  payoutMethodChanged(method: PayoutMethod): void {
+    this.toasts.raise({
+      title: 'Forma de cobro actualizada',
+      message: methodLabel(method),
       tone: 'success',
     });
   }

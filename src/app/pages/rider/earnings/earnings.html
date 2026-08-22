@@ -63,4 +63,84 @@
       message="Sin un acuerdo aceptado por las dos partes no hay tarifa que cobrar."
     />
   }
+
+  <arena-section
+    eyebrow="Cómo cobras"
+    title="Tu forma de cobro"
+    description="Es opcional. Si no haces nada, cobras como siempre."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      <arena-radio-group
+        label="Adónde te llega lo que ganas"
+        ariaLabel="Adónde te llega lo que ganas"
+        name="cobro"
+        [value]="method()"
+        (change)="pickMethod($event)"
+      >
+        <arena-radio
+          value="automatico"
+          label="Depósito automático"
+          [hint]="'A tu cuenta ' + account() + ', como hasta ahora.'"
+        />
+        <arena-radio
+          value="tarjeta"
+          label="A mi tarjeta"
+          hint="Sólo se aplica con las empresas que registraron la suya. Con el resto sigue el depósito."
+        />
+      </arena-radio-group>
+
+      <arena-alert tone="info" title="Tu tarjeta hoy">
+        {{ cardName() }}. Esta maqueta no pide el número completo: guarda la marca, los últimos
+        cuatro dígitos, el titular y el vencimiento, y nada más.
+      </arena-alert>
+
+      <arena-input
+        label="Marca"
+        placeholder="Visa"
+        [value]="draft().brand"
+        (change)="onBrand($event)"
+      />
+      <arena-input
+        label="Últimos cuatro dígitos"
+        placeholder="4471"
+        hint="Cuatro dígitos. No pedimos el número completo."
+        [value]="draft().last4"
+        (change)="onLast4($event)"
+      />
+      <arena-input
+        label="Titular"
+        placeholder="Marco Quispe"
+        [value]="draft().holder"
+        (change)="onHolder($event)"
+      />
+      <arena-input
+        label="Vencimiento"
+        placeholder="09/29"
+        hint="Mes y año, así: 09/29."
+        [value]="draft().expires"
+        (change)="onExpires($event)"
+      />
+
+      <div class="arena-row">
+        <arena-button icon="ph-bold ph-credit-card" [disabled]="!readyCard()" (click)="saveCard()">
+          Guardar la tarjeta
+        </arena-button>
+        @if (card()) {
+          <arena-button variant="danger" (click)="removeCard()">Quitar la tarjeta</arena-button>
+        }
+      </div>
+    </div>
+  </arena-section>
+
+  @if (payers().length > 0) {
+    <arena-section
+      eyebrow="Empresa por empresa"
+      title="Quién te puede pagar a la tarjeta"
+      description="Hace falta que las dos partes tengan una. Si a la empresa le falta, cobras por depósito y te lo decimos."
+      rhythm="md"
+    >
+      <arena-key-value [rows]="payers()" />
+    </arena-section>
+  }
 </div>

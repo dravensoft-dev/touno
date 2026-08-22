@@ -513,4 +513,36 @@ export const THREADS: readonly ChatThread[] = [
       },
     ],
   },
+  {
+    id: 'th-2215',
+    orderCode: 'TO-2215',
+    counterpart: { kind: 'rider', riderId: 'r-hugo', since: '2026-08-15T06:50:00' },
+    counterpartName: 'Hugo Barrientos',
+    messages: [
+      {
+        id: 'm-2215-1',
+        threadId: 'th-2215',
+        author: 'sistema',
+        authorName: 'Touno',
+        body: 'La carga salió de Santa Cruz. Ahora hablas con Hugo Barrientos, que la trae en camión.',
+        at: '2026-08-15T06:50:00',
+      },
+    ],
+  },
+  {
+    id: 'th-2216',
+    orderCode: 'TO-2216',
+    counterpart: { kind: 'rider', riderId: 'r-hugo', since: '2026-08-15T06:50:00' },
+    counterpartName: 'Hugo Barrientos',
+    messages: [
+      {
+        id: 'm-2216-1',
+        threadId: 'th-2216',
+        author: 'sistema',
+        authorName: 'Touno',
+        body: 'La carga salió de Santa Cruz. Ahora hablas con Hugo Barrientos, que la trae en camión.',
+        at: '2026-08-15T06:50:00',
+      },
+    ],
+  },
 ];

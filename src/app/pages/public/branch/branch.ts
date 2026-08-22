@@ -144,7 +144,7 @@ export class BranchDetail {
         value: minutos(branch.prepMinutes),
         numeric: true,
       },
-      { term: 'Envío', value: bs(branch.deliveryBob), numeric: true },
+      { term: 'Envío desde', value: bs(branch.deliveryBob), numeric: true },
       ...branch.hours.map((one) => ({
         term: one.days,
         value: `${one.opens} a ${one.closes}`,
@@ -186,7 +186,7 @@ export class BranchDetail {
       makesOffer: this.products().map((product) => ({
         '@type': 'Offer',
         name: product.name,
-        price: product.priceBob,
+        price: this.catalog.priceOf(product.id, this.branch().id),
         priceCurrency: PRICE_CURRENCY,
         availability: 'https://schema.org/InStock',
       })),
@@ -205,6 +205,10 @@ export class BranchDetail {
         type: 'website',
       });
     });
+  }
+
+  protected priceOf(product: Product): number {
+    return this.catalog.priceOf(product.id, this.branch().id);
   }
 
   protected inCategory(category: string): readonly Product[] {

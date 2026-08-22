@@ -114,6 +114,7 @@ describe('BranchPickups', () => {
   it('shows the loads coming to this sucursal, and only those', () => {
     const host: HTMLElement = render().nativeElement;
 
-    expect(host.textContent).toContain('Ningún camión en ruta hacia aquí');
+    expect(host.textContent).toContain('cg-3306');
+    expect(host.textContent).not.toContain('cg-3302');
   });
 });

@@ -69,7 +69,9 @@
           >
             <div class="arena-stack arena-stack--group">
               <app-state-tag [agreement]="agreement.state" />
+              <p>{{ kindOf(agreement) }}</p>
               <p class="arena-num">{{ rate(agreement) }}</p>
+              <p class="arena-num">{{ pointsOf(agreement) }}</p>
               <arena-button variant="secondary" (click)="open(agreement)">Ver</arena-button>
             </div>
           </arena-card>
@@ -101,7 +103,9 @@
           >
             <div class="arena-stack arena-stack--group">
               <app-state-tag [agreement]="agreement.state" />
+              <p>{{ kindOf(agreement) }}</p>
               <p class="arena-num">{{ rate(agreement) }}</p>
+              <p class="arena-num">{{ pointsOf(agreement) }}</p>
               <arena-button variant="secondary" (click)="open(agreement)">Ver</arena-button>
             </div>
           </arena-card>
@@ -116,6 +120,43 @@
       />
     }
   </arena-section>
+
+  <arena-alert
+    [tone]="pointsPending() > 0 ? 'info' : 'success'"
+    [title]="
+      pointsPending() > 0
+        ? 'Te quedan ' + pointsPending() + ' puntos de carrera por cumplir'
+        : 'No te queda ningún punto pendiente'
+    "
+  >
+    @if (peakHeld()) {
+      Estás en un reclutamiento de hora pico, y sólo puedes tener uno.
+    } @else if (pointsPending() > 0) {
+      Mientras te quede uno no puedes aceptar un reclutamiento de hora pico. Cada escaneo que cierra
+      una entrega te descuenta uno.
+    } @else {
+      Puedes aceptar un reclutamiento de hora pico, siempre que no sea de una empresa que ya te
+      reclutó así antes.
+    }
+  </arena-alert>
+
+  @if (fulfilled().length > 0) {
+    <arena-section
+      eyebrow="Cumplidos"
+      [title]="fulfilled().length + ' reclutamientos que llevaste hasta el final'"
+      description="Gastaste todos sus puntos de carrera. Quedan como constancia de tu trabajo."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        @for (agreement of fulfilled(); track agreement.id) {
+          <p class="arena-row arena-row--between">
+            <span>{{ companyName(agreement) }} · {{ scope(agreement) }}</span>
+            <span class="arena-num">{{ agreement.points }} puntos</span>
+          </p>
+        }
+      </div>
+    </arena-section>
+  }
 
   @if (closed().length > 0) {
     <arena-section

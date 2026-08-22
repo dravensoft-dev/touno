@@ -3,6 +3,7 @@ import { TruckLoad } from './loads.model';
 export const TRUCK_LOADS: readonly TruckLoad[] = [
   {
     id: 'cg-3301',
+    receiptCode: 'RC-3301',
     riderId: 'r-hugo',
     fromBranchId: 'b-ale-la-paz',
     toBranchId: 'b-ale-santa-cruz',
@@ -15,6 +16,7 @@ export const TRUCK_LOADS: readonly TruckLoad[] = [
   },
   {
     id: 'cg-3302',
+    receiptCode: 'RC-3302',
     riderId: 'r-elias',
     fromBranchId: 'b-tecno-cochabamba',
     toBranchId: 'b-tecno-la-paz',
@@ -27,6 +29,7 @@ export const TRUCK_LOADS: readonly TruckLoad[] = [
   },
   {
     id: 'cg-3303',
+    receiptCode: 'RC-3303',
     riderId: 'r-hugo',
     fromBranchId: 'b-ale-santa-cruz',
     toBranchId: 'b-ale-la-paz',
@@ -39,6 +42,7 @@ export const TRUCK_LOADS: readonly TruckLoad[] = [
   },
   {
     id: 'cg-3304',
+    receiptCode: 'RC-3304',
     riderId: 'r-hugo',
     fromBranchId: 'b-ale-la-paz',
     toBranchId: 'b-ale-cochabamba',
@@ -51,6 +55,7 @@ export const TRUCK_LOADS: readonly TruckLoad[] = [
   },
   {
     id: 'cg-3305',
+    receiptCode: 'RC-3305',
     riderId: 'r-elias',
     fromBranchId: 'b-andes-santa-cruz',
     toBranchId: 'b-andes-la-paz',
@@ -60,5 +65,18 @@ export const TRUCK_LOADS: readonly TruckLoad[] = [
     openedAt: '2026-08-13T09:00:00',
     departsAt: '2026-08-14T07:10:00',
     arrivesAt: '2026-08-15T09:15:00',
+  },
+  {
+    id: 'cg-3306',
+    receiptCode: 'RC-3306',
+    riderId: 'r-hugo',
+    fromBranchId: 'b-ale-santa-cruz',
+    toBranchId: 'b-ale-la-paz',
+    orderCodes: ['TO-2215', 'TO-2216'],
+    capacity: 2,
+    state: 'en-ruta',
+    openedAt: '2026-08-14T09:00:00',
+    departsAt: '2026-08-15T06:50:00',
+    arrivesAt: '2026-08-15T18:10:00',
   },
 ];

@@ -1,0 +1,75 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="La red"
+    subtitle="Qué empresa subió qué tarifa por encima del piso, y quién puede cobrar a tarjeta."
+  />
+
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-lightning"
+      label="Hora pico en curso"
+      [value]="livePeaks().length.toString()"
+      sub="Cada rider sólo puede tener uno"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-handshake"
+      label="Reclutamientos de hora pico"
+      [value]="peaks().length.toString()"
+      sub="Contando los cumplidos y los pendientes"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-credit-card"
+      label="Riders con tarjeta"
+      [value]="withCard().toString()"
+      sub="De ellos depende que se pueda pagar así"
+    />
+  </arena-grid>
+
+  <arena-alert tone="info" title="Por qué una tarjeta a veces no se usa">
+    Para pagar a la tarjeta de un rider hacen falta las dos: la suya y la de quien lo reclutó. Si a
+    la empresa le falta, el rider cobra por depósito y en su pantalla se le explica por qué.
+  </arena-alert>
+
+  <arena-section
+    eyebrow="Empresas"
+    title="Lo que cada una cobra por encima del piso"
+    description="El piso lo fijas tú desde Tarifas. Ninguna empresa puede quedar por debajo."
+    rhythm="md"
+  >
+    <arena-table label="Empresas de la red" [columns]="companyColumns">
+      @for (company of businesses.companies(); track company.id) {
+        <tr arena-table-row>
+          <td arena-table-cell>{{ company.name }}</td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ weatherOf(company) }}</span>
+            @if (raisedWeather(company)) {
+              · lo subió
+            }
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ lowestFee(company) }}</span>
+          </td>
+          <td arena-table-cell>{{ cardOf(company) }}</td>
+        </tr>
+      }
+    </arena-table>
+  </arena-section>
+
+  <arena-section
+    eyebrow="Riders"
+    title="Cómo quieren cobrar y cómo cobran"
+    description="La diferencia entre las dos columnas es siempre una empresa sin tarjeta."
+    rhythm="md"
+  >
+    <arena-table label="Riders de la red" [columns]="riderColumns">
+      @for (rider of riders.all(); track rider.id) {
+        <tr arena-table-row>
+          <td arena-table-cell>{{ rider.name }}</td>
+          <td arena-table-cell>{{ wants(rider) }}</td>
+          <td arena-table-cell>{{ getsPaid(rider) }}</td>
+        </tr>
+      }
+    </arena-table>
+  </arena-section>
+</div>

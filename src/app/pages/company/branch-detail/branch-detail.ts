@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ArenaAlert,
   ArenaButton,
   ArenaEmptyState,
   ArenaGrid,
+  ArenaInput,
   ArenaKeyValue,
   ArenaKeyValueRow,
   ArenaPageHead,
@@ -17,8 +18,10 @@ import { Businesses } from '../../../domain/businesses';
 import { Geography } from '../../../domain/geography';
 import { Loads } from '../../../domain/loads';
 import { Orders } from '../../../domain/orders';
+import { Platform } from '../../../domain/platform';
 import { Session } from '../../../domain/session';
 import { bs, minutos } from '../../../domain/format';
+import { Notices } from '../../../layout/notices';
 import { RiderPicker } from '../../../shared/rider-picker/rider-picker';
 
 @Component({
@@ -33,6 +36,7 @@ import { RiderPicker } from '../../../shared/rider-picker/rider-picker';
     ArenaSwitch,
     ArenaKeyValue,
     ArenaAlert,
+    ArenaInput,
     ArenaButton,
     ArenaEmptyState,
     RiderPicker,
@@ -44,7 +48,9 @@ export class CompanyBranchDetail {
   private readonly agreements = inject(Agreements);
   private readonly geography = inject(Geography);
   private readonly loads = inject(Loads);
+  private readonly notices = inject(Notices);
   private readonly orders = inject(Orders);
+  private readonly platform = inject(Platform);
   private readonly session = inject(Session);
 
   protected readonly businesses = inject(Businesses);
@@ -71,6 +77,36 @@ export class CompanyBranchDetail {
 
   protected readonly takings = computed(() => bs(this.orders.salesOf(this.id())));
 
+  protected readonly feeFloor = computed(() => this.platform.minDeliveryFeeBob());
+
+  protected readonly feeFloorName = computed(() => bs(this.feeFloor()));
+
+  protected readonly typedFee = signal<string | null>(null);
+
+  protected readonly feeValue = computed(
+    () => this.typedFee() ?? String(this.businesses.deliveryFeeOf(this.branch()?.id ?? '')),
+  );
+
+  protected readonly feeBob = computed(() => Number(this.feeValue()));
+
+  protected readonly feeReady = computed(() => this.feeBob() >= this.feeFloor());
+
+  protected onFee(value: string): void {
+    this.typedFee.set(value);
+  }
+
+  protected saveFee(): void {
+    const branch = this.branch();
+
+    if (!branch || !this.feeReady()) {
+      return;
+    }
+
+    this.businesses.setDeliveryFee(branch.id, this.feeBob());
+    this.typedFee.set(null);
+    this.notices.feeRaised();
+  }
+
   protected readonly facts = computed<readonly ArenaKeyValueRow[]>(() => {
     const branch = this.branch();
 
@@ -85,7 +121,7 @@ export class CompanyBranchDetail {
       { term: 'Teléfono', value: branch.phone, numeric: true },
       { term: 'Encargado', value: branch.managerName },
       { term: 'Preparación', value: minutos(branch.prepMinutes), numeric: true },
-      { term: 'Envío', value: bs(branch.deliveryBob), numeric: true },
+      { term: 'Envío base', value: bs(this.businesses.deliveryFeeOf(branch.id)), numeric: true },
       ...branch.hours.map((one) => ({
         term: one.days,
         value: `${one.opens} a ${one.closes}`,

@@ -279,6 +279,25 @@ export const routes: Routes = [
   },
 
   {
+    path: 'plataforma/tarifas',
+    title: 'Tarifas universales',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/platform/fees/fees').then((m) => m.PlatformFees),
+  },
+  {
+    path: 'plataforma/clima',
+    title: 'Clima por ciudad',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/platform/weather/weather').then((m) => m.PlatformWeather),
+  },
+  {
+    path: 'plataforma/red',
+    title: 'La red',
+    data: PRIVATE,
+    loadComponent: () => import('./pages/platform/network/network').then((m) => m.PlatformNetwork),
+  },
+
+  {
     path: '404',
     title: 'Página no encontrada',
     data: PRIVATE,

@@ -100,6 +100,50 @@
           (change)="onRate($event)"
         />
 
+        <arena-radio-group
+          label="Clase de reclutamiento"
+          ariaLabel="Clase de reclutamiento"
+          name="reclutamiento"
+          [value]="kind()"
+          (change)="pickKind($event)"
+        >
+          <arena-radio
+            value="normal"
+            label="Normal"
+            hint="Puede tenerlo junto con otros reclutamientos normales, de otras empresas también."
+          />
+          <arena-radio
+            value="hora-pico"
+            label="Hora pico"
+            hint="Sólo lo puede aceptar si no le quedan puntos pendientes, y sólo puede tener uno en total."
+          />
+        </arena-radio-group>
+
+        <arena-input
+          label="Puntos de carrera que le das"
+          type="number"
+          [hint]="
+            'Se le descuenta uno por cada entrega que cierra con un escaneo. Touno no permite menos de ' +
+            minPoints() +
+            '.'
+          "
+          [value]="points()"
+          (change)="onPoints($event)"
+        />
+
+        @if (peak() && peakReason(); as reason) {
+          <arena-alert tone="warning" title="Ahora no puede tomar un reclutamiento de hora pico">
+            {{ reason }}
+          </arena-alert>
+        }
+
+        @if (peak() && !peakReason()) {
+          <arena-alert tone="info" title="Mientras dure, trabaja sólo estos puntos">
+            Le quedan {{ pointsPending() }} puntos pendientes en total, así que puede tomarlo. Un
+            rider sólo tiene un reclutamiento de hora pico, y ninguna empresa puede darle dos.
+          </arena-alert>
+        }
+
         <arena-button
           size="lg"
           icon="ph-bold ph-handshake"

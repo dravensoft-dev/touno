@@ -25,6 +25,27 @@
       </arena-alert>
     }
 
+    @if (blocked(); as porque) {
+      <arena-alert tone="warning" title="No puedes aceptar este reclutamiento de hora pico">
+        {{ porque }} Te quedan {{ pointsPending() }} puntos por cumplir en total. Cuando llegues a
+        cero, este mismo reclutamiento se podrá aceptar.
+      </arena-alert>
+    }
+
+    @if (peak() && acuerdo.state === 'activo') {
+      <arena-alert tone="warning" title="Estás en hora pico">
+        Mientras te queden puntos de este reclutamiento no puedes aceptar otro de hora pico, de
+        ninguna empresa. Sólo tienes uno a la vez.
+      </arena-alert>
+    }
+
+    @if (acuerdo.state === 'cumplido') {
+      <arena-alert tone="success" title="Reclutamiento cumplido">
+        Gastaste los {{ acuerdo.points }} puntos. Estas sucursales ya no te mandan encargos por este
+        reclutamiento, y quedas libre para uno de hora pico.
+      </arena-alert>
+    }
+
     @if (waitingOnThem()) {
       <arena-alert tone="info" title="Esperas la respuesta de la empresa">
         Tú ya dijiste que sí. Hasta que ellos contesten no puedes recibir encargos de estas

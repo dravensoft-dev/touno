@@ -2,12 +2,59 @@
   <div class="arena-stack arena-stack--section">
     <arena-page-head headingLevel="h1" [title]="articulo.name" [subtitle]="articulo.description" />
 
-    <arena-alert tone="info" title="El precio rige en toda la marca">
-      Lo que escribas aquí vale para todas tus sucursales. Lo único que decide cada local es si hoy
-      tiene o se le acabó.
-    </arena-alert>
-
     <arena-key-value [rows]="facts()" />
+
+    <arena-section
+      eyebrow="Lo fijas tú"
+      title="El precio"
+      description="La sucursal nunca cambia un precio. Lo único que decide cada local es si hoy tiene o se le acabó."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        <arena-input
+          label="Precio para toda la marca"
+          type="number"
+          hint="Es lo que tú cobras, íntegro."
+          [value]="price()"
+          (change)="onPrice($event)"
+        />
+
+        <arena-switch
+          [state]="perBranch()"
+          label="Precio distinto en cada sucursal"
+          [confirm]="true"
+          (requestChange)="toggleScope()"
+        />
+
+        @if (perBranch()) {
+          @for (branch of branches(); track branch.id) {
+            <arena-input
+              [label]="branch.name + ' · ' + cityOf(branch.cityId)"
+              type="number"
+              [value]="branchPrice(branch.id)"
+              (change)="onBranchPrice(branch.id, $event)"
+            />
+          }
+        }
+
+        <arena-alert tone="warning" title="Sobre este precio, el comprador paga más">
+          Comisión de Touno {{ commission() }}, que es el {{ commissionPct() }} % de lo que cuesta
+          el artículo. Si lo pide a domicilio, envío por distancia desde {{ distanceFrom() }},
+          medido entre la sucursal y la zona del comprador. Y si además el clima está desfavorable,
+          {{ weatherFee() }} más. La comisión es de Touno; la distancia y el clima son del rider. Tú
+          cobras el precio que escribiste, completo.
+        </arena-alert>
+
+        <arena-button
+          size="lg"
+          icon="ph-bold ph-floppy-disk"
+          [disabled]="!ready()"
+          (click)="save()"
+        >
+          Guardar el precio
+        </arena-button>
+      </div>
+    </arena-section>
 
     <arena-section
       eyebrow="Dónde se vende"

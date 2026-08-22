@@ -15,12 +15,22 @@ working contract: the rules that hold across the tree, and the traps that alread
   prices and the agreements; the sucursal owns the address, the hours, whether it is open and what
   it has today. That split is the whole reason there are two management panels.
 - A **rider** is a free agent. He joins a sucursal only through a **`RiderAgreement` both sides
-  accepted**, scoped to named `branchIds`. His **vehicle decides the work**: `camion` carries
-  interurban loads, everything else delivers in a city.
+  accepted** — a **reclutamiento** — scoped to named `branchIds`. His **vehicle decides the work**:
+  `camion` carries interurban loads, everything else delivers in a city.
+- A recruitment carries **career points**, set by the recruiter over Touno's floor, and **one is
+  spent per scan that closes a delivery**. At zero it becomes `cumplido` and stops binding. A
+  `hora-pico` recruitment is exclusive: only with no points pending anywhere, only one ever, and
+  never twice from the same empresa. A sucursal may propose one **only for itself**; two or more
+  sucursales is the gerente de empresa's alone.
 - An **order** is one entity for both verticals. Its `scenario` picks which milestones it has, so a
   plate of food and a parcel crossing three cities are the same record read two ways.
 - The **order code is the buyer's** from the moment of purchase, and it is the only thing that
-  closes a delivery. A rider scans it at a door; a gerente de sucursal scans it at a counter.
+  closes a delivery. A rider scans it at a door; a gerente de sucursal scans it at a counter. A
+  **`TruckLoad` carries a second code**, `RC-####`, which the destination sucursal shows and the
+  truck rider scans: it closes a load, never a pedido, which is how "one order, one code" survives.
+- **The buyer pays four things**: the products, Touno's 15 %, a distance fee and a weather fee. The
+  business keeps its price whole; the last two are the rider's. Distance and weather are charged
+  only on a `domicilio`.
 - The buyer has **one chat thread per order**, and its counterpart **follows physical custody**.
   Every hand-over writes a system line saying why the counterpart changed.
 
@@ -95,6 +105,12 @@ carry the skin. Hold these:
 - **`mono: true` on an `ArenaTableColumn` is for identifiers only.** It carries the mono face _and_
   the identifier ink, so a money column set that way reads as a code. Money and time columns take
   `align: 'right'` and a `<span class="arena-num">` in the cell.
+- **A fare is derived, never invented twice.** `src/app/domain/pricing.ts` is pure functions, like
+  `timeline.ts`, and `orders.spec.ts` recomputes every fixture's four amounts from that order's own
+  inputs. Hand-editing an amount without its inputs fails loudly, which is the point.
+- **A distance is in plane units, never kilometres.** A `GeoPoint` is a viewBox position, so
+  `pricing.ts` measures over two separate schematic planes — one per city, one national — at two
+  declared rates, and no copy anywhere may write "km".
 - `bs()` in `src/app/domain/format.ts` is the only place a boliviano is formatted. Bolivian
   convention is dotted thousands and a comma decimal: `Bs 2.730,50`.
 - **Nothing reads the wall clock.** `src/app/domain/clock.ts` exports a literal `NOW`, and every
@@ -267,6 +283,16 @@ Each of these was paid for once. Do not rediscover them.
   `id`. `arena-breadcrumbs` takes `items` and reports `navigate`. `danger` is a button _variant_,
   which is how Arena enforces that danger is never filled.
 - **An `output` may not be named after a DOM event.** `copy` is one; `angular-eslint` refuses it.
+- **The operator panel is `/plataforma`, not `/touno`.** GitHub Pages builds with
+  `--base-href=/touno/` and `app.ts` runs every rail destination through
+  `Location.prepareExternalUrl()`, so a `/touno` prefix writes `/touno/touno/tarifas` into each
+  `href`. It works and it reads like a bug.
+- **Two `Record<…>` types do the grep for you.** `GATE_NOUN` in `app.ts` is `Record<Role, string>`
+  and `AGREEMENT` in `state-tag.ts` is `Record<AgreementState, Look>`; neither compiles until a new
+  member is answered. Add a role or a state and let the compiler find the sites.
+- **`scripts/overflow-sweep/plan.ts` used to fall through to `branchRoutes()`** for any role it did
+  not name, so the eighth profile would have been planned a sucursal's routes and measured the gate
+  eight times. `detailsOf()` now names `gerente-sucursal` explicitly and answers `[]` otherwise.
 - **A page reached by id must check the record is the reader's.** `/sucursal/pedidos/:codigo`
   refuses an order belonging to another sucursal, `/rider/encargos/:codigo` one not assigned to
   that rider, `/empresa/sucursales/:id` one of another empresa. Loading by slug alone means every
@@ -287,7 +313,7 @@ bun run audit:arena
 Then check by hand, because nothing above checks them:
 
 - **No horizontal overflow from 320px up.** `bun run serve:static`, then `bun run sweep:overflow`,
-  which walks the public surface the sitemap indexes, then all **seven** profiles, then **two short
+  which walks the public surface the sitemap indexes, then all **eight** profiles, then **two short
   walks with a filled cart**, at 320, 360, 390, 768, 1024 and 1440, and fails naming what crossed
   the edge: `documentElement.scrollWidth`
   must equal `clientWidth`, and nothing outside a container that declares `overflow-x` may cross
@@ -310,3 +336,15 @@ Then check by hand, because nothing above checks them:
   restaurant in one city · importadora in one city · another city with counter pickup, where the
   gerente scans · another city to the door, where custody goes rider → sucursal → rider and the
   chat says so twice.
+- **Walk the recruitment rules**, which the fixtures are built to reach: propose normal and hora
+  pico from `/empresa/riders/ivan-mamani`; read the refusal on `marco-quispe`, who still owes
+  points; open Marco's blocked hora-pico invitation at `/rider/acuerdos`; recruit in hora pico from
+  `/sucursal/riders`, which offers no branch picker at all.
+- **Walk the load reception from both sides.** `cg-3306` is on the road to `b-ale-la-paz`: the
+  gerente shows `RC-3306` from `/sucursal/entregas`, the truck rider scans it at
+  `/rider/cargas/cg-3306`, and one point comes off `ag-506` — one for the load, not one per parcel.
+- **Watch a recruitment finish.** `ag-516` has one point left, so the next scan at `b-ale-la-paz`
+  turns it `cumplido` and drops Marco out of that sucursal's rider list on the spot.
+- **Check the fare in all four shapes**: a domicilio in normal weather, a domicilio into an adverse
+  city, a counter pickup that pays neither, and the cart's "desde" figure before a zone is chosen.
+  `/plataforma/clima` is what makes the weather branch reachable without editing a fixture.

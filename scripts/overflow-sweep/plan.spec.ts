@@ -40,7 +40,7 @@ describe('sweepPlan', () => {
   it('walks the anonymous visitor before it signs in as anyone', () => {
     expect(plan[0]?.id).toBe('anon');
     expect(plan[0]?.button).toBeUndefined();
-    expect(plan).toHaveLength(10);
+    expect(plan).toHaveLength(11);
   });
 
   it('covers every page the sitemap asks Google to index', () => {

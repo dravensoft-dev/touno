@@ -12,6 +12,8 @@ export interface Addon {
   readonly priceBob: number;
 }
 
+export type PriceScope = 'marca' | 'sucursal';
+
 export interface Product {
   readonly id: string;
   readonly companyId: string;
@@ -19,11 +21,18 @@ export interface Product {
   readonly name: string;
   readonly description: string;
   readonly priceBob: number;
+  readonly priceScope: PriceScope;
   readonly photo?: string;
   readonly featured: boolean;
   readonly soldThisMonth: number;
   readonly variants: readonly Variant[];
   readonly addons: readonly Addon[];
+}
+
+export interface BranchPrice {
+  readonly branchId: string;
+  readonly productId: string;
+  readonly priceBob: number;
 }
 
 export interface BranchStock {
@@ -36,4 +45,5 @@ export interface FeedItem {
   readonly product: Product;
   readonly branch: Branch;
   readonly company: Company;
+  readonly priceBob: number;
 }

@@ -22,6 +22,7 @@ import { copyText } from '../../../domain/clipboard';
 import { bs, fechaHora, restante } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 import { CustodyCard } from '../../../shared/custody-card/custody-card';
+import { fareRows } from '../../../shared/fare-rows';
 import { OrderChat } from '../../../shared/order-chat/order-chat';
 import { OrderCode } from '../../../shared/order-code/order-code';
 import { OrderTimelineView } from '../../../shared/order-timeline/order-timeline';
@@ -155,8 +156,13 @@ export class BuyerOrderDetail {
 
     const rows: ArenaKeyValueRow[] = [
       { term: 'Hecho', value: fechaHora(order.placedAt), numeric: true },
-      { term: 'Productos', value: bs(order.subtotalBob), numeric: true },
-      { term: 'Envío', value: bs(order.deliveryBob), numeric: true },
+      ...fareRows({
+        productsBob: order.subtotalBob,
+        commissionBob: order.commissionBob,
+        distanceBob: order.distanceBob,
+        weatherBob: order.weatherBob,
+        totalBob: order.totalBob,
+      }),
     ];
 
     if (order.address) {

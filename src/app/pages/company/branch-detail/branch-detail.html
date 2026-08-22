@@ -23,7 +23,7 @@
         icon="ph-bold ph-hand-coins"
         label="Vendido"
         [value]="takings()"
-        sub="Sin contar lo rechazado"
+        sub="Tu precio, sin comisión ni envío, y sin contar lo rechazado"
       />
     </arena-grid>
 
@@ -53,6 +53,40 @@
     }
 
     <arena-key-value [rows]="facts()" />
+
+    <arena-section
+      eyebrow="Tarifas"
+      title="El envío base de esta sucursal"
+      description="Es el piso del envío. Encima se le suma la distancia hasta la zona del comprador, y sólo si pidió a domicilio."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        <arena-input
+          label="Envío base"
+          type="number"
+          [hint]="
+            'El mínimo universal de Touno es ' + feeFloorName() + '. Puedes subirlo, nunca bajarlo.'
+          "
+          [value]="feeValue()"
+          (change)="onFee($event)"
+        />
+
+        @if (!feeReady()) {
+          <arena-alert tone="warning" title="Por debajo del mínimo de Touno">
+            No puedes dejar el envío base bajo {{ feeFloorName() }}. Ese piso lo fija Touno para
+            todas las empresas, y lo que cobras de más va al rider.
+          </arena-alert>
+        }
+
+        <arena-button
+          icon="ph-bold ph-currency-circle-dollar"
+          [disabled]="!feeReady()"
+          (click)="saveFee()"
+        >
+          Guardar el envío base
+        </arena-button>
+      </div>
+    </arena-section>
 
     <arena-section
       eyebrow="Quién trabaja aquí"

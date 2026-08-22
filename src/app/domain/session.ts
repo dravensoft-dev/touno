@@ -1,7 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { BusinessType } from './businesses.model';
 
-export type Role = 'comprador' | 'rider' | 'gerente-empresa' | 'gerente-sucursal';
+export type Role = 'comprador' | 'rider' | 'gerente-empresa' | 'gerente-sucursal' | 'operador';
 
 export interface Profile {
   readonly id: string;
@@ -15,6 +15,8 @@ export interface Profile {
   readonly branchId?: string;
   readonly riderId?: string;
   readonly buyerPhone?: string;
+  readonly cityId?: string;
+  readonly zoneName?: string;
   readonly businessType?: BusinessType;
 }
 
@@ -28,6 +30,8 @@ export const PROFILES: readonly Profile[] = [
     icon: 'ph-bold ph-user-circle',
     home: '/feed',
     buyerPhone: '7712 4408',
+    cityId: 'la-paz',
+    zoneName: 'Obrajes',
   },
   {
     id: 'p-rider',
@@ -95,6 +99,15 @@ export const PROFILES: readonly Profile[] = [
     branchId: 'b-ale-la-paz',
     businessType: 'importadora',
   },
+  {
+    id: 'p-touno',
+    role: 'operador',
+    label: 'Operador de Touno',
+    name: 'Silvia Rocha',
+    place: 'Touno · Plataforma',
+    icon: 'ph-bold ph-sliders-horizontal',
+    home: '/plataforma/tarifas',
+  },
 ];
 
 @Injectable({ providedIn: 'root' })
@@ -118,6 +131,10 @@ export class Session {
   readonly riderId = computed(() => this.profile()?.riderId);
 
   readonly buyerPhone = computed(() => this.profile()?.buyerPhone);
+
+  readonly cityId = computed(() => this.profile()?.cityId);
+
+  readonly zoneName = computed(() => this.profile()?.zoneName);
 
   is(role: Role): boolean {
     return this.role() === role;

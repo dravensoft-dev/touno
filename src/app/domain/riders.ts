@@ -1,4 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
+import { Card, PayoutMethod } from './payments.model';
 import { Payout, Rider, RiderRange, Vehicle, rangeOf } from './riders.model';
 import { PAYOUTS, RIDERS } from './riders.data';
 
@@ -57,6 +58,16 @@ export class Riders {
 
   drives(id: string, vehicle: Vehicle): boolean {
     return this.byId(id)?.vehicle === vehicle;
+  }
+
+  setPayoutMethod(id: string, payoutMethod: PayoutMethod): void {
+    this.riderList.update((list) =>
+      list.map((one) => (one.id === id ? { ...one, payoutMethod } : one)),
+    );
+  }
+
+  setCard(id: string, card: Card | undefined): void {
+    this.riderList.update((list) => list.map((one) => (one.id === id ? { ...one, card } : one)));
   }
 
   setOnline(id: string, online: boolean): void {

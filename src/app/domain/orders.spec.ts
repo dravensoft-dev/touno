@@ -3,7 +3,10 @@ import { Agreements } from './agreements';
 import { Businesses } from './businesses';
 import { Catalog } from './catalog';
 import { Chat } from './chat';
+import { Geography } from './geography';
 import { Loads } from './loads';
+import { Platform } from './platform';
+import { fareOf, round2, unitsBetween } from './pricing';
 import { Orders } from './orders';
 import { Riders } from './riders';
 import { Order, OrderScenario, isInterurban, movingLeg } from './orders.model';
@@ -64,11 +67,64 @@ describe('Orders', () => {
 
       expect(order.lines.length).toBeGreaterThan(0);
       expect(order.subtotalBob).toBe(lines);
-      expect(order.totalBob).toBe(order.subtotalBob + order.deliveryBob);
+      expect(order.totalBob).toBe(
+        round2(order.subtotalBob + order.commissionBob + order.distanceBob + order.weatherBob),
+      );
 
       for (const line of order.lines) {
         expect(catalog.byId(line.productId)?.companyId).toBe(order.companyId);
       }
+    }
+  });
+
+  it('recomputes every stored fare from the order own inputs and gets the same figures', () => {
+    const geography = TestBed.inject(Geography);
+    const platform = TestBed.inject(Platform);
+
+    for (const order of orders.all()) {
+      const handoverId = isInterurban(order.scenario)
+        ? (order.destinationBranchId ?? order.originBranchId)
+        : order.originBranchId;
+      const handover = businesses.branchById(handoverId);
+      const origin = businesses.branchById(order.originBranchId);
+      const from = geography.byId(origin?.cityId ?? '');
+      const to = geography.byId(order.buyerCityId);
+      const zone = order.zoneName ? geography.zoneOf(order.buyerCityId, order.zoneName) : undefined;
+
+      expect(handover).toBeDefined();
+      expect(to).toBeDefined();
+
+      const fare = fareOf({
+        productsBob: order.subtotalBob,
+        delivery: order.delivery,
+        baseFeeBob: handover?.deliveryBob ?? 0,
+        cityUnits: zone && handover ? unitsBetween(handover.point, zone.point) : 0,
+        interurbanUnits: from && to && from.id !== to.id ? unitsBetween(from.point, to.point) : 0,
+        adverseWeather: geography.isAdverse(order.buyerCityId),
+        weatherFeeBob: businesses.weatherFeeOf(order.companyId),
+        config: platform.config(),
+      });
+
+      expect(fare.commissionBob).toBe(order.commissionBob);
+      expect(fare.distanceBob).toBe(order.distanceBob);
+      expect(fare.weatherBob).toBe(order.weatherBob);
+      expect(fare.totalBob).toBe(order.totalBob);
+    }
+  });
+
+  it('charges no distance and no weather to a buyer who collects at a counter', () => {
+    for (const order of orders.all().filter((one) => one.delivery === 'sucursal')) {
+      expect(order.distanceBob).toBe(0);
+      expect(order.weatherBob).toBe(0);
+    }
+  });
+
+  it('names a zone of the buyer own city on every order that goes to a door', () => {
+    const geography = TestBed.inject(Geography);
+
+    for (const order of orders.all().filter((one) => one.delivery === 'domicilio')) {
+      expect(order.zoneName).toBeDefined();
+      expect(geography.zoneOf(order.buyerCityId, order.zoneName ?? '')).toBeDefined();
     }
   });
 
@@ -256,5 +312,38 @@ describe('Orders', () => {
 
     expect(legs.length).toBe(1);
     expect(legs[0].riderId).toBe('r-noemi');
+  });
+
+  it('spends a career point when the rider scans at the door, and none at the counter', () => {
+    const door = orders.all().find((one) => movingLeg(one.state) !== undefined);
+    const leg = door ? movingLeg(door.state) : undefined;
+    const assignment = door && leg ? orders.legOf(door, leg) : undefined;
+
+    expect(assignment).toBeDefined();
+
+    const before = agreements.chargeable(
+      assignment?.riderId ?? '',
+      assignment?.branchId ?? '',
+    )?.pointsLeft;
+
+    expect(before).toBeGreaterThan(0);
+    expect(orders.scan(door?.slug ?? '', assignment?.riderId ?? '')?.pointsLeft).toBe(
+      (before ?? 0) - 1,
+    );
+
+    const counter = orders.all().find((one) => one.state === 'listo-para-recojo');
+
+    expect(orders.scan(counter?.slug ?? '', counter?.destinationBranchId ?? '')).toBeUndefined();
+  });
+
+  it('counts what a sucursal sold, not what the buyer paid on top of it', () => {
+    const branchId = 'b-copacabana-miraflores';
+    const mine = orders
+      .all()
+      .filter((one) => one.originBranchId === branchId && one.state !== 'rechazado');
+
+    expect(mine.length).toBeGreaterThan(0);
+    expect(orders.salesOf(branchId)).toBe(mine.reduce((sum, one) => sum + one.subtotalBob, 0));
+    expect(orders.salesOf(branchId)).toBeLessThan(mine.reduce((sum, one) => sum + one.totalBob, 0));
   });
 });

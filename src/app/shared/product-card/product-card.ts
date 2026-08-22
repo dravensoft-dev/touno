@@ -26,6 +26,7 @@ export class ProductCard {
   readonly product = input.required<Product>();
   readonly branch = input<Branch>();
   readonly available = input(true);
+  readonly priceBob = input<number>();
   readonly fallbackIcon = input('ph ph-fork-knife');
 
   readonly add = output<Product>();
@@ -36,7 +37,7 @@ export class ProductCard {
     return photo ? this.location.prepareExternalUrl(photo) : undefined;
   });
 
-  protected readonly price = computed(() => bs(this.product().priceBob));
+  protected readonly price = computed(() => bs(this.priceBob() ?? this.product().priceBob));
 
   protected addToCart(): void {
     this.add.emit(this.product());

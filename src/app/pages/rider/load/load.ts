@@ -20,9 +20,11 @@ import { Geography } from '../../../domain/geography';
 import { Loads } from '../../../domain/loads';
 import { Orders } from '../../../domain/orders';
 import { Riders } from '../../../domain/riders';
+import { Agreements } from '../../../domain/agreements';
 import { Session } from '../../../domain/session';
 import { bs, hhmm } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
+import { ScanPanel } from '../../../shared/scan-panel/scan-panel';
 import { StateTag } from '../../../shared/state-tag/state-tag';
 
 const COLUMNS: readonly ArenaTableColumn[] = [
@@ -47,12 +49,14 @@ const COLUMNS: readonly ArenaTableColumn[] = [
     ArenaTableCell,
     ArenaButton,
     ArenaEmptyState,
+    ScanPanel,
     StateTag,
   ],
   templateUrl: './load.html',
 })
 export class RiderLoad {
   private readonly router = inject(Router);
+  private readonly agreements = inject(Agreements);
   private readonly businesses = inject(Businesses);
   private readonly geography = inject(Geography);
   private readonly orders = inject(Orders);
@@ -78,6 +82,18 @@ export class RiderLoad {
   });
 
   protected readonly notMine = computed(() => this.found() !== undefined && !this.load());
+
+  protected readonly receivable = computed(() => this.load()?.state === 'en-ruta');
+
+  protected readonly expected = computed(() => this.load()?.receiptCode ?? '');
+
+  protected readonly pointsLeft = computed(() => {
+    const load = this.load();
+
+    return load
+      ? (this.agreements.chargeable(this.riderId(), load.fromBranchId)?.pointsLeft ?? 0)
+      : 0;
+  });
 
   protected readonly missing = computed(() => this.loads.missing(this.id()));
 
@@ -155,6 +171,46 @@ export class RiderLoad {
     }
 
     this.notices.loadDeparted();
+  }
+
+  protected onReceived(code: string): void {
+    const load = this.load();
+
+    if (!load || load.state !== 'en-ruta') {
+      return;
+    }
+
+    if (code.toUpperCase() !== load.receiptCode) {
+      this.notices.codeMismatch();
+      return;
+    }
+
+    const branch = this.businesses.branchById(load.toBranchId);
+
+    this.loads.receive(load.id);
+
+    for (const order of this.carried()) {
+      this.orders.advance(
+        order.slug,
+        order.delivery === 'sucursal' ? 'listo-para-recojo' : 'en-sucursal-destino',
+      );
+      this.chat.handOver(
+        order.threadId,
+        { kind: 'sucursal', branchId: load.toBranchId, since: order.placedAt },
+        branch?.name ?? '',
+        `Tu pedido llegó a ${branch?.name ?? 'la sucursal de destino'}. Desde ahora hablas con ellos.`,
+      );
+    }
+
+    const spent = this.agreements.spend(this.riderId(), load.fromBranchId);
+
+    this.notices.loadReceived();
+
+    if (spent?.state === 'cumplido') {
+      this.notices.recruitmentFulfilled();
+    } else if (spent) {
+      this.notices.pointSpent(spent.pointsLeft);
+    }
   }
 
   protected back(): void {

@@ -95,7 +95,7 @@ export class CompanyBranches {
   }
 
   protected facts(branch: Branch): string {
-    return `${minutos(branch.prepMinutes)} · envío ${bs(branch.deliveryBob)}`;
+    return `${minutos(branch.prepMinutes)} · envío desde ${bs(branch.deliveryBob)}`;
   }
 
   protected open_(branch: Branch): void {

@@ -12,7 +12,7 @@ import {
 import { Agreements } from '../../../domain/agreements';
 import { Businesses } from '../../../domain/businesses';
 import { Session } from '../../../domain/session';
-import { RiderAgreement } from '../../../domain/agreements.model';
+import { RiderAgreement, kindLabel } from '../../../domain/agreements.model';
 import { bs } from '../../../domain/format';
 import { StateTag } from '../../../shared/state-tag/state-tag';
 
@@ -53,10 +53,24 @@ export class RiderAgreements {
 
   protected readonly active = computed(() => this.agreements.activeFor(this.riderId()));
 
+  protected readonly fulfilled = computed(() => this.agreements.fulfilledFor(this.riderId()));
+
+  protected readonly pointsPending = computed(() =>
+    this.agreements.pointsPendingOf(this.riderId()),
+  );
+
+  protected readonly peakHeld = computed(() =>
+    this.agreements
+      .ofRider(this.riderId())
+      .some((one) => one.kind === 'hora-pico' && one.state === 'activo'),
+  );
+
   protected readonly closed = computed(() =>
     this.agreements
       .ofRider(this.riderId())
-      .filter((one) => one.state !== 'pendiente' && one.state !== 'activo'),
+      .filter(
+        (one) => one.state !== 'pendiente' && one.state !== 'activo' && one.state !== 'cumplido',
+      ),
   );
 
   protected companyName(agreement: RiderAgreement): string {
@@ -73,6 +87,14 @@ export class RiderAgreements {
 
   protected rate(agreement: RiderAgreement): string {
     return `${bs(agreement.perTripBob)} por viaje`;
+  }
+
+  protected kindOf(agreement: RiderAgreement): string {
+    return kindLabel(agreement.kind);
+  }
+
+  protected pointsOf(agreement: RiderAgreement): string {
+    return `${agreement.pointsLeft} de ${agreement.points} puntos de carrera`;
   }
 
   protected open(agreement: RiderAgreement): void {

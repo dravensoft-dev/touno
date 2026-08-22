@@ -61,6 +61,21 @@
       </arena-button>
     }
 
+    @if (receivable()) {
+      <arena-alert tone="info" title="Al descargar, te muestran el código de la carga">
+        No escaneas el código de ningún comprador: ése lo escanea quien se lo entrega en mano. El
+        tuyo es el de la carga, y te lo muestra el gerente de la sucursal de destino. Con ese
+        escaneo se te descuenta un punto de carrera, y te quedan {{ pointsLeft() }}.
+      </arena-alert>
+
+      <app-scan-panel
+        title="Escanear el código de recepción"
+        hint="Apunta al código que te muestra la sucursal, o escríbelo si la cámara no coopera."
+        [simulated]="expected()"
+        (scanned)="onReceived($event)"
+      />
+    }
+
     <div class="arena-row">
       <arena-button variant="ghost" icon="ph-bold ph-arrow-left" (click)="back()">
         Volver a encargos

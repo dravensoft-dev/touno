@@ -51,6 +51,7 @@ export const COMPANIES: readonly Company[] = [
   },
   {
     id: 'c-ale',
+    card: { brand: 'Mastercard', last4: '8820', holder: 'Importadora Ale SRL', expires: '04/30' },
     slug: 'importadora-ale',
     name: 'Importadora Ale',
     type: 'importadora',
@@ -234,6 +235,7 @@ export const BRANCHES: readonly Branch[] = [
   },
   {
     id: 'b-ale-la-paz',
+    card: { brand: 'Mastercard', last4: '8820', holder: 'Importadora Ale SRL', expires: '04/30' },
     slug: 'la-paz',
     companyId: 'c-ale',
     name: 'Ale La Paz',

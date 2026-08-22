@@ -33,6 +33,7 @@ const LOAD: Record<LoadState, Look> = {
 const AGREEMENT: Record<AgreementState, Look> = {
   pendiente: { label: 'Pendiente', tone: 'warning' },
   activo: { label: 'Activo', tone: 'success' },
+  cumplido: { label: 'Cumplido', tone: 'success' },
   rechazado: { label: 'Rechazado', tone: 'danger' },
   terminado: { label: 'Terminado', tone: 'neutral' },
   vencido: { label: 'Vencido', tone: 'neutral' },

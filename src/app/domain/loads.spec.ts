@@ -127,4 +127,33 @@ describe('Loads', () => {
     expect(loads.arriving('b-tecno-la-paz').map((one) => one.id)).toContain('cg-3302');
     expect(loads.arriving('b-ale-santa-cruz')).toEqual([]);
   });
+
+  it('gives every carga a reception code of its own, never an order code', () => {
+    const codes = loads.all().map((one) => one.receiptCode);
+
+    expect(new Set(codes).size).toBe(codes.length);
+
+    for (const code of codes) {
+      expect(code.startsWith('RC-')).toBe(true);
+      expect(code.startsWith('TO-')).toBe(false);
+    }
+  });
+
+  it('finds a carga by the code the destination sucursal shows', () => {
+    expect(loads.byReceiptCode('RC-3306')?.id).toBe('cg-3306');
+    expect(loads.byReceiptCode('RC-nada')).toBeUndefined();
+  });
+
+  it('receives only a carga that is actually on the road', () => {
+    loads.receive('cg-3301');
+    expect(loads.byId('cg-3301')?.state).toBe('acumulando');
+
+    loads.receive('cg-3306');
+    expect(loads.byId('cg-3306')?.state).toBe('descargado');
+    expect(loads.byId('cg-3306')?.receivedAt).toBeDefined();
+  });
+
+  it('has a carga arriving at the sucursal the demo profile answers for', () => {
+    expect(loads.arriving('b-ale-la-paz').map((one) => one.id)).toContain('cg-3306');
+  });
 });

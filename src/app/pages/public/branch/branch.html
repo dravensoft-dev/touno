@@ -46,6 +46,7 @@
               @for (product of inCategory(category); track product.id) {
                 <app-product-card
                   [product]="product"
+                  [priceBob]="priceOf(product)"
                   [fallbackIcon]="fallbackIcon()"
                   [available]="branch().open"
                   (add)="addToCart($event)"

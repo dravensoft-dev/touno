@@ -14,6 +14,7 @@ import {
   ArenaTableRow,
 } from '@dravensoft/arena-angular';
 import { Businesses } from '../../../domain/businesses';
+import { fareRows, fareTotalRow } from '../../../shared/fare-rows';
 import { Cart, CartLine } from '../../../domain/cart';
 import { Geography } from '../../../domain/geography';
 import { Orders } from '../../../domain/orders';
@@ -81,7 +82,7 @@ export class BuyerCart {
         branchName: branch?.name ?? branchId,
         cityName: this.geography.nameOf(branch?.cityId ?? ''),
         awayFromHome: branch !== undefined && branch.cityId !== this.homeCity(),
-        deliveryBob: bs(branch?.deliveryBob ?? 0),
+        deliveryBob: bs(this.cart.fareOfBranch(branchId).distanceBob),
         lines: this.cart.linesOf(branchId).map((line) => ({
           ...line,
           subtotal: bs(line.unitBob * line.qty),
@@ -92,20 +93,11 @@ export class BuyerCart {
 
   protected readonly interurban = computed(() => this.baskets().filter((one) => one.awayFromHome));
 
-  protected readonly summary = computed<readonly ArenaKeyValueRow[]>(() => [
-    { term: 'Productos', value: bs(this.cart.subtotalBob()), numeric: true },
-    {
-      term: `Envíos · ${this.cart.branches().length} sucursales`,
-      value: bs(this.cart.deliveryBob()),
-      numeric: true,
-    },
-  ]);
+  protected readonly summary = computed<readonly ArenaKeyValueRow[]>(() =>
+    fareRows(this.cart.fare()),
+  );
 
-  protected readonly total = computed<ArenaKeyValueRow>(() => ({
-    term: 'Total',
-    value: bs(this.cart.totalBob()),
-    numeric: true,
-  }));
+  protected readonly total = computed<ArenaKeyValueRow>(() => fareTotalRow(this.cart.fare()));
 
   protected remove(line: CartLine): void {
     this.cart.remove(line.productId, line.branchId);

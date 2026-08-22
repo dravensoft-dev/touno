@@ -49,6 +49,7 @@ const GATE_NOUN: Record<Role, string> = {
   rider: 'rider',
   'gerente-empresa': 'gerente de empresa',
   'gerente-sucursal': 'gerente de sucursal',
+  operador: 'operador de Touno',
 };
 
 const PUBLIC_LINKS: readonly PublicLink[] = [

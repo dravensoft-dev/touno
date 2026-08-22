@@ -27,9 +27,55 @@
   }
 
   <arena-alert tone="info" title="Lo que se cambia desde la empresa">
-    La dirección, el horario, el tiempo de preparación y el costo de envío los fija la empresa para
-    esta sucursal. Aquí los ves para confirmarlos.
+    La dirección, el horario, el tiempo de preparación y el envío base los fija la empresa para esta
+    sucursal. El envío base nunca baja del mínimo universal de Touno, y a él se le suma la distancia
+    hasta la zona del comprador. Aquí los ves para confirmarlos.
   </arena-alert>
 
   <arena-key-value [rows]="facts()" />
+
+  <arena-section
+    eyebrow="Cobros"
+    title="La tarjeta de la sucursal"
+    description="Si reclutas tú en hora pico, es la tuya la que paga al rider que eligió cobrar a tarjeta."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      <arena-alert tone="info" title="Tu tarjeta hoy">
+        {{ cardName() }}. Esta maqueta guarda la marca, los últimos cuatro dígitos, el titular y el
+        vencimiento, y nada más.
+      </arena-alert>
+
+      <arena-input
+        label="Marca"
+        placeholder="Visa"
+        [value]="draft().brand"
+        (change)="onBrand($event)"
+      />
+      <arena-input
+        label="Últimos cuatro dígitos"
+        placeholder="8820"
+        hint="Cuatro dígitos. No pedimos el número completo."
+        [value]="draft().last4"
+        (change)="onLast4($event)"
+      />
+      <arena-input label="Titular" [value]="draft().holder" (change)="onHolder($event)" />
+      <arena-input
+        label="Vencimiento"
+        placeholder="04/30"
+        hint="Mes y año, así: 04/30."
+        [value]="draft().expires"
+        (change)="onExpires($event)"
+      />
+
+      <div class="arena-row">
+        <arena-button icon="ph-bold ph-credit-card" [disabled]="!readyCard()" (click)="saveCard()">
+          Guardar la tarjeta
+        </arena-button>
+        @if (card()) {
+          <arena-button variant="danger" (click)="removeCard()">Quitar la tarjeta</arena-button>
+        }
+      </div>
+    </div>
+  </arena-section>
 </div>

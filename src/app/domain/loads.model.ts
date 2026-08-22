@@ -7,8 +7,10 @@ export interface TruckLoad {
   readonly toBranchId: string;
   readonly orderCodes: readonly string[];
   readonly capacity: number;
+  readonly receiptCode: string;
   readonly state: LoadState;
   readonly openedAt: string;
   readonly departsAt: string;
   readonly arrivesAt: string;
+  readonly receivedAt?: string;
 }

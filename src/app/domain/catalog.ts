@@ -1,8 +1,8 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Businesses } from './businesses';
 import { Branch, BusinessType } from './businesses.model';
-import { BranchStock, FeedItem, Product } from './catalog.model';
-import { BRANCH_STOCK, PRODUCTS } from './catalog.data';
+import { BranchPrice, BranchStock, FeedItem, PriceScope, Product } from './catalog.model';
+import { BRANCH_PRICES, BRANCH_STOCK, PRODUCTS } from './catalog.data';
 
 @Injectable({ providedIn: 'root' })
 export class Catalog {
@@ -10,10 +10,13 @@ export class Catalog {
 
   private readonly productList = signal<readonly Product[]>(PRODUCTS);
   private readonly stockList = signal<readonly BranchStock[]>(BRANCH_STOCK);
+  private readonly priceList = signal<readonly BranchPrice[]>(BRANCH_PRICES);
 
   readonly products = this.productList.asReadonly();
 
   readonly stock = this.stockList.asReadonly();
+
+  readonly branchPrices = this.priceList.asReadonly();
 
   readonly foodFeed = computed(() => this.feedOf('restaurante'));
 
@@ -29,6 +32,28 @@ export class Catalog {
 
   categoriesOf(companyId: string): readonly string[] {
     return [...new Set(this.ofCompany(companyId).map((one) => one.category))];
+  }
+
+  priceOf(productId: string, branchId?: string): number {
+    const product = this.byId(productId);
+
+    if (!product) {
+      return 0;
+    }
+
+    if (product.priceScope !== 'sucursal' || branchId === undefined) {
+      return product.priceBob;
+    }
+
+    const override = this.branchPrices().find(
+      (one) => one.branchId === branchId && one.productId === productId,
+    );
+
+    return override?.priceBob ?? product.priceBob;
+  }
+
+  pricesOf(productId: string): readonly BranchPrice[] {
+    return this.branchPrices().filter((one) => one.productId === productId);
   }
 
   isAvailable(branchId: string, productId: string): boolean {
@@ -70,7 +95,12 @@ export class Catalog {
             Number(right.featured) - Number(left.featured) ||
             right.soldThisMonth - left.soldThisMonth,
         )
-        .map((product) => ({ product, branch, company }));
+        .map((product) => ({
+          product,
+          branch,
+          company,
+          priceBob: this.priceOf(product.id, branch.id),
+        }));
 
       return [items];
     });
@@ -98,6 +128,32 @@ export class Catalog {
       .filter((one) => cityId === undefined || one.cityId === cityId)
       .slice()
       .sort((left, right) => left.name.localeCompare(right.name));
+  }
+
+  setPrice(productId: string, priceBob: number): void {
+    this.productList.update((list) =>
+      list.map((one) => (one.id === productId ? { ...one, priceBob } : one)),
+    );
+  }
+
+  setPriceScope(productId: string, priceScope: PriceScope): void {
+    this.productList.update((list) =>
+      list.map((one) => (one.id === productId ? { ...one, priceScope } : one)),
+    );
+
+    if (priceScope === 'marca') {
+      this.priceList.update((list) => list.filter((one) => one.productId !== productId));
+    }
+  }
+
+  setBranchPrice(branchId: string, productId: string, priceBob: number): void {
+    this.priceList.update((list) => {
+      const rest = list.filter(
+        (one) => !(one.branchId === branchId && one.productId === productId),
+      );
+
+      return [...rest, { branchId, productId, priceBob }];
+    });
   }
 
   setAvailability(branchId: string, productId: string, available: boolean): void {

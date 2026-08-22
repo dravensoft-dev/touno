@@ -21,8 +21,8 @@ different business, and the tree was rebuilt against it. What changed is not dec
 | First mock-up (Terminal Ya)                     | Touno today                                                       |
 | ----------------------------------------------- | ----------------------------------------------------------------- |
 | A flat merchant with a city and a zone          | **Empresa + at least one sucursal**, and two management panels    |
-| Four roles                                      | **Four roles, seven profiles** — the profile adds the vertical    |
-| Drivers hired for a block of prepaid rides      | **Riders**, free agents, bound by a **two-sided agreement**       |
+| Four roles                                      | **Five roles, eight profiles** — the profile adds the vertical    |
+| Drivers hired for a block of prepaid rides      | **Riders**, free agents, bound by a **two-sided recruitment**     |
 | Waybill `TY-####` plus a four-digit pickup code | **One order code**, the buyer's, and the only thing that delivers |
 | Parcels on third-party buses, **no live map**   | **Own trucks**, live map on every leg a rider is moving           |
 | No chat                                         | **One thread per order**, its counterpart following custody       |
@@ -41,10 +41,10 @@ moment of purchase.
 | Framework                   | Angular 22, standalone, zoneless, `OnPush` everywhere, signals only       |
 | Runtime and package manager | Bun 1.3                                                                   |
 | Build                       | `@angular/build` — Vite in dev, esbuild in build                          |
-| Rendering                   | `@angular/ssr`, `outputMode: "static"`: 244 prerendered routes, no server |
+| Rendering                   | `@angular/ssr`, `outputMode: "static"`: 259 prerendered routes, no server |
 | Design system               | `@dravensoft/arena-angular` 10.2.2, pinned exactly                        |
 | Icons                       | Phosphor, subset and self-hosted by `arena-to-prod`                       |
-| Tests                       | Vitest through `@angular/build:unit-test` — 278 across 31 files           |
+| Tests                       | Vitest through `@angular/build:unit-test` — 399 across 47 files           |
 
 ## Commands
 
@@ -98,17 +98,27 @@ Spanish paths. Everything public is indexed; every panel is `noindex,follow`.
 | `/rider/…`                                                | shift, jobs, the live job, the scan, loads, agreements, earnings |
 | `/sucursal/…`                                             | board, order, deliveries, riders, stock, history, settings       |
 | `/empresa/…`                                              | branches, orders, catalogue, riders, finance, settings           |
+| `/plataforma/…`                                           | Touno's own fees, the per-city weather, and the network view     |
 
 There is no password. `/ingresar` picks a profile, the profile lives in a signal, and a panel whose
 role is not the current one renders an unauthenticated card offering the profiles that do open it.
 
+**The operator panel is `/plataforma` and not `/touno` on purpose.** The GitHub Pages artefact is
+built with `--base-href=/touno/`, and every rail destination goes through
+`Location.prepareExternalUrl()`, so a `/touno` prefix would write `/touno/touno/tarifas` into each
+`href`. It would work, and it would read like a bug in a bug report.
+
 ## Data
 
 Everything is a typed module constant read through a `providedIn: 'root'` service that holds it in a
-signal: 5 cities, 8 companies, 18 branches, 40 products, 10 riders, 18 agreements, 15 orders, 5
-truck loads, 15 chat threads and 6 rider tracks. No HTTP, no backend, and mutations go through a
+signal: 5 cities, 8 companies, 18 branches, 40 products, 10 riders, 21 recruitments, 17 orders, 6
+truck loads, 17 chat threads and 8 rider tracks, plus one platform config. No HTTP, no backend, and mutations go through a
 small `withLatency()` helper that resolves immediately on the server so the prerender always
 settles.
+
+A fare is derived and never stored twice: `domain/pricing.ts` is pure functions, the way
+`domain/timeline.ts` is, and `orders.spec.ts` recomputes every fixture's four amounts from the
+order's own inputs rather than trusting the numbers written into it.
 
 **Nothing reads the wall clock.** `domain/clock.ts` exports a literal `NOW`, because a live clock
 writes different HTML on the server than on the first client render.
@@ -131,7 +141,12 @@ prerendered HTML breaks hydration.
 
 ## What is not here
 
-- No backend, no authentication and no payments.
+- No backend and no authentication. **The money is computed but never moved**: the fare breakdown
+  and the card records are real, a payment gateway is not. A card record holds a brand, four
+  digits, a holder and an expiry, and there is no field that could hold a full number.
+- **No real distance.** `pricing.ts` measures over the same schematic planes the map draws — one
+  per city, plus a national one at its own scale — so a fee is coherent without pretending to be
+  kilometres.
 - **No map library.** `shared/route-map` is our own SVG: a schematic street grid, a route, an amber
   rider dot, and — when the rider stops reporting — his last known point labelled with the hour. Its
   coordinates are viewBox positions, not latitudes, which is why no `geo` node appears in any

@@ -1,3 +1,5 @@
+import { Card, PayoutMethod } from './payments.model';
+
 export type Vehicle = 'moto' | 'auto' | 'camion';
 
 export type RiderRange = 'urbano' | 'interurbano';
@@ -17,6 +19,8 @@ export interface Rider {
   readonly online: boolean;
   readonly ratePerTripBob: number;
   readonly account: string;
+  readonly payoutMethod: PayoutMethod;
+  readonly card?: Card;
   readonly phone: string;
 }
 

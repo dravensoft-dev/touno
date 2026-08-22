@@ -56,6 +56,15 @@
           (change)="setAddress($event)"
         />
 
+        <arena-select
+          label="Tu zona"
+          hint="De aquí sale el envío por distancia: se mide entre la sucursal y tu zona."
+          placeholder="Elige tu zona"
+          [options]="zones()"
+          [value]="checkout.current().zoneName"
+          (change)="setZone($event)"
+        />
+
         @if (interurban()) {
           <arena-alert tone="info" title="Llega en dos tramos">
             Primero viaja en camión hasta la sucursal de {{ homeCityName() }}. Cuando llegue, esa

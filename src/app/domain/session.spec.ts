@@ -19,10 +19,10 @@ describe('Session', () => {
     orders = TestBed.inject(Orders);
   });
 
-  it('carries seven profiles over four roles', () => {
-    expect(session.profiles.length).toBe(7);
-    expect(new Set(session.profiles.map((one) => one.role)).size).toBe(4);
-    expect(new Set(session.profiles.map((one) => one.id)).size).toBe(7);
+  it('carries eight profiles over five roles', () => {
+    expect(session.profiles.length).toBe(8);
+    expect(new Set(session.profiles.map((one) => one.role)).size).toBe(5);
+    expect(new Set(session.profiles.map((one) => one.id)).size).toBe(8);
   });
 
   it('carries a rider of each range under one role, because the vehicle decides', () => {
@@ -111,5 +111,22 @@ describe('Session', () => {
 
     expect(session.profile()).toBeUndefined();
     expect(session.role()).toBeNull();
+  });
+
+  it('gives the operador de Touno no record of his own, because he answers for the platform', () => {
+    const operator = session.profiles.find((one) => one.role === 'operador');
+
+    expect(operator?.id).toBe('p-touno');
+    expect(operator?.companyId).toBeUndefined();
+    expect(operator?.branchId).toBeUndefined();
+    expect(operator?.riderId).toBeUndefined();
+    expect(operator?.buyerPhone).toBeUndefined();
+  });
+
+  it('gives the buyer the city and zone his distance fee is measured to', () => {
+    const buyer = session.profiles.find((one) => one.role === 'comprador');
+
+    expect(buyer?.cityId).toBe('la-paz');
+    expect(buyer?.zoneName).toBe('Obrajes');
   });
 });

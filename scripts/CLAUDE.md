@@ -21,8 +21,10 @@ root its own schema names.
 - `overflow-sweep.ts` — the horizontal-overflow check the root checklist asks for by hand, which
   nothing else in the tree performs. `bun run serve:static` first, then `bun run sweep:overflow`;
   `overflow-sweep/plan.ts` names what it walks: the public surface the sitemap indexes, then each
-  of the seven profiles with its rail and its detail routes, then two short walks with a **filled
-  cart**, at 320, 360, 390, 768, 1024 and 1440.
+  of the eight profiles with its rail and its detail routes, then two short walks with a **filled
+  cart**, at 320, 360, 390, 768, 1024 and 1440. **`detailsOf()` names every role it serves and
+  answers `[]` for the rest.** It used to fall through to `branchRoutes()`, so a profile of a new
+  role would have been planned a sucursal's routes and measured the gate over and over.
   It fails when
   `documentElement.scrollWidth` exceeds `clientWidth` and names the elements crossing the right
   edge, ignoring any that sit inside a container declaring `overflow-x`, which is the carve-out the

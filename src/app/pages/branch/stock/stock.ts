@@ -84,7 +84,7 @@ export class BranchStockPage {
   }
 
   protected price(product: Product): string {
-    return bs(product.priceBob);
+    return bs(this.catalog.priceOf(product.id, this.branchId()));
   }
 
   protected has(product: Product): boolean {

@@ -29,6 +29,7 @@ const PRODUCT: Product = {
   name: 'Cuarto de pollo con papas',
   description: 'Presa de pollo broaster, papas fritas y llajua.',
   priceBob: 38,
+  priceScope: 'marca',
   featured: true,
   soldThisMonth: 906,
   variants: [],

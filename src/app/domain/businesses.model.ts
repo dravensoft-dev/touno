@@ -1,4 +1,5 @@
 import { GeoPoint } from './geography.model';
+import { Card } from './payments.model';
 
 export type BusinessType = 'restaurante' | 'importadora';
 
@@ -14,6 +15,8 @@ export interface Company {
   readonly tags: readonly string[];
   readonly since: string;
   readonly cover?: string;
+  readonly weatherFeeBob?: number;
+  readonly card?: Card;
 }
 
 export interface BranchHours {
@@ -36,6 +39,7 @@ export interface Branch {
   readonly open: boolean;
   readonly prepMinutes: number;
   readonly deliveryBob: number;
+  readonly card?: Card;
   readonly managerName: string;
   readonly cover?: string;
 }

@@ -44,6 +44,13 @@ function fill(fixture: ComponentFixture<CompanyRiderDetail>, rate: string): void
   fixture.detectChanges();
 }
 
+function pickPeak(fixture: ComponentFixture<CompanyRiderDetail>): void {
+  fixture.debugElement
+    .query((one) => one.name === 'arena-radio-group')
+    .componentInstance.change.emit('hora-pico');
+  fixture.detectChanges();
+}
+
 describe('CompanyRiderDetail', () => {
   it('offers an urban rider only the sucursales of his own city', () => {
     const drawn = boxes(render('noemi-flores'));
@@ -145,5 +152,46 @@ describe('CompanyRiderDetail', () => {
 
   it('says plainly when there is no such rider', () => {
     expect(render('nadie').nativeElement.textContent).toContain('No encontramos ese rider');
+  });
+
+  it('asks for the clase de reclutamiento and the puntos de carrera', () => {
+    const host: HTMLElement = render('ivan-mamani', 'p-empresa-restaurante').nativeElement;
+
+    expect(host.textContent).toContain('Puntos de carrera que le das');
+    expect(host.textContent).toContain('Touno no permite menos de');
+    expect(host.textContent).toContain('sólo puede tener uno en total');
+  });
+
+  it('says why a rider who still owes points cannot take hora pico', () => {
+    const fixture = render('noemi-flores');
+
+    expect(TestBed.inject(Agreements).pointsPendingOf('r-noemi')).toBeGreaterThan(0);
+
+    pickPeak(fixture);
+
+    expect(fixture.nativeElement.textContent).toContain(
+      'Ahora no puede tomar un reclutamiento de hora pico',
+    );
+    expect(button(fixture, 'Enviar la propuesta')?.hasAttribute('disabled')).toBe(true);
+  });
+
+  it('lets the gerente de empresa recruit in hora pico when the rider is free', () => {
+    const fixture = render('ivan-mamani', 'p-empresa-restaurante');
+
+    expect(TestBed.inject(Agreements).pointsPendingOf('r-ivan')).toBe(0);
+
+    pickPeak(fixture);
+
+    expect(fixture.nativeElement.textContent).not.toContain(
+      'Ahora no puede tomar un reclutamiento de hora pico',
+    );
+    expect(fixture.nativeElement.textContent).toContain('ninguna empresa puede darle dos');
+  });
+
+  it('names the clase and the points left on a reclutamiento already running', () => {
+    const host: HTMLElement = render('hugo-barrientos').nativeElement;
+
+    expect(host.textContent).toContain('Reclutamiento normal');
+    expect(host.textContent).toContain('puntos de carrera');
   });
 });

@@ -40,6 +40,71 @@
   }
 
   <arena-section
+    eyebrow="Sólo para ti"
+    title="Reclutar en hora pico"
+    description="Una sucursal recluta en hora pico únicamente para sí misma. Si necesitas cubrir dos locales con el mismo rider, eso lo hace el gerente de empresa."
+    rhythm="md"
+  >
+    @if (candidates().length > 0) {
+      <div class="arena-stack arena-stack--group">
+        <arena-select
+          label="A quién reclutas"
+          placeholder="Elige un rider de tu ciudad"
+          [options]="options()"
+          [value]="chosen()"
+          (change)="pickRider($event)"
+        />
+
+        <arena-input
+          label="Lo que le pagas por viaje"
+          type="number"
+          [value]="rate()"
+          (change)="onRate($event)"
+        />
+
+        <arena-input
+          label="Puntos de carrera que le das"
+          type="number"
+          [hint]="
+            'Se le descuenta uno por cada entrega que cierra con un escaneo. Touno no permite menos de ' +
+            minPoints() +
+            '.'
+          "
+          [value]="points()"
+          (change)="onPoints($event)"
+        />
+
+        @if (reason(); as porque) {
+          <arena-alert tone="warning" title="Ese rider no puede tomar hora pico ahora">
+            {{ porque }}
+          </arena-alert>
+        }
+
+        <arena-alert tone="info" title="Qué significa para él">
+          Mientras le queden puntos de este reclutamiento no puede aceptar otro de hora pico, de
+          nadie. Y una vez que lo cumpla, tu empresa ya no podrá volver a reclutarlo en hora pico.
+        </arena-alert>
+
+        <arena-button
+          size="lg"
+          icon="ph-bold ph-lightning"
+          [disabled]="!ready()"
+          (click)="recruit()"
+        >
+          Enviar el reclutamiento
+        </arena-button>
+      </div>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-lightning"
+        title="Nadie más a quien reclutar en tu ciudad"
+        message="Todos los riders urbanos de aquí ya trabajan con esta sucursal."
+      />
+    }
+  </arena-section>
+
+  <arena-section
     eyebrow="Reparto en ciudad"
     title="Moto y auto"
     description="Los que llevan pedidos a la puerta del comprador."

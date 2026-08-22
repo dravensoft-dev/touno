@@ -44,6 +44,8 @@ export class BranchStockItem {
     return product ? this.catalog.isAvailable(this.branchId(), product.id) : false;
   });
 
+  protected readonly ownPrice = computed(() => this.product()?.priceScope === 'sucursal');
+
   protected readonly elsewhere = computed(() => {
     const product = this.product();
 
@@ -66,7 +68,11 @@ export class BranchStockItem {
 
     return [
       { term: 'Categoría', value: product.category },
-      { term: 'Precio de la empresa', value: bs(product.priceBob), numeric: true },
+      {
+        term: this.ownPrice() ? 'Precio de tu sucursal' : 'Precio de la empresa',
+        value: bs(this.catalog.priceOf(product.id, this.branchId())),
+        numeric: true,
+      },
       { term: 'Vendidos este mes', value: product.soldThisMonth.toString(), numeric: true },
       { term: 'A la venta en', value: `${this.elsewhere().length} sucursales más` },
     ];

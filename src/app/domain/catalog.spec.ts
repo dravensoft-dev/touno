@@ -112,4 +112,47 @@ describe('Catalog', () => {
     expect(closed).toBeDefined();
     expect(shown).not.toContain(closed?.id);
   });
+
+  it('reads the brand price unless the article is priced by sucursal', () => {
+    expect(catalog.priceOf('pc-combo-familiar', 'b-copacabana-miraflores')).toBe(
+      catalog.byId('pc-combo-familiar')?.priceBob,
+    );
+
+    expect(catalog.priceOf('al-campera', 'b-ale-santa-cruz')).toBe(285);
+    expect(catalog.priceOf('al-campera', 'b-ale-la-paz')).toBe(320);
+  });
+
+  it('falls back to the brand price for a sucursal with no row of its own', () => {
+    catalog.setPriceScope('al-jean', 'sucursal');
+
+    expect(catalog.priceOf('al-jean', 'b-ale-la-paz')).toBe(catalog.byId('al-jean')?.priceBob);
+  });
+
+  it('drops every branch price when the article goes back to one price for the marca', () => {
+    expect(catalog.pricesOf('al-campera').length).toBeGreaterThan(0);
+
+    catalog.setPriceScope('al-campera', 'marca');
+
+    expect(catalog.pricesOf('al-campera')).toEqual([]);
+    expect(catalog.priceOf('al-campera', 'b-ale-santa-cruz')).toBe(
+      catalog.byId('al-campera')?.priceBob,
+    );
+  });
+
+  it('writes a price the whole marca reads, and one only a sucursal reads', () => {
+    catalog.setPrice('al-jean', 199);
+    expect(catalog.priceOf('al-jean')).toBe(199);
+
+    catalog.setBranchPrice('b-ale-la-paz', 'al-campera', 299);
+    expect(catalog.priceOf('al-campera', 'b-ale-la-paz')).toBe(299);
+    expect(catalog.priceOf('al-campera', 'b-ale-cochabamba')).toBe(305);
+  });
+
+  it('carries the price each sucursal charges into the feed it builds', () => {
+    const item = catalog
+      .feedOf('importadora')
+      .find((one) => one.product.id === 'al-campera' && one.branch.id === 'b-ale-santa-cruz');
+
+    expect(item?.priceBob).toBe(285);
+  });
 });

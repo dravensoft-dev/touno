@@ -1,9 +1,11 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { NOW } from './clock';
+import { Agreements } from './agreements';
 import { Businesses } from './businesses';
 import { Geography } from './geography';
 import { Loads } from './loads';
 import { Riders } from './riders';
+import { RiderAgreement } from './agreements.model';
 import { timelineOf } from './timeline';
 import { COUPONS, ORDERS, SETTLEMENTS } from './orders.data';
 import {
@@ -18,6 +20,8 @@ import {
   Review,
   Settlement,
   isInterurban,
+  legOf,
+  movingLeg,
 } from './orders.model';
 
 const LIVE: readonly OrderState[] = [
@@ -38,6 +42,7 @@ export class Orders {
   private readonly businesses = inject(Businesses);
   private readonly geography = inject(Geography);
   private readonly riders = inject(Riders);
+  private readonly agreements = inject(Agreements);
   private readonly loads = inject(Loads);
 
   private readonly orderList = signal<readonly Order[]>(ORDERS);
@@ -165,7 +170,7 @@ export class Orders {
   salesOf(branchId: string): number {
     return this.ofBranch(branchId)
       .filter((one) => one.state !== 'rechazado')
-      .reduce((sum, one) => sum + one.totalBob, 0);
+      .reduce((sum, one) => sum + one.subtotalBob, 0);
   }
 
   advance(slug: string, state: OrderState): void {
@@ -192,12 +197,22 @@ export class Orders {
     );
   }
 
-  scan(slug: string, by: string): void {
+  scan(slug: string, by: string): RiderAgreement | undefined {
+    const order = this.bySlug(slug);
+    const leg = order ? movingLeg(order.state) : undefined;
+    const assignment = order && leg ? legOf(order.assignments, leg) : undefined;
+
     this.orderList.update((list) =>
       list.map((one) =>
         one.slug === slug ? { ...one, state: 'entregado', scannedAt: NOW, scannedBy: by } : one,
       ),
     );
+
+    if (assignment && assignment.riderId === by) {
+      return this.agreements.spend(by, assignment.branchId);
+    }
+
+    return undefined;
   }
 
   toggleCoupon(code: string): void {

@@ -198,7 +198,11 @@ function detailsOf(profile: Profile): readonly PlannedRoute[] {
     return companyRoutes(profile.companyId ?? '');
   }
 
-  return branchRoutes(profile);
+  if (profile.role === 'gerente-sucursal') {
+    return branchRoutes(profile);
+  }
+
+  return [];
 }
 
 function stocked(): Fill | undefined {

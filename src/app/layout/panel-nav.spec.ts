@@ -80,4 +80,18 @@ describe('activeIdIn', () => {
     expect(activeIdIn(rider!, '/rider/encargos/to-1043')).toBe('encargos');
     expect(activeIdIn(rider!, '/rider/nada')).toBeUndefined();
   });
+
+  it('opens the Touno panel on its own prefix and never swallows a neighbour', () => {
+    expect(panelFor('/plataforma/tarifas')?.role).toBe('operador');
+    expect(panelFor('/plataforma')?.role).toBe('operador');
+    expect(panelFor('/plataformas')).toBeUndefined();
+  });
+
+  it('keeps the operador rail whole, because he answers for no vertical', () => {
+    const panel = PANELS.find((one) => one.role === 'operador');
+
+    expect(panel).toBeDefined();
+    expect(destinationsFor(panel!, undefined).length).toBe(panel?.destinations.length);
+    expect(destinationsFor(panel!, 'restaurante').length).toBe(panel?.destinations.length);
+  });
 });
