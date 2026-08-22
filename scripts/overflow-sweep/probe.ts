@@ -17,14 +17,27 @@ export interface Settled {
   readonly kind: 'settled';
   readonly ms: number;
   readonly timedOut: boolean;
+  readonly signature: string;
 }
 
 export type ProbeResult = Settled;
 
 export function pageProbe(command: ProbeCommand): Promise<ProbeResult> {
   const root = document.documentElement;
-  const signature = (): string =>
-    `${root.scrollWidth}|${root.clientWidth}|${document.body.innerHTML.length}`;
+  const signature = (): string => {
+    const text = `${root.scrollWidth}|${root.clientWidth}|${root.className}|${document.body.outerHTML}`;
+    let low = 0x811c9dc5;
+    let high = 0xcbf29ce4;
+
+    for (let at = 0; at < text.length; at++) {
+      const code = text.charCodeAt(at);
+
+      low = Math.imul(low ^ code, 0x01000193) >>> 0;
+      high = Math.imul(high + code, 0x85ebca6b) >>> 0;
+    }
+
+    return `${low.toString(16)}-${high.toString(16)}`;
+  };
 
   const hold = (frames: number, maxMs: number, leaving: string | undefined): Promise<Settled> =>
     new Promise<Settled>((resolve) => {
@@ -40,13 +53,13 @@ export function pageProbe(command: ProbeCommand): Promise<ProbeResult> {
         previous = current;
 
         if (still >= frames && current !== leaving) {
-          resolve({ kind: 'settled', ms: elapsed, timedOut: false });
+          resolve({ kind: 'settled', ms: elapsed, timedOut: false, signature: current });
 
           return;
         }
 
         if (elapsed >= maxMs) {
-          resolve({ kind: 'settled', ms: elapsed, timedOut: true });
+          resolve({ kind: 'settled', ms: elapsed, timedOut: true, signature: current });
 
           return;
         }

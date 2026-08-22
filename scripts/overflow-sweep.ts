@@ -9,6 +9,7 @@ import { RIDERS } from '../src/app/domain/riders.data';
 import { PROFILES, Profile } from '../src/app/domain/session';
 import { PANELS, destinationsFor, panelFor } from '../src/app/layout/panel-nav';
 import { ProbeCommand, Settled, pageProbe } from './overflow-sweep/probe';
+import { SeenPages } from './overflow-sweep/seen';
 
 const BASE = process.env['SWEEP_BASE'] ?? 'http://localhost:4173';
 const WIDTHS = [320, 360, 390, 768, 1024, 1440];
@@ -147,6 +148,7 @@ if (!reachable) {
 
 const browser = await chromium.launch({ executablePath });
 const findings: Finding[] = [];
+const seen = new SeenPages();
 let visited = 0;
 let measured = 0;
 let impatient = 0;
@@ -176,13 +178,20 @@ for (const profile of [undefined, ...PROFILES] as readonly (Profile | undefined)
   const routes = profile ? [...railOf(profile), ...detailsOf(profile)] : PUBLIC_ROUTES;
 
   for (const route of routes) {
-    await settle(page, {
+    const arrived = await settle(page, {
       kind: 'navigate',
       path: route,
       frames: STILL_FRAMES,
       maxMs: SETTLE_MS,
     });
+
     visited++;
+
+    const twin = seen.claim(arrived.signature, `${id} ${route}`);
+
+    if (twin !== undefined) {
+      continue;
+    }
 
     for (const width of WIDTHS) {
       await page.setViewportSize({ width, height: 900 });
@@ -223,8 +232,14 @@ if (visited === 0) {
 }
 
 process.stdout.write(
-  `overflow-sweep: ${measured} measurement(s) over ${visited} page(s), ${findings.length} overflow(s)\n`,
+  `overflow-sweep: ${measured} measurement(s) over ${seen.size} distinct page(s) of ${visited} visited, ${findings.length} overflow(s)\n`,
 );
+
+if (seen.repeats > 0) {
+  process.stdout.write(
+    `overflow-sweep: ${seen.repeats} visit(s) drew a page already measured, so their widths were skipped\n`,
+  );
+}
 
 if (impatient > 0) {
   process.stdout.write(`overflow-sweep: ${impatient} wait(s) hit the ${SETTLE_MS}ms ceiling\n`);
