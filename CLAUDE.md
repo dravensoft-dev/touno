@@ -210,6 +210,12 @@ Each of these was paid for once. Do not rediscover them.
 - **`ArenaPageHead` has no `eyebrow` and no `lede`.** It takes `title` and `subtitle`. Both wrong
   names were written across 32 pages as plain attributes, which renders and does nothing at all;
   only binding one (`[lede]`) ever raised an error. When a page head looks bare, check the names.
+- **A required input may not be read in a destroy hook.** Angular clears an input's value before
+  the view's destroy hooks run, so `input.required` throws **NG0950 inside `destroyLView`** — and a
+  throw there aborts the teardown, so the router outlet never rebuilds and `<main>` disappears.
+  `seo/structured-data.ts` did exactly this and it cost every signed-in reader the whole public
+  marketplace: `/restaurantes`, `/tiendas` and every sucursal page died on arrival from a panel
+  route. Hold the thing you will need to clean up in a field, not behind an input.
 - **`ArenaSection` refuses an empty `title` at runtime**, and it throws rather than degrading. A
   computed title that is `''` for some states — an ETA on a closed order, say — takes down the page
   for exactly those records. Put the varying string in `description`.

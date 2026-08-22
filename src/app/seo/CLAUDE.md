@@ -58,5 +58,13 @@ business, where a tracking page was only ever useful to the one person holding t
   `'sucursal-' + empresa + '-' + sucursal` — is what makes a client-side navigation between two
   sucursales replace the script instead of stacking two.
 - `serialize()` escapes every `<` so no payload can close the script tag. Keep that.
+- **The cleanup must not read `key()`, and once it did.** `key` is an `input.required`, and Angular
+  clears an input's value before it runs the view's destroy hooks, so a `DestroyRef.onDestroy` that
+  looked the script up by `selectorFor(this.key())` threw **NG0950 during `destroyLView`** — which
+  aborts the teardown, so the outlet never rebuilt and `<main>` vanished from the page. It fired on
+  every navigation from a panel route to a public one: a signed-in reader could not open
+  `/restaurantes`, `/tiendas` or any sucursal page at all. The component now holds the element it
+  wrote in a field, removes it there, and removes the previous one itself when the key changes.
+  `structured-data.spec.ts` holds the destroy and the key change.
 - **`ArenaMetadataService.apply()` prefixes `SITE_ORIGIN` onto `canonical`** — pass a path, never
   an absolute URL. JSON-LD is the opposite: every `url` there is absolute.

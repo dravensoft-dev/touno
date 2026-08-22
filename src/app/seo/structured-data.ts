@@ -20,14 +20,23 @@ export class StructuredData {
   readonly key = input.required<string>();
   readonly schema = input.required<Record<string, unknown>>();
 
+  private written: HTMLScriptElement | undefined;
+
   constructor() {
     effect(() => {
       const element = this.resolveElement(this.key());
+
+      if (this.written !== undefined && this.written !== element) {
+        this.written.remove();
+      }
+
+      this.written = element;
       element.textContent = serialize(this.schema());
     });
 
     inject(DestroyRef).onDestroy(() => {
-      this.document.head.querySelector(selectorFor(this.key()))?.remove();
+      this.written?.remove();
+      this.written = undefined;
     });
   }
 
