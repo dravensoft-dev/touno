@@ -110,6 +110,22 @@ async function walk(target: PlannedProfile): Promise<Walked> {
     await settle(`${id} signing in`, { kind: 'settle', frames: STILL_FRAMES, maxMs: COLD_MS });
   }
 
+  if (target.fill !== undefined) {
+    await settle(`${id} ${target.fill.path}`, {
+      kind: 'navigate',
+      path: target.fill.path,
+      frames: STILL_FRAMES,
+      maxMs: COLD_MS,
+    });
+
+    await page.locator('button', { hasText: target.fill.button }).first().click();
+    await settle(`${id} filling the cart`, {
+      kind: 'settle',
+      frames: STILL_FRAMES,
+      maxMs: WARM_MS,
+    });
+  }
+
   for (const planned of target.routes) {
     const route = planned.path;
     const cold = !warm.has(planned.pattern);

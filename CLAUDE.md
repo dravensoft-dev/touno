@@ -287,8 +287,9 @@ bun run audit:arena
 Then check by hand, because nothing above checks them:
 
 - **No horizontal overflow from 320px up.** `bun run serve:static`, then `bun run sweep:overflow`,
-  which walks the public surface the sitemap indexes and then all **seven** profiles, at 320, 360,
-  390, 768, 1024 and 1440, and fails naming what crossed the edge: `documentElement.scrollWidth`
+  which walks the public surface the sitemap indexes, then all **seven** profiles, then **two short
+  walks with a filled cart**, at 320, 360, 390, 768, 1024 and 1440, and fails naming what crossed
+  the edge: `documentElement.scrollWidth`
   must equal `clientWidth`, and nothing outside a container that declares `overflow-x` may cross
   the viewport's right edge. It reads the fixtures rather than following links, because a table row
   navigates through `(activate)` and not an `href`, so a link crawler never opens a detail page —
@@ -296,7 +297,11 @@ Then check by hand, because nothing above checks them:
   profiles at once and measures each distinct page once, however many routes draw it, so it is
   about forty seconds rather than the six minutes it used to be. `scripts/CLAUDE.md` holds the
   reasons; the ones that bite are that the wait is a condition and never a clock, and that a
-  planned path is checked against `app.routes` because two of them had been measuring the 404.
+  planned path is checked against `app.routes` because two of them had been measuring the 404, and
+  that two walks fill the cart first because the cart action only exists once something is in it.
+  **A wrapped bar is not an overflow.** `arena-app-bar`'s band is `flex-wrap: wrap`, so a top bar
+  that stops fitting becomes two rows in silence and every width measurement still passes. When you
+  change what the bar holds, look at its height as well as at the sweep.
 - **No external font requests.** Nothing to `fonts.googleapis.com` or `fonts.gstatic.com`.
 - **The skip link is the first tab stop**, and it lands on the main region.
 - **Both palettes look right on the page**, including the brand mark, which inverts under `noche`,

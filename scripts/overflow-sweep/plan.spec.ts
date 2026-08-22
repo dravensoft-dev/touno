@@ -40,7 +40,7 @@ describe('sweepPlan', () => {
   it('walks the anonymous visitor before it signs in as anyone', () => {
     expect(plan[0]?.id).toBe('anon');
     expect(plan[0]?.button).toBeUndefined();
-    expect(plan).toHaveLength(8);
+    expect(plan).toHaveLength(10);
   });
 
   it('covers every page the sitemap asks Google to index', () => {
@@ -120,9 +120,30 @@ describe('sweepPlan', () => {
 
   it('plans no path the router cannot match', () => {
     for (const profile of plan) {
-      for (const route of profile.routes) {
-        expect(matches(route.path), `${route.path} matches no route`).toBe(true);
+      for (const path of [...profile.routes.map((one) => one.path), profile.fill?.path ?? '/']) {
+        expect(matches(path), `${path} matches no route`).toBe(true);
       }
     }
+  });
+
+  it('fills the cart on a sucursal that is open, because a closed one draws no Agregar', () => {
+    const filling = plan.filter((one) => one.fill !== undefined);
+
+    expect(filling.map((one) => one.id)).toEqual(['anon-carrito', 'p-comprador-carrito']);
+
+    for (const profile of filling) {
+      const slug = profile.fill?.path.split('/').at(-1);
+      const branch = BRANCHES.find((one) => one.slug === slug);
+
+      expect(profile.fill?.button).toBe('Agregar');
+      expect(branch?.open, `${slug} is closed, so its Agregar is disabled`).toBe(true);
+    }
+  });
+
+  it('walks the filled cart signed out and signed in, which are the two shapes of the bar', () => {
+    expect(plan.find((one) => one.id === 'anon-carrito')?.button).toBeUndefined();
+    expect(plan.find((one) => one.id === 'p-comprador-carrito')?.button).toBe(
+      'Compradora · Rosa Villca',
+    );
   });
 });

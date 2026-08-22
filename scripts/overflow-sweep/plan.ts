@@ -16,10 +16,16 @@ export interface PlannedRoute {
   readonly shows: Shows;
 }
 
+export interface Fill {
+  readonly path: string;
+  readonly button: string;
+}
+
 export interface PlannedProfile {
   readonly id: string;
   readonly button: string | undefined;
   readonly routes: readonly PlannedRoute[];
+  readonly fill?: Fill;
 }
 
 interface Records<T> {
@@ -50,6 +56,8 @@ function open<T>(source: Records<T>): readonly PlannedRoute[] {
     ? drawn
     : [...drawn, { path: source.pathOf(stranger), pattern: source.pattern, shows: 'refusal' }];
 }
+
+const ADD_TO_CART = 'Agregar';
 
 function companyOf(branchCompanyId: string) {
   return COMPANIES.find((one) => one.id === branchCompanyId);
@@ -193,6 +201,51 @@ function detailsOf(profile: Profile): readonly PlannedRoute[] {
   return branchRoutes(profile);
 }
 
+function stocked(): Fill | undefined {
+  const branch = BRANCHES.find(
+    (one) => one.open && PRODUCTS.some((product) => product.companyId === one.companyId),
+  );
+  const company = branch ? companyOf(branch.companyId) : undefined;
+
+  if (branch === undefined || company === undefined) {
+    return undefined;
+  }
+
+  return {
+    path: `/${pathOfType(company.type)}/${company.slug}/${branch.slug}`,
+    button: ADD_TO_CART,
+  };
+}
+
+function cartWalks(): readonly PlannedProfile[] {
+  const fill = stocked();
+
+  if (fill === undefined) {
+    return [];
+  }
+
+  const buyer = PROFILES.find((one) => one.role === 'comprador');
+
+  return [
+    {
+      id: 'anon-carrito',
+      button: undefined,
+      fill,
+      routes: [plain('/'), plain('/restaurantes'), plain(fill.path)],
+    },
+    ...(buyer === undefined
+      ? []
+      : [
+          {
+            id: `${buyer.id}-carrito`,
+            button: `${buyer.label} · ${buyer.name}`,
+            fill,
+            routes: [plain(buyer.home), plain('/carrito')],
+          },
+        ]),
+  ];
+}
+
 export function sweepPlan(): readonly PlannedProfile[] {
   return [
     { id: 'anon', button: undefined, routes: publicRoutes() },
@@ -201,5 +254,6 @@ export function sweepPlan(): readonly PlannedProfile[] {
       button: `${profile.label} · ${profile.name}`,
       routes: [...railOf(profile), ...detailsOf(profile)],
     })),
+    ...cartWalks(),
   ];
 }

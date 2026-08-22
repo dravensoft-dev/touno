@@ -21,7 +21,8 @@ root its own schema names.
 - `overflow-sweep.ts` — the horizontal-overflow check the root checklist asks for by hand, which
   nothing else in the tree performs. `bun run serve:static` first, then `bun run sweep:overflow`;
   `overflow-sweep/plan.ts` names what it walks: the public surface the sitemap indexes, then each
-  of the seven profiles with its rail and its detail routes, at 320, 360, 390, 768, 1024 and 1440.
+  of the seven profiles with its rail and its detail routes, then two short walks with a **filled
+  cart**, at 320, 360, 390, 768, 1024 and 1440.
   It fails when
   `documentElement.scrollWidth` exceeds `clientWidth` and names the elements crossing the right
   edge, ignoring any that sit inside a container declaring `overflow-x`, which is the carve-out the
@@ -76,11 +77,22 @@ root its own schema names.
   `/empresa/catalogo/:id` whatever the vertical, and only the sucursal splits `carta` from
   `catalogo`. Five product pages had been measuring the 404. The empresa's rider page resolves by
   **slug**, not by id, and had been measuring the not-found state for all ten riders.
-- **The eight walks run four at a time and share one cache.** `pool.ts` keeps the worker count,
+- **A walk may fill the cart before it starts, and two of them do.** The cart action only exists
+  while `cart.count() > 0`, so every walk before this one measured a bar the reader never sees
+  once he has bought anything — and because `arena-app-bar`'s band wraps rather than overflows, the
+  two-row bar it produced was invisible to a measurement that only asks whether anything crosses
+  the right edge. `PlannedProfile.fill` names a path and a button; `walk()` navigates there after
+  the sign-in click, clicks it and settles. `anon-carrito` is the narrow bar with no session,
+  `p-comprador-carrito` the wide bar with a cart and a name beside it, which is the tightest the
+  bar ever gets. `stocked()` picks a sucursal that is **open**, because a closed one draws its
+  Agregar disabled and the click would time out. The cart is a signal and the sweep never reloads,
+  so it survives every later `pushState`. `SeenPages` needs no carve-out: a filled cart draws a
+  different bar, so the signature differs from the same route's empty-cart visit.
+- **The ten walks run four at a time and share one cache.** `pool.ts` keeps the worker count,
   `SWEEP_WORKERS` moves it. `SeenPages` is shared on purpose: a refusal page is the same page
   whoever was refused, so a twin found by one worker spares another the six widths. Which walk
   gets credited for a page depends on who arrived first, and nothing but the diagnostic line reads
-  that. Every summary is collected and printed after the pool drains, because eight walks writing
+  that. Every summary is collected and printed after the pool drains, because ten walks writing
   findings as they go is unreadable.
 - **The ceiling is the size of a chunk fetch, and only the first visit to a pattern pays one.**
   `COLD_MS` covers a route whose component has not been downloaded in this context, measured at
