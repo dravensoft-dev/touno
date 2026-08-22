@@ -1,9 +1,16 @@
 # scripts — the build-time helpers
 
-Four Bun TypeScript files. They import the app's own fixtures so nothing is stated twice. The
-first three are dependency-free, using only `node:fs` and `node:path`, and run inside the build.
+Four Bun TypeScript entry points. They import the app's own fixtures so nothing is stated twice.
+Three of them are dependency-free, using only `node:fs` and `node:path`, and run inside the build.
 `overflow-sweep.ts` is the exception on both counts: it drives a real browser, so it needs
-`playwright-core` and a Chrome on the machine, and nothing runs it for you.
+`playwright-core` and a Chrome on the machine, and nothing runs it for you. It is also the only one
+with modules of its own, under `overflow-sweep/`, and the only one under test.
+
+**Everything under `scripts` is type-checked, linted and tested like `src` is.**
+`tsconfig.spec.json` includes `scripts/**/*.ts`, `angular.json` adds `../scripts/**/*.spec.ts` to
+the unit-test `include` and `scripts/**/*.ts` to `lintFilePatterns`. The include glob is written
+with `../` because the builder globs from `sourceRoot`, which is `src`, and not from the workspace
+root its own schema names.
 
 - `generate-sitemap.ts` — writes `public/sitemap.xml` from `COMPANIES` and `BRANCHES`, plus the four
   static public routes. Runs in `prepare:assets`. **The count it prints must equal the number of
@@ -30,6 +37,22 @@ first three are dependency-free, using only `node:fs` and `node:path`, and run i
 
 ## Rules
 
+- **The sweep waits for a condition, never for a clock.** `overflow-sweep/probe.ts` exports
+  `pageProbe`, which polls `requestAnimationFrame` until the layout signature holds still for
+  `STILL_FRAMES` frames. The fixed `waitForTimeout(260)` and `waitForTimeout(140)` it replaced were
+  4-5x longer than the page actually needs — measured at 54ms after a route change and 38ms after a
+  viewport change — and they were 85% of a 348-second run.
+- **`pageProbe` is serialized into the page by `toString()`, so it must be self-contained.** It may
+  not call another module's function, read a module constant or close over anything. That is why it
+  is one function switching on a command rather than one export per job, and why its helpers are
+  declared inside it. A helper lifted out to the module scope compiles fine and throws
+  `ReferenceError` in the browser.
+- **A navigation waits for the page it arrived at, not for the page it left.** A route change does
+  not blank the DOM: the router keeps the previous component on screen while it fetches the new
+  chunk, so a plain stability poll settles on the _previous_ route and measures the wrong page.
+  `pageProbe`'s `navigate` command captures the signature before `pushState` and refuses to settle
+  until it differs. When two routes genuinely draw the same DOM it waits out `SETTLE_MS` and the
+  run reports how many times that happened.
 - **The sweep navigates without reloading, and it must.** The profile lives in a signal and not in
   `localStorage`, so a reload signs you out and a panel route entered by URL renders the gate
   instead of the page. It clicks a profile on `/ingresar` and then moves with `history.pushState`

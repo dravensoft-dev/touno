@@ -55,11 +55,15 @@
         },
         "test": {
           "builder": "@angular/build:unit-test",
-          "options": { "buildTarget": "touno:build:development", "runner": "vitest" }
+          "options": {
+            "buildTarget": "touno:build:development",
+            "runner": "vitest",
+            "include": ["src/**/*.spec.ts", "../scripts/**/*.spec.ts"]
+          }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
-          "options": { "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"] }
+          "options": { "lintFilePatterns": ["src/**/*.ts", "src/**/*.html", "scripts/**/*.ts"] }
         }
       }
     }

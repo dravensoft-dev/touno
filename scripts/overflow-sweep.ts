@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs';
+import type { Page } from 'playwright-core';
 import { AGREEMENTS } from '../src/app/domain/agreements.data';
 import { BRANCHES } from '../src/app/domain/businesses.data';
 import { PRODUCTS } from '../src/app/domain/catalog.data';
@@ -7,11 +8,12 @@ import { ORDERS } from '../src/app/domain/orders.data';
 import { RIDERS } from '../src/app/domain/riders.data';
 import { PROFILES, Profile } from '../src/app/domain/session';
 import { PANELS, destinationsFor, panelFor } from '../src/app/layout/panel-nav';
+import { ProbeCommand, Settled, pageProbe } from './overflow-sweep/probe';
 
-const BASE = process.env.SWEEP_BASE ?? 'http://localhost:4173';
+const BASE = process.env['SWEEP_BASE'] ?? 'http://localhost:4173';
 const WIDTHS = [320, 360, 390, 768, 1024, 1440];
 const BROWSERS = [
-  process.env.CHROME,
+  process.env['CHROME'],
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
   '/usr/bin/google-chrome',
@@ -19,6 +21,9 @@ const BROWSERS = [
 ];
 
 const PUBLIC_ROUTES = ['/', '/restaurantes', '/tiendas', '/riders', '/ingresar'];
+
+const STILL_FRAMES = 2;
+const SETTLE_MS = 600;
 
 interface Finding {
   readonly profileId: string;
@@ -144,6 +149,17 @@ const browser = await chromium.launch({ executablePath });
 const findings: Finding[] = [];
 let visited = 0;
 let measured = 0;
+let impatient = 0;
+
+async function settle(page: Page, command: ProbeCommand): Promise<Settled> {
+  const result = await page.evaluate(pageProbe, command);
+
+  if (result.timedOut) {
+    impatient++;
+  }
+
+  return result;
+}
 
 for (const profile of [undefined, ...PROFILES] as readonly (Profile | undefined)[]) {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -154,22 +170,23 @@ for (const profile of [undefined, ...PROFILES] as readonly (Profile | undefined)
 
   if (profile) {
     await page.locator('button', { hasText: profile.label }).first().click();
-    await page.waitForTimeout(400);
+    await settle(page, { kind: 'settle', frames: STILL_FRAMES, maxMs: SETTLE_MS });
   }
 
   const routes = profile ? [...railOf(profile), ...detailsOf(profile)] : PUBLIC_ROUTES;
 
   for (const route of routes) {
-    await page.evaluate((path) => {
-      history.pushState({}, '', path);
-      dispatchEvent(new PopStateEvent('popstate', { state: {} }));
-    }, route);
-    await page.waitForTimeout(260);
+    await settle(page, {
+      kind: 'navigate',
+      path: route,
+      frames: STILL_FRAMES,
+      maxMs: SETTLE_MS,
+    });
     visited++;
 
     for (const width of WIDTHS) {
       await page.setViewportSize({ width, height: 900 });
-      await page.waitForTimeout(140);
+      await settle(page, { kind: 'settle', frames: STILL_FRAMES, maxMs: SETTLE_MS });
 
       const result = await page.evaluate(measure);
 
@@ -208,4 +225,8 @@ if (visited === 0) {
 process.stdout.write(
   `overflow-sweep: ${measured} measurement(s) over ${visited} page(s), ${findings.length} overflow(s)\n`,
 );
+
+if (impatient > 0) {
+  process.stdout.write(`overflow-sweep: ${impatient} wait(s) hit the ${SETTLE_MS}ms ceiling\n`);
+}
 process.exit(findings.length > 0 ? 1 : 0);
