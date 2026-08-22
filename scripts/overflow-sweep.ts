@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
-import type { Page } from 'playwright-core';
-import { sweepPlan } from './overflow-sweep/plan';
+import { PlannedProfile, sweepPlan } from './overflow-sweep/plan';
+import { inPool } from './overflow-sweep/pool';
 import { ProbeCommand, Settled, pageProbe } from './overflow-sweep/probe';
 import { SeenPages } from './overflow-sweep/seen';
 
@@ -15,9 +15,11 @@ const BROWSERS = [
 ];
 
 const WIDEST = WIDTHS[WIDTHS.length - 1] ?? 1440;
+const WORKERS = Math.max(1, Number(process.env['SWEEP_WORKERS'] ?? 4));
 
 const STILL_FRAMES = 2;
-const SETTLE_MS = 600;
+const COLD_MS = 2500;
+const WARM_MS = 400;
 
 interface Finding {
   readonly profileId: string;
@@ -101,54 +103,70 @@ if (!reachable) {
 }
 
 const browser = await chromium.launch({ executablePath });
-const findings: Finding[] = [];
 const seen = new SeenPages();
-let visited = 0;
-let measured = 0;
-let impatient = 0;
 
-async function settle(page: Page, command: ProbeCommand): Promise<Settled> {
-  const result = await page.evaluate(pageProbe, command);
-
-  if (result.timedOut) {
-    impatient++;
-  }
-
-  return result;
+interface Walked {
+  readonly id: string;
+  readonly routes: number;
+  readonly visited: number;
+  readonly measured: number;
+  readonly findings: readonly Finding[];
+  readonly impatient: readonly string[];
 }
 
-for (const target of sweepPlan()) {
+async function walk(target: PlannedProfile): Promise<Walked> {
   const context = await browser.newContext({ viewport: { width: WIDEST, height: 900 } });
   const page = await context.newPage();
   const id = target.id;
+  const findings: Finding[] = [];
+  const impatient: string[] = [];
+  const warm = new Set<string>();
+  let visited = 0;
+  let measured = 0;
+
+  const settle = async (where: string, command: ProbeCommand): Promise<Settled> => {
+    const result = await page.evaluate(pageProbe, command);
+
+    if (result.timedOut) {
+      impatient.push(`${where} never held still inside ${command.maxMs}ms`);
+    }
+
+    return result;
+  };
 
   await page.goto(`${BASE}/ingresar/`, { waitUntil: 'networkidle' });
 
   if (target.button !== undefined) {
     await page.locator('button', { hasText: target.button }).first().click();
-    await settle(page, { kind: 'settle', frames: STILL_FRAMES, maxMs: SETTLE_MS });
+    await settle(`${id} signing in`, { kind: 'settle', frames: STILL_FRAMES, maxMs: COLD_MS });
   }
 
   for (const planned of target.routes) {
     const route = planned.path;
-    const arrived = await settle(page, {
+    const cold = !warm.has(planned.pattern);
+
+    warm.add(planned.pattern);
+
+    const arrived = await settle(`${id} ${route}`, {
       kind: 'navigate',
       path: route,
       frames: STILL_FRAMES,
-      maxMs: SETTLE_MS,
+      maxMs: cold ? COLD_MS : WARM_MS,
     });
 
     visited++;
 
-    const twin = seen.claim(arrived.signature, `${id} ${route}`);
-
-    if (twin !== undefined) {
+    if (seen.claim(arrived.signature, `${id} ${route}`) !== undefined) {
       continue;
     }
 
     for (const width of WIDTHS) {
       await page.setViewportSize({ width, height: 900 });
-      await settle(page, { kind: 'settle', frames: STILL_FRAMES, maxMs: SETTLE_MS });
+      await settle(`${id} ${route} @${width}`, {
+        kind: 'settle',
+        frames: STILL_FRAMES,
+        maxMs: WARM_MS,
+      });
 
       const result = await page.evaluate(measure);
 
@@ -162,24 +180,38 @@ for (const target of sweepPlan()) {
           over: result.over,
           culprits: result.culprits,
         });
-        process.stdout.write(`overflow-sweep: ${id} ${route} @${width} +${result.over}px\n`);
-
-        for (const culprit of result.culprits) {
-          process.stdout.write(`    ${culprit}\n`);
-        }
       }
     }
   }
 
-  process.stdout.write(`overflow-sweep: ${id}, ${target.routes.length} route(s)\n`);
   await context.close();
+  process.stdout.write(`overflow-sweep: ${id}, ${target.routes.length} route(s)\n`);
+
+  return { id, routes: target.routes.length, visited, measured, findings, impatient };
 }
 
+const walked = await inPool(sweepPlan(), WORKERS, walk);
+
 await browser.close();
+
+const findings = walked.flatMap((one) => one.findings);
+const impatient = walked.flatMap((one) => one.impatient);
+const visited = walked.reduce((total, one) => total + one.visited, 0);
+const measured = walked.reduce((total, one) => total + one.measured, 0);
 
 if (visited === 0) {
   process.stderr.write('overflow-sweep: no route was visited\n');
   process.exit(1);
+}
+
+for (const finding of findings) {
+  process.stdout.write(
+    `overflow-sweep: ${finding.profileId} ${finding.route} @${finding.width} +${finding.over}px\n`,
+  );
+
+  for (const culprit of finding.culprits) {
+    process.stdout.write(`    ${culprit}\n`);
+  }
 }
 
 process.stdout.write(
@@ -192,7 +224,8 @@ if (seen.repeats > 0) {
   );
 }
 
-if (impatient > 0) {
-  process.stdout.write(`overflow-sweep: ${impatient} wait(s) hit the ${SETTLE_MS}ms ceiling\n`);
+for (const where of impatient) {
+  process.stdout.write(`overflow-sweep: ${where}\n`);
 }
+
 process.exit(findings.length > 0 ? 1 : 0);

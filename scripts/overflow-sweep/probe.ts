@@ -71,12 +71,14 @@ export function pageProbe(command: ProbeCommand): Promise<ProbeResult> {
     });
 
   if (command.kind === 'navigate') {
+    const trim = (path: string): string => (path.length > 1 ? path.replace(/\/$/, '') : path);
+    const standing = trim(location.pathname) === trim(command.path);
     const leaving = signature();
 
     history.pushState({}, '', command.path);
     dispatchEvent(new PopStateEvent('popstate', { state: {} }));
 
-    return hold(command.frames, command.maxMs, leaving);
+    return hold(command.frames, command.maxMs, standing ? undefined : leaving);
   }
 
   return hold(command.frames, command.maxMs, undefined);

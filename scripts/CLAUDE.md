@@ -70,6 +70,19 @@ root its own schema names.
   `/empresa/catalogo/:id` whatever the vertical, and only the sucursal splits `carta` from
   `catalogo`. Five product pages had been measuring the 404. The empresa's rider page resolves by
   **slug**, not by id, and had been measuring the not-found state for all ten riders.
+- **The eight walks run four at a time and share one cache.** `pool.ts` keeps the worker count,
+  `SWEEP_WORKERS` moves it. `SeenPages` is shared on purpose: a refusal page is the same page
+  whoever was refused, so a twin found by one worker spares another the six widths. Which walk
+  gets credited for a page depends on who arrived first, and nothing but the diagnostic line reads
+  that. Every summary is collected and printed after the pool drains, because eight walks writing
+  findings as they go is unreadable.
+- **The ceiling is the size of a chunk fetch, and only the first visit to a pattern pays one.**
+  `COLD_MS` covers a route whose component has not been downloaded in this context, measured at
+  267ms for the landing page and slower under four parallel contexts, which is why it is 2500 and
+  not the 600 it started at: at 600 the landing page was being measured before it had finished
+  drawing. `WARM_MS` covers a pattern already visited, where the router reuses the component and
+  only the parameter changed, so nothing is fetched and 400ms is generous. The four escanear
+  twins pay the warm ceiling because there is genuinely nothing to see.
 - **Navigation always happens at the widest viewport.** The widths are walked ascending and the
   loop ends on the widest, so nothing has to reset it. The page signature carries `scrollWidth`,
   so a route navigated at some other width would key the cache differently and never match its

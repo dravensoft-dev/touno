@@ -73,6 +73,21 @@ describe('pageProbe navigate', () => {
     }
   });
 
+  it('settles at once when it is already standing on the path it was asked for', async () => {
+    document.body.innerHTML = '<main>el turno</main>';
+    history.pushState({}, '', '/rider/turno');
+
+    const result = await pageProbe({
+      kind: 'navigate',
+      path: '/rider/turno',
+      frames: 2,
+      maxMs: 400,
+    });
+
+    expect(result.timedOut).toBe(false);
+    expect(result.ms).toBeLessThan(400);
+  });
+
   it('waits for what the new route drew, not for the page it left', async () => {
     document.body.innerHTML = '<main>antes</main>';
 
