@@ -34,3 +34,9 @@ body {
 router-outlet {
   display: none;
 }
+
+@media (width < 22.5rem) {
+  :root {
+    --gutter: var(--sp-4);
+  }
+}

@@ -66,6 +66,9 @@ carry the skin. Hold these:
   `data-arena-part` hooks are the contract, and only `design/touno/plugin.css` may select them.
 - **Every value is read through its token.** No hex, no `rgb()`, no colour name, no bare pixel
   length. Derive with `calc()`, `clamp()` or `color-mix()` over a token.
+- **A role re-answered under a media query goes in `src/styles.css`, not in the plugin.**
+  `plugin.generated.css` is wrapped in `@layer arena-plugin` and the role values are emitted
+  unlayered, and no layer outranks unlayered. The narrow `--gutter` step is the one case.
 - **Icons are Phosphor class strings**, `class="ph-bold ph-truck"` or `icon="…"`, never an element
   and never inline SVG. The one inline SVG in the tree is the brand mark, and it is ours.
 - **No emoji, and no glyph standing in for one.** A row of `★` characters is reported by the audit
@@ -180,7 +183,9 @@ Each of these was paid for once. Do not rediscover them.
 - **`ArenaThemeService` throws during prerender.** Its constructor reaches
   `document.defaultView.matchMedia`, and the DOM `@angular/platform-server` ships has
   `defaultView` and no `matchMedia`, so the optional chain does not save you. `theme-toggle.ts`
-  resolves the service inside `afterNextRender` and renders identical markup on both sides.
+  resolves the service inside `afterNextRender` and renders identical markup on both sides: it
+  draws the moon and the sun both, every time, and `:host-context(.arena-noche)` gives one of them
+  a box. A glyph computed from the current theme prerenders one icon and hydrates to the other.
 - **The profile lives in memory only, and the theme persists.** A guard returning a `UrlTree`
   during hydration is NG0500, so the panel gate is a render decision (`@if (unlocked())`) rather
   than a redirect, and the profile is deliberately not in `localStorage` so server and first client
@@ -211,8 +216,11 @@ Each of these was paid for once. Do not rediscover them.
 - **An `@else` block with more than one root node cannot fill a projection slot.** Wrap the block's
   content in one container of your own.
 - **`--bp-*` does not resolve during prerender**, so `arenaViewportBelow` always returns the wide
-  branch server-side. The one width decision in this project is a media query for exactly this
-  reason, in `app.css`.
+  branch server-side. Every width decision in this project is a media query for exactly this
+  reason. There are two: `app.css` at `48rem`, which swaps the panel rail for the bottom bar and
+  the top bar's link row for an `arena-menu`; and `src/styles.css` below `22.5rem`, which steps
+  `--gutter` down to `--sp-4`. Both branches of a swap are always in the markup, so the prerender
+  and the first client render are the same HTML and CSS alone decides.
 - **Prettier must keep double quotes in CSS.** `arena-to-prod` detects part hooks by matching
   `data-arena-part="..."`; single quotes make it blind to the whole style plugin.
 - **`arena-to-prod` reports `arena-stack` and `arena-row` as unknown components.** They are rhythm

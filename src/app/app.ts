@@ -11,7 +11,9 @@ import {
   ArenaBottomNavItem,
   ArenaBrand,
   ArenaButton,
+  ArenaIconButton,
   ArenaMain,
+  ArenaMenu,
   ArenaNav,
   ArenaSideNav,
   ArenaSideNavItem,
@@ -21,6 +23,7 @@ import {
   ArenaToastQueue,
   ArenaUnauthCard,
 } from '@dravensoft/arena-angular';
+import type { ArenaMenuItem } from '@dravensoft/arena-angular';
 import { Cart } from './domain/cart';
 import { Profile, Role, Session } from './domain/session';
 import { Destination, activeIdIn, destinationsFor, panelFor } from './layout/panel-nav';
@@ -36,6 +39,7 @@ interface Reachable extends Destination {
 interface PublicLink {
   readonly path: string;
   readonly label: string;
+  readonly icon: string;
   readonly exact: boolean;
 }
 
@@ -47,10 +51,15 @@ const GATE_NOUN: Record<Role, string> = {
 };
 
 const PUBLIC_LINKS: readonly PublicLink[] = [
-  { path: '/restaurantes', label: 'Restaurantes', exact: false },
-  { path: '/tiendas', label: 'Importadoras', exact: false },
-  { path: '/riders', label: 'Maneja con Touno', exact: true },
+  { path: '/restaurantes', label: 'Restaurantes', icon: 'ph-bold ph-fork-knife', exact: false },
+  { path: '/tiendas', label: 'Importadoras', icon: 'ph-bold ph-package', exact: false },
+  { path: '/riders', label: 'Maneja con Touno', icon: 'ph-bold ph-motorcycle', exact: true },
 ];
+
+const MENU_LINKS: readonly ArenaMenuItem[] = PUBLIC_LINKS.map((link) => ({
+  label: link.label,
+  icon: link.icon,
+}));
 
 @Component({
   selector: 'app-root',
@@ -68,6 +77,8 @@ const PUBLIC_LINKS: readonly PublicLink[] = [
     ArenaNav,
     ArenaActions,
     ArenaButton,
+    ArenaIconButton,
+    ArenaMenu,
     ArenaSideNav,
     ArenaSideNavItem,
     ArenaBottomNav,
@@ -98,6 +109,8 @@ export class App {
   protected readonly siteName = SITE_NAME;
 
   protected readonly publicLinks = PUBLIC_LINKS;
+
+  protected readonly menuLinks = MENU_LINKS;
 
   protected readonly url = toSignal(
     this.router.events.pipe(
@@ -165,6 +178,14 @@ export class App {
   protected leave(): void {
     this.session.leave();
     void this.router.navigateByUrl('/');
+  }
+
+  protected toLink(item: ArenaMenuItem): void {
+    const link = PUBLIC_LINKS.find((one) => one.label === item.label);
+
+    if (link) {
+      void this.router.navigateByUrl(link.path);
+    }
   }
 
   protected toCart(): void {

@@ -18,6 +18,11 @@
         {{ link.label }}
       </a>
     }
+    <div class="shell-nav__menu">
+      <arena-menu [items]="menuLinks" (select)="toLink($event)">
+        <arena-icon-button trigger icon="ph-bold ph-list" label="Secciones de Touno" />
+      </arena-menu>
+    </div>
   </nav>
 
   <div actions class="shell-actions arena-row">
@@ -28,11 +33,30 @@
     }
     <app-theme-toggle />
     @if (session.profile(); as who) {
-      <arena-button variant="ghost" icon="ph-bold ph-sign-out" (click)="leave()">
-        {{ who.name }}
-      </arena-button>
+      <div class="shell-actions__wide">
+        <arena-button variant="ghost" icon="ph-bold ph-sign-out" (click)="leave()">
+          {{ who.name }}
+        </arena-button>
+      </div>
+      <div class="shell-actions__narrow">
+        <arena-icon-button
+          icon="ph-bold ph-sign-out"
+          [label]="'Salir de ' + who.name"
+          (click)="leave()"
+        />
+      </div>
     } @else {
-      <arena-button icon="ph-bold ph-user-circle" (click)="toSignIn()">Ingresar</arena-button>
+      <div class="shell-actions__wide">
+        <arena-button icon="ph-bold ph-user-circle" (click)="toSignIn()">Ingresar</arena-button>
+      </div>
+      <div class="shell-actions__narrow">
+        <arena-icon-button
+          icon="ph-bold ph-user-circle"
+          label="Ingresar"
+          variant="solid"
+          (click)="toSignIn()"
+        />
+      </div>
     }
   </div>
 </arena-app-bar>

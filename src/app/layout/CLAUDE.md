@@ -55,9 +55,9 @@ already claimed, which is what NG0500 is made of. Two consequences, both deliber
 The theme is the opposite case and _is_ persisted, because its class sits on `<html>`, which
 hydration never claims.
 
-## The one media query in the project
+## The two media queries in the project
 
-`app.css` carries `@media (width >= 48rem)`, and it is the only width query in the tree:
+`app.css` carries `@media (width >= 48rem)`, and it is the only one that changes a layout:
 
 - below it the rail is `display: none` and `ArenaBottomNav` carries the panel, with the page
   padded by `--layout-bar` plus the safe-area inset so the fixed bar never covers the last row;
@@ -68,6 +68,20 @@ signal returns the wide branch server-side and a phone is served the sidebar unt
 Show/hide is a discrete decision at first paint, which is exactly the case the signal cannot serve.
 **Why a literal `48rem`**: a media query cannot read a `var()`, so it restates `--bp-md`. If Arena
 moves that breakpoint, this number has to follow.
+
+The same query decides the top bar, because at a phone width the three public links do not fit
+beside the brand and the account action: below it they are `display: none` and an `arena-menu` on a
+`ph-list` trigger carries them, and "Ingresar" is drawn as an `arena-icon-button` rather than a
+labelled one; above it the links come back and the menu goes. **Both branches are always in the
+markup and CSS picks one**, which is the same reason the width decision is a query at all. The menu
+is dispatched on the label — `ArenaMenuItem` carries no id — so `PUBLIC_LINKS` in `app.ts` is the
+one place a section's label is written, and `MENU_LINKS` is derived from it.
+
+The second query is `@media (width < 22.5rem)` in `src/styles.css`, and it changes no layout: it
+re-answers `--gutter` as `--sp-4`, so the page padding steps from 24px to 16px on the narrowest
+phones. It sits there rather than in `design/touno/plugin.css` because the plugin's sheet is wrapped
+in `@layer arena-plugin` and the role values are emitted unlayered, which no layer can outrank.
+Those sixteen pixels are what lets the app bar hold one row at 320.
 
 Both navigation landmarks are named apart — "Panel de la sucursal" and "Accesos rápidos" — and
 the hidden one is `display: none`, which takes it out of the accessibility tree, so a screen reader
@@ -127,5 +141,13 @@ and answers `(close)`.
 `ArenaThemeService`'s constructor reaches `document.defaultView.matchMedia`, and the DOM
 `@angular/platform-server` ships has `defaultView` and no `matchMedia`, so the optional chain does
 not protect you and **the prerender of every route that draws the toggle throws**. The component
-resolves the service inside `afterNextRender` and renders one `arena-icon-button` with a glyph that
-does not depend on the current theme, so the first client render matches the prerendered HTML.
+resolves the service inside `afterNextRender`, so the first client render matches the prerendered
+HTML.
+
+It draws **two** `arena-icon-button`s and always both: a moon that offers `noche` and a sun that
+offers `papel`, each in a `span` of ours, and `:host-context(.arena-noche)` decides which one has a
+box. **The glyph must not be computed from the current theme.** The server does not know it —
+`localStorage` is read by the inline script in `index.html`, in the browser, before Angular starts —
+so a component that picked its own icon would prerender one glyph and hydrate to the other, which is
+NG0500. Rendering both and letting CSS choose is what keeps the two renders identical, and it is the
+same move the brand mark makes when it inverts. `theme-toggle.spec.ts` holds the pair.

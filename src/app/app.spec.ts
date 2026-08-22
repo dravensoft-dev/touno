@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { ARENA_MAIN_ID } from '@dravensoft/arena-angular';
 import { App } from './app';
@@ -156,5 +156,64 @@ describe('App gate', () => {
     expect(rail).toContain('/sucursal/pedidos');
     expect(rail).not.toContain('/sucursal/carta');
     expect(rail).not.toContain('/sucursal/catalogo');
+  });
+});
+
+describe('App sections menu', () => {
+  async function open(): Promise<{
+    fixture: ComponentFixture<App>;
+    labels: readonly string[];
+    rows: readonly HTMLElement[];
+  }> {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const host: HTMLElement = fixture.nativeElement;
+    const trigger = host.querySelector<HTMLButtonElement>('.shell-nav__menu button');
+
+    expect(trigger).not.toBeNull();
+    trigger?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    return {
+      fixture,
+      labels: [...host.querySelectorAll('.shell-nav__link')].map((one) =>
+        (one.textContent ?? '').trim(),
+      ),
+      rows: [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')],
+    };
+  }
+
+  beforeEach(() => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([
+          { path: 'restaurantes', children: [] },
+          { path: 'tiendas', children: [] },
+          { path: 'riders', children: [] },
+        ]),
+      ],
+    });
+  });
+
+  it('offers the phone exactly the sections the wide bar lists', async () => {
+    const { labels, rows } = await open();
+
+    expect(labels.length).toBe(3);
+    expect(rows.map((row) => (row.textContent ?? '').trim())).toEqual([...labels]);
+  });
+
+  it('reaches a section from a row, which is dispatched on the label alone', async () => {
+    const { fixture, labels, rows } = await open();
+    const wanted = rows.find((row) => (row.textContent ?? '').trim() === labels[1]);
+
+    expect(wanted).toBeDefined();
+    wanted?.click();
+    await fixture.whenStable();
+
+    expect(TestBed.inject(Router).url).toBe('/tiendas');
   });
 });

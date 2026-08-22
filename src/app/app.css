@@ -5,6 +5,7 @@
 }
 
 .shell-nav__link {
+  display: none;
   color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
   font-size: var(--fs-sm);
   font-weight: var(--fw-control);
@@ -14,6 +15,15 @@
 .shell-nav__link:hover,
 .shell-nav__link.is-current {
   color: var(--color-primary);
+}
+
+.shell-nav__menu,
+.shell-actions__narrow {
+  display: contents;
+}
+
+.shell-actions__wide {
+  display: none;
 }
 
 .shell-panel {
@@ -38,6 +48,19 @@
 }
 
 @media (width >= 48rem) {
+  .shell-nav__link {
+    display: inline;
+  }
+
+  .shell-nav__menu,
+  .shell-actions__narrow {
+    display: none;
+  }
+
+  .shell-actions__wide {
+    display: contents;
+  }
+
   .shell-panel {
     grid-template-columns: var(--layout-sidebar) minmax(0, 1fr);
   }

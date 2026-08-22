@@ -14,12 +14,39 @@ import { ArenaIconButton, ArenaThemeService } from '@dravensoft/arena-angular';
   host: { style: 'display: contents' },
   imports: [ArenaIconButton],
   template: `
-    <arena-icon-button
-      icon="ph-bold ph-circle-half"
-      label="Cambiar entre tema claro y oscuro"
-      variant="ghost"
-      (click)="toggle()"
-    />
+    <span class="theme-toggle__to-dark">
+      <arena-icon-button
+        icon="ph-bold ph-moon"
+        label="Cambiar al tema oscuro"
+        variant="ghost"
+        (click)="toggle()"
+      />
+    </span>
+    <span class="theme-toggle__to-light">
+      <arena-icon-button
+        icon="ph-bold ph-sun"
+        label="Cambiar al tema claro"
+        variant="ghost"
+        (click)="toggle()"
+      />
+    </span>
+  `,
+  styles: `
+    .theme-toggle__to-dark {
+      display: contents;
+    }
+
+    .theme-toggle__to-light {
+      display: none;
+    }
+
+    :host-context(.arena-noche) .theme-toggle__to-dark {
+      display: none;
+    }
+
+    :host-context(.arena-noche) .theme-toggle__to-light {
+      display: contents;
+    }
   `,
 })
 export class ThemeToggle {
