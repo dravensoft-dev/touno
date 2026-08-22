@@ -20,8 +20,9 @@ root its own schema names.
   serves the not-found page from the root. Exits 1 if the route was not prerendered.
 - `overflow-sweep.ts` — the horizontal-overflow check the root checklist asks for by hand, which
   nothing else in the tree performs. `bun run serve:static` first, then `bun run sweep:overflow`;
-  it signs in as each of the seven profiles and walks the rail of that profile plus every detail
-  route the fixtures can name, at 320, 360, 390, 768, 1024 and 1440. It fails when
+  `overflow-sweep/plan.ts` names what it walks: the public surface the sitemap indexes, then each
+  of the seven profiles with its rail and its detail routes, at 320, 360, 390, 768, 1024 and 1440.
+  It fails when
   `documentElement.scrollWidth` exceeds `clientWidth` and names the elements crossing the right
   edge, ignoring any that sit inside a container declaring `overflow-x`, which is the carve-out the
   rule itself makes. `SWEEP_BASE` points it at another origin and `CHROME` at another browser.
@@ -57,6 +58,22 @@ root its own schema names.
   `localStorage`, so a reload signs you out and a panel route entered by URL renders the gate
   instead of the page. It clicks a profile on `/ingresar` and then moves with `history.pushState`
   plus a `popstate` event, which the router listens to and the session survives.
+- **A detail route is planned for the records the reader can actually open, plus one he cannot.**
+  Every panel page reached by id refuses a record belonging to someone else, and every refusal
+  draws the same markup, so walking all fifteen pedidos as a rider who carries two measured one
+  page and thirteen copies of a refusal. `open()` in `plan.ts` takes the records, the path and the
+  ownership test, and returns every record the reader owns plus the first he does not, which is
+  the one visit that proves the refusal state still lays out. Adding a detail route means adding
+  one `Records` source, not another branch in a chain of `if`s.
+- **A planned path is checked against `app.routes`.** `plan.spec.ts` refuses any path the router
+  cannot match, which is how `/empresa/carta/:id` was found: the empresa's catalogue is
+  `/empresa/catalogo/:id` whatever the vertical, and only the sucursal splits `carta` from
+  `catalogo`. Five product pages had been measuring the 404. The empresa's rider page resolves by
+  **slug**, not by id, and had been measuring the not-found state for all ten riders.
+- **Navigation always happens at the widest viewport.** The widths are walked ascending and the
+  loop ends on the widest, so nothing has to reset it. The page signature carries `scrollWidth`,
+  so a route navigated at some other width would key the cache differently and never match its
+  twin.
 - **The sweep cannot find pages by following links.** Table rows navigate through
   `[interactive]` and `(activate)`, not through an `href`, so a link crawler reports every list
   page clean without ever opening a detail page — which is where the route map and the chat

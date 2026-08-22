@@ -1,13 +1,6 @@
 import { existsSync } from 'node:fs';
 import type { Page } from 'playwright-core';
-import { AGREEMENTS } from '../src/app/domain/agreements.data';
-import { BRANCHES } from '../src/app/domain/businesses.data';
-import { PRODUCTS } from '../src/app/domain/catalog.data';
-import { TRUCK_LOADS } from '../src/app/domain/loads.data';
-import { ORDERS } from '../src/app/domain/orders.data';
-import { RIDERS } from '../src/app/domain/riders.data';
-import { PROFILES, Profile } from '../src/app/domain/session';
-import { PANELS, destinationsFor, panelFor } from '../src/app/layout/panel-nav';
+import { sweepPlan } from './overflow-sweep/plan';
 import { ProbeCommand, Settled, pageProbe } from './overflow-sweep/probe';
 import { SeenPages } from './overflow-sweep/seen';
 
@@ -21,7 +14,7 @@ const BROWSERS = [
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 ];
 
-const PUBLIC_ROUTES = ['/', '/restaurantes', '/tiendas', '/riders', '/ingresar'];
+const WIDEST = WIDTHS[WIDTHS.length - 1] ?? 1440;
 
 const STILL_FRAMES = 2;
 const SETTLE_MS = 600;
@@ -32,45 +25,6 @@ interface Finding {
   readonly width: number;
   readonly over: number;
   readonly culprits: readonly string[];
-}
-
-function railOf(profile: Profile): readonly string[] {
-  const panel = panelFor(profile.home) ?? PANELS.find((one) => one.role === profile.role);
-
-  return panel ? destinationsFor(panel, profile.businessType).map((one) => one.path) : [];
-}
-
-function detailsOf(profile: Profile): readonly string[] {
-  const slugs = ORDERS.map((one) => one.slug);
-
-  if (profile.role === 'comprador') {
-    return ['/carrito/entrega', ...slugs.map((slug) => `/mis-pedidos/${slug}`)];
-  }
-
-  if (profile.role === 'rider') {
-    return [
-      ...slugs.map((slug) => `/rider/encargos/${slug}`),
-      ...slugs.map((slug) => `/rider/encargos/${slug}/escanear`),
-      ...AGREEMENTS.map((one) => `/rider/acuerdos/${one.id}`),
-      ...TRUCK_LOADS.map((one) => `/rider/cargas/${one.id}`),
-    ];
-  }
-
-  const catalogue = profile.businessType === 'restaurante' ? 'carta' : 'catalogo';
-  const mine = PRODUCTS.filter((one) => one.companyId === profile.companyId).map((one) => one.id);
-
-  if (profile.role === 'gerente-empresa') {
-    return [
-      ...BRANCHES.map((one) => `/empresa/sucursales/${one.id}`),
-      ...RIDERS.map((one) => `/empresa/riders/${one.id}`),
-      ...mine.map((id) => `/empresa/${catalogue}/${id}`),
-    ];
-  }
-
-  return [
-    ...slugs.map((slug) => `/sucursal/pedidos/${slug}`),
-    ...mine.map((id) => `/sucursal/${catalogue}/${id}`),
-  ];
 }
 
 function measure() {
@@ -163,21 +117,20 @@ async function settle(page: Page, command: ProbeCommand): Promise<Settled> {
   return result;
 }
 
-for (const profile of [undefined, ...PROFILES] as readonly (Profile | undefined)[]) {
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+for (const target of sweepPlan()) {
+  const context = await browser.newContext({ viewport: { width: WIDEST, height: 900 } });
   const page = await context.newPage();
-  const id = profile?.id ?? 'anon';
+  const id = target.id;
 
   await page.goto(`${BASE}/ingresar/`, { waitUntil: 'networkidle' });
 
-  if (profile) {
-    await page.locator('button', { hasText: profile.label }).first().click();
+  if (target.button !== undefined) {
+    await page.locator('button', { hasText: target.button }).first().click();
     await settle(page, { kind: 'settle', frames: STILL_FRAMES, maxMs: SETTLE_MS });
   }
 
-  const routes = profile ? [...railOf(profile), ...detailsOf(profile)] : PUBLIC_ROUTES;
-
-  for (const route of routes) {
+  for (const planned of target.routes) {
+    const route = planned.path;
     const arrived = await settle(page, {
       kind: 'navigate',
       path: route,
@@ -216,11 +169,9 @@ for (const profile of [undefined, ...PROFILES] as readonly (Profile | undefined)
         }
       }
     }
-
-    await page.setViewportSize({ width: 1440, height: 900 });
   }
 
-  process.stdout.write(`overflow-sweep: ${id}, ${routes.length} route(s)\n`);
+  process.stdout.write(`overflow-sweep: ${id}, ${target.routes.length} route(s)\n`);
   await context.close();
 }
 
