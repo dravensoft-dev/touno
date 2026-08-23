@@ -37,6 +37,18 @@ describe('what counts as a claim about a path', () => {
     expect(isPathClaim('src/plugin.generated.css')).toBe(false);
   });
 
+  it('leaves a path the walk never descends into alone, whatever is on disk', () => {
+    expect(isPathClaim('dist/touno/browser/404.html')).toBe(false);
+    expect(isPathClaim('node_modules/vitest/index.js')).toBe(false);
+  });
+
+  it('reports nothing for a build product whether or not the tree has been built', () => {
+    const naming = () => 'it writes `dist/touno/browser/404.html`';
+
+    expect(pathProblems(['one.md'], naming)).toEqual([]);
+    expect(memberProblems(['one.md'], () => 'see `dist/touno/browser/app.ts:main()`')).toEqual([]);
+  });
+
   it('reads a path out of a code span and not out of running prose', () => {
     expect(pathClaims('the `src/app/app.ts` file and src/app/other.ts')).toEqual([
       { claim: 'src/app/app.ts', number: 1 },

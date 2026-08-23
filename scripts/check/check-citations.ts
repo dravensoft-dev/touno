@@ -1,4 +1,13 @@
-import { codeSpans, exists, GENERATED_INFIX, markdownFiles, proseLines, read, ROOT } from './tree';
+import {
+  codeSpans,
+  exists,
+  GENERATED_INFIX,
+  markdownFiles,
+  proseLines,
+  read,
+  ROOT,
+  underSkippedRoot,
+} from './tree';
 
 export const OUTSIDE_THE_TREE = new Map<string, string>([
   [
@@ -32,6 +41,7 @@ export function isPathClaim(span: string): boolean {
   if (clean === '' || METAVARIABLE.test(clean)) return false;
   if (clean.startsWith('/') || /^[a-z][a-z0-9+.-]*:\/\//i.test(clean)) return false;
   if (clean.includes(GENERATED_INFIX)) return false;
+  if (underSkippedRoot(clean)) return false;
   if (!PATH_LIKE.test(clean)) return false;
   return EXTENSION.test(clean);
 }
@@ -51,7 +61,7 @@ export function memberClaims(text: string): { path: string; member: string; numb
       const match = MEMBER.exec(span);
       if (match === null) return [];
       const path = match[1] as string;
-      if (METAVARIABLE.test(path) || !PATH_LIKE.test(path)) return [];
+      if (METAVARIABLE.test(path) || !PATH_LIKE.test(path) || underSkippedRoot(path)) return [];
       return [{ path, member: match[2] as string, number }];
     }),
   );

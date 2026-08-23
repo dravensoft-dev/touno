@@ -13,6 +13,10 @@ export const SKIPPED = new Set([
 
 export const GENERATED_INFIX = '.generated.';
 
+export function underSkippedRoot(rel: string): boolean {
+  return SKIPPED.has(rel.split('/')[0] ?? '');
+}
+
 export function relPosix(path: string): string {
   return relative(ROOT, path).split(sep).join('/');
 }
