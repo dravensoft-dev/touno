@@ -18,12 +18,13 @@ import {
 } from '@dravensoft/arena-angular';
 import { ArenaMetadataService } from '@dravensoft/arena-angular/metadata';
 import { Businesses } from '../../../domain/businesses';
+import { Reputation } from '../../../domain/reputation';
 import { Cart } from '../../../domain/cart';
 import { Catalog } from '../../../domain/catalog';
 import { Geography } from '../../../domain/geography';
 import { BusinessType, pathOfType } from '../../../domain/businesses.model';
 import { Product } from '../../../domain/catalog.model';
-import { bs, minutos } from '../../../domain/format';
+import { bs, minutos, porcentaje } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 import { ProductCard } from '../../../shared/product-card/product-card';
 import { StructuredData } from '../../../seo/structured-data';
@@ -64,6 +65,7 @@ export class BranchDetail {
   private readonly notices = inject(Notices);
 
   protected readonly businesses = inject(Businesses);
+  private readonly reputation = inject(Reputation);
   protected readonly catalog = inject(Catalog);
   protected readonly geography = inject(Geography);
 
@@ -132,6 +134,14 @@ export class BranchDetail {
     { label: this.branch().name },
   ]);
 
+  protected standingLine(): string {
+    const one = this.reputation.of(this.branch().id);
+
+    return one.totalCount === 0
+      ? 'Sucursal nueva, sin historial todavía'
+      : `${porcentaje(one.pct)} · ${one.keptCount} de ${one.totalCount} compromisos cumplidos`;
+  }
+
   protected readonly facts = computed<readonly ArenaKeyValueRow[]>(() => {
     const branch = this.branch();
 
@@ -145,6 +155,7 @@ export class BranchDetail {
         numeric: true,
       },
       { term: 'Envío desde', value: bs(branch.deliveryBob), numeric: true },
+      { term: 'Cumplimiento', value: this.standingLine(), numeric: true },
       ...branch.hours.map((one) => ({
         term: one.days,
         value: `${one.opens} a ${one.closes}`,

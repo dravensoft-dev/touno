@@ -63,11 +63,11 @@ Puede empezar de cualquiera de los dos lados: la empresa invita al rider, o el r
 las sucursales que le interesan. En ambos casos, **la otra parte tiene que aceptar**. Si no acepta,
 no hay asignación y la sucursal no le puede mandar trabajo.
 
-**Todo reclutamiento trae puntos de carrera.** Es la cantidad de entregas que cubre, y la elige
-quien recluta —con un mínimo que fija Touno para todos—. **Se descuenta un punto cada vez que un
+**Todo reclutamiento trae carreras.** Es la cantidad de entregas que cubre, y la elige
+quien recluta —con un mínimo que fija Touno para todos—. **Se descuenta una carrera cada vez que un
 escaneo cierra una entrega**: el del código del comprador cuando el rider llega a su puerta, y el
 del código de la carga cuando un rider de camión descarga en la sucursal de destino. Cuando se
-gasta el último punto el reclutamiento queda **cumplido**: esas sucursales dejan de mandarle
+gasta la última carrera el reclutamiento queda **cumplido**: esas sucursales dejan de mandarle
 trabajo, y el rider queda libre.
 
 **Hay dos clases de reclutamiento.**
@@ -200,6 +200,7 @@ Depende de por dónde va tu pedido, y esto es a propósito: la ficha te dice **q
 - **Poder preguntar** sin buscar un número de teléfono, y sin que te pasen de una persona a otra sin
   explicación.
 - **Un código que es tuyo desde el principio** y que nadie más puede usar para cerrar tu pedido.
+- **Tu reputación es tuya y no la ve nadie más.** Ni la sucursal ni el rider la consultan.
 - **Elegir**, cuando compras a otra ciudad, entre que te lo lleven o ir a buscarlo.
 
 ### Qué no puedes hacer, y quién sí
@@ -243,7 +244,7 @@ urbano**; si llevas camión, tu recorrido es el de la sección siguiente.
    Mientras no haya un sí de las dos partes, esa sucursal no te puede mandar trabajo. Puedes tener
    varios reclutamientos normales con varias empresas al mismo tiempo.
 
-   Cada reclutamiento viene con sus **puntos de carrera**, y los ves antes de aceptar.
+   Cada reclutamiento viene con sus **carreras**, y las ves antes de aceptar.
 
 2. **Te pones en turno** cuando quieras trabajar.
 3. **Recibes un encargo** de una de tus sucursales, con el punto de recojo, el destino y **cuánto
@@ -251,21 +252,21 @@ urbano**; si llevas camión, tu recorrido es el de la sección siguiente.
 4. **Recoges** en la sucursal.
 5. **Vas.** Desde ese momento el comprador ve tu recorrido en el mapa y puede escribirte por el chat
    del pedido.
-6. **Escaneas el código del comprador** al llegar. Eso cierra el pedido **y te descuenta un punto
-   de carrera** del reclutamiento que cubre esa sucursal.
+6. **Escaneas el código del comprador** al llegar. Eso cierra el pedido **y te descuenta una
+   carrera** del reclutamiento que cubre esa sucursal.
 
-### Tus puntos de carrera
+### Tus carreras
 
-Los puntos son **la cuenta de lo que te falta cumplir**. Bajan de a uno, con cada escaneo que cierra
+Las carreras son **la cuenta de lo que te falta cumplir**. Bajan de a una, con cada escaneo que cierra
 una entrega tuya, y cuando llegan a cero ese reclutamiento queda **cumplido**: esas sucursales
 dejan de mandarte trabajo y tú quedas libre.
 
-Sirven para una cosa concreta: **mientras te quede un punto pendiente, en cualquier reclutamiento,
-no puedes aceptar uno de hora pico**. Un reclutamiento de hora pico es exclusivo —sólo puedes tener
+Sirven para una cosa concreta: **mientras te quede una carrera pendiente, en cualquier
+reclutamiento, no puedes aceptar uno de hora pico**. Un reclutamiento de hora pico es exclusivo —sólo puedes tener
 uno en toda tu cuenta, y una misma empresa no puede dártelo dos veces—, así que Touno se asegura de
 que no lo tomes con trabajo a medias.
 
-En **Acuerdos** ves cuántos puntos te quedan en total, y si una invitación de hora pico está
+En **Acuerdos** ves cuántas carreras te quedan en total, y si una invitación de hora pico está
 bloqueada te decimos **por qué**, no sólo que no se puede.
 
 ### Cómo cobras
@@ -294,7 +295,7 @@ entrega en mano, y tú entregas a una sucursal, no a una persona.
    le explica por qué.
 4. **Descargas en la sucursal de destino, y ahí sí escaneas: el código de la carga.** El gerente
    te lo muestra en su pantalla, tú lo escaneas, y con eso la carga queda recibida, cada comprador
-   es avisado y **se te descuenta un punto de carrera**. Un escaneo por carga, no uno por pedido.
+   es avisado y **se te descuenta una carrera**. Un escaneo por carga, no uno por pedido.
    Es tu constancia de que entregaste, que antes no tenías.
 5. Ahí termina tu parte. Lo que pase después —que el comprador lo recoja en mostrador, o que otro
    rider se lo lleve a su casa— ya no es tuyo, y el chat pasa a quien corresponda.
@@ -306,20 +307,23 @@ entrega en mano, y tú entregas a una sucursal, no a una persona.
   mapa, su chat y el escaneo.
 - **Cargas** — sólo si llevas camión: tus cargas, cuánto les falta para salir y qué llevan.
 - **Acuerdos** — invitaciones que te llegaron, postulaciones que enviaste, con qué sucursales estás
-  trabajando hoy, cuántos puntos de carrera te quedan y cuáles ya cumpliste.
+  trabajando hoy, cuántas carreras te quedan y cuáles ya cumpliste.
 - **Ganancias** — lo que llevas ganado, por día y por periodo, y dónde quieres que te lo paguen.
+- **Manual** — cómo funciona Touno para ti, y cómo se calcula tu reputación.
 
 ### Qué ganas
 
 - **Eliges para quién trabajas**, y a qué sucursales concretas. No te asignan a una empresa entera
   si sólo te sirven dos locales.
 - **Nadie te asigna sin tu sí.** El acuerdo es de dos partes, siempre.
-- **Sabes cuánto ganas antes de aceptar**, no después, y **cuántas entregas te compromete**.
+- **Sabes cuánto ganas antes de aceptar**, no después, y **cuántas carreras te compromete**.
 - **Tu trabajo queda probado.** El escaneo del código es la constancia de que entregaste, y ahora
   también la tienes cuando llevas camión.
 - **Eliges dónde cobrar.** A tu cuenta o a tu tarjeta, y si algo lo impide se te dice cuál es.
 - **Si pierdes señal no quedas mal.** El sistema muestra tu última conexión con su hora, en vez de
-  aparentar que dejaste de moverte.
+  aparentar que dejaste de moverte, **y tu reputación tampoco lo cuenta**.
+- **Cumplir se nota.** Tu reputación te pone antes en la lista del gerente y te abre la hora pico,
+  y sale de hechos y no de opiniones. Está en la sección 12.
 
 ### Qué no puedes hacer, y quién sí
 
@@ -327,7 +331,7 @@ entrega en mano, y tú entregas a una sucursal, no a una persona.
 - **No trabajas para una sucursal sin acuerdo aceptado**, aunque estés al lado.
 - **No cierras un pedido sin escanear el código del comprador.** No hay forma de marcarlo entregado
   a mano. Si llevas camión no escaneas nunca el código de un comprador: el tuyo es el de la carga.
-- **No aceptas un reclutamiento de hora pico con puntos pendientes**, ni un segundo de hora pico, ni
+- **No aceptas un reclutamiento de hora pico con carreras pendientes**, ni un segundo de hora pico, ni
   uno de una empresa que ya te reclutó así antes.
 - **No decides cuándo sale tu camión.** Sale cuando se llena, y cuántos pedidos hacen falta lo fija
   la empresa.
@@ -349,7 +353,7 @@ Respondes por la marca completa: todos los locales, no uno.
    sucursal tiene el suyo**; en los dos casos los escribes tú. Al ponerlo, Touno te avisa qué se le
    suma encima al comprador.
 3. **Reclutas riders.** Invitas a un rider, **eliges a qué sucursales tuyas queda asociado**, la
-   clase de reclutamiento —normal o de hora pico— y **cuántos puntos de carrera le das**. Ves quién
+   clase de reclutamiento —normal o de hora pico— y **cuántas carreras le das**. Ves quién
    aceptó, quién está pendiente y quién se postuló a ti. Si un rider no puede tomar hora pico ahora,
    la pantalla te dice por qué.
 4. **Miras las finanzas** de toda la marca junta, y comparas entre sucursales.
@@ -360,7 +364,7 @@ Respondes por la marca completa: todos los locales, no uno.
 
 ### Qué pantallas tienes
 
-Resumen de la empresa · Sucursales · Carta · Riders · Finanzas · Ajustes.
+Resumen de la empresa · Sucursales · Carta · Riders · Finanzas · Ajustes · Manual.
 
 ### Qué ganas
 
@@ -373,7 +377,7 @@ Resumen de la empresa · Sucursales · Carta · Riders · Finanzas · Ajustes.
 - **Eres el único que puede reclutar en hora pico para varias sucursales.** Una sucursal sólo puede
   hacerlo para sí misma.
 - **Ves lo que no funciona** sin que te lo cuenten: qué local rechaza pedidos, cuál se queda sin
-  riders.
+  riders. Ahora con una cifra: la reputación de cada sucursal, con de qué está hecha.
 
 ### Qué no puedes hacer, y quién sí
 
@@ -406,8 +410,8 @@ Respondes por un local. Es la persona que está cuando entra el pedido.
 ### Qué pantallas tienes
 
 Pedidos (el tablero del día) · Ficha del pedido · Escanear · Disponibilidad de la carta ·
-Tus riders, con el reclutamiento de hora pico · Historial · Métricas de tu local · Ajustes de tu
-local, con la tarjeta de la sucursal.
+Tus riders, con el reclutamiento de hora pico y tu propia reputación · Historial · Métricas de tu
+local · Ajustes de tu local, con la tarjeta de la sucursal · Manual.
 
 ### Qué ganas
 
@@ -415,6 +419,7 @@ local, con la tarjeta de la sucursal.
 - **Asignas el rider sabiendo quién está disponible ahora** y quién trabaja contigo de verdad.
 - **Cortas de raíz el "¿ya salió?"**: el comprador lo ve solo.
 - **Desactivas un plato en segundos** sin pedir permiso ni llamar a nadie.
+- **Ves la reputación de cada rider al asignar**, y la lista viene ordenada por ella.
 
 ### Qué no puedes hacer, y quién sí
 
@@ -460,7 +465,7 @@ es lo que define hasta dónde puedes vender.
 
 ### Qué pantallas tienes
 
-Resumen de la empresa · Sucursales · Catálogo · Riders · Finanzas · Ajustes.
+Resumen de la empresa · Sucursales · Catálogo · Riders · Finanzas · Ajustes · Manual.
 
 ### Qué ganas
 
@@ -515,7 +520,8 @@ Llegó un camión a tu ciudad con pedidos de compradores de aquí.
 
 Pedidos · Ficha del pedido · **Entradas** (las cargas que llegan a tu sucursal, con su código de
 recepción) · Escanear · Disponibilidad del catálogo · Tus riders, con el reclutamiento de hora
-pico · Historial · Métricas · Ajustes, con la tarjeta de la sucursal.
+pico y tu propia reputación · Historial · Métricas · Ajustes, con la tarjeta de la sucursal ·
+Manual.
 
 ### Qué ganas
 
@@ -546,7 +552,8 @@ que rigen para **todas** las empresas a la vez.
 
 1. **Fijas las tarifas universales.** La comisión de Touno, el **envío base mínimo** que ninguna
    empresa puede bajar, las tarifas por distancia y el **recargo por clima**. También el **mínimo de
-   puntos de carrera** que puede dar un reclutamiento.
+   carreras** que puede comprometer un reclutamiento y el **piso de reputación** que hace falta para
+   reclutar y para tomar hora pico.
 2. **Marcas el clima de cada ciudad.** Mientras una ciudad esté marcada como desfavorable, cada
    pedido a domicilio que llegue ahí paga el recargo, y ese dinero va completo al rider. Un pedido
    con recojo en mostrador no lo paga.
@@ -555,7 +562,7 @@ que rigen para **todas** las empresas a la vez.
 
 ### Qué pantallas tienes
 
-Tarifas · Clima · Red.
+Tarifas · Clima · Red · Manual.
 
 ### Qué ganas
 
@@ -563,6 +570,8 @@ Tarifas · Clima · Red.
   tocar ninguna una por una.
 - **Ves quién cobra de más**, y cuánto, sin pedirle el dato a nadie.
 - **El clima deja de ser una excusa**: o está marcado y se cobra, o no lo está y no se cobra.
+- **Un solo número fija el nivel de exigencia de toda la red**, y se aplica en el momento: lo subes
+  y quien queda debajo deja de poder reclutar en el acto.
 
 ### Qué no puedes hacer, y quién sí
 
@@ -578,16 +587,16 @@ Los mismos hechos de arriba, ahora en orden y diciendo **quién ve qué** en cad
 
 ### Recorrido A — Comida, misma ciudad
 
-| Paso               | Comprador                     | Sucursal              | Rider                                 |
-| ------------------ | ----------------------------- | --------------------- | ------------------------------------- |
-| Compra             | Recibe su código              | Le entra el pedido    | —                                     |
-| La sucursal acepta | Ve _Aceptado_                 | Lo pasa a cocina      | —                                     |
-| Preparando         | Ve _Preparando_               | Cocina                | —                                     |
-| Sin rider aún      | Ve **En espera de rider**     | Busca a quién asignar | —                                     |
-| Asignan al rider   | **Empieza el mapa** y el chat | Sigue el pedido       | Recibe el encargo con su ganancia     |
-| El rider recoge    | Ve el recorrido en vivo       | —                     | Va en camino                          |
-| Llega              | Muestra su código             | —                     | **Escanea**                           |
-| Fin                | Ve _Entregado_                | Entra al historial    | Suma a sus ganancias y gasta un punto |
+| Paso               | Comprador                     | Sucursal              | Rider                                    |
+| ------------------ | ----------------------------- | --------------------- | ---------------------------------------- |
+| Compra             | Recibe su código              | Le entra el pedido    | —                                        |
+| La sucursal acepta | Ve _Aceptado_                 | Lo pasa a cocina      | —                                        |
+| Preparando         | Ve _Preparando_               | Cocina                | —                                        |
+| Sin rider aún      | Ve **En espera de rider**     | Busca a quién asignar | —                                        |
+| Asignan al rider   | **Empieza el mapa** y el chat | Sigue el pedido       | Recibe el encargo con su ganancia        |
+| El rider recoge    | Ve el recorrido en vivo       | —                     | Va en camino                             |
+| Llega              | Muestra su código             | —                     | **Escanea**                              |
+| Fin                | Ve _Entregado_                | Entra al historial    | Suma a sus ganancias y gasta una carrera |
 
 ### Recorrido B — Importadora, misma ciudad
 
@@ -595,27 +604,27 @@ Idéntico al recorrido A. Cambia lo que va en la caja, no el camino.
 
 ### Recorrido C — Importadora, otra ciudad, **recojo en sucursal**
 
-| Paso               | Comprador                                     | Sucursal de origen        | Rider de camión                                   | Sucursal de destino                                       |
-| ------------------ | --------------------------------------------- | ------------------------- | ------------------------------------------------- | --------------------------------------------------------- |
-| Compra             | Elige _recojo en sucursal_ y recibe su código | Le entra el pedido        | —                                                 | —                                                         |
-| Aceptan y preparan | Ve el avance                                  | Prepara                   | —                                                 | —                                                         |
-| Entra a la carga   | Ve **En espera de más pedidos · 3 de 6**      | Suma el pedido a la carga | Ve crecer su carga                                | —                                                         |
-| La carga sale      | **Empieza el mapa**                           | —                         | En ruta                                           | Ve que viene                                              |
-| Llega a destino    | Es **notificado**: está en su sucursal        | —                         | **Escanea el código de la carga** y suma un punto | **Se lo muestra**, recibe la carga, y el chat pasa a ella |
-| Va al mostrador    | Muestra su código                             | —                         | —                                                 | **Escanea**                                               |
-| Fin                | Ve _Entregado_                                | —                         | —                                                 | Entra al historial                                        |
+| Paso               | Comprador                                     | Sucursal de origen        | Rider de camión                                       | Sucursal de destino                                       |
+| ------------------ | --------------------------------------------- | ------------------------- | ----------------------------------------------------- | --------------------------------------------------------- |
+| Compra             | Elige _recojo en sucursal_ y recibe su código | Le entra el pedido        | —                                                     | —                                                         |
+| Aceptan y preparan | Ve el avance                                  | Prepara                   | —                                                     | —                                                         |
+| Entra a la carga   | Ve **En espera de más pedidos · 3 de 6**      | Suma el pedido a la carga | Ve crecer su carga                                    | —                                                         |
+| La carga sale      | **Empieza el mapa**                           | —                         | En ruta                                               | Ve que viene                                              |
+| Llega a destino    | Es **notificado**: está en su sucursal        | —                         | **Escanea el código de la carga** y gasta una carrera | **Se lo muestra**, recibe la carga, y el chat pasa a ella |
+| Va al mostrador    | Muestra su código                             | —                         | —                                                     | **Escanea**                                               |
+| Fin                | Ve _Entregado_                                | —                         | —                                                     | Entra al historial                                        |
 
 ### Recorrido D — Importadora, otra ciudad, **entrega a domicilio**
 
 Igual que el C hasta que llega a destino. Desde ahí:
 
-| Paso                | Comprador                                                      | Sucursal de destino                       | Rider local                           |
-| ------------------- | -------------------------------------------------------------- | ----------------------------------------- | ------------------------------------- |
-| Llega a destino     | Es notificado; **el chat pasa a la sucursal**                  | Muestra el código de la carga y la recibe | —                                     |
-| Asignan rider local | Ve **En espera de rider**, luego **el chat vuelve a un rider** | Elige entre sus riders                    | Recibe el encargo                     |
-| Va en camino        | **Mapa otra vez**                                              | Sigue el pedido                           | Va                                    |
-| Llega               | Muestra su código                                              | —                                         | **Escanea**                           |
-| Fin                 | Ve _Entregado_                                                 | Entra al historial                        | Suma a sus ganancias y gasta un punto |
+| Paso                | Comprador                                                      | Sucursal de destino                       | Rider local                              |
+| ------------------- | -------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| Llega a destino     | Es notificado; **el chat pasa a la sucursal**                  | Muestra el código de la carga y la recibe | —                                        |
+| Asignan rider local | Ve **En espera de rider**, luego **el chat vuelve a un rider** | Elige entre sus riders                    | Recibe el encargo                        |
+| Va en camino        | **Mapa otra vez**                                              | Sigue el pedido                           | Va                                       |
+| Llega               | Muestra su código                                              | —                                         | **Escanea**                              |
+| Fin                 | Ve _Entregado_                                                 | Entra al historial                        | Suma a sus ganancias y gasta una carrera |
 
 Este es el recorrido donde el chat cambia de interlocutor **dos veces**: rider de camión →
 sucursal de destino → rider local. Cada cambio se explica dentro de la conversación.
@@ -646,18 +655,92 @@ El pedido se queda en **En espera de rider** y la sucursal lo ve marcado como pe
 No se pierde ni se cancela solo.
 
 **El comprador no aparece a recoger su pedido.**
-El pedido se queda en la sucursal como _Listo para recoger_. _(Todavía no está definido cuánto
-tiempo se guarda ni qué pasa después. Es una decisión que nos gustaría tomar con tu ayuda.)_
+El pedido se queda en la sucursal como _Listo para recoger_, y pasado el plazo **cuenta contra la
+reputación del comprador** —de nadie más, y sólo él la ve—. _(Sigue sin estar definido cuánto tiempo
+se guarda el paquete ni qué pasa después con la mercadería. Esa parte nos gustaría decidirla con tu
+ayuda.)_
 
 ---
 
-## 12. Qué no hace Touno todavía
+## 12. Tu reputación en Touno
+
+Esta sección es nueva y es la respuesta a una pregunta que el documento no contestaba: **cómo se
+regula la comunidad a sí misma**, sin que Touno tenga que arbitrar cada caso.
+
+### No hay estrellas, hay cumplimiento
+
+Touno **no tiene calificaciones ni reseñas**. Nadie le pone una nota a nadie, ni el comprador al
+rider, ni el rider a la sucursal. Lo que hay es **reputación**: un **porcentaje de compromisos
+cumplidos**, calculado sobre hechos que la plataforma ya registra.
+
+La cifra **nunca aparece sola**. Siempre viene con de qué está hecha:
+
+> **96 % · 192 de 199 compromisos cumplidos**
+
+Y debajo, uno por uno, qué la compone: cuántas entregas se cerraron dentro de la hora, cuántas
+después, cuántos reclutamientos se cumplieron, cuántos se dejaron a medias.
+
+La diferencia con una calificación es la que importa: **una nota es una opinión y se puede regalar o
+castigar; un porcentaje de cumplimiento se gana entregando**. Nadie puede dejarte tres estrellas
+porque tuvo un mal día, y nadie puede subirte la cifra pidiéndolo.
+
+### Qué cuenta, por tipo de usuario
+
+| Tú eres       | Suma                                                                                | Resta                                                                                                |
+| ------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Rider**     | Entregas cerradas dentro de la hora · cargas descargadas · reclutamientos cumplidos | Entregas cerradas tarde · reclutamientos que aceptaste y dejaste con carreras pendientes             |
+| **Sucursal**  | Pedidos despachados y entregados · cargas que salieron                              | Pedidos rechazados · pedidos que pasaron su hora sin rider · cargas que pasaron su hora sin llenarse |
+| **Comprador** | Pedidos recibidos en la puerta al primer intento · recojos dentro del plazo         | Pedidos que se quedaron esperando en el mostrador · direcciones equivocadas                          |
+
+**La reputación de un negocio es de la sucursal, no de la marca.** Es la sucursal la que acepta,
+despacha y hace esperar. La cifra de la empresa se arma **sumando los compromisos de todas sus
+sucursales**, no promediando sus porcentajes: un local con cuatro pedidos no puede pesar lo mismo
+que uno con cuatrocientos.
+
+### Lo que no se cuenta, y por qué
+
+**Que un rider pierda señal no cuenta contra él.** Este documento le promete en la sección 4 que si
+pierde señal no queda mal, y un sistema de puntuación que la contara rompería esa promesa. Lo mismo
+con **rechazar una invitación**: negarse a una oferta no es incumplir nada.
+
+**Una carga que todavía está juntando pedidos, dentro de su plazo, no cuenta contra la sucursal.**
+Eso es el producto funcionando, no una falla.
+
+### Qué se gana y qué se pierde
+
+Touno fija un **piso de reputación**, igual que fija el envío base mínimo y las carreras mínimas, y
+ese piso rige para toda la red.
+
+- **Un rider por encima del piso** aparece antes en la lista cuando un gerente elige a quién
+  asignarle un pedido, y **puede aceptar un reclutamiento de hora pico**. Por debajo, no puede:
+  la pantalla se lo dice con ese motivo y no con otro. Sigue trabajando con reclutamientos normales.
+- **Una sucursal por encima del piso** aparece antes en el escaparate —la portada, Restaurantes y
+  Tiendas— y antes en la lista de invitaciones que ve un rider. Por debajo, **no puede reclutar**.
+  Y no se puede esconder: si una empresa nombra varias sucursales en un mismo reclutamiento, manda
+  la peor de las que nombró.
+- **Un comprador** no gana ni pierde nada frente a un negocio, porque **su cifra no la ve nadie más
+  que él**. Es la base sobre la que se van a construir las promociones.
+
+### Si recién empiezas, no estás abajo
+
+**No tener historial no es tener mal historial.** Un rider o una sucursal sin hechos registrados
+pasa el piso igual que cualquiera, y la pantalla dice «Sin historial» en vez de inventar un cero.
+
+### Dónde se ve
+
+Cada usuario tiene un **Manual** en su panel, con dos partes: **Tutorial**, que es este documento
+contado para su trabajo, y **Reputación**, que dice cómo se calcula su cifra, qué la sube, qué la
+baja y qué gana y qué pierde con ella. El manual es público: se puede leer antes de entrar.
+
+---
+
+## 13. Qué no hace Touno todavía
 
 Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista de promesas.
 
 - **Ya se puede administrar buena parte de lo que antes venía puesto.** Se pueden escribir los
   precios —de marca o por sucursal—, subir el envío base de cada local y el recargo por clima,
-  reclutar con su clase y sus puntos, registrar una tarjeta y cambiar los valores universales de
+  reclutar con su clase y sus carreras, registrar una tarjeta y cambiar los valores universales de
   Touno. Lo que **todavía** no se puede crear ni editar es: **los artículos del catálogo** en sí,
   **la dirección y el horario de una sucursal**, y **cuántos pedidos tiene que juntar una carga
   antes de salir**. Esos datos se ven en pantalla, se explica de quién son, y por ahora vienen
@@ -675,7 +758,12 @@ Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista 
   clases de viaje sin cambiar de aplicación.
 - **No hay devoluciones ni cancelaciones** una vez que el pedido salió.
 - **No hay pedidos programados** para una hora futura.
-- **No hay calificación del rider por parte del comprador.**
+- **No hay calificación por estrellas de nadie hacia nadie, y no la va a haber.** Lo que hay es
+  reputación: un porcentaje de cumplimiento calculado sobre hechos, explicado en la sección 12.
+- **No hay promociones todavía.** La reputación del comprador se calcula y se le muestra, pero
+  nada la premia aún.
+- **No se puede escribir ni corregir la reputación de nadie a mano**, ni discutir un hecho ya
+  registrado. Se deriva, y no hay apelación.
 - **El mapa es esquemático**, no cartografía real con nombres de calles.
 - **Sólo hay dos tipos de negocio**, restaurantes e importadoras. Está previsto sumar más.
 - **No hay reparto entre ciudades sin sucursal en destino.** Es una decisión de diseño, no una
@@ -686,7 +774,7 @@ Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista 
 
 ---
 
-## 13. Cómo dejar una observación
+## 14. Cómo dejar una observación
 
 Lo más útil que puedes decirnos no es "me gusta" o "no me gusta", sino **dónde esto no se parece a
 tu realidad**. Por ejemplo:
@@ -697,7 +785,12 @@ tu realidad**. Por ejemplo:
 - "Mis clientes no tienen teléfono con cámara para el QR."
 - "Falta un tipo de usuario: el que sólo atiende el mostrador y no administra nada."
 - "El 15 % me parece mucho / poco, y así es como lo cobra la competencia."
-- "Los puntos de carrera no encajan: mis repartidores entran y salen, no se comprometen por veinte
+- "Medir el cumplimiento sin dejar opinar al cliente no sirve: yo quiero saber si el rider fue
+  grosero, y eso ningún escaneo lo mide."
+- "Castigar un rechazo me obliga a aceptar pedidos que no puedo cumplir."
+- "Que la reputación del comprador no la vea nadie está mal: yo quiero saber a quién le estoy
+  guardando un paquete hace una semana."
+- "Las carreras no encajan: mis repartidores entran y salen, no se comprometen por veinte
   entregas."
 - "En hora pico yo necesito al rider en dos locales, no en uno."
 - "Cobrar por clima me va a espantar clientes justo el día que más pedidos entran."

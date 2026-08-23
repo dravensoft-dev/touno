@@ -27,7 +27,7 @@ describe('PlatformFees', () => {
 
     expect(host.textContent).toContain('Comisión de Touno');
     expect(host.textContent).toContain('Envío base mínimo');
-    expect(host.textContent).toContain('Puntos de carrera mínimos');
+    expect(host.textContent).toContain('Carreras mínimas');
   });
 
   it('says the distance rates are plane units and never kilometres', () => {

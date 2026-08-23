@@ -5,6 +5,25 @@
     subtitle="Sólo aparecen aquí los que aceptaron trabajar contigo, y a quienes tú aceptaste."
   />
 
+  <arena-section
+    headingLevel="h2"
+    title="Tu reputación"
+    description="Sale de tus propios hechos: pedidos despachados, rechazados, y los que pasaron su hora sin rider. Es lo que un rider ve antes de aceptar trabajar contigo."
+  >
+    <app-reputation-figure
+      label="de esta sucursal"
+      [standing]="standing()"
+      [breakdown]="breakdown()"
+    />
+  </arena-section>
+
+  @if (!canRecruit()) {
+    <arena-alert tone="warning" title="No puedes reclutar mientras estés por debajo del piso">
+      Touno fija un cumplimiento mínimo para reclutar, y el tuyo está debajo. Despacha lo que tienes
+      y vuelve a intentarlo.
+    </arena-alert>
+  }
+
   <arena-grid>
     <arena-stat-card
       icon="ph-bold ph-handshake"
@@ -63,14 +82,14 @@
         />
 
         <arena-input
-          label="Puntos de carrera que le das"
+          label="Carreras que le das"
           type="number"
           [hint]="
             'Se le descuenta uno por cada entrega que cierra con un escaneo. Touno no permite menos de ' +
-            minPoints() +
+            minRuns() +
             '.'
           "
-          [value]="points()"
+          [value]="runs()"
           (change)="onPoints($event)"
         />
 
@@ -81,7 +100,7 @@
         }
 
         <arena-alert tone="info" title="Qué significa para él">
-          Mientras le queden puntos de este reclutamiento no puede aceptar otro de hora pico, de
+          Mientras le queden carreras de este reclutamiento no puede aceptar otro de hora pico, de
           nadie. Y una vez que lo cumpla, tu empresa ya no podrá volver a reclutarlo en hora pico.
         </arena-alert>
 

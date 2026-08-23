@@ -14,7 +14,7 @@ describe('Platform', () => {
     expect(platform.commissionPct()).toBe(15);
     expect(platform.minDeliveryFeeBob()).toBeGreaterThan(0);
     expect(platform.weatherFeeBob()).toBeGreaterThan(0);
-    expect(platform.minCareerPoints()).toBeGreaterThan(0);
+    expect(platform.minRuns()).toBeGreaterThan(0);
   });
 
   it('changes one value without disturbing the rest', () => {

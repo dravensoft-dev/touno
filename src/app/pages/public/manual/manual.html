@@ -1,0 +1,38 @@
+<app-structured-data key="manual" [schema]="schema()" />
+
+<div class="arena-stack arena-stack--section">
+  <arena-breadcrumbs
+    ngSkipHydration
+    ariaLabel="Dónde estás"
+    [items]="crumbs()"
+    (navigate)="goTo($event)"
+  />
+
+  <arena-page-head
+    headingLevel="h1"
+    title="Manual de Touno"
+    subtitle="Cómo funciona Touno, contado por tipo de usuario. Elige el tuyo."
+  />
+
+  <arena-section
+    headingLevel="h2"
+    title="Un manual por cada quien"
+    description="Cada uno tiene dos partes: un Tutorial, que explica el trabajo paso a paso, y Reputación, que dice cómo se calcula tu cifra, qué la sube, qué la baja y qué se gana y se pierde con ella."
+    rhythm="md"
+  >
+    <arena-grid>
+      @for (entry of entries(); track entry.role) {
+        <arena-card
+          [title]="entry.title"
+          headingLevel="h3"
+          eyebrow="Tutorial y Reputación"
+          [href]="hrefOf(entry)"
+          [interactive]="true"
+          (click)="open(entry)"
+        >
+          <p>{{ entry.lede }}</p>
+        </arena-card>
+      }
+    </arena-grid>
+  </arena-section>
+</div>

@@ -17,9 +17,9 @@ working contract: the rules that hold across the tree, and the traps that alread
 - A **rider** is a free agent. He joins a sucursal only through a **`RiderAgreement` both sides
   accepted** — a **reclutamiento** — scoped to named `branchIds`. His **vehicle decides the work**:
   `camion` carries interurban loads, everything else delivers in a city.
-- A recruitment carries **career points**, set by the recruiter over Touno's floor, and **one is
+- A recruitment carries **carreras** — runs — set by the recruiter over Touno's floor, and **one is
   spent per scan that closes a delivery**. At zero it becomes `cumplido` and stops binding. A
-  `hora-pico` recruitment is exclusive: only with no points pending anywhere, only one ever, and
+  `hora-pico` recruitment is exclusive: only with no runs pending anywhere, only one ever, and
   never twice from the same empresa. A sucursal may propose one **only for itself**; two or more
   sucursales is the gerente de empresa's alone.
 - An **order** is one entity for both verticals. Its `scenario` picks which milestones it has, so a
@@ -33,6 +33,14 @@ working contract: the rules that hold across the tree, and the traps that alread
   only on a `domicilio`.
 - The buyer has **one chat thread per order**, and its counterpart **follows physical custody**.
   Every hand-over writes a system line saying why the counterpart changed.
+- **Reputation is a percentage of promises kept, derived and never invented.** Its subjects are the
+  rider, the **sucursal** (an empresa's figure is the sum of its branches' kept and total, never the
+  average of their percentages) and the buyer, whose figure **only he sees**. Touno sets a floor in
+  `PlatformConfig`: under it a rider cannot take hora pico and a sucursal cannot recruit. **No stars,
+  no reviews, and losing signal counts against nobody** — `TOUNO_STRUC.md` promises that in writing.
+- **Every role has a `Manual`**, public and indexable at `/manual/:rol`, in two sections: `Tutorial`
+  and `Reputación`. The Reputación section is written out of the `ReputationFact` union itself, so a
+  renamed fact renames the manual.
 
 ## Rules
 
@@ -293,6 +301,30 @@ Each of these was paid for once. Do not rediscover them.
 - **`scripts/overflow-sweep/plan.ts` used to fall through to `branchRoutes()`** for any role it did
   not name, so the eighth profile would have been planned a sucursal's routes and measured the gate
   eight times. `detailsOf()` now names `gerente-sucursal` explicitly and answers `[]` otherwise.
+- **`Reputation` may be injected by a page and by nothing in `domain/` that it reads.** The graph is
+  `Reputation -> Orders -> Agreements -> Platform`, so an `Agreements -> Reputation` edge is a DI
+  cycle at construction. The gate is fed the other way: `Reputation.gated()` fills `riderPct`,
+  `proposerPct` and `floorPct` onto the ask, and `peakRefusal()` stays pure — the same shape
+  `pricing.ts` uses when it takes `config` as an argument.
+- **`Orders.scan()` must never write a reputation event.** It already writes the fact it needs —
+  `entregado`, `scannedAt`, `scannedBy` — and a `computed` over `Orders.all()` moves on its own.
+  Writing one would close the cycle above and count the same delivery twice.
+- **The reputation floor is read at the question, never stored on a record.** That is what makes
+  raising it at `/plataforma/tarifas` block everyone below it in the same update, and it is the same
+  idiom as `minDeliveryFeeBob`.
+- **A percentage of promises kept may never round up to 100.** `Math.round(194 / 195 * 100)` is 100,
+  and a figure that reads "todo cumplido" with a broken promise behind it is a lie the whole
+  subsystem exists to avoid. `pctOf()` floors, and answers 100 only when `kept === total`.
+- **No history is not bad history.** `meetsFloor()` passes a subject with `totalCount === 0`, or a
+  new rider could never work and a new sucursal could never recruit.
+- **An `arena-person-row` that carries actions may not also carry a `figure` at 320px.** The action
+  block is a fixed 200px, so the figure column takes what is left of the name — and the compliance
+  figure is one glyph wider than the `4.9` it replaced, which was enough to push "Aceptar ·
+  Rechazar" one pixel past the edge on `/empresa/riders`. Put the figure in `secondary` on any row
+  with buttons. The sweep found it and named the element; guessing at the text length did not,
+  because the column widths and not the string are what set the row.
+- **`ArenaCard` has no `icon` and reports `click`, not `activate`.** It takes `title`, `eyebrow`,
+  `href`, `interactive` and `headingLevel`. `ArenaTableRow` is the one that reports `activate`.
 - **A page reached by id must check the record is the reader's.** `/sucursal/pedidos/:codigo`
   refuses an order belonging to another sucursal, `/rider/encargos/:codigo` one not assigned to
   that rider, `/empresa/sucursales/:id` one of another empresa. Loading by slug alone means every
@@ -338,13 +370,24 @@ Then check by hand, because nothing above checks them:
   chat says so twice.
 - **Walk the recruitment rules**, which the fixtures are built to reach: propose normal and hora
   pico from `/empresa/riders/ivan-mamani`; read the refusal on `marco-quispe`, who still owes
-  points; open Marco's blocked hora-pico invitation at `/rider/acuerdos`; recruit in hora pico from
+  runs; open Marco's blocked hora-pico invitation at `/rider/acuerdos`; recruit in hora pico from
   `/sucursal/riders`, which offers no branch picker at all.
 - **Walk the load reception from both sides.** `cg-3306` is on the road to `b-ale-la-paz`: the
   gerente shows `RC-3306` from `/sucursal/entregas`, the truck rider scans it at
-  `/rider/cargas/cg-3306`, and one point comes off `ag-506` — one for the load, not one per parcel.
-- **Watch a recruitment finish.** `ag-516` has one point left, so the next scan at `b-ale-la-paz`
+  `/rider/cargas/cg-3306`, and one carrera comes off `ag-506` — one for the load, not one per parcel.
+- **Watch a recruitment finish.** `ag-516` has one carrera left, so the next scan at `b-ale-la-paz`
   turns it `cumplido` and drops Marco out of that sucursal's rider list on the spot.
+- **Walk the reputation floor.** As `p-touno`, move `Reputación mínima` at `/plataforma/tarifas`
+  and watch `/plataforma/red` fill and empty on the spot — the floor is read at the question and
+  never stored, which is the same rule as the delivery-fee floor. `r-rene` is under it and owes no
+  carreras, so his hora-pico refusal reads `reputacion-baja` and not something else; `b-yungas-oruro`
+  is under it and cannot recruit at all. `r-elias` has no history, and no history must pass.
+- **Watch the picker reorder.** `/sucursal/pedidos/to-1041` as `p-sucursal-restaurante`: Noemí
+  (`ag-523`) sits above Marco in the free group, each with what its figure is made of.
+- **Confirm the buyer's figure is his alone.** It is on `/mis-pedidos` and must appear on no branch
+  or rider screen anywhere.
+- **Read the Manual from all five rails**, and confirm each lands on its own role and offers the way
+  back into the panel it left. `/manual/*` is public, so its prerendered HTML must be complete.
 - **Check the fare in all four shapes**: a domicilio in normal weather, a domicilio into an adverse
   city, a counter pickup that pays neither, and the cart's "desde" figure before a zone is chosen.
   `/plataforma/clima` is what makes the weather branch reachable without editing a fixture.

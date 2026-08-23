@@ -13,7 +13,7 @@ import {
   canTakePeak,
   kindLabel,
   peakRefusal,
-  pointsPending,
+  runsPending,
 } from './agreements.model';
 import { AGREEMENTS } from './agreements.data';
 
@@ -56,8 +56,8 @@ export class Agreements {
     return this.ofRider(riderId).filter((one) => one.state === 'cumplido');
   }
 
-  pointsPendingOf(riderId: string): number {
-    return pointsPending(this.ofRider(riderId));
+  runsPendingOf(riderId: string): number {
+    return runsPending(this.ofRider(riderId));
   }
 
   refusalFor(riderId: string, ask: PeakAsk, exceptId?: string): PeakRefusal | undefined {
@@ -76,11 +76,11 @@ export class Agreements {
 
   chargeable(riderId: string, branchId: string): RiderAgreement | undefined {
     return [...this.activeFor(riderId)]
-      .filter((one) => one.branchIds.includes(branchId) && one.pointsLeft > 0)
+      .filter((one) => one.branchIds.includes(branchId) && one.runsLeft > 0)
       .sort(
         (left, right) =>
           Number(right.kind === 'hora-pico') - Number(left.kind === 'hora-pico') ||
-          left.pointsLeft - right.pointsLeft ||
+          left.runsLeft - right.runsLeft ||
           left.id.localeCompare(right.id),
       )[0];
   }
@@ -117,11 +117,21 @@ export class Agreements {
       throw new Error('El reclutamiento no cubre ninguna sucursal');
     }
 
-    const minimum = this.platform.minCareerPoints();
-
-    if (draft.points < minimum) {
+    if (
+      draft.proposerPct !== undefined &&
+      draft.floorPct !== undefined &&
+      draft.proposerPct < draft.floorPct
+    ) {
       throw new Error(
-        `Un ${kindLabel(draft.kind).toLowerCase()} no puede dar menos de ${minimum} puntos de carrera`,
+        'Esta sucursal está por debajo del piso de reputación de Touno y no puede reclutar',
+      );
+    }
+
+    const minimum = this.platform.minRuns();
+
+    if (draft.runs < minimum) {
+      throw new Error(
+        `Un ${kindLabel(draft.kind).toLowerCase()} no puede dar menos de ${minimum} carreras`,
       );
     }
 
@@ -145,8 +155,8 @@ export class Agreements {
       kind: draft.kind,
       state: 'pendiente',
       perTripBob: draft.perTripBob,
-      points: draft.points,
-      pointsLeft: draft.points,
+      runs: draft.runs,
+      runsLeft: draft.runs,
       message: draft.message,
       sentAt: NOW,
       validUntil: '2026-12-31',
@@ -182,11 +192,11 @@ export class Agreements {
       return undefined;
     }
 
-    const left = target.pointsLeft - 1;
+    const left = target.runsLeft - 1;
     const next: RiderAgreement =
       left === 0
-        ? { ...target, pointsLeft: 0, state: 'cumplido', settledAt: NOW }
-        : { ...target, pointsLeft: left };
+        ? { ...target, runsLeft: 0, state: 'cumplido', settledAt: NOW }
+        : { ...target, runsLeft: left };
 
     this.agreementList.update((list) => list.map((one) => (one.id === target.id ? next : one)));
 

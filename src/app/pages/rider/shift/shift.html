@@ -49,15 +49,9 @@
     />
     <arena-stat-card
       icon="ph-bold ph-package"
-      label="Viajes hechos"
-      [value]="(rider()?.tripsDone ?? 0).toString()"
-      sub="Desde que empezaste"
-    />
-    <arena-stat-card
-      icon="ph-bold ph-clock"
-      label="A tiempo"
-      [value]="onTime()"
-      sub="Lo que ven las empresas al proponerte un acuerdo"
+      label="Compromisos"
+      [value]="deliveries()"
+      sub="Hechos tuyos que Touno tiene contados"
     />
   </arena-grid>
 

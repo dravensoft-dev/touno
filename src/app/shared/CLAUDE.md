@@ -15,6 +15,7 @@ component for it. Nothing here restyles an Arena component.
 | `custody-card`                | the ficha: who answers for this order right now                   |
 | `rider-picker`                | the one place a sucursal may choose someone to carry a pedido     |
 | `order-header`                | the ink band on a pedido's heading                                |
+| `reputation-figure`           | the compliance percentage, and what it is made of                 |
 
 ## The two inline SVGs, and why they are allowed
 
@@ -91,6 +92,15 @@ card already holds the Agregar button.
 
 `branch-card` links three segments — `/tiendas/:empresa/:sucursal` — so it prepares both the `href`
 and the cover through `Location`, and its spec holds the `/touno/` case.
+
+## ReputationFigure never draws a figure it does not have
+
+It takes a `Standing` and an optional breakdown, and it draws the percentage **with what it is made
+of underneath**, never one without the other. With no history it says "Sin historial" in words
+instead of a zero, which is the same honesty as "Última conexión registrada": a figure computed from
+nothing is not a bad figure, it is an absent one. **There is no star, and no glyph, bar or dot row
+standing in for one** — `audit:arena --strict=glyph` fails the build over that, and it is how the
+old `ph-fill ph-star` in `branch-card` was found and removed.
 
 ## StateTag composes, it does not restyle
 

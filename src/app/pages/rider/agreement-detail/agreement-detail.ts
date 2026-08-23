@@ -10,6 +10,7 @@ import {
   ArenaPageHead,
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
+import { Reputation } from '../../../domain/reputation';
 import { Businesses } from '../../../domain/businesses';
 import { Geography } from '../../../domain/geography';
 import { Session } from '../../../domain/session';
@@ -35,6 +36,7 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
 })
 export class RiderAgreementDetail {
   private readonly router = inject(Router);
+  private readonly reputation = inject(Reputation);
   private readonly businesses = inject(Businesses);
   private readonly geography = inject(Geography);
   private readonly notices = inject(Notices);
@@ -65,11 +67,11 @@ export class RiderAgreementDetail {
 
     const refusal = this.agreements.refusalFor(
       agreement.riderId,
-      {
+      this.reputation.gated(agreement.riderId, {
         companyId: agreement.companyId,
         branchIds: agreement.branchIds,
         originBranchId: agreement.originBranchId,
-      },
+      }),
       agreement.id,
     );
 
@@ -88,9 +90,7 @@ export class RiderAgreementDetail {
 
   protected readonly peak = computed(() => this.agreement()?.kind === 'hora-pico');
 
-  protected readonly pointsPending = computed(() =>
-    this.agreements.pointsPendingOf(this.riderId()),
-  );
+  protected readonly runsPending = computed(() => this.agreements.runsPendingOf(this.riderId()));
 
   protected readonly waitingOnThem = computed(() => {
     const agreement = this.agreement();
@@ -122,11 +122,11 @@ export class RiderAgreementDetail {
       { term: 'Clase', value: kindLabel(agreement.kind) },
       { term: 'Por viaje', value: bs(agreement.perTripBob), numeric: true },
       {
-        term: 'Puntos de carrera',
+        term: 'Carreras',
         value:
           agreement.state === 'activo' || agreement.state === 'cumplido'
-            ? `${agreement.pointsLeft} de ${agreement.points}`
-            : `${agreement.points}`,
+            ? `${agreement.runsLeft} de ${agreement.runs}`
+            : `${agreement.runs}`,
         numeric: true,
       },
       { term: 'Lo propuso', value: agreement.initiatedBy === 'empresa' ? 'La empresa' : 'Tú' },

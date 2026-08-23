@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { Agreements } from '../../../domain/agreements';
 import { Chat } from '../../../domain/chat';
 import { Orders } from '../../../domain/orders';
+import { Reputation } from '../../../domain/reputation';
 import { Riders } from '../../../domain/riders';
 import { Session } from '../../../domain/session';
 import { rangeOf } from '../../../domain/riders.model';
@@ -142,5 +143,23 @@ describe('BranchOrderDetail', () => {
     expect(
       render('to-1041').nativeElement.querySelector('arena-page-head app-state-tag'),
     ).not.toBeNull();
+  });
+
+  it("never shows the comprador's reputation to a sucursal, because it is his alone", () => {
+    const order = TestBed.inject(Orders).bySlug('to-1041');
+    const host: HTMLElement = render('to-1041').nativeElement;
+    const shown = TestBed.inject(Reputation).of(order?.buyer.phone ?? '');
+    const text = host.textContent ?? '';
+
+    expect(shown.totalCount).toBeGreaterThan(0);
+    expect(text).toContain(order?.buyer.name ?? '');
+    expect(text).not.toContain(`${shown.keptCount} de ${shown.totalCount}`);
+  });
+
+  it("shows the rider's reputation to the sucursal, because that is the one it decides on", () => {
+    const host: HTMLElement = render('to-1041', 'p-sucursal-restaurante', true).nativeElement;
+    const marco = TestBed.inject(Reputation).of('r-marco');
+
+    expect(host.textContent).toContain(`${marco.keptCount} de ${marco.totalCount} cumplidos`);
   });
 });

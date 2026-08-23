@@ -3,6 +3,7 @@ import { Agreements } from './agreements';
 import { Businesses } from './businesses';
 import { Riders } from './riders';
 import { Platform } from './platform';
+import { Reputation } from './reputation';
 import { AgreementDraft, AgreementState, otherSide } from './agreements.model';
 
 describe('Agreements', () => {
@@ -118,7 +119,7 @@ describe('Agreements', () => {
       initiatedBy: 'empresa',
       kind: 'normal',
       perTripBob: 19,
-      points: 20,
+      runs: 20,
     });
 
     expect(agreement.state).toBe('pendiente');
@@ -168,16 +169,77 @@ describe('Agreements', () => {
       initiatedBy: 'empresa',
       kind: 'hora-pico',
       perTripBob: 25,
-      points: 10,
+      runs: 10,
       ...change,
     };
   }
 
   it('refuses a reclutamiento that gives less than the minimum Touno set', () => {
-    const minimum = TestBed.inject(Platform).minCareerPoints();
+    const minimum = TestBed.inject(Platform).minRuns();
 
-    expect(() => agreements.propose(peakDraft({ kind: 'normal', points: minimum - 1 }))).toThrow();
-    expect(() => agreements.propose(peakDraft({ kind: 'normal', points: minimum }))).not.toThrow();
+    expect(() => agreements.propose(peakDraft({ kind: 'normal', runs: minimum - 1 }))).toThrow();
+    expect(() => agreements.propose(peakDraft({ kind: 'normal', runs: minimum }))).not.toThrow();
+  });
+
+  it('refuses hora pico to a rider under Touno reputation floor, and says which refusal it is', () => {
+    const reputation = TestBed.inject(Reputation);
+
+    expect(reputation.clears('r-rene')).toBe(false);
+    expect(agreements.runsPendingOf('r-rene')).toBe(0);
+
+    const ask = reputation.gated('r-rene', {
+      companyId: 'c-copacabana',
+      branchIds: ['b-copacabana-miraflores'],
+    });
+
+    expect(agreements.refusalFor('r-rene', ask)).toBe('reputacion-baja');
+    expect(() => agreements.propose(peakDraft({ riderId: 'r-rene', ...ask }))).toThrow();
+  });
+
+  it('reports the reputation refusal before the carreras pendientes one', () => {
+    const ask = {
+      companyId: 'c-copacabana',
+      branchIds: ['b-copacabana-miraflores'],
+      riderPct: 40,
+      floorPct: 80,
+    };
+
+    expect(agreements.runsPendingOf('r-marco')).toBeGreaterThan(0);
+    expect(agreements.refusalFor('r-marco', ask)).toBe('reputacion-baja');
+  });
+
+  it('refuses a reclutamiento proposed by a sucursal under the floor, whatever its clase', () => {
+    const reputation = TestBed.inject(Reputation);
+
+    expect(reputation.clears('b-yungas-oruro')).toBe(false);
+
+    const draft = reputation.gated('r-ivan', {
+      ...peakDraft({ kind: 'normal', companyId: 'c-yungas', branchIds: ['b-yungas-oruro'] }),
+    });
+
+    expect(() => agreements.propose(draft)).toThrow();
+  });
+
+  it('refuses one an empresa scopes through a good sucursal to carry a bad one', () => {
+    const reputation = TestBed.inject(Reputation);
+
+    const draft = reputation.gated('r-ivan', {
+      ...peakDraft({
+        kind: 'normal',
+        companyId: 'c-yungas',
+        branchIds: ['b-yungas-la-paz', 'b-yungas-oruro'],
+      }),
+    });
+
+    expect(reputation.clears('b-yungas-la-paz')).toBe(true);
+    expect(() => agreements.propose(draft)).toThrow();
+  });
+
+  it('lets a rider with no history at all take hora pico, because no record is not a bad record', () => {
+    const reputation = TestBed.inject(Reputation);
+
+    expect(reputation.of('r-elias').totalCount).toBe(0);
+    expect(reputation.gated('r-elias', peakDraft()).riderPct).toBeUndefined();
   });
 
   it('lets a rider hold many reclutamientos normales at once', () => {
@@ -188,19 +250,19 @@ describe('Agreements', () => {
     }
   });
 
-  it('refuses hora pico to a rider who still owes points somewhere', () => {
-    expect(agreements.pointsPendingOf('r-marco')).toBeGreaterThan(0);
+  it('refuses hora pico to a rider who still owes runs somewhere', () => {
+    expect(agreements.runsPendingOf('r-marco')).toBeGreaterThan(0);
     expect(() => agreements.propose(peakDraft({ riderId: 'r-marco' }))).toThrow();
     expect(
       agreements.refusalFor('r-marco', {
         companyId: 'c-copacabana',
         branchIds: ['b-copacabana-miraflores'],
       }),
-    ).toBe('puntos-pendientes');
+    ).toBe('carreras-pendientes');
   });
 
   it('refuses a second hora pico, whoever offers it', () => {
-    expect(agreements.pointsPendingOf('r-alvaro')).toBeGreaterThan(0);
+    expect(agreements.runsPendingOf('r-alvaro')).toBeGreaterThan(0);
 
     const held = agreements.ofRider('r-alvaro').find((one) => one.kind === 'hora-pico');
 
@@ -209,7 +271,7 @@ describe('Agreements', () => {
   });
 
   it('refuses a second hora pico from the empresa that already recruited him, even once cumplido', () => {
-    expect(agreements.pointsPendingOf('r-rosario')).toBe(0);
+    expect(agreements.runsPendingOf('r-rosario')).toBe(0);
 
     expect(
       agreements.refusalFor('r-rosario', {
@@ -264,7 +326,7 @@ describe('Agreements', () => {
       initiatedBy: 'rider',
       kind: 'normal',
       perTripBob: 18,
-      points: 20,
+      runs: 20,
     });
 
     const normal = agreements
@@ -273,7 +335,7 @@ describe('Agreements', () => {
 
     agreements.accept(normal?.id ?? '', 'empresa', 'c-illimani');
 
-    expect(agreements.pointsPendingOf('r-ivan')).toBeGreaterThan(0);
+    expect(agreements.runsPendingOf('r-ivan')).toBeGreaterThan(0);
     expect(() => agreements.accept(peak.id, 'rider', 'r-ivan')).toThrow();
   });
 
@@ -281,14 +343,14 @@ describe('Agreements', () => {
     const before = agreements.byId('ag-516');
 
     expect(before?.state).toBe('activo');
-    expect(before?.pointsLeft).toBe(1);
+    expect(before?.runsLeft).toBe(1);
     expect(agreements.covers('r-marco', 'b-ale-la-paz')).toBe(true);
 
     const after = agreements.spend('r-marco', 'b-ale-la-paz');
 
     expect(after?.id).toBe('ag-516');
     expect(after?.state).toBe('cumplido');
-    expect(after?.pointsLeft).toBe(0);
+    expect(after?.runsLeft).toBe(0);
     expect(agreements.covers('r-marco', 'b-ale-la-paz')).toBe(false);
     expect(agreements.ridersOf('b-ale-la-paz').map((one) => one.id)).not.toContain('r-marco');
   });
@@ -306,7 +368,7 @@ describe('Agreements', () => {
       initiatedBy: 'empresa',
       kind: 'normal',
       perTripBob: 18,
-      points: 20,
+      runs: 20,
     });
 
     const normal = agreements

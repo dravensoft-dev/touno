@@ -16,16 +16,10 @@
 
     <arena-grid>
       <arena-stat-card
-        icon="ph-bold ph-star"
-        label="Calificación"
-        [value]="persona.rating.toString()"
-        [sub]="persona.tripsDone + ' viajes hechos'"
-      />
-      <arena-stat-card
-        icon="ph-bold ph-clock"
-        label="A tiempo"
-        [value]="onTime()"
-        sub="De sus últimos viajes"
+        icon="ph-bold ph-seal-check"
+        label="Reputación"
+        [value]="figure()"
+        [sub]="madeOf()"
       />
       <arena-stat-card
         icon="ph-bold ph-check-circle"
@@ -115,19 +109,19 @@
           <arena-radio
             value="hora-pico"
             label="Hora pico"
-            hint="Sólo lo puede aceptar si no le quedan puntos pendientes, y sólo puede tener uno en total."
+            hint="Sólo lo puede aceptar si no le quedan carreras pendientes, y sólo puede tener uno en total."
           />
         </arena-radio-group>
 
         <arena-input
-          label="Puntos de carrera que le das"
+          label="Carreras que le das"
           type="number"
           [hint]="
             'Se le descuenta uno por cada entrega que cierra con un escaneo. Touno no permite menos de ' +
-            minPoints() +
+            minRuns() +
             '.'
           "
-          [value]="points()"
+          [value]="runs()"
           (change)="onPoints($event)"
         />
 
@@ -138,8 +132,8 @@
         }
 
         @if (peak() && !peakReason()) {
-          <arena-alert tone="info" title="Mientras dure, trabaja sólo estos puntos">
-            Le quedan {{ pointsPending() }} puntos pendientes en total, así que puede tomarlo. Un
+          <arena-alert tone="info" title="Mientras dure, trabaja sólo estas sucursales">
+            Le quedan {{ runsPending() }} carreras pendientes en total, así que puede tomarlo. Un
             rider sólo tiene un reclutamiento de hora pico, y ninguna empresa puede darle dos.
           </arena-alert>
         }

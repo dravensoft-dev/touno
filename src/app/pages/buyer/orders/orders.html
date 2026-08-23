@@ -5,6 +5,18 @@
     subtitle="Cada uno con su código y su estado ahora mismo."
   />
 
+  <arena-section
+    headingLevel="h2"
+    title="Tu reputación"
+    description="Es tuya y no la ve nadie más: ni la sucursal que despacha ni el rider que te lleva el pedido. Sale de hechos, no de opiniones."
+  >
+    <app-reputation-figure
+      label="de lo que te toca a ti"
+      [standing]="standing()"
+      [breakdown]="breakdown()"
+    />
+  </arena-section>
+
   <arena-segmented-control
     ariaLabel="Filtrar pedidos"
     [options]="filters"

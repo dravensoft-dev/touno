@@ -18,6 +18,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
 import { Businesses } from '../../../domain/businesses';
+import { Reputation } from '../../../domain/reputation';
 import { Geography } from '../../../domain/geography';
 import { Orders } from '../../../domain/orders';
 import { Riders } from '../../../domain/riders';
@@ -54,6 +55,7 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
 })
 export class CompanyRiderDetail {
   private readonly router = inject(Router);
+  private readonly reputation = inject(Reputation);
   private readonly geography = inject(Geography);
   private readonly orders = inject(Orders);
   private readonly platform = inject(Platform);
@@ -112,12 +114,12 @@ export class CompanyRiderDetail {
 
   protected readonly kind = signal<RecruitmentKind>('normal');
 
-  protected readonly points = signal('');
+  protected readonly runs = signal('');
 
-  protected readonly minPoints = computed(() => this.platform.minCareerPoints());
+  protected readonly minRuns = computed(() => this.platform.minRuns());
 
-  protected readonly pointsBob = computed(() =>
-    this.points() === '' ? this.minPoints() : Number(this.points()),
+  protected readonly runsGiven = computed(() =>
+    this.runs() === '' ? this.minRuns() : Number(this.runs()),
   );
 
   protected readonly peak = computed(() => this.kind() === 'hora-pico');
@@ -129,14 +131,17 @@ export class CompanyRiderDetail {
       return undefined;
     }
 
-    return this.agreements.reasonFor(rider.id, {
-      companyId: this.companyId(),
-      branchIds: this.chosen(),
-    });
+    return this.agreements.reasonFor(
+      rider.id,
+      this.reputation.gated(rider.id, {
+        companyId: this.companyId(),
+        branchIds: this.chosen(),
+      }),
+    );
   });
 
-  protected readonly pointsPending = computed(() =>
-    this.agreements.pointsPendingOf(this.rider()?.id ?? ''),
+  protected readonly runsPending = computed(() =>
+    this.agreements.runsPendingOf(this.rider()?.id ?? ''),
   );
 
   protected readonly ready = computed(() => {
@@ -144,7 +149,7 @@ export class CompanyRiderDetail {
       return false;
     }
 
-    if (this.pointsBob() < this.minPoints()) {
+    if (this.runsGiven() < this.minRuns()) {
       return false;
     }
 
@@ -157,7 +162,25 @@ export class CompanyRiderDetail {
     return rider ? this.orders.all().filter((one) => one.scannedBy === rider.id).length : 0;
   });
 
-  protected readonly onTime = computed(() => porcentaje(this.rider()?.onTimePct ?? 0));
+  protected readonly standing = computed(() => this.reputation.of(this.rider()?.id ?? ''));
+
+  protected readonly breakdown = computed(() =>
+    this.reputation.breakdownOf(this.rider()?.id ?? ''),
+  );
+
+  protected readonly figure = computed(() => {
+    const one = this.standing();
+
+    return one.totalCount === 0 ? 'Sin historial' : porcentaje(one.pct);
+  });
+
+  protected readonly madeOf = computed(() => {
+    const one = this.standing();
+
+    return one.totalCount === 0
+      ? 'Todavía no cerró ninguna entrega en Touno'
+      : `${one.keptCount} de ${one.totalCount} compromisos cumplidos`;
+  });
 
   protected readonly hisRate = computed(() => bs(this.rider()?.ratePerTripBob ?? 0));
 
@@ -172,7 +195,7 @@ export class CompanyRiderDetail {
 
     return `${kindLabel(agreement.kind)}. Cubre ${names.join(', ')} a ${bs(
       agreement.perTripBob,
-    )} por viaje, y le quedan ${agreement.pointsLeft} de ${agreement.points} puntos de carrera.`;
+    )} por viaje, y le quedan ${agreement.runsLeft} de ${agreement.runs} carreras.`;
   });
 
   protected vehicleLabelOf(): string {
@@ -211,7 +234,7 @@ export class CompanyRiderDetail {
   }
 
   protected onPoints(value: string): void {
-    this.points.set(value);
+    this.runs.set(value);
   }
 
   protected pickKind(value: string): void {
@@ -233,19 +256,21 @@ export class CompanyRiderDetail {
       return;
     }
 
-    this.agreements.propose({
-      riderId: rider.id,
-      companyId: this.companyId(),
-      branchIds: this.chosen(),
-      initiatedBy: 'empresa',
-      kind: this.kind(),
-      perTripBob: Number(this.rate()),
-      points: this.pointsBob(),
-    });
+    this.agreements.propose(
+      this.reputation.gated(rider.id, {
+        riderId: rider.id,
+        companyId: this.companyId(),
+        branchIds: this.chosen(),
+        initiatedBy: 'empresa',
+        kind: this.kind(),
+        perTripBob: Number(this.rate()),
+        runs: this.runsGiven(),
+      }),
+    );
 
     this.chosen.set([]);
     this.rate.set('');
-    this.points.set('');
+    this.runs.set('');
     this.kind.set('normal');
     this.notices.agreementSent();
   }

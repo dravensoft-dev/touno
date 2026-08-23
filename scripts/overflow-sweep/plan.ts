@@ -1,5 +1,6 @@
 import { AGREEMENTS } from '../../src/app/domain/agreements.data';
 import { BRANCHES, COMPANIES } from '../../src/app/domain/businesses.data';
+import { MANUAL } from '../../src/app/domain/manual.data';
 import { pathOfType } from '../../src/app/domain/businesses.model';
 import { PRODUCTS } from '../../src/app/domain/catalog.data';
 import { TRUCK_LOADS } from '../../src/app/domain/loads.data';
@@ -35,7 +36,7 @@ interface Records<T> {
   readonly mine: (one: T) => boolean;
 }
 
-const STATIC_PUBLIC = ['/', '/restaurantes', '/tiendas', '/riders', '/ingresar'];
+const STATIC_PUBLIC = ['/', '/restaurantes', '/tiendas', '/riders', '/ingresar', '/manual'];
 
 function plain(path: string): PlannedRoute {
   return { path, pattern: path, shows: 'record' };
@@ -86,7 +87,13 @@ function publicRoutes(): readonly PlannedRoute[] {
     ];
   });
 
-  return [...STATIC_PUBLIC.map(plain), ...companies, ...branches];
+  const manual = MANUAL.map<PlannedRoute>((one) => ({
+    path: `/manual/${one.role}`,
+    pattern: '/manual/:rol',
+    shows: 'record',
+  }));
+
+  return [...STATIC_PUBLIC.map(plain), ...manual, ...companies, ...branches];
 }
 
 function railOf(profile: Profile): readonly PlannedRoute[] {

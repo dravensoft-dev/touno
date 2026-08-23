@@ -1,4 +1,5 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
+import { MANUAL } from './domain/manual.data';
 import { AGREEMENTS } from './domain/agreements.data';
 import { BRANCHES, COMPANIES } from './domain/businesses.data';
 import { BusinessType } from './domain/businesses.model';
@@ -113,6 +114,11 @@ export const serverRoutes: ServerRoute[] = [
     path: 'sucursal/catalogo/:id',
     renderMode: RenderMode.Prerender,
     getPrerenderParams: () => productParams('importadora'),
+  },
+  {
+    path: 'manual/:rol',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: () => Promise.resolve(MANUAL.map((one) => ({ rol: one.role }))),
   },
   {
     path: '**',

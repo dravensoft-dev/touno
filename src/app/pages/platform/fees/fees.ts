@@ -46,9 +46,14 @@ const KNOBS: readonly Knob[] = [
     hint: 'Sólo se cobra a domicilio y sólo donde el clima está marcado como desfavorable.',
   },
   {
-    key: 'minCareerPoints',
-    label: 'Puntos de carrera mínimos',
-    hint: 'Lo menos que puede dar un reclutamiento, sea normal o de hora pico.',
+    key: 'minReputationPct',
+    label: 'Reputación mínima',
+    hint: 'El cumplimiento que hace falta para reclutar y para tomar hora pico. Se lee cada vez que alguien pregunta, así que subirlo bloquea al instante a quien quede debajo.',
+  },
+  {
+    key: 'minRuns',
+    label: 'Carreras mínimas',
+    hint: 'Lo menos que puede comprometer un reclutamiento, sea normal o de hora pico.',
   },
 ];
 
@@ -75,8 +80,13 @@ export class PlatformFees {
       { term: 'Envío base mínimo', value: bs(config.minDeliveryFeeBob), numeric: true },
       { term: 'Recargo por clima', value: bs(config.weatherFeeBob), numeric: true },
       {
-        term: 'Puntos de carrera mínimos',
-        value: config.minCareerPoints.toString(),
+        term: 'Reputación mínima',
+        value: porcentaje(config.minReputationPct),
+        numeric: true,
+      },
+      {
+        term: 'Carreras mínimas',
+        value: config.minRuns.toString(),
         numeric: true,
       },
     ];

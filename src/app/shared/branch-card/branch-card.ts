@@ -9,7 +9,8 @@ import {
   ArenaTag,
 } from '@dravensoft/arena-angular';
 import { Branch, Company, pathOfType } from '../../domain/businesses.model';
-import { bs } from '../../domain/format';
+import { bs, porcentaje } from '../../domain/format';
+import { Reputation } from '../../domain/reputation';
 
 @Component({
   selector: 'app-branch-card',
@@ -22,6 +23,7 @@ import { bs } from '../../domain/format';
 export class BranchCard {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly reputation = inject(Reputation);
 
   readonly branch = input.required<Branch>();
   readonly company = input.required<Company>();
@@ -45,6 +47,12 @@ export class BranchCard {
   );
 
   protected readonly delivery = computed(() => bs(this.branch().deliveryBob));
+
+  protected readonly standing = computed(() => {
+    const one = this.reputation.of(this.branch().id);
+
+    return one.totalCount === 0 ? 'Sucursal nueva' : `${porcentaje(one.pct)} cumplido`;
+  });
 
   protected open(): void {
     void this.router.navigateByUrl(this.path());

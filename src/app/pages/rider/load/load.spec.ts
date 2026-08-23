@@ -113,7 +113,7 @@ describe('RiderLoad', () => {
     const host: HTMLElement = render('cg-3306').nativeElement;
 
     expect(host.textContent).toContain('No escaneas el código de ningún comprador');
-    expect(host.textContent).toContain('punto de carrera');
+    expect(host.textContent).toContain('una carrera');
   });
 
   it('unloads nothing when the code belongs to another load', () => {
@@ -147,10 +147,10 @@ describe('RiderLoad', () => {
   it('spends one career point for the whole load, not one per parcel', () => {
     const fixture = render('cg-3306');
     const agreements = TestBed.inject(Agreements);
-    const before = agreements.byId('ag-506')?.pointsLeft ?? 0;
+    const before = agreements.byId('ag-506')?.runsLeft ?? 0;
 
     scanWith(fixture, 'RC-3306');
 
-    expect(agreements.byId('ag-506')?.pointsLeft).toBe(before - 1);
+    expect(agreements.byId('ag-506')?.runsLeft).toBe(before - 1);
   });
 });

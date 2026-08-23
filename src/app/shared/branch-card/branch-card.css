@@ -37,7 +37,7 @@
   color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
 }
 
-.branch-card__rating {
+.branch-card__standing {
   display: inline-flex;
   align-items: center;
   gap: var(--gap-control);

@@ -38,9 +38,9 @@ export class Notices {
     this.toasts.raise({ title: 'Entrega confirmada', message: code, tone: 'success' });
   }
 
-  pointSpent(left: number): void {
+  runSpent(left: number): void {
     this.toasts.raise({
-      title: 'Un punto de carrera menos',
+      title: 'Una carrera menos',
       message: `Te quedan ${left} en ese reclutamiento.`,
       tone: 'success',
     });
@@ -49,7 +49,7 @@ export class Notices {
   recruitmentFulfilled(): void {
     this.toasts.raise({
       title: 'Reclutamiento cumplido',
-      message: 'Gastaste el último punto. Quedas libre para un reclutamiento de hora pico.',
+      message: 'Gastaste la última carrera. Quedas libre para un reclutamiento de hora pico.',
       tone: 'success',
     });
   }

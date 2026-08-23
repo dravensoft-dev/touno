@@ -6,7 +6,11 @@ export type AgreementState =
   'pendiente' | 'activo' | 'cumplido' | 'rechazado' | 'terminado' | 'vencido';
 
 export type PeakRefusal =
-  'puntos-pendientes' | 'ya-tiene-hora-pico' | 'empresa-repetida' | 'alcance-de-sucursal';
+  | 'alcance-de-sucursal'
+  | 'reputacion-baja'
+  | 'carreras-pendientes'
+  | 'ya-tiene-hora-pico'
+  | 'empresa-repetida';
 
 export interface RiderAgreement {
   readonly id: string;
@@ -18,8 +22,8 @@ export interface RiderAgreement {
   readonly kind: RecruitmentKind;
   readonly state: AgreementState;
   readonly perTripBob: number;
-  readonly points: number;
-  readonly pointsLeft: number;
+  readonly runs: number;
+  readonly runsLeft: number;
   readonly message?: string;
   readonly sentAt: string;
   readonly validUntil: string;
@@ -34,8 +38,11 @@ export interface AgreementDraft {
   readonly originBranchId?: string;
   readonly kind: RecruitmentKind;
   readonly perTripBob: number;
-  readonly points: number;
+  readonly runs: number;
   readonly message?: string;
+  readonly riderPct?: number;
+  readonly proposerPct?: number;
+  readonly floorPct?: number;
 }
 
 const KIND_LABELS: Record<RecruitmentKind, string> = {
@@ -44,7 +51,9 @@ const KIND_LABELS: Record<RecruitmentKind, string> = {
 };
 
 export const PEAK_REASONS: Record<PeakRefusal, string> = {
-  'puntos-pendientes': 'Todavía le quedan puntos de carrera por cumplir en otro reclutamiento.',
+  'reputacion-baja':
+    'Su reputación está por debajo del piso que fija Touno, así que no puede tomar hora pico ahora.',
+  'carreras-pendientes': 'Todavía le quedan carreras por cumplir en otro reclutamiento.',
   'ya-tiene-hora-pico': 'Ya tiene un reclutamiento de hora pico, y sólo puede tener uno.',
   'empresa-repetida': 'Esta empresa ya lo reclutó en hora pico una vez, y no puede repetir.',
   'alcance-de-sucursal': 'Una sucursal sólo puede reclutar en hora pico para sí misma.',
@@ -59,7 +68,7 @@ export function kindLabel(kind: RecruitmentKind): string {
 }
 
 export function owes(agreement: RiderAgreement): boolean {
-  return agreement.state === 'activo' && agreement.pointsLeft > 0;
+  return agreement.state === 'activo' && agreement.runsLeft > 0;
 }
 
 export function bound(state: AgreementState): boolean {
@@ -81,14 +90,16 @@ export function peakWith(
   );
 }
 
-export function pointsPending(list: readonly RiderAgreement[]): number {
-  return list.filter(owes).reduce((sum, one) => sum + one.pointsLeft, 0);
+export function runsPending(list: readonly RiderAgreement[]): number {
+  return list.filter(owes).reduce((sum, one) => sum + one.runsLeft, 0);
 }
 
 export interface PeakAsk {
   readonly companyId: string;
   readonly branchIds: readonly string[];
   readonly originBranchId?: string;
+  readonly riderPct?: number;
+  readonly floorPct?: number;
 }
 
 export function peakRefusal(
@@ -103,10 +114,14 @@ export function peakRefusal(
     return 'alcance-de-sucursal';
   }
 
+  if (ask.riderPct !== undefined && ask.floorPct !== undefined && ask.riderPct < ask.floorPct) {
+    return 'reputacion-baja';
+  }
+
   const others = list.filter((one) => one.id !== exceptId);
 
-  if (pointsPending(others) > 0) {
-    return 'puntos-pendientes';
+  if (runsPending(others) > 0) {
+    return 'carreras-pendientes';
   }
 
   if (heldPeak(others)) {

@@ -13,6 +13,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
 import { Businesses } from '../../../domain/businesses';
+import { Reputation } from '../../../domain/reputation';
 import { Geography } from '../../../domain/geography';
 import { Riders } from '../../../domain/riders';
 import { Session } from '../../../domain/session';
@@ -43,6 +44,7 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
 export class CompanyRiders {
   private readonly router = inject(Router);
   private readonly businesses = inject(Businesses);
+  private readonly reputation = inject(Reputation);
   private readonly geography = inject(Geography);
   private readonly notices = inject(Notices);
   private readonly session = inject(Session);
@@ -88,11 +90,23 @@ export class CompanyRiders {
   }
 
   protected line(agreement: RiderAgreement): string {
-    return `${this.scope(agreement)} · ${bs(agreement.perTripBob)} por viaje`;
+    return `${this.scope(agreement)} · ${bs(agreement.perTripBob)}`;
   }
 
   protected profile(rider: Rider): string {
-    return `${vehicleLabel(rider.vehicle)} · ${this.geography.nameOf(rider.cityId)} · ${porcentaje(rider.onTimePct)} a tiempo`;
+    const standing = this.reputation.of(rider.id);
+    const made =
+      standing.totalCount === 0
+        ? 'sin historial'
+        : `${standing.keptCount} de ${standing.totalCount}`;
+
+    return `${vehicleLabel(rider.vehicle)} · ${this.geography.nameOf(rider.cityId)} · ${made}`;
+  }
+
+  protected figureOf(rider: Rider | undefined): string {
+    const standing = this.reputation.of(rider?.id ?? '');
+
+    return standing.totalCount === 0 ? '—' : porcentaje(standing.pct);
   }
 
   protected rangeOf(rider: Rider): string {

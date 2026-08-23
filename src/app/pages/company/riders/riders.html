@@ -27,11 +27,7 @@
     @if (applications().length > 0) {
       <arena-people-list label="Postulaciones pendientes">
         @for (agreement of applications(); track agreement.id) {
-          <arena-person-row
-            [name]="riderOf(agreement)?.name ?? ''"
-            [secondary]="line(agreement)"
-            [figure]="(riderOf(agreement)?.rating ?? 0).toString()"
-          >
+          <arena-person-row [name]="riderOf(agreement)?.name ?? ''" [secondary]="line(agreement)">
             <div action class="arena-row">
               <arena-button size="sm" (click)="accept(agreement)">Aceptar</arena-button>
               <arena-button size="sm" variant="danger" (click)="reject(agreement)">
@@ -63,7 +59,7 @@
           <arena-person-row
             [name]="riderOf(agreement)?.name ?? ''"
             [secondary]="line(agreement)"
-            [figure]="(riderOf(agreement)?.rating ?? 0).toString()"
+            [figure]="figureOf(riderOf(agreement))"
           >
             <app-state-tag action [agreement]="agreement.state" />
           </arena-person-row>
@@ -91,7 +87,7 @@
           <arena-person-row
             [name]="riderOf(agreement)?.name ?? ''"
             [secondary]="line(agreement)"
-            [figure]="(riderOf(agreement)?.rating ?? 0).toString()"
+            [figure]="figureOf(riderOf(agreement))"
           >
             <arena-button action size="sm" variant="secondary" (click)="open(agreement.riderId)">
               Ver
@@ -128,7 +124,7 @@
           <arena-person-row
             [name]="rider.name"
             [secondary]="profile(rider) + ' · ' + rangeOf(rider)"
-            [figure]="rider.rating.toString()"
+            [figure]="figureOf(rider)"
           >
             <arena-button action size="sm" (click)="open(rider.id)">Proponer acuerdo</arena-button>
           </arena-person-row>

@@ -324,10 +324,10 @@ describe('Orders', () => {
     const before = agreements.chargeable(
       assignment?.riderId ?? '',
       assignment?.branchId ?? '',
-    )?.pointsLeft;
+    )?.runsLeft;
 
     expect(before).toBeGreaterThan(0);
-    expect(orders.scan(door?.slug ?? '', assignment?.riderId ?? '')?.pointsLeft).toBe(
+    expect(orders.scan(door?.slug ?? '', assignment?.riderId ?? '')?.runsLeft).toBe(
       (before ?? 0) - 1,
     );
 

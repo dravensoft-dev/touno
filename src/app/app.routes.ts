@@ -298,6 +298,19 @@ export const routes: Routes = [
   },
 
   {
+    path: 'manual',
+    title: 'Manual de Touno',
+    data: arenaRouteMeta({
+      description:
+        'Cómo funciona Touno, contado por tipo de usuario: comprador, rider, gerente de empresa, gerente de sucursal y operador.',
+    }),
+    loadComponent: () => import('./pages/public/manual/manual').then((m) => m.ManualIndex),
+  },
+  {
+    path: 'manual/:rol',
+    loadComponent: () => import('./pages/public/manual-role/manual-role').then((m) => m.ManualRole),
+  },
+  {
     path: '404',
     title: 'Página no encontrada',
     data: PRIVATE,

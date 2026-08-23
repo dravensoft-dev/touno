@@ -10,12 +10,13 @@ import {
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
 import { Businesses } from '../../../domain/businesses';
+import { Reputation } from '../../../domain/reputation';
 import { Catalog } from '../../../domain/catalog';
 import { Geography } from '../../../domain/geography';
 import { Loads } from '../../../domain/loads';
 import { Platform } from '../../../domain/platform';
 import { Session } from '../../../domain/session';
-import { bs } from '../../../domain/format';
+import { bs, porcentaje } from '../../../domain/format';
 import { CardDraft, cardLabel, completeCard } from '../../../domain/payments.model';
 import { Notices } from '../../../layout/notices';
 
@@ -28,6 +29,7 @@ import { Notices } from '../../../layout/notices';
 })
 export class CompanySettings {
   private readonly agreements = inject(Agreements);
+  private readonly reputation = inject(Reputation);
   private readonly catalog = inject(Catalog);
   private readonly geography = inject(Geography);
   private readonly loads = inject(Loads);
@@ -141,6 +143,14 @@ export class CompanySettings {
     this.notices.cardRemoved();
   }
 
+  protected brandStanding(): string {
+    const one = this.reputation.ofCompany(this.companyId());
+
+    return one.totalCount === 0
+      ? 'Sin historial todavía'
+      : `${porcentaje(one.pct)} · ${one.keptCount} de ${one.totalCount} cumplidos`;
+  }
+
   protected readonly facts = computed<readonly ArenaKeyValueRow[]>(() => {
     const company = this.company();
 
@@ -175,8 +185,11 @@ export class CompanySettings {
           .length.toString(),
         numeric: true,
       },
-      { term: 'Calificación', value: company.rating.toString(), numeric: true },
-      { term: 'Reseñas', value: company.reviewCount.toString(), numeric: true },
+      {
+        term: 'Reputación de la marca',
+        value: this.brandStanding(),
+        numeric: true,
+      },
     ];
   });
 }

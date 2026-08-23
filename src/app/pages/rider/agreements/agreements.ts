@@ -10,10 +10,11 @@ import {
   ArenaSection,
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
+import { Reputation } from '../../../domain/reputation';
 import { Businesses } from '../../../domain/businesses';
 import { Session } from '../../../domain/session';
 import { RiderAgreement, kindLabel } from '../../../domain/agreements.model';
-import { bs } from '../../../domain/format';
+import { bs, porcentaje } from '../../../domain/format';
 import { StateTag } from '../../../shared/state-tag/state-tag';
 
 @Component({
@@ -38,11 +39,12 @@ export class RiderAgreements {
   private readonly session = inject(Session);
 
   protected readonly agreements = inject(Agreements);
+  private readonly reputation = inject(Reputation);
 
   protected readonly riderId = computed(() => this.session.riderId() ?? '');
 
   protected readonly invitations = computed(() =>
-    this.agreements.awaiting('rider', this.riderId()),
+    this.bestFirst(this.agreements.awaiting('rider', this.riderId())),
   );
 
   protected readonly sent = computed(() =>
@@ -53,11 +55,33 @@ export class RiderAgreements {
 
   protected readonly active = computed(() => this.agreements.activeFor(this.riderId()));
 
+  protected standingLine(agreement: RiderAgreement): string {
+    const one = this.reputation.of(this.weakestOf(agreement));
+
+    return one.totalCount === 0
+      ? 'Sucursal nueva, sin historial todavía'
+      : `${porcentaje(one.pct)} de cumplimiento`;
+  }
+
+  private weakestOf(agreement: RiderAgreement): string {
+    return agreement.branchIds
+      .slice()
+      .sort((left, right) => this.reputation.of(left).pct - this.reputation.of(right).pct)[0];
+  }
+
+  private bestFirst(list: readonly RiderAgreement[]): readonly RiderAgreement[] {
+    return list
+      .slice()
+      .sort(
+        (left, right) =>
+          this.reputation.of(this.weakestOf(right)).pct -
+            this.reputation.of(this.weakestOf(left)).pct || left.id.localeCompare(right.id),
+      );
+  }
+
   protected readonly fulfilled = computed(() => this.agreements.fulfilledFor(this.riderId()));
 
-  protected readonly pointsPending = computed(() =>
-    this.agreements.pointsPendingOf(this.riderId()),
-  );
+  protected readonly runsPending = computed(() => this.agreements.runsPendingOf(this.riderId()));
 
   protected readonly peakHeld = computed(() =>
     this.agreements
@@ -94,7 +118,7 @@ export class RiderAgreements {
   }
 
   protected pointsOf(agreement: RiderAgreement): string {
-    return `${agreement.pointsLeft} de ${agreement.points} puntos de carrera`;
+    return `${agreement.runsLeft} de ${agreement.runs} carreras`;
   }
 
   protected open(agreement: RiderAgreement): void {

@@ -9,8 +9,6 @@ export interface Company {
   readonly name: string;
   readonly type: BusinessType;
   readonly summary: string;
-  readonly rating: number;
-  readonly reviewCount: number;
   readonly categories: readonly string[];
   readonly tags: readonly string[];
   readonly since: string;

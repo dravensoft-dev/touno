@@ -14,6 +14,8 @@ import {
 import { ArenaMetadataService } from '@dravensoft/arena-angular/metadata';
 import { Businesses } from '../../../domain/businesses';
 import { Catalog } from '../../../domain/catalog';
+import { Reputation } from '../../../domain/reputation';
+import { porcentaje } from '../../../domain/format';
 import { Geography } from '../../../domain/geography';
 import { BusinessType, pathOfType } from '../../../domain/businesses.model';
 import { bs } from '../../../domain/format';
@@ -42,6 +44,7 @@ export class CompanyDetail {
   private readonly location = inject(Location);
   private readonly metadata = inject(ArenaMetadataService);
   private readonly catalog = inject(Catalog);
+  private readonly reputation = inject(Reputation);
 
   protected readonly businesses = inject(Businesses);
   protected readonly geography = inject(Geography);
@@ -82,6 +85,14 @@ export class CompanyDetail {
     { label: this.company().name },
   ]);
 
+  protected standingLine(): string {
+    const one = this.reputation.ofCompany(this.company().id);
+
+    return one.totalCount === 0
+      ? 'Sin historial todavía'
+      : `${porcentaje(one.pct)} · ${one.keptCount} de ${one.totalCount} compromisos cumplidos`;
+  }
+
   protected readonly facts = computed<readonly ArenaKeyValueRow[]>(() => {
     const company = this.company();
 
@@ -91,8 +102,8 @@ export class CompanyDetail {
       { term: 'Categorías', value: company.categories.join(', ') },
       { term: 'Desde', value: company.since, numeric: true },
       {
-        term: 'Reseñas',
-        value: `${company.rating} · ${company.reviewCount}`,
+        term: 'Cumplimiento',
+        value: this.standingLine(),
         numeric: true,
       },
     ];
@@ -109,11 +120,7 @@ export class CompanyDetail {
       description: company.summary,
       url: `${SITE_ORIGIN}${this.path()}`,
       areaServed: this.cities().map((one) => ({ '@type': 'City', name: one })),
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: company.rating,
-        reviewCount: company.reviewCount,
-      },
+      foundingDate: company.since,
       department: this.branches().map((branch) => ({
         '@type': this.restaurant() ? 'Restaurant' : 'Store',
         name: branch.name,

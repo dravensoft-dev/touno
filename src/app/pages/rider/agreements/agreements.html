@@ -21,7 +21,7 @@
   <arena-section
     eyebrow="Te invitaron"
     title="Propuestas que te llegaron"
-    description="Una empresa te quiere en sus sucursales. Aceptas o rechazas tú."
+    description="Una empresa te quiere en sus sucursales. Aceptas o rechazas tú. Van primero las que mejor cumplen con sus riders."
     rhythm="md"
   >
     @if (invitations().length > 0) {
@@ -35,6 +35,7 @@
             <div class="arena-stack arena-stack--group">
               <app-state-tag [agreement]="agreement.state" />
               <p class="arena-num">{{ rate(agreement) }}</p>
+              <p class="arena-num">{{ standingLine(agreement) }}</p>
               @if (agreement.message) {
                 <p>{{ agreement.message }}</p>
               }
@@ -122,16 +123,16 @@
   </arena-section>
 
   <arena-alert
-    [tone]="pointsPending() > 0 ? 'info' : 'success'"
+    [tone]="runsPending() > 0 ? 'info' : 'success'"
     [title]="
-      pointsPending() > 0
-        ? 'Te quedan ' + pointsPending() + ' puntos de carrera por cumplir'
+      runsPending() > 0
+        ? 'Te quedan ' + runsPending() + ' carreras por cumplir'
         : 'No te queda ningún punto pendiente'
     "
   >
     @if (peakHeld()) {
       Estás en un reclutamiento de hora pico, y sólo puedes tener uno.
-    } @else if (pointsPending() > 0) {
+    } @else if (runsPending() > 0) {
       Mientras te quede uno no puedes aceptar un reclutamiento de hora pico. Cada escaneo que cierra
       una entrega te descuenta uno.
     } @else {
@@ -144,14 +145,14 @@
     <arena-section
       eyebrow="Cumplidos"
       [title]="fulfilled().length + ' reclutamientos que llevaste hasta el final'"
-      description="Gastaste todos sus puntos de carrera. Quedan como constancia de tu trabajo."
+      description="Gastaste todas sus carreras. Quedan como constancia de tu trabajo."
       rhythm="md"
     >
       <div class="arena-stack arena-stack--group">
         @for (agreement of fulfilled(); track agreement.id) {
           <p class="arena-row arena-row--between">
             <span>{{ companyName(agreement) }} · {{ scope(agreement) }}</span>
-            <span class="arena-num">{{ agreement.points }} puntos</span>
+            <span class="arena-num">{{ agreement.runs }} carreras</span>
           </p>
         }
       </div>

@@ -13,9 +13,6 @@ export interface Rider {
   readonly vehicle: Vehicle;
   readonly cityId: string;
   readonly zones: readonly string[];
-  readonly rating: number;
-  readonly tripsDone: number;
-  readonly onTimePct: number;
   readonly online: boolean;
   readonly ratePerTripBob: number;
   readonly account: string;

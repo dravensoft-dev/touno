@@ -12,15 +12,17 @@ the unit-test `include` and `scripts/**/*.ts` to `lintFilePatterns`. The include
 with `../` because the builder globs from `sourceRoot`, which is `src`, and not from the workspace
 root its own schema names.
 
-- `generate-sitemap.ts` — writes `public/sitemap.xml` from `COMPANIES` and `BRANCHES`, plus the four
-  static public routes. Runs in `prepare:assets`. **The count it prints must equal the number of
-  prerendered pages carrying `index,follow`**; they are 30 and 30 today, and a mismatch means either
-  a public route was added without a sitemap entry or a panel route lost its `PRIVATE` marker.
+- `generate-sitemap.ts` — writes `public/sitemap.xml` from `COMPANIES`, `BRANCHES` and `MANUAL`,
+  plus the five static public routes. Runs in `prepare:assets`. **The count it prints must equal the
+  number of prerendered pages carrying `index,follow`**; they are 36 and 36 today, and a mismatch
+  means either a public route was added without a sitemap entry or a panel route lost its `PRIVATE`
+  marker.
 - `emit-404.ts` — copies the prerendered `404/index.html` up to `404.html`, because a static host
   serves the not-found page from the root. Exits 1 if the route was not prerendered.
 - `overflow-sweep.ts` — the horizontal-overflow check the root checklist asks for by hand, which
   nothing else in the tree performs. `bun run serve:static` first, then `bun run sweep:overflow`;
-  `overflow-sweep/plan.ts` names what it walks: the public surface the sitemap indexes, then each
+  `overflow-sweep/plan.ts` names what it walks: the public surface the sitemap indexes —
+  including `/manual` and one page per role, which are the only long-prose pages in the tree — then each
   of the eight profiles with its rail and its detail routes, then two short walks with a **filled
   cart**, at 320, 360, 390, 768, 1024 and 1440. **`detailsOf()` names every role it serves and
   answers `[]` for the rest.** It used to fall through to `branchRoutes()`, so a profile of a new

@@ -6,5 +6,6 @@ export const PLATFORM: PlatformConfig = {
   cityRateBob: 0.25,
   interurbanRateBob: 0.6,
   weatherFeeBob: 5,
-  minCareerPoints: 5,
+  minRuns: 5,
+  minReputationPct: 80,
 };

@@ -12,6 +12,8 @@ import {
   ArenaStatCard,
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
+import { Reputation } from '../../../domain/reputation';
+import { ReputationFigure } from '../../../shared/reputation-figure/reputation-figure';
 import { Businesses } from '../../../domain/businesses';
 import { Platform } from '../../../domain/platform';
 import { Riders } from '../../../domain/riders';
@@ -26,6 +28,7 @@ import { RiderPicker } from '../../../shared/rider-picker/rider-picker';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { style: 'display: contents' },
   imports: [
+    ReputationFigure,
     ArenaPageHead,
     ArenaSection,
     ArenaGrid,
@@ -41,6 +44,7 @@ import { RiderPicker } from '../../../shared/rider-picker/rider-picker';
 })
 export class BranchRiders {
   private readonly agreements = inject(Agreements);
+  private readonly reputation = inject(Reputation);
   private readonly businesses = inject(Businesses);
   private readonly notices = inject(Notices);
   private readonly platform = inject(Platform);
@@ -73,12 +77,12 @@ export class BranchRiders {
 
   protected readonly rate = signal('');
 
-  protected readonly points = signal('');
+  protected readonly runs = signal('');
 
-  protected readonly minPoints = computed(() => this.platform.minCareerPoints());
+  protected readonly minRuns = computed(() => this.platform.minRuns());
 
-  protected readonly pointsBob = computed(() =>
-    this.points() === '' ? this.minPoints() : Number(this.points()),
+  protected readonly runsGiven = computed(() =>
+    this.runs() === '' ? this.minRuns() : Number(this.runs()),
   );
 
   protected readonly candidates = computed(() =>
@@ -95,21 +99,30 @@ export class BranchRiders {
     })),
   );
 
+  protected readonly standing = computed(() => this.reputation.of(this.branchId()));
+
+  protected readonly breakdown = computed(() => this.reputation.breakdownOf(this.branchId()));
+
+  protected readonly canRecruit = computed(() => this.reputation.clears(this.branchId()));
+
   protected readonly reason = computed(() =>
     this.chosen() === ''
       ? undefined
-      : this.agreements.reasonFor(this.chosen(), {
-          companyId: this.branch()?.companyId ?? '',
-          branchIds: [this.branchId()],
-          originBranchId: this.branchId(),
-        }),
+      : this.agreements.reasonFor(
+          this.chosen(),
+          this.reputation.gated(this.chosen(), {
+            companyId: this.branch()?.companyId ?? '',
+            branchIds: [this.branchId()],
+            originBranchId: this.branchId(),
+          }),
+        ),
   );
 
   protected readonly ready = computed(
     () =>
       this.chosen() !== '' &&
       Number(this.rate()) > 0 &&
-      this.pointsBob() >= this.minPoints() &&
+      this.runsGiven() >= this.minRuns() &&
       this.reason() === undefined,
   );
 
@@ -122,7 +135,7 @@ export class BranchRiders {
   }
 
   protected onPoints(value: string): void {
-    this.points.set(value);
+    this.runs.set(value);
   }
 
   protected recruit(): void {
@@ -130,20 +143,22 @@ export class BranchRiders {
       return;
     }
 
-    this.agreements.propose({
-      riderId: this.chosen(),
-      companyId: this.branch()?.companyId ?? '',
-      branchIds: [this.branchId()],
-      initiatedBy: 'empresa',
-      originBranchId: this.branchId(),
-      kind: 'hora-pico',
-      perTripBob: Number(this.rate()),
-      points: this.pointsBob(),
-    });
+    this.agreements.propose(
+      this.reputation.gated(this.chosen(), {
+        riderId: this.chosen(),
+        companyId: this.branch()?.companyId ?? '',
+        branchIds: [this.branchId()],
+        initiatedBy: 'empresa',
+        originBranchId: this.branchId(),
+        kind: 'hora-pico',
+        perTripBob: Number(this.rate()),
+        runs: this.runsGiven(),
+      }),
+    );
 
     this.chosen.set('');
     this.rate.set('');
-    this.points.set('');
+    this.runs.set('');
     this.notices.agreementSent();
   }
 }

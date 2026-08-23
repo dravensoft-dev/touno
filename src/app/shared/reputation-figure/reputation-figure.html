@@ -1,0 +1,29 @@
+<div class="standing arena-stack arena-stack--group">
+  @if (known()) {
+    <p class="standing__head">
+      <span class="standing__figure arena-num">{{ figure() }}</span>
+      <span class="standing__label">{{ label() }}</span>
+    </p>
+    <p class="standing__made-of arena-num">{{ madeOf() }}</p>
+    @if (rows().length > 0) {
+      <dl class="standing__rows">
+        @for (row of rows(); track row.label) {
+          <div class="standing__row">
+            <dt>{{ row.label }}</dt>
+            <dd class="arena-num">{{ row.count }}</dd>
+          </div>
+        }
+      </dl>
+    }
+  } @else {
+    <div>
+      <p class="standing__head">
+        <span class="standing__figure standing__figure--blank">Sin historial</span>
+        <span class="standing__label">{{ label() }}</span>
+      </p>
+      <p class="standing__made-of">
+        Todavía no cerró ninguna entrega en Touno, así que no hay nada que contar.
+      </p>
+    </div>
+  }
+</div>

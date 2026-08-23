@@ -94,4 +94,32 @@ describe('activeIdIn', () => {
     expect(destinationsFor(panel!, undefined).length).toBe(panel?.destinations.length);
     expect(destinationsFor(panel!, 'restaurante').length).toBe(panel?.destinations.length);
   });
+
+  it('gives every panel a Manual destination, and keeps every one out of the bottom bar', () => {
+    for (const panel of PANELS) {
+      const manual = panel.destinations.find((one) => one.id === 'manual');
+
+      expect(manual).toBeDefined();
+      expect(manual?.bar).toBe(false);
+      expect(manual?.path).toBe(`/manual/${panel.role}`);
+    }
+  });
+
+  it('leaves the panel when the Manual opens, because the manual is public', () => {
+    for (const panel of PANELS) {
+      expect(panelFor(`/manual/${panel.role}`)).toBeUndefined();
+    }
+
+    expect(panelFor('/manual')).toBeUndefined();
+  });
+
+  it('keeps at most four destinations in any bottom bar, because a fifth wraps at 320px', () => {
+    for (const panel of PANELS) {
+      for (const type of [undefined, 'restaurante', 'importadora'] as const) {
+        const bar = destinationsFor(panel, type).filter((one) => one.bar);
+
+        expect(bar.length).toBeLessThanOrEqual(4);
+      }
+    }
+  });
 });

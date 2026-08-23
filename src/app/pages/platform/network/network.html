@@ -57,6 +57,34 @@
   </arena-section>
 
   <arena-section
+    eyebrow="Reputación"
+    title="Quién está por debajo del piso"
+    description="Mientras estén aquí no pueden reclutar, y un rider de esta lista no puede tomar hora pico. El piso se mueve en Tarifas."
+    rhythm="md"
+  >
+    @if (underFloor().length > 0) {
+      <arena-table label="Por debajo del piso" [columns]="floorColumns">
+        @for (row of underFloor(); track row.name) {
+          <tr arena-table-row>
+            <td arena-table-cell>{{ row.name }}</td>
+            <td arena-table-cell>{{ row.kind }}</td>
+            <td arena-table-cell align="right">
+              <span class="arena-num">{{ row.figure }}</span>
+            </td>
+          </tr>
+        }
+      </arena-table>
+    } @else {
+      <arena-empty-state
+        headingLevel="h3"
+        icon="ph-bold ph-seal-check"
+        title="Nadie está por debajo del piso"
+        message="Con el piso de hoy, toda la red cumple."
+      />
+    }
+  </arena-section>
+
+  <arena-section
     eyebrow="Riders"
     title="Cómo quieren cobrar y cómo cobran"
     description="La diferencia entre las dos columnas es siempre una empresa sin tarjeta."

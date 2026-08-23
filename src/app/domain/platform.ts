@@ -14,7 +14,9 @@ export class Platform {
 
   readonly weatherFeeBob = computed(() => this.config().weatherFeeBob);
 
-  readonly minCareerPoints = computed(() => this.config().minCareerPoints);
+  readonly minRuns = computed(() => this.config().minRuns);
+
+  readonly minReputationPct = computed(() => this.config().minReputationPct);
 
   patch(change: Partial<PlatformConfig>): void {
     this.state.update((one) => ({ ...one, ...change }));

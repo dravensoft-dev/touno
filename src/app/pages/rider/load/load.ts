@@ -87,11 +87,11 @@ export class RiderLoad {
 
   protected readonly expected = computed(() => this.load()?.receiptCode ?? '');
 
-  protected readonly pointsLeft = computed(() => {
+  protected readonly runsLeft = computed(() => {
     const load = this.load();
 
     return load
-      ? (this.agreements.chargeable(this.riderId(), load.fromBranchId)?.pointsLeft ?? 0)
+      ? (this.agreements.chargeable(this.riderId(), load.fromBranchId)?.runsLeft ?? 0)
       : 0;
   });
 
@@ -209,7 +209,7 @@ export class RiderLoad {
     if (spent?.state === 'cumplido') {
       this.notices.recruitmentFulfilled();
     } else if (spent) {
-      this.notices.pointSpent(spent.pointsLeft);
+      this.notices.runSpent(spent.runsLeft);
     }
   }
 

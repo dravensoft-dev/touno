@@ -154,18 +154,18 @@ describe('CompanyRiderDetail', () => {
     expect(render('nadie').nativeElement.textContent).toContain('No encontramos ese rider');
   });
 
-  it('asks for the clase de reclutamiento and the puntos de carrera', () => {
+  it('asks for the clase de reclutamiento and the carreras', () => {
     const host: HTMLElement = render('ivan-mamani', 'p-empresa-restaurante').nativeElement;
 
-    expect(host.textContent).toContain('Puntos de carrera que le das');
+    expect(host.textContent).toContain('Carreras que le das');
     expect(host.textContent).toContain('Touno no permite menos de');
     expect(host.textContent).toContain('sólo puede tener uno en total');
   });
 
-  it('says why a rider who still owes points cannot take hora pico', () => {
+  it('says why a rider who still owes runs cannot take hora pico', () => {
     const fixture = render('noemi-flores');
 
-    expect(TestBed.inject(Agreements).pointsPendingOf('r-noemi')).toBeGreaterThan(0);
+    expect(TestBed.inject(Agreements).runsPendingOf('r-noemi')).toBeGreaterThan(0);
 
     pickPeak(fixture);
 
@@ -178,7 +178,7 @@ describe('CompanyRiderDetail', () => {
   it('lets the gerente de empresa recruit in hora pico when the rider is free', () => {
     const fixture = render('ivan-mamani', 'p-empresa-restaurante');
 
-    expect(TestBed.inject(Agreements).pointsPendingOf('r-ivan')).toBe(0);
+    expect(TestBed.inject(Agreements).runsPendingOf('r-ivan')).toBe(0);
 
     pickPeak(fixture);
 
@@ -188,10 +188,10 @@ describe('CompanyRiderDetail', () => {
     expect(fixture.nativeElement.textContent).toContain('ninguna empresa puede darle dos');
   });
 
-  it('names the clase and the points left on a reclutamiento already running', () => {
+  it('names the clase and the runs left on a reclutamiento already running', () => {
     const host: HTMLElement = render('hugo-barrientos').nativeElement;
 
     expect(host.textContent).toContain('Reclutamiento normal');
-    expect(host.textContent).toContain('puntos de carrera');
+    expect(host.textContent).toContain('carreras');
   });
 });

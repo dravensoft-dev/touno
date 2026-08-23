@@ -79,15 +79,21 @@ describe('App panel destinations', () => {
   it('addresses every destination from the root when the base href is the root', async () => {
     const [rail, bar] = await railAndBarUnder('/');
 
-    expect(rail).toEqual(['/feed', '/', '/carrito', '/mis-pedidos']);
-    expect(bar).toEqual(rail);
+    expect(rail).toEqual(['/feed', '/', '/carrito', '/mis-pedidos', '/manual/comprador']);
+    expect(bar).toEqual(rail.filter((one) => !(one ?? '').startsWith('/manual')));
   });
 
   it('carries the base href into every destination when the site is served from a subpath', async () => {
     const [rail, bar] = await railAndBarUnder('/touno/');
 
-    expect(rail).toEqual(['/touno/feed', '/touno/', '/touno/carrito', '/touno/mis-pedidos']);
-    expect(bar).toEqual(rail);
+    expect(rail).toEqual([
+      '/touno/feed',
+      '/touno/',
+      '/touno/carrito',
+      '/touno/mis-pedidos',
+      '/touno/manual/comprador',
+    ]);
+    expect(bar).toEqual(rail.filter((one) => !(one ?? '').includes('/manual')));
   });
 });
 

@@ -40,6 +40,10 @@ the reader is told.
   empresa that had raised less without invalidating a stored row.
 - **`Platform` injects nothing and must stay that way.** `Businesses -> Platform`,
   `Agreements -> Platform` and `Orders -> Agreements` are all safe only while it is a leaf.
+- **`Reputation` reads and never writes, and nothing it reads may read it back.** It injects
+  `Orders`, `Agreements`, `Loads`, `Businesses` and `Platform`; an `Agreements -> Reputation` edge
+  would be a cycle. The gate goes the other way through `ReputationGate` on the ask, which is the
+  same move `pricing.ts` makes by taking `config` as an argument. `Manual` injects nothing at all.
 
 ## Facts the fixtures carry, and the tests that hold them
 
@@ -53,15 +57,15 @@ the reader is told.
 - **A rider is bound to a sucursal only by an agreement both sides accepted.** `agreements.ts`
   throws three times and the three throws are the rule: you cannot answer your own proposal, one
   addressed to someone else, or one already answered.
-- **A reclutamiento carries points, and the hora pico rules are throws too.** `propose()` refuses
+- **A reclutamiento carries runs — `carreras` — and the hora pico rules are throws too.** `propose()` refuses
   under Touno's minimum, a sucursal scoping outside itself, a second hora pico, one from an empresa
-  that already recruited this rider that way, and one to a rider who still owes points. `settle()`
+  that already recruited this rider that way, and one to a rider who still owes runs. `settle()`
   re-checks the last three on accept, because the rider could have taken a normal recruitment in
-  between. `spend()` charges the hora pico first, then the one with fewest points left, then by id
+  between. `spend()` charges the hora pico first, then the one with fewest runs left, then by id
   — never `Math.random()`.
 - **`cumplido` is a real state and it stops binding.** `covers()` filters on `activo`, so the scan
-  that spends the last point drops the rider out of `ridersOf()` in the same update. `ag-516` is
-  left at one point on purpose, so that transition is walkable and not only asserted.
+  that spends the last run drops the rider out of `ridersOf()` in the same update. `ag-516` is
+  left at one run on purpose, so that transition is walkable and not only asserted.
 - **A `TruckLoad` has a `receiptCode` and it is not an order code.** `RC-####` against `TO-####`,
   one per load, and `loads.spec.ts` holds both the uniqueness and the prefix.
 - **An expiring agreement does not rewrite history.** A load still filling or still moving, and an
@@ -89,6 +93,23 @@ the reader is told.
 - **`BranchPrice` is the same shape for the same reason.** A product charges its brand price unless
   its `priceScope` is `sucursal` and that sucursal has a row, and setting the scope back to `marca`
   drops every row. `al-campera` is the one article priced per sucursal.
+- **The reputation ledger is closed history, and the present is derived.** `reputation.data.ts` is
+  tallies — `subjectId`, `fact`, `count` — because nine hundred literal rows are a file that says
+  nothing, and because a tally adds no prerendered route. Everything live comes from
+  `factsOfOrder`, `factsOfAgreement` and `factsOfLoad`, so a scan moves the figure with no write at
+  all. `reputation.spec.ts` holds that no ledger row names a live pedido and that each fact appears
+  once per subject.
+- **A comprador's subject id is his phone**, which is already the key `Orders.ofBuyer()` uses.
+- **Nothing in the reputation calculation reads `RiderTrack` or `STALE_AFTER_MINUTES`**, and that is
+  a promise `TOUNO_STRUC.md` makes to riders in writing, not an oversight.
+- **`r-rene` is under the floor and owes no carreras**, so his hora-pico refusal is `reputacion-baja`
+  and not one of the older three; `b-yungas-oruro` is the sucursal under it; `r-elias` has no history
+  at all, so the empty figure is walkable. `ag-522` is the abandoned reclutamiento and `ag-523` puts
+  a second urban rider on the demo sucursal, so the picker's ordering is visible rather than only
+  asserted.
+- **The manual is a fixture with a coverage spec.** Every `Role` has a chapter, every chapter has
+  both a Tutorial and a Reputación section, and the Reputación section names `ReputationFact` members
+  rather than repeating their wording — so renaming a fact renames the manual.
 - **An order stores its fare and `orders.spec.ts` recomputes it.** The four amounts are
   denormalised, so the spec rebuilds each one from the order's own branch, zone, city and weather
   and compares. Editing an amount by hand without its inputs fails loudly.

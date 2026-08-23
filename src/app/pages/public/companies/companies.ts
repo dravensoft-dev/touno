@@ -10,6 +10,7 @@ import {
   ArenaSelectOption,
 } from '@dravensoft/arena-angular';
 import { Businesses } from '../../../domain/businesses';
+import { Reputation } from '../../../domain/reputation';
 import { Catalog } from '../../../domain/catalog';
 import { Geography } from '../../../domain/geography';
 import { BusinessType, pathOfType } from '../../../domain/businesses.model';
@@ -38,6 +39,7 @@ export class Companies {
   private readonly catalog = inject(Catalog);
 
   protected readonly businesses = inject(Businesses);
+  private readonly reputation = inject(Reputation);
   protected readonly geography = inject(Geography);
 
   readonly type = input.required<BusinessType>();
@@ -58,23 +60,25 @@ export class Companies {
   protected readonly branches = computed(() => {
     const needle = this.term().trim().toLowerCase();
 
-    return this.businesses
-      .branches()
-      .filter((one) => this.businesses.typeOfBranch(one.id) === this.type())
-      .filter((one) => this.city() === 'todas' || one.cityId === this.city())
-      .filter((one) => {
-        if (needle === '') {
-          return true;
-        }
+    return this.reputation.bestFirst(
+      this.businesses
+        .branches()
+        .filter((one) => this.businesses.typeOfBranch(one.id) === this.type())
+        .filter((one) => this.city() === 'todas' || one.cityId === this.city())
+        .filter((one) => {
+          if (needle === '') {
+            return true;
+          }
 
-        const company = this.businesses.companyById(one.companyId);
+          const company = this.businesses.companyById(one.companyId);
 
-        return (
-          one.name.toLowerCase().includes(needle) ||
-          one.zone.toLowerCase().includes(needle) ||
-          (company?.name.toLowerCase().includes(needle) ?? false)
-        );
-      });
+          return (
+            one.name.toLowerCase().includes(needle) ||
+            one.zone.toLowerCase().includes(needle) ||
+            (company?.name.toLowerCase().includes(needle) ?? false)
+          );
+        }),
+    );
   });
 
   protected readonly schema = computed<Record<string, unknown>>(() => ({

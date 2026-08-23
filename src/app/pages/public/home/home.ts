@@ -14,6 +14,7 @@ import { Businesses } from '../../../domain/businesses';
 import { pathOfType } from '../../../domain/businesses.model';
 import { Cart } from '../../../domain/cart';
 import { Catalog } from '../../../domain/catalog';
+import { Reputation } from '../../../domain/reputation';
 import { FeedItem } from '../../../domain/catalog.model';
 import { Geography } from '../../../domain/geography';
 import { Notices } from '../../../layout/notices';
@@ -55,14 +56,15 @@ export class Home {
 
   protected readonly businesses = inject(Businesses);
   protected readonly catalog = inject(Catalog);
+  private readonly reputation = inject(Reputation);
   protected readonly geography = inject(Geography);
 
   protected readonly restaurants = computed(() =>
-    this.catalog.sellingBranches('restaurante').slice(0, 4),
+    this.reputation.bestFirst(this.catalog.sellingBranches('restaurante')).slice(0, 4),
   );
 
   protected readonly importers = computed(() =>
-    this.catalog.sellingBranches('importadora').slice(0, 4),
+    this.reputation.bestFirst(this.catalog.sellingBranches('importadora')).slice(0, 4),
   );
 
   protected readonly cities = computed(() => this.geography.all());

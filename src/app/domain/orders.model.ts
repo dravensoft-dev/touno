@@ -64,13 +64,6 @@ export interface Milestone {
   readonly tracked: boolean;
 }
 
-export interface Review {
-  readonly stars: 1 | 2 | 3 | 4 | 5;
-  readonly text: string;
-  readonly at: string;
-  readonly reply?: string;
-}
-
 export interface Order {
   readonly code: string;
   readonly slug: string;
@@ -99,7 +92,6 @@ export interface Order {
   readonly threadId: string;
   readonly scannedAt?: string;
   readonly scannedBy?: string;
-  readonly review?: Review;
 }
 
 export type SheetPartyRole = 'sucursal-origen' | 'rider-origen' | 'sucursal-local' | 'rider-local';

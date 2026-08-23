@@ -179,12 +179,6 @@ export const ORDERS: readonly Order[] = [
     threadId: 'th-1045',
     scannedAt: '2026-08-15T12:06:00',
     scannedBy: 'r-gabriela',
-    review: {
-      stars: 5,
-      text: 'Llegó calientito y antes de la hora.',
-      at: '2026-08-15T12:40:00',
-      reply: 'Gracias Karina, te esperamos pronto.',
-    },
   },
   {
     code: 'TO-1046',
@@ -527,11 +521,6 @@ export const ORDERS: readonly Order[] = [
     threadId: 'th-2208',
     scannedAt: '2026-08-13T15:12:00',
     scannedBy: 'r-lucia',
-    review: {
-      stars: 4,
-      text: 'Llegó bien, un día después de lo que decía.',
-      at: '2026-08-14T09:00:00',
-    },
   },
   {
     code: 'TO-2214',

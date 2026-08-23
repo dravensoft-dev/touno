@@ -1,0 +1,79 @@
+<app-structured-data [key]="'manual-' + rol()" [schema]="schema()" />
+
+<div class="arena-stack arena-stack--section">
+  <arena-breadcrumbs
+    ngSkipHydration
+    ariaLabel="Dónde estás"
+    [items]="crumbs()"
+    (navigate)="goTo($event)"
+  />
+
+  <arena-page-head headingLevel="h1" [title]="entry().title" [subtitle]="entry().lede" />
+
+  @for (chapter of entry().chapters; track chapter.section) {
+    <arena-section
+      headingLevel="h2"
+      [eyebrow]="labelOf(chapter)"
+      [title]="chapter.title"
+      [description]="chapter.summary"
+      rhythm="md"
+    >
+      <div class="manual arena-stack arena-stack--component">
+        <ol class="manual__steps">
+          @for (step of chapter.steps; track step.title) {
+            <li class="manual__step">
+              <h3 class="manual__step-title">{{ step.title }}</h3>
+              <p class="manual__step-body">{{ step.body }}</p>
+            </li>
+          }
+        </ol>
+
+        @if (countedIn(chapter, 'cumplido').length > 0) {
+          <div class="manual__facts">
+            <h3 class="manual__facts-title">Qué cuenta a favor</h3>
+            <ul class="manual__list">
+              @for (fact of countedIn(chapter, 'cumplido'); track fact) {
+                <li>{{ fact }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        @if (countedIn(chapter, 'incumplido').length > 0) {
+          <div class="manual__facts">
+            <h3 class="manual__facts-title">Qué cuenta en contra</h3>
+            <ul class="manual__list">
+              @for (fact of countedIn(chapter, 'incumplido'); track fact) {
+                <li>{{ fact }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        <div class="manual__facts">
+          <h3 class="manual__facts-title">Qué ganas</h3>
+          <ul class="manual__list">
+            @for (gain of chapter.gains; track gain) {
+              <li>{{ gain }}</li>
+            }
+          </ul>
+        </div>
+
+        <div class="manual__facts">
+          <h3 class="manual__facts-title">Qué no puedes hacer</h3>
+          <ul class="manual__list">
+            @for (limit of chapter.limits; track limit) {
+              <li>{{ limit }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    </arena-section>
+  }
+
+  @if (home()) {
+    <div>
+      <arena-button variant="secondary" (click)="goHome()">Volver a tu panel</arena-button>
+    </div>
+  }
+</div>

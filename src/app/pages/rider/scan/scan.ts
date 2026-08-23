@@ -89,7 +89,7 @@ export class RiderScan {
     if (spent?.state === 'cumplido') {
       this.notices.recruitmentFulfilled();
     } else if (spent) {
-      this.notices.pointSpent(spent.pointsLeft);
+      this.notices.runSpent(spent.runsLeft);
     }
   }
 

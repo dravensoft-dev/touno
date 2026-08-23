@@ -4,7 +4,7 @@
       <arena-person-row
         [name]="candidate.rider.name"
         [secondary]="candidate.secondary"
-        [figure]="candidate.rider.rating.toString()"
+        [figure]="candidate.figure"
       >
         <arena-button action variant="secondary" (click)="pick(candidate.rider)">
           Asignar
@@ -16,7 +16,7 @@
       <arena-person-row
         [name]="candidate.rider.name"
         [secondary]="candidate.secondary + ' · fuera de turno'"
-        [figure]="candidate.rider.rating.toString()"
+        [figure]="candidate.figure"
       />
     }
   </arena-people-list>

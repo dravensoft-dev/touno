@@ -17,7 +17,6 @@ import {
   OrderSheetParty,
   OrderState,
   OrderTimeline,
-  Review,
   Settlement,
   isInterurban,
   legOf,
@@ -151,12 +150,6 @@ export class Orders {
     }
 
     return { code: order.code, scenario: order.scenario, parties };
-  }
-
-  reviewsOf(companyId: string): readonly Review[] {
-    return this.ofCompany(companyId)
-      .map((one) => one.review)
-      .filter((one): one is Review => one !== undefined);
   }
 
   couponsOf(companyId: string): readonly Coupon[] {

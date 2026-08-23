@@ -15,11 +15,12 @@ import { Businesses } from '../../../domain/businesses';
 import { Geography } from '../../../domain/geography';
 import { Loads } from '../../../domain/loads';
 import { Orders } from '../../../domain/orders';
+import { Reputation } from '../../../domain/reputation';
 import { Riders } from '../../../domain/riders';
 import { Session } from '../../../domain/session';
 import { movingLeg } from '../../../domain/orders.model';
 import { rangeOf, vehicleLabel } from '../../../domain/riders.model';
-import { bs, porcentaje } from '../../../domain/format';
+import { bs } from '../../../domain/format';
 import { StateTag } from '../../../shared/state-tag/state-tag';
 
 @Component({
@@ -41,6 +42,7 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
 })
 export class RiderShift {
   private readonly router = inject(Router);
+  private readonly reputation = inject(Reputation);
   private readonly agreements = inject(Agreements);
   private readonly businesses = inject(Businesses);
   private readonly geography = inject(Geography);
@@ -89,7 +91,11 @@ export class RiderShift {
 
   protected readonly earnings = computed(() => bs(this.riders.weekEarnings()));
 
-  protected readonly onTime = computed(() => porcentaje(this.rider()?.onTimePct ?? 0));
+  protected readonly standing = computed(() => this.reputation.of(this.riderId()));
+
+  protected readonly breakdown = computed(() => this.reputation.breakdownOf(this.riderId()));
+
+  protected readonly deliveries = computed(() => this.standing().totalCount.toString());
 
   protected cityOf(cityId: string): string {
     return this.geography.nameOf(cityId);

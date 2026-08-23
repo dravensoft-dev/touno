@@ -1,6 +1,7 @@
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { BRANCHES, COMPANIES } from '../src/app/domain/businesses.data';
+import { MANUAL } from '../src/app/domain/manual.data';
 import { pathOfType } from '../src/app/domain/businesses.model';
 import { SITE_ORIGIN } from '../src/app/seo/site';
 
@@ -15,6 +16,12 @@ const entries: SitemapEntry[] = [
   { path: '/restaurantes', priority: '0.9', changefreq: 'daily' },
   { path: '/tiendas', priority: '0.9', changefreq: 'daily' },
   { path: '/riders', priority: '0.6', changefreq: 'monthly' },
+  { path: '/manual', priority: '0.6', changefreq: 'monthly' },
+  ...MANUAL.map((one) => ({
+    path: `/manual/${one.role}`,
+    priority: '0.5',
+    changefreq: 'monthly',
+  })),
   ...COMPANIES.map((company) => ({
     path: `/${pathOfType(company.type)}/${company.slug}`,
     priority: '0.8',

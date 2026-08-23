@@ -10,8 +10,6 @@ const COMPANY: Company = {
   name: 'Importadora Ale',
   type: 'importadora',
   summary: 'Ropa y calzado por temporada.',
-  rating: 4.4,
-  reviewCount: 566,
   categories: ['Ropa'],
   tags: ['Temporada'],
   since: '2011',

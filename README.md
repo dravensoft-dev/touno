@@ -41,10 +41,10 @@ moment of purchase.
 | Framework                   | Angular 22, standalone, zoneless, `OnPush` everywhere, signals only       |
 | Runtime and package manager | Bun 1.3                                                                   |
 | Build                       | `@angular/build` — Vite in dev, esbuild in build                          |
-| Rendering                   | `@angular/ssr`, `outputMode: "static"`: 259 prerendered routes, no server |
+| Rendering                   | `@angular/ssr`, `outputMode: "static"`: 267 prerendered routes, no server |
 | Design system               | `@dravensoft/arena-angular` 10.2.2, pinned exactly                        |
 | Icons                       | Phosphor, subset and self-hosted by `arena-to-prod`                       |
-| Tests                       | Vitest through `@angular/build:unit-test` — 399 across 47 files           |
+| Tests                       | Vitest through `@angular/build:unit-test` — 458 across 51 files           |
 
 ## Commands
 
@@ -84,13 +84,14 @@ their stroke widths with `calc()` over existing tokens in their own stylesheets.
 
 Spanish paths. Everything public is indexed; every panel is `noindex,follow`.
 
-| Public                                        |                                        |
-| --------------------------------------------- | -------------------------------------- |
-| `/`                                           | mixed marketplace                      |
-| `/restaurantes`, `/tiendas`                   | listings, by sucursal                  |
-| `/restaurantes/:empresa`, `/tiendas/:empresa` | the empresa and every sucursal it runs |
-| `/…/:empresa/:sucursal`                       | one sucursal, with `LocalBusiness`     |
-| `/riders`                                     | rider recruitment                      |
+| Public                                        |                                             |
+| --------------------------------------------- | ------------------------------------------- |
+| `/`                                           | mixed marketplace                           |
+| `/restaurantes`, `/tiendas`                   | listings, by sucursal                       |
+| `/restaurantes/:empresa`, `/tiendas/:empresa` | the empresa and every sucursal it runs      |
+| `/…/:empresa/:sucursal`                       | one sucursal, with `LocalBusiness`          |
+| `/riders`                                     | rider recruitment                           |
+| `/manual`, `/manual/:rol`                     | one chapter per role, Tutorial + Reputación |
 
 | Behind the fake sign-in                                   |                                                                  |
 | --------------------------------------------------------- | ---------------------------------------------------------------- |
@@ -111,14 +112,25 @@ built with `--base-href=/touno/`, and every rail destination goes through
 ## Data
 
 Everything is a typed module constant read through a `providedIn: 'root'` service that holds it in a
-signal: 5 cities, 8 companies, 18 branches, 40 products, 10 riders, 21 recruitments, 17 orders, 6
-truck loads, 17 chat threads and 8 rider tracks, plus one platform config. No HTTP, no backend, and mutations go through a
+signal: 5 cities, 8 companies, 18 branches, 40 products, 10 riders, 23 recruitments, 17 orders, 6
+truck loads, 17 chat threads, 8 rider tracks, one closed-facts reputation ledger and five manual
+chapters, plus one platform config. No HTTP, no backend, and mutations go through a
 small `withLatency()` helper that resolves immediately on the server so the prerender always
 settles.
 
 A fare is derived and never stored twice: `domain/pricing.ts` is pure functions, the way
 `domain/timeline.ts` is, and `orders.spec.ts` recomputes every fixture's four amounts from the
 order's own inputs rather than trusting the numbers written into it.
+
+**Reputation is derived the same way, and it used to be invented.** `Rider.rating`, `Company.rating`,
+`Company.reviewCount` and an `Order.review` with stars were fixture numbers nobody computed — and
+they were already leaving the tree as an `aggregateRating` node in the public JSON-LD. They are gone.
+`domain/reputation.model.ts` is pure functions over facts the tree already holds: a scan that closed
+a delivery, its hour against `promisedAt`, a recruitment that reached `cumplido` or was left with
+carreras owing, a pedido rejected, a carga that never filled. `reputation.data.ts` is a ledger of
+**closed history as tallies**, so the figures are credible without adding one prerendered route, and
+`Reputation` is **read-only**: `Orders.scan()` writes nothing, because a `computed` over the orders
+already moves. Signal loss counts against nobody, on purpose — `TOUNO_STRUC.md` promises it.
 
 **Nothing reads the wall clock.** `domain/clock.ts` exports a literal `NOW`, because a live clock
 writes different HTML on the server than on the first client render.
@@ -131,8 +143,13 @@ waiting at the demo counter, one rider who has gone quiet, and orders covering a
 
 The SEO is complete in the tree and configured for `https://touno.bo`: per-route titles and
 descriptions, canonicals and `og:*`, JSON-LD (`WebSite`, `Organization`, `ItemList`, `Restaurant`,
-`Store` as `LocalBusiness`, `WebPage`), a generated `sitemap.xml` and a `robots.txt`. Thirty pages
-carry `index,follow` and the sitemap has thirty entries.
+`Store` as `LocalBusiness`, `WebPage`, `Article` and `ItemList` for the manual), a generated
+`sitemap.xml` and a `robots.txt`. Thirty-six pages carry `index,follow` and the sitemap has
+thirty-six entries.
+
+**No `AggregateRating` anywhere.** It was emitted from invented numbers, and schema.org's
+`AggregateRating` means an opinion someone held. The compliance figure is shown in visible HTML
+instead, and `branch.spec.ts` and the two manual specs refuse a rating node.
 
 `scripts/pages-preview.ts` puts it to sleep **in the GitHub Pages artefact only**: every `robots`
 meta becomes `noindex,nofollow`, `robots.txt` becomes `Disallow: /`, and the sitemap is deleted.

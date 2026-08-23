@@ -4,7 +4,8 @@ export interface PlatformConfig {
   readonly cityRateBob: number;
   readonly interurbanRateBob: number;
   readonly weatherFeeBob: number;
-  readonly minCareerPoints: number;
+  readonly minRuns: number;
+  readonly minReputationPct: number;
 }
 
 export function atLeast(value: number, floor: number): number {
