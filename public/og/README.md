@@ -7,8 +7,13 @@ WhatsApp, Telegram, Facebook, X, Slack or iMessage. It is declared once, as `SIT
 drop the image and render the link as plain text.
 
 It matters more here than on an ordinary site, because the most-shared Touno link is not the
-landing page: it is `touno.bo/seguimiento/ty-4471`, which a seller copies from the shipment detail
-and sends to their buyer. That preview is the first time the recipient meets the brand.
+landing page: it is a sucursal's own, `touno.bo/restaurantes/pollos-copacabana/miraflores`, which
+a branch sends to its customers and a buyer forwards to whoever is eating with them. That preview
+is the first time the recipient meets the brand.
+
+**It used to say `touno.bo/seguimiento/ty-4471`.** Public parcel tracking was retired, and one page
+per sucursal is what replaced it as the indexable surface — so the link this card is drawn for
+changed with it.
 
 The source is `design/og/card.html`, drawn from the same parts the app uses — Archivo, the
 Phosphor bold glyphs and the identity's three colours — so the mark on the card and the mark in
