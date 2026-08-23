@@ -79,8 +79,8 @@ describe('App panel destinations', () => {
   it('addresses every destination from the root when the base href is the root', async () => {
     const [rail, bar] = await railAndBarUnder('/');
 
-    expect(rail).toEqual(['/feed', '/', '/carrito', '/mis-pedidos', '/manual/comprador']);
-    expect(bar).toEqual(rail.filter((one) => !(one ?? '').startsWith('/manual')));
+    expect(rail).toEqual(['/feed', '/carrito', '/mis-pedidos', '/manual/comprador']);
+    expect(bar).toEqual(['/feed', '/carrito', '/mis-pedidos']);
   });
 
   it('carries the base href into every destination when the site is served from a subpath', async () => {
@@ -88,12 +88,11 @@ describe('App panel destinations', () => {
 
     expect(rail).toEqual([
       '/touno/feed',
-      '/touno/',
       '/touno/carrito',
       '/touno/mis-pedidos',
       '/touno/manual/comprador',
     ]);
-    expect(bar).toEqual(rail.filter((one) => !(one ?? '').includes('/manual')));
+    expect(bar).toEqual(['/touno/feed', '/touno/carrito', '/touno/mis-pedidos']);
   });
 });
 
@@ -186,61 +185,155 @@ describe('App gate', () => {
   });
 });
 
-describe('App sections menu', () => {
-  async function open(): Promise<{
-    fixture: ComponentFixture<App>;
-    labels: readonly string[];
-    rows: readonly HTMLElement[];
-  }> {
-    const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
-
-    const host: HTMLElement = fixture.nativeElement;
-    const trigger = host.querySelector<HTMLButtonElement>('.shell-nav__menu button');
-
-    expect(trigger).not.toBeNull();
-    trigger?.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    return {
-      fixture,
-      labels: [...host.querySelectorAll('.shell-nav__link')].map((one) =>
-        (one.textContent ?? '').trim(),
-      ),
-      rows: [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')],
-    };
-  }
-
-  beforeEach(() => {
+describe('App signed in', () => {
+  async function shellAs(profileId: string, path: string): Promise<ComponentFixture<App>> {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
+          { path: '', children: [] },
+          { path: 'feed', children: [] },
           { path: 'restaurantes', children: [] },
-          { path: 'tiendas', children: [] },
-          { path: 'riders', children: [] },
+          { path: 'mis-pedidos', children: [] },
+          { path: 'manual/:rol', children: [] },
         ]),
+        { provide: APP_BASE_HREF, useValue: '/' },
       ],
     });
+
+    const fixture = TestBed.createComponent(App);
+
+    TestBed.inject(Session).enter(profileId);
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl(path);
+    fixture.detectChanges();
+
+    return fixture;
+  }
+
+  it('takes the app bar away, because the rail carries the brand instead', async () => {
+    const fixture = await shellAs('p-comprador', '/feed');
+    const host: HTMLElement = fixture.nativeElement;
+
+    expect(host.querySelector('arena-app-bar')).toBeNull();
+    expect(host.querySelector('.shell-rail-brand arena-app-logo')).not.toBeNull();
+    expect(host.classList.contains('shell-signed-in')).toBe(true);
   });
 
-  it('offers the phone exactly the sections the wide bar lists', async () => {
-    const { labels, rows } = await open();
+  it('leaves the app bar to whoever is signed out, which is what the prerender writes', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
 
-    expect(labels.length).toBe(3);
-    expect(rows.map((row) => (row.textContent ?? '').trim())).toEqual([...labels]);
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const host: HTMLElement = fixture.nativeElement;
+
+    expect(host.querySelector('arena-app-bar')).not.toBeNull();
+    expect(host.querySelector('.shell-rail-brand')).toBeNull();
+    expect(host.classList.contains('shell-signed-in')).toBe(false);
   });
 
-  it('reaches a section from a row, which is dispatched on the label alone', async () => {
-    const { fixture, labels, rows } = await open();
-    const wanted = rows.find((row) => (row.textContent ?? '').trim() === labels[1]);
+  it('carries the rail into a public route, so the marketplace never strands a reader', async () => {
+    const fixture = await shellAs('p-comprador', '/restaurantes');
+    const rail = [...fixture.nativeElement.querySelectorAll('arena-side-nav a')].map(
+      (one: Element) => one.getAttribute('href'),
+    );
 
-    expect(wanted).toBeDefined();
-    wanted?.click();
-    await fixture.whenStable();
+    expect(rail).toContain('/feed');
+    expect(rail).toContain('/mis-pedidos');
+  });
 
-    expect(TestBed.inject(Router).url).toBe('/tiendas');
+  it('keeps the gate on another role panel, which the rail must never open', async () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([{ path: 'empresa/sucursales', children: [] }]),
+        { provide: APP_BASE_HREF, useValue: '/' },
+      ],
+    });
+
+    const fixture = TestBed.createComponent(App);
+    TestBed.inject(Session).enter('p-comprador');
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl('/empresa/sucursales');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('arena-unauth-card')).not.toBeNull();
+  });
+});
+
+describe('App bottom bar Más', () => {
+  async function barOf(profileId: string, path: string): Promise<ComponentFixture<App>> {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([
+          { path: 'feed', children: [] },
+          { path: 'mis-pedidos', children: [] },
+          { path: 'rider/turno', children: [] },
+          { path: 'rider/ganancias', children: [] },
+          { path: 'manual/:rol', children: [] },
+        ]),
+        { provide: APP_BASE_HREF, useValue: '/' },
+      ],
+    });
+
+    const fixture = TestBed.createComponent(App);
+
+    TestBed.inject(Session).enter(profileId);
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl(path);
+    fixture.detectChanges();
+
+    return fixture;
+  }
+
+  function labelsIn(host: HTMLElement, selector: string): readonly string[] {
+    return [...host.querySelectorAll(selector)].map((one) => (one.textContent ?? '').trim());
+  }
+
+  it('gives the bar a fourth column that is a button and never a link', async () => {
+    const fixture = await barOf('p-comprador', '/feed');
+    const host: HTMLElement = fixture.nativeElement;
+    const items = labelsIn(host, 'arena-bottom-nav-item');
+
+    expect(items.length).toBe(4);
+    expect(items[3]).toBe('Más');
+    expect(host.querySelectorAll('arena-bottom-nav a').length).toBe(3);
+    expect(host.querySelector('arena-bottom-nav button')).not.toBeNull();
+  });
+
+  it('keeps the sheet closed until Más is pressed, and opens it with what the bar cannot hold', async () => {
+    const fixture = await barOf('p-rider', '/rider/turno');
+    const host: HTMLElement = fixture.nativeElement;
+
+    expect(host.querySelector('arena-sheet arena-side-nav-item')).toBeNull();
+
+    host.querySelector<HTMLButtonElement>('arena-bottom-nav button')?.click();
+    fixture.detectChanges();
+
+    const inSheet = labelsIn(host, 'arena-sheet arena-side-nav-item');
+
+    expect(inSheet).toEqual(['Ganancias', 'Manual']);
+  });
+
+  it('offers the tema and the salida there, which the app bar used to carry', async () => {
+    const fixture = await barOf('p-rider', '/rider/turno');
+    const host: HTMLElement = fixture.nativeElement;
+
+    host.querySelector<HTMLButtonElement>('arena-bottom-nav button')?.click();
+    fixture.detectChanges();
+
+    expect(host.querySelector('arena-sheet app-theme-toggle')).not.toBeNull();
+    expect(host.querySelector('arena-sheet [footer]')?.textContent).toContain('Marco Quispe');
+  });
+
+  it('lights Más when the reader is on a destination the sheet holds', async () => {
+    const fixture = await barOf('p-rider', '/rider/ganancias');
+    const host: HTMLElement = fixture.nativeElement;
+    const current = host.querySelector('arena-bottom-nav [aria-current="page"]');
+
+    expect((current?.textContent ?? '').trim()).toBe('Más');
   });
 });

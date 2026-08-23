@@ -1,6 +1,5 @@
 <app-structured-data key="website" [schema]="websiteSchema" />
 <app-structured-data key="organization" [schema]="businessSchema" />
-<app-structured-data key="feed" [schema]="feedSchema()" />
 
 <div class="home arena-stack arena-stack--section">
   <arena-hero
@@ -47,9 +46,93 @@
   </arena-section>
 
   <arena-section
+    id="verticales"
+    eyebrow="Qué se pide"
+    title="Dos formas de comprar, una sola red"
+    description="El mismo código, el mismo mapa y el mismo chat, ya sea un almuerzo que cruza tu barrio o una caja que cruza el país."
+    rhythm="md"
+  >
+    <arena-grid>
+      <arena-card
+        headingLevel="h3"
+        eyebrow="Comida"
+        title="De un restaurante de tu ciudad"
+        [href]="href('/restaurantes')"
+        [interactive]="true"
+        (click)="goTo('/restaurantes')"
+      >
+        <p>
+          {{ restaurants() }} sucursales de restaurante atendiendo ahora. La comida sale de tu
+          ciudad y llega con un rider que trabaja para ese local, no con quien pasaba por ahí.
+        </p>
+        <arena-button action variant="ghost" icon="ph-bold ph-arrow-right">
+          Ver restaurantes
+        </arena-button>
+      </arena-card>
+
+      <arena-card
+        headingLevel="h3"
+        eyebrow="Encomiendas"
+        title="De una importadora de otra ciudad"
+        [href]="href('/tiendas')"
+        [interactive]="true"
+        (click)="goTo('/tiendas')"
+      >
+        <p>
+          {{ importers() }} sucursales de importadora con stock. Compras hoy, sale en la próxima
+          carga hacia tu ciudad y eliges si te lo llevan a la puerta o lo recoges en mostrador.
+        </p>
+        <arena-button action variant="ghost" icon="ph-bold ph-arrow-right">
+          Ver importadoras
+        </arena-button>
+      </arena-card>
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    id="como-funciona"
+    eyebrow="Cómo funciona"
+    title="Cuatro pasos y ninguna llamada"
+    description="Desde que pagas hasta que te lo entregan, sin preguntarle a nadie por dónde va."
+    rhythm="md"
+  >
+    <arena-grid>
+      <arena-stat-card
+        icon="ph-bold ph-shopping-cart-simple"
+        label="Paso uno"
+        value="Compras"
+        sub="Eliges la sucursal, pagas y el código del pedido queda tuyo en ese momento."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-storefront"
+        label="Paso dos"
+        value="Lo preparan"
+        sub="La sucursal lo alista y asigna a un rider que ya trabaja para ella."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-navigation-arrow"
+        label="Paso tres"
+        value="Lo sigues"
+        sub="Lo ves avanzar en el mapa y le escribes por el chat del pedido, no por teléfono."
+      />
+      <arena-stat-card
+        icon="ph-bold ph-qr-code"
+        label="Paso cuatro"
+        value="Lo cierras tú"
+        sub="Muestras tu código, te lo escanean, y con eso queda entregado. Nadie más puede."
+      />
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
     eyebrow="Dónde operamos"
     title="Ciudades con red propia"
-    description="Recojo urbano en el día y salidas interurbanas todos los días."
+    [description]="
+      brands() +
+      ' empresas y ' +
+      fleet() +
+      ' riders. Recojo urbano en el día y salidas interurbanas todos los días.'
+    "
     rhythm="md"
   >
     <arena-scroller label="Ciudades donde opera Touno">
@@ -62,82 +145,46 @@
   </arena-section>
 
   <arena-section
-    id="feed-comida"
-    eyebrow="Lo más pedido"
-    title="Platos que salen hoy"
-    description="De los restaurantes que están abiertos ahora mismo, listos para tu pedido."
+    id="trabajar"
+    eyebrow="Del otro lado"
+    title="Si en vez de pedir quieres trabajar"
+    description="Touno es también el panel de quien maneja, de quien atiende un mostrador y de quien lleva la empresa."
     rhythm="md"
   >
     <arena-grid>
-      @for (item of foodPicks(); track item.product.id) {
-        <app-product-card
-          [product]="item.product"
-          [branch]="item.branch"
-          [priceBob]="item.priceBob"
-          fallbackIcon="ph ph-fork-knife"
-          (add)="addToCart(item)"
-        />
-      }
-    </arena-grid>
-  </arena-section>
+      <arena-card
+        headingLevel="h3"
+        eyebrow="Riders"
+        title="Maneja con Touno"
+        [href]="href('/riders')"
+        [interactive]="true"
+        (click)="goTo('/riders')"
+      >
+        <p>
+          Con tu moto, tu auto o tu camión. Nadie te asigna un encargo sin tu sí: el acuerdo lo
+          firman las dos partes y eliges para qué sucursales trabajas.
+        </p>
+        <arena-button action variant="ghost" icon="ph-bold ph-arrow-right">
+          Ver cómo se trabaja
+        </arena-button>
+      </arena-card>
 
-  <arena-section
-    id="feed-encomiendas"
-    eyebrow="En stock hoy"
-    title="Listo para despachar"
-    description="Lo que las importadoras tienen en stock para la próxima salida."
-    rhythm="md"
-  >
-    <arena-grid>
-      @for (item of parcelPicks(); track item.product.id) {
-        <app-product-card
-          [product]="item.product"
-          [branch]="item.branch"
-          [priceBob]="item.priceBob"
-          fallbackIcon="ph ph-package"
-          (add)="addToCart(item)"
-        />
-      }
-    </arena-grid>
-  </arena-section>
-
-  <arena-section
-    id="restaurantes"
-    eyebrow="Comida"
-    title="Sucursales de restaurante"
-    description="Sucursales abiertas ahora, con riders que trabajan para ellas."
-    rhythm="md"
-  >
-    <arena-grid>
-      @for (branch of restaurants(); track branch.id) {
-        @if (companyOf(branch.id); as company) {
-          <app-branch-card
-            [branch]="branch"
-            [company]="company"
-            [cityName]="geography.nameOf(branch.cityId)"
-          />
-        }
-      }
-    </arena-grid>
-  </arena-section>
-
-  <arena-section
-    id="importadoras"
-    eyebrow="Encomiendas"
-    title="Sucursales de importadora"
-    description="Compras aquí y sale en la próxima carga hacia tu ciudad."
-    rhythm="md"
-  >
-    <arena-grid>
-      @for (branch of importers(); track branch.id) {
-        @if (companyOf(branch.id); as company) {
-          <app-branch-card
-            [branch]="branch"
-            [company]="company"
-            [cityName]="geography.nameOf(branch.cityId)"
-          />
-        }
-      }
+      <arena-card
+        headingLevel="h3"
+        eyebrow="Manual"
+        title="Cómo funciona, contado por rol"
+        [href]="href('/manual')"
+        [interactive]="true"
+        (click)="goTo('/manual')"
+      >
+        <p>
+          Un manual para cada quien, con su tutorial y con la cuenta exacta de cómo se calcula su
+          reputación: qué la sube, qué la baja y qué se gana con ella.
+        </p>
+        <arena-button action variant="ghost" icon="ph-bold ph-arrow-right">
+          Leer el manual
+        </arena-button>
+      </arena-card>
     </arena-grid>
   </arena-section>
 </div>

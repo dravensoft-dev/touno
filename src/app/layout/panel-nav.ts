@@ -6,9 +6,10 @@ export interface Destination {
   readonly label: string;
   readonly icon: string;
   readonly path: string;
-  readonly bar: boolean;
   readonly type?: BusinessType;
 }
+
+export const BAR_SLOTS = 3;
 
 export interface PanelArea {
   readonly role: Role;
@@ -28,49 +29,42 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Sucursales',
         icon: 'ph-bold ph-buildings',
         path: '/empresa/sucursales',
-        bar: true,
       },
       {
         id: 'pedidos',
         label: 'Pedidos',
         icon: 'ph-bold ph-tray',
         path: '/empresa/pedidos',
-        bar: true,
       },
       {
         id: 'catalogo',
         label: 'Catálogo',
         icon: 'ph-bold ph-tag',
         path: '/empresa/catalogo',
-        bar: true,
       },
       {
         id: 'riders',
         label: 'Riders',
         icon: 'ph-bold ph-motorcycle',
         path: '/empresa/riders',
-        bar: true,
       },
       {
         id: 'finanzas',
         label: 'Finanzas',
         icon: 'ph-bold ph-wallet',
         path: '/empresa/finanzas',
-        bar: false,
       },
       {
         id: 'ajustes',
         label: 'Ajustes',
         icon: 'ph-bold ph-gear',
         path: '/empresa/ajustes',
-        bar: false,
       },
       {
         id: 'manual',
         label: 'Manual',
         icon: 'ph-bold ph-book-open-text',
         path: '/manual/gerente-empresa',
-        bar: false,
       },
     ],
   },
@@ -84,14 +78,12 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Pedidos',
         icon: 'ph-bold ph-tray',
         path: '/sucursal/pedidos',
-        bar: true,
       },
       {
         id: 'carta',
         label: 'Carta',
         icon: 'ph-bold ph-list-bullets',
         path: '/sucursal/carta',
-        bar: true,
         type: 'restaurante',
       },
       {
@@ -99,7 +91,6 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Catálogo',
         icon: 'ph-bold ph-tag',
         path: '/sucursal/catalogo',
-        bar: true,
         type: 'importadora',
       },
       {
@@ -107,35 +98,30 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Entregas',
         icon: 'ph-bold ph-hand-arrow-down',
         path: '/sucursal/entregas',
-        bar: true,
       },
       {
         id: 'riders',
         label: 'Riders',
         icon: 'ph-bold ph-motorcycle',
         path: '/sucursal/riders',
-        bar: false,
       },
       {
         id: 'historial',
         label: 'Historial',
         icon: 'ph-bold ph-clock-counter-clockwise',
         path: '/sucursal/historial',
-        bar: false,
       },
       {
         id: 'ajustes',
         label: 'Ajustes',
         icon: 'ph-bold ph-gear',
         path: '/sucursal/ajustes',
-        bar: false,
       },
       {
         id: 'manual',
         label: 'Manual',
         icon: 'ph-bold ph-book-open-text',
         path: '/manual/gerente-sucursal',
-        bar: false,
       },
     ],
   },
@@ -149,35 +135,30 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Turno',
         icon: 'ph-bold ph-power',
         path: '/rider/turno',
-        bar: true,
       },
       {
         id: 'encargos',
         label: 'Encargos',
         icon: 'ph-bold ph-navigation-arrow',
         path: '/rider/encargos',
-        bar: true,
       },
       {
         id: 'acuerdos',
         label: 'Acuerdos',
         icon: 'ph-bold ph-handshake',
         path: '/rider/acuerdos',
-        bar: true,
       },
       {
         id: 'ganancias',
         label: 'Ganancias',
         icon: 'ph-bold ph-hand-coins',
         path: '/rider/ganancias',
-        bar: true,
       },
       {
         id: 'manual',
         label: 'Manual',
         icon: 'ph-bold ph-book-open-text',
         path: '/manual/rider',
-        bar: false,
       },
     ],
   },
@@ -187,39 +168,28 @@ export const PANELS: readonly PanelArea[] = [
     label: 'Panel del comprador',
     destinations: [
       {
-        id: 'feed',
-        label: 'Feed',
-        icon: 'ph-bold ph-squares-four',
-        path: '/feed',
-        bar: true,
-      },
-      {
         id: 'tienda',
         label: 'Tienda',
         icon: 'ph-bold ph-storefront',
-        path: '/',
-        bar: true,
+        path: '/feed',
       },
       {
         id: 'carrito',
         label: 'Carrito',
         icon: 'ph-bold ph-shopping-cart-simple',
         path: '/carrito',
-        bar: true,
       },
       {
         id: 'mis-pedidos',
         label: 'Mis pedidos',
         icon: 'ph-bold ph-package',
         path: '/mis-pedidos',
-        bar: true,
       },
       {
         id: 'manual',
         label: 'Manual',
         icon: 'ph-bold ph-book-open-text',
         path: '/manual/comprador',
-        bar: false,
       },
     ],
   },
@@ -233,28 +203,24 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Tarifas',
         icon: 'ph-bold ph-percent',
         path: '/plataforma/tarifas',
-        bar: true,
       },
       {
         id: 'clima',
         label: 'Clima',
         icon: 'ph-bold ph-cloud-rain',
         path: '/plataforma/clima',
-        bar: true,
       },
       {
         id: 'red',
         label: 'Red',
         icon: 'ph-bold ph-graph',
         path: '/plataforma/red',
-        bar: true,
       },
       {
         id: 'manual',
         label: 'Manual',
         icon: 'ph-bold ph-book-open-text',
         path: '/manual/operador',
-        bar: false,
       },
     ],
   },
@@ -281,6 +247,18 @@ export function destinationsFor(
   type: BusinessType | undefined,
 ): readonly Destination[] {
   return panel.destinations.filter((one) => one.type === undefined || one.type === type);
+}
+
+export function panelOf(role: Role): PanelArea | undefined {
+  return PANELS.find((panel) => panel.role === role);
+}
+
+export function barDestinations<T extends Destination>(destinations: readonly T[]): readonly T[] {
+  return destinations.slice(0, BAR_SLOTS);
+}
+
+export function moreDestinations<T extends Destination>(destinations: readonly T[]): readonly T[] {
+  return destinations.slice(BAR_SLOTS);
 }
 
 export function activeIdIn(panel: PanelArea, url: string): string | undefined {

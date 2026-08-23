@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter, map } from 'rxjs';
 import {
   ArenaActions,
@@ -11,10 +11,10 @@ import {
   ArenaBottomNavItem,
   ArenaBrand,
   ArenaButton,
+  ArenaFooter,
   ArenaIconButton,
   ArenaMain,
-  ArenaMenu,
-  ArenaNav,
+  ArenaSheet,
   ArenaSideNav,
   ArenaSideNavItem,
   ArenaSkipLink,
@@ -23,10 +23,17 @@ import {
   ArenaToastQueue,
   ArenaUnauthCard,
 } from '@dravensoft/arena-angular';
-import type { ArenaMenuItem } from '@dravensoft/arena-angular';
 import { Cart } from './domain/cart';
 import { Profile, Role, Session } from './domain/session';
-import { Destination, activeIdIn, destinationsFor, panelFor } from './layout/panel-nav';
+import {
+  Destination,
+  activeIdIn,
+  barDestinations,
+  destinationsFor,
+  moreDestinations,
+  panelFor,
+  panelOf,
+} from './layout/panel-nav';
 import { scrollAway } from './layout/scroll-away';
 import { SiteFooter } from './layout/site-footer/site-footer';
 import { ThemeToggle } from './layout/theme-toggle/theme-toggle';
@@ -37,13 +44,6 @@ interface Reachable extends Destination {
   readonly href: string;
 }
 
-interface PublicLink {
-  readonly path: string;
-  readonly label: string;
-  readonly icon: string;
-  readonly exact: boolean;
-}
-
 const GATE_NOUN: Record<Role, string> = {
   comprador: 'comprador',
   rider: 'rider',
@@ -52,16 +52,7 @@ const GATE_NOUN: Record<Role, string> = {
   operador: 'operador de Touno',
 };
 
-const PUBLIC_LINKS: readonly PublicLink[] = [
-  { path: '/restaurantes', label: 'Restaurantes', icon: 'ph-bold ph-fork-knife', exact: false },
-  { path: '/tiendas', label: 'Importadoras', icon: 'ph-bold ph-package', exact: false },
-  { path: '/riders', label: 'Maneja con Touno', icon: 'ph-bold ph-motorcycle', exact: true },
-];
-
-const MENU_LINKS: readonly ArenaMenuItem[] = PUBLIC_LINKS.map((link) => ({
-  label: link.label,
-  icon: link.icon,
-}));
+const MORE_ID = 'mas';
 
 @Component({
   selector: 'app-root',
@@ -69,21 +60,21 @@ const MENU_LINKS: readonly ArenaMenuItem[] = PUBLIC_LINKS.map((link) => ({
   host: {
     class: 'arena-shell arena-stack arena-stack--section',
     '[class.shell-bar-away]': 'barAway()',
+    '[class.shell-signed-in]': 'signedIn()',
   },
   imports: [
     RouterOutlet,
     RouterLink,
-    RouterLinkActive,
     ArenaSkipLink,
     ArenaMain,
     ArenaAppBar,
     ArenaAppLogo,
     ArenaBrand,
-    ArenaNav,
     ArenaActions,
     ArenaButton,
+    ArenaFooter,
     ArenaIconButton,
-    ArenaMenu,
+    ArenaSheet,
     ArenaSideNav,
     ArenaSideNavItem,
     ArenaBottomNav,
@@ -113,9 +104,11 @@ export class App {
 
   protected readonly siteName = SITE_NAME;
 
-  protected readonly publicLinks = PUBLIC_LINKS;
+  protected readonly moreId = MORE_ID;
 
-  protected readonly menuLinks = MENU_LINKS;
+  protected readonly moreOpen = signal(false);
+
+  protected readonly signedIn = computed(() => this.session.profile() !== undefined);
 
   protected readonly barAway = scrollAway();
 
@@ -127,7 +120,11 @@ export class App {
     { initialValue: this.router.url },
   );
 
-  protected readonly panel = computed(() => panelFor(this.url()));
+  protected readonly panel = computed(() => {
+    const role = this.session.role();
+
+    return panelFor(this.url()) ?? (role ? panelOf(role) : undefined);
+  });
 
   protected readonly activeId = computed(() => {
     const panel = this.panel();
@@ -148,9 +145,15 @@ export class App {
     }));
   });
 
-  protected readonly barDestinations = computed(() =>
-    this.destinations().filter((destination) => destination.bar),
-  );
+  protected readonly bar = computed(() => barDestinations(this.destinations()));
+
+  protected readonly more = computed(() => moreDestinations(this.destinations()));
+
+  protected readonly barActiveId = computed(() => {
+    const active = this.activeId();
+
+    return this.more().some((destination) => destination.id === active) ? MORE_ID : active;
+  });
 
   protected readonly unlocked = computed(() => {
     const panel = this.panel();
@@ -171,11 +174,22 @@ export class App {
   });
 
   protected go(id: string): void {
+    if (id === MORE_ID) {
+      this.moreOpen.set(true);
+
+      return;
+    }
+
     const destination = this.destinations().find((one) => one.id === id);
 
     if (destination) {
+      this.closeMore();
       void this.router.navigateByUrl(destination.path);
     }
+  }
+
+  protected closeMore(): void {
+    this.moreOpen.set(false);
   }
 
   protected enter(profileId: string): void {
@@ -183,19 +197,13 @@ export class App {
   }
 
   protected leave(): void {
+    this.closeMore();
     this.session.leave();
     void this.router.navigateByUrl('/');
   }
 
-  protected toLink(item: ArenaMenuItem): void {
-    const link = PUBLIC_LINKS.find((one) => one.label === item.label);
-
-    if (link) {
-      void this.router.navigateByUrl(link.path);
-    }
-  }
-
   protected toCart(): void {
+    this.closeMore();
     void this.router.navigateByUrl('/carrito');
   }
 

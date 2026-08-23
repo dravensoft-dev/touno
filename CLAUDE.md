@@ -137,7 +137,16 @@ carry the skin. Hold these:
 
 SEO is a first-class requirement, not a finishing pass. The indexable surface is the marketplace,
 the empresa pages and **one page per sucursal**, which is what replaced the retired public parcel
-tracking. A new public route is not done until it has:
+tracking.
+
+**`/` is the only public _door_, and that is not the same as the only public _route_.** The landing
+names every other public surface and the app bar carries no section links, but `/restaurantes`,
+`/tiendas`, every empresa and sucursal ficha, `/riders` and `/manual/:rol` all keep their own URL,
+their own metadata and their entry in `sitemap.xml` — 36 of them. Collapsing them into the landing
+would leave Touno findable by its own name and nothing else, and the sucursal ficha is the unit
+somebody actually searches for. Navigation folded in; the routes did not.
+
+A new public route is not done until it has:
 
 - a `title` and an `arenaRouteMeta` `description` (or an `ArenaMetadataService.apply()` call when
   the metadata is a fact about the record, not about the route);
@@ -223,7 +232,18 @@ Each of these was paid for once. Do not rediscover them.
 - **The vertical filter is applied in `app.ts`, not in `panelFor()`.** It depends on the session
   and `panelFor()` is pure. Signed out, `businessType()` is `undefined` and **both** `carta` and
   `catalogo` drop from the rail — which is what the prerender writes and what the first client
-  render reproduces, so hydration agrees.
+  render reproduces, so hydration agrees. **The signed-in panel fallback is there for the same
+  reason**: `App.panel` is `panelFor(url) ?? panelOf(role)`, so a reader keeps their rail on a
+  public route. Both are session-dependent, so both stay out of the pure function.
+- **The app bar exists only while nobody is signed in**, and the rail carries the brand instead.
+  Nothing else may assume a header is on the page: the panel's top padding and the rail's sticky
+  offset are re-answered through `:host(.shell-signed-in)` in `app.css`, not inherited from a bar.
+- **A rail destination may never point at `/`.** The comprador's "Tienda" used to, which dropped him
+  out of his own panel onto the landing every time he pressed it. His shop is `/feed`;
+  `panel-nav.spec.ts` refuses any destination whose path is the landing.
+- **The bottom bar holds three destinations and a "Más" sheet**, derived from rail order rather than
+  from a flag on each destination. Before it, every role hid something from every phone — the
+  Manual of all five, plus Finanzas, Ajustes, Riders, Historial and Ganancias.
 - **`ArenaSwitch` reports `requestChange` with no payload.** The host owns the state, so the
   handler flips the value it already holds; binding `$event` is a type error.
 - **`ArenaTableRow` and `ArenaTableCell` are attribute selectors on real elements**,
@@ -387,7 +407,12 @@ Then check by hand, because nothing above checks them:
 - **Confirm the buyer's figure is his alone.** It is on `/mis-pedidos` and must appear on no branch
   or rider screen anywhere.
 - **Read the Manual from all five rails**, and confirm each lands on its own role and offers the way
-  back into the panel it left. `/manual/*` is public, so its prerendered HTML must be complete.
+  back into the panel it left. `/manual/*` is public, so its prerendered HTML must be complete. On a
+  phone every one of them is reached through **Más**, not through the bar.
+- **Walk the landing as the one public door**, and confirm each of its four cards reaches the
+  surface it names: `/restaurantes`, `/tiendas`, `/riders`, `/manual`. Then sign in and confirm the
+  rail follows you onto a public route — `Tienda → Ver las sucursales` is what a comprador uses to
+  reach a sucursal ficha now that the bar carries no section links.
 - **Check the fare in all four shapes**: a domicilio in normal weather, a domicilio into an adverse
   city, a counter pickup that pays neither, and the cart's "desde" figure before a zone is chosen.
   `/plataforma/clima` is what makes the weather branch reachable without editing a fixture.

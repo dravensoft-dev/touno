@@ -7,7 +7,7 @@ import { TRUCK_LOADS } from '../../src/app/domain/loads.data';
 import { ORDERS } from '../../src/app/domain/orders.data';
 import { RIDERS } from '../../src/app/domain/riders.data';
 import { PROFILES, Profile } from '../../src/app/domain/session';
-import { PANELS, destinationsFor, panelFor } from '../../src/app/layout/panel-nav';
+import { destinationsFor, panelOf } from '../../src/app/layout/panel-nav';
 
 export type Shows = 'record' | 'refusal';
 
@@ -97,7 +97,7 @@ function publicRoutes(): readonly PlannedRoute[] {
 }
 
 function railOf(profile: Profile): readonly PlannedRoute[] {
-  const panel = panelFor(profile.home) ?? PANELS.find((one) => one.role === profile.role);
+  const panel = panelOf(profile.role);
 
   return panel ? destinationsFor(panel, profile.businessType).map((one) => plain(one.path)) : [];
 }

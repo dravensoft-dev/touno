@@ -24,6 +24,15 @@
     description="Llega a tu puerta con un rider de la sucursal que lo prepara."
     rhythm="md"
   >
+    <arena-button
+      action
+      variant="ghost"
+      icon="ph-bold ph-arrow-right"
+      (click)="goTo('/restaurantes')"
+    >
+      Ver las sucursales
+    </arena-button>
+
     @if (food().length > 0) {
       <arena-grid>
         @for (item of food(); track item.branch.id + item.product.id) {
@@ -58,6 +67,10 @@
     "
     rhythm="md"
   >
+    <arena-button action variant="ghost" icon="ph-bold ph-arrow-right" (click)="goTo('/tiendas')">
+      Ver las importadoras
+    </arena-button>
+
     @if (parcels().length > 0) {
       <arena-grid>
         @for (item of parcels(); track item.branch.id + item.product.id) {

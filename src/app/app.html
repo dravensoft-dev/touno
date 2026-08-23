@@ -1,56 +1,25 @@
 <arena-skip-link label="Saltar al contenido" />
 
-<arena-app-bar>
-  <a brand routerLink="/" class="shell-brand" [attr.aria-label]="siteName + ', inicio'">
-    <span class="shell-brand__narrow">
-      <app-brand-mark />
-    </span>
-    <span class="shell-brand__wide">
-      <arena-app-logo size="md" [name]="siteName">
-        <app-brand-mark mark />
-      </arena-app-logo>
-    </span>
-  </a>
+@if (!signedIn()) {
+  <arena-app-bar>
+    <a brand routerLink="/" class="shell-brand" [attr.aria-label]="siteName + ', inicio'">
+      <span class="shell-brand__narrow">
+        <app-brand-mark />
+      </span>
+      <span class="shell-brand__wide">
+        <arena-app-logo size="md" [name]="siteName">
+          <app-brand-mark mark />
+        </arena-app-logo>
+      </span>
+    </a>
 
-  <nav nav aria-label="Secciones de Touno" class="shell-nav arena-row">
-    @for (link of publicLinks; track link.path) {
-      <a
-        [routerLink]="link.path"
-        routerLinkActive="is-current"
-        [routerLinkActiveOptions]="{ exact: link.exact }"
-        class="shell-nav__link"
-      >
-        {{ link.label }}
-      </a>
-    }
-    <div class="shell-nav__menu">
-      <arena-menu [items]="menuLinks" (select)="toLink($event)">
-        <arena-icon-button trigger icon="ph-bold ph-list" label="Secciones de Touno" />
-      </arena-menu>
-    </div>
-  </nav>
-
-  <div actions class="shell-actions arena-row">
-    @if (cart.count() > 0) {
-      <arena-button variant="ghost" icon="ph-bold ph-shopping-cart-simple" (click)="toCart()">
-        {{ cart.count() }}
-      </arena-button>
-    }
-    <app-theme-toggle />
-    @if (session.profile(); as who) {
-      <div class="shell-actions__wide">
-        <arena-button variant="ghost" icon="ph-bold ph-sign-out" (click)="leave()">
-          {{ who.name }}
+    <div actions class="shell-actions arena-row">
+      @if (cart.count() > 0) {
+        <arena-button variant="ghost" icon="ph-bold ph-shopping-cart-simple" (click)="toCart()">
+          {{ cart.count() }}
         </arena-button>
-      </div>
-      <div class="shell-actions__narrow">
-        <arena-icon-button
-          icon="ph-bold ph-sign-out"
-          [label]="'Salir de ' + who.name"
-          (click)="leave()"
-        />
-      </div>
-    } @else {
+      }
+      <app-theme-toggle />
       <div class="shell-actions__wide">
         <arena-button icon="ph-bold ph-user-circle" (click)="toSignIn()">Ingresar</arena-button>
       </div>
@@ -62,13 +31,25 @@
           (click)="toSignIn()"
         />
       </div>
-    }
-  </div>
-</arena-app-bar>
+    </div>
+  </arena-app-bar>
+}
 
 @if (panel(); as area) {
   <div class="shell-panel">
     <div class="shell-panel__rail">
+      @if (session.profile(); as who) {
+        <a
+          [routerLink]="who.home"
+          class="shell-rail-brand"
+          [attr.aria-label]="siteName + ', inicio'"
+        >
+          <arena-app-logo size="md" [name]="siteName">
+            <app-brand-mark mark />
+          </arena-app-logo>
+        </a>
+      }
+
       <arena-side-nav [ariaLabel]="area.label" [active]="activeId()" (nav)="go($event)">
         @for (destination of destinations(); track destination.id) {
           <arena-side-nav-item
@@ -115,8 +96,8 @@
   </div>
 
   <div class="shell-panel__bar">
-    <arena-bottom-nav ariaLabel="Accesos rápidos" [active]="activeId()" (nav)="go($event)">
-      @for (destination of barDestinations(); track destination.id) {
+    <arena-bottom-nav ariaLabel="Accesos rápidos" [active]="barActiveId()" (nav)="go($event)">
+      @for (destination of bar(); track destination.id) {
         <arena-bottom-nav-item
           [id]="destination.id"
           [label]="destination.label"
@@ -124,7 +105,41 @@
           [href]="destination.href"
         />
       }
+      <arena-bottom-nav-item [id]="moreId" label="Más" icon="ph-bold ph-dots-three-outline" />
     </arena-bottom-nav>
+
+    <arena-sheet
+      title="Más"
+      placement="bottom"
+      [open]="moreOpen()"
+      [dismissible]="true"
+      (close)="closeMore()"
+    >
+      <arena-side-nav ariaLabel="Más destinos" [active]="activeId()" (nav)="go($event)">
+        @for (destination of more(); track destination.id) {
+          <arena-side-nav-item
+            [id]="destination.id"
+            [label]="destination.label"
+            [icon]="destination.icon"
+            [href]="destination.href"
+          />
+        }
+      </arena-side-nav>
+
+      <div footer class="shell-more arena-row">
+        @if (cart.count() > 0 && !session.is('comprador')) {
+          <arena-button variant="ghost" icon="ph-bold ph-shopping-cart-simple" (click)="toCart()">
+            {{ cart.count() }}
+          </arena-button>
+        }
+        <app-theme-toggle />
+        @if (session.profile(); as who) {
+          <arena-button variant="ghost" icon="ph-bold ph-sign-out" (click)="leave()">
+            Salir de {{ who.name }}
+          </arena-button>
+        }
+      </div>
+    </arena-sheet>
   </div>
 } @else {
   <div class="shell-public arena-band">

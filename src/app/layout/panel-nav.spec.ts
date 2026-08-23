@@ -1,4 +1,13 @@
-import { PANELS, activeIdIn, destinationsFor, panelFor } from './panel-nav';
+import {
+  BAR_SLOTS,
+  PANELS,
+  activeIdIn,
+  barDestinations,
+  destinationsFor,
+  moreDestinations,
+  panelFor,
+  panelOf,
+} from './panel-nav';
 
 describe('panelFor', () => {
   it('finds the panel of each role by its prefix', () => {
@@ -95,12 +104,11 @@ describe('activeIdIn', () => {
     expect(destinationsFor(panel!, 'restaurante').length).toBe(panel?.destinations.length);
   });
 
-  it('gives every panel a Manual destination, and keeps every one out of the bottom bar', () => {
+  it('gives every panel a Manual destination', () => {
     for (const panel of PANELS) {
       const manual = panel.destinations.find((one) => one.id === 'manual');
 
       expect(manual).toBeDefined();
-      expect(manual?.bar).toBe(false);
       expect(manual?.path).toBe(`/manual/${panel.role}`);
     }
   });
@@ -112,13 +120,75 @@ describe('activeIdIn', () => {
 
     expect(panelFor('/manual')).toBeUndefined();
   });
+});
 
-  it('keeps at most four destinations in any bottom bar, because a fifth wraps at 320px', () => {
+describe('the rail', () => {
+  it('never sends a destination to the landing, which is the public door and has no rail', () => {
     for (const panel of PANELS) {
-      for (const type of [undefined, 'restaurante', 'importadora'] as const) {
-        const bar = destinationsFor(panel, type).filter((one) => one.bar);
+      for (const destination of panel.destinations) {
+        expect(destination.path).not.toBe('/');
+      }
+    }
+  });
 
-        expect(bar.length).toBeLessThanOrEqual(4);
+  it('gives the comprador his shop at the feed and nothing that leaves the panel', () => {
+    const buyer = PANELS.find((one) => one.role === 'comprador');
+
+    expect(buyer!.destinations.map((one) => one.id)).toEqual([
+      'tienda',
+      'carrito',
+      'mis-pedidos',
+      'manual',
+    ]);
+    expect(buyer!.destinations[0].path).toBe('/feed');
+  });
+});
+
+describe('panelOf', () => {
+  it('answers the panel of every role, which is what a signed-in reader carries around', () => {
+    expect(panelOf('comprador')?.prefix).toBe('/mis-pedidos');
+    expect(panelOf('rider')?.prefix).toBe('/rider');
+    expect(panelOf('gerente-empresa')?.prefix).toBe('/empresa');
+    expect(panelOf('gerente-sucursal')?.prefix).toBe('/sucursal');
+    expect(panelOf('operador')?.prefix).toBe('/plataforma');
+  });
+});
+
+describe('the bottom bar', () => {
+  const verticals = [undefined, 'restaurante', 'importadora'] as const;
+
+  it('holds three destinations, because the fourth column belongs to Más', () => {
+    for (const panel of PANELS) {
+      for (const type of verticals) {
+        expect(barDestinations(destinationsFor(panel, type)).length).toBeLessThanOrEqual(BAR_SLOTS);
+      }
+    }
+  });
+
+  it('sends everything the bar cannot hold to Más, in rail order and losing nothing', () => {
+    for (const panel of PANELS) {
+      for (const type of verticals) {
+        const all = destinationsFor(panel, type);
+
+        expect([...barDestinations(all), ...moreDestinations(all)]).toEqual(all);
+      }
+    }
+  });
+
+  it('puts every Manual within reach of a phone, which no bottom bar ever did', () => {
+    for (const panel of PANELS) {
+      for (const type of verticals) {
+        const ids = moreDestinations(destinationsFor(panel, type)).map((one) => one.id);
+
+        expect(ids).toContain('manual');
+      }
+    }
+  });
+
+  it('leaves Más empty for nobody, because it also carries the tema and the salida', () => {
+    for (const panel of PANELS) {
+      for (const type of verticals) {
+        expect(moreDestinations(destinationsFor(panel, type)).length).toBeGreaterThan(0);
       }
     }
   });

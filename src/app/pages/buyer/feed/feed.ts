@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import {
+  ArenaAction,
   ArenaActions,
+  ArenaButton,
   ArenaEmptyState,
   ArenaGrid,
   ArenaPageHead,
@@ -24,7 +27,9 @@ import { ProductCard } from '../../../shared/product-card/product-card';
   host: { style: 'display: contents' },
   imports: [
     ArenaPageHead,
+    ArenaAction,
     ArenaActions,
+    ArenaButton,
     ArenaSection,
     ArenaGrid,
     ArenaSelect,
@@ -34,6 +39,7 @@ import { ProductCard } from '../../../shared/product-card/product-card';
   templateUrl: './feed.html',
 })
 export class Feed {
+  private readonly router = inject(Router);
   private readonly cart = inject(Cart);
   private readonly notices = inject(Notices);
   private readonly orders = inject(Orders);
@@ -78,5 +84,9 @@ export class Feed {
   protected addToCart(item: FeedItem): void {
     this.cart.add(item.product, item.branch.id);
     this.notices.addedToCart(item.product.name);
+  }
+
+  protected goTo(path: string): void {
+    void this.router.navigateByUrl(path);
   }
 }

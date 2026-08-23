@@ -6,11 +6,26 @@ components would have meant two router outlets.
 
 ## One shell, two shapes
 
-`app.html` always draws `arena-skip-link`, `arena-app-bar` and `arena-main`. What changes is what
-sits between them, and `panelFor(router.url)` decides:
+`app.html` always draws `arena-skip-link` and `arena-main`. Two decisions change what sits between
+them.
+
+**Who is reading decides the chrome.** `arena-app-bar` is drawn **only while nobody is signed in**,
+because a header full of public sections is in the way of someone who came to work. Signed in there
+is no bar at all: the brand sits above the rail on a desktop, and on a phone the bottom bar is the
+whole chrome. `signedIn()` gates the bar and `shell-signed-in` on the host is what re-answers the
+rail's sticky offset and gives the panel the top padding the bar used to provide.
+
+**Where they are decides the shape**, and `panelFor(router.url)` decides that:
 
 - **no panel** — the page in a band, then `app-site-footer`;
 - **a panel** — the rail and the page side by side, the bottom bar under them, and the footer gone.
+
+**A signed-in reader carries their panel everywhere.** `App.panel` is
+`panelFor(url) ?? panelOf(role)`, so a comprador reading `/restaurantes/pollos-copacabana` keeps his
+rail rather than losing every way out — which is what removing the app bar would otherwise cost him.
+The fallback lives in `app.ts` and not in `panelFor()` for the same reason the vertical filter does:
+it depends on the session and `panelFor()` is pure. The gate is unaffected, because a route under
+_another_ panel's prefix is answered by `panelFor()` before the fallback is ever reached.
 
 `app-root` carries `arena-shell arena-stack arena-stack--section` on its host, and
 `router-outlet { display: none }` in `src/styles.css` is the mirror rule: the outlet draws nothing
@@ -70,7 +85,9 @@ hydration never claims.
 
 - below it the rail is `display: none` and `ArenaBottomNav` carries the panel, with the page
   padded by `--layout-bar` plus the safe-area inset so the fixed bar never covers the last row;
-- above it the rail appears, sticky under the app bar, and the bottom bar goes.
+- above it the rail appears and the bottom bar goes. The rail is sticky under the app bar when
+  there is one, and `:host(.shell-signed-in)` drops that offset to `--rhythm-component` when there
+  is not.
 
 **Why a query and not `arenaViewportBelow`**: `--bp-*` does not resolve during prerender, so the
 signal returns the wide branch server-side and a phone is served the sidebar until hydration.
@@ -78,14 +95,16 @@ Show/hide is a discrete decision at first paint, which is exactly the case the s
 **Why a literal `48rem`**: a media query cannot read a `var()`, so it restates `--bp-md`. If Arena
 moves that breakpoint, this number has to follow.
 
-The same query decides the top bar, because at a phone width the three public links do not fit
-beside the brand and the account action: below it they are `display: none` and an `arena-menu` on a
-`ph-list` trigger carries them, "Ingresar" is drawn as an `arena-icon-button` rather than a labelled
-one, and the brand is **the mark alone**; above it the links come back, the menu goes and the mark
-is joined by the wordmark in an `arena-app-logo size="md"`. **Both branches are always in the
-markup and CSS picks one**, which is the same reason the width decision is a query at all. The menu
-is dispatched on the label — `ArenaMenuItem` carries no id — so `PUBLIC_LINKS` in `app.ts` is the
-one place a section's label is written, and `MENU_LINKS` is derived from it.
+The same query decides the public top bar: below it "Ingresar" is drawn as an `arena-icon-button`
+rather than a labelled one and the brand is **the mark alone**; above it the mark is joined by the
+wordmark in an `arena-app-logo size="md"`. **Both branches are always in the markup and CSS picks
+one**, which is the same reason the width decision is a query at all.
+
+**The bar carries no section links any more.** It used to hold three — Restaurantes, Importadoras,
+Maneja con Touno — with an `arena-menu` on a `ph-list` trigger standing in for them on a phone. The
+landing is now the single public door and names those surfaces itself, so the whole `nav` slot went,
+taking `PUBLIC_LINKS`, `MENU_LINKS` and the label-dispatched menu handler with it. What is left is
+the brand, the cart, the theme and Ingresar.
 
 **The wordmark is what the phone cannot afford, and the cart is why.** `arena-app-bar`'s band is
 `flex-wrap: wrap`, so a bar that stops fitting becomes two rows in silence rather than overflowing —
@@ -96,7 +115,10 @@ Arena's **comfortable** density, so every control in the bar is 48px, and `--gap
 `sm` lock-up's 95, and that is where the ten pixels came from. `.shell-brand__narrow` is the box
 that gives the SVG its size and it reads `--logo-mark-sm`, so the mark stays exactly the size
 `size="sm"` drew it. The anchor keeps its `aria-label`, and `BrandMark`'s host is `aria-hidden`, so
-the link is named "Touno, inicio" in both branches whatever it draws.
+the link is named "Touno, inicio" in both branches whatever it draws. **Losing the `ph-list` trigger
+gave the narrow bar a whole control back**, so the measured band is 68px at 320 with a filled cart
+and 72px above it — one row either way — but the margin is the reason the rule stands, not a reason
+to spend it.
 
 Two more pixels come from the style plugin, under the `22.5rem` query rather than this one, because
 they are the bar's own spacing and not a layout: the band, the nav and the actions take `--sp-2`
@@ -137,9 +159,22 @@ never meets both.
 
 ## Navigation
 
-`panel-nav.ts` is the single destination table, keyed by role. Its `bar` flag is what a
-destination needs to appear in the bottom bar as well as the rail.
+`panel-nav.ts` is the single destination table, keyed by role.
 
+- **The bottom bar is derived from the rail's order, never from a flag.** `barDestinations()` takes
+  the first `BAR_SLOTS` and `moreDestinations()` takes the rest; `app.html` draws a fourth column,
+  **Más**, that opens an `arena-sheet` holding everything the bar could not. A `bar: boolean` on
+  each destination used to say the same thing, and in all five panels its `true` entries were
+  exactly the first ones in rail order — a field that could only ever drift out of sync with the
+  order beside it. `panel-nav.spec.ts` holds that bar and sheet together reconstruct the rail.
+- **Más is why every role's Manual is reachable on a phone.** With four bar slots and a Manual
+  flagged out of the bar, `/empresa` hid Finanzas, Ajustes and Manual from every phone, `/sucursal`
+  hid four, and rider and operador hid their Manual. The sheet also carries the theme and the
+  salida, which is where they went when the app bar left.
+- **Más lights up for the destination it hides.** `barActiveId()` answers `mas` when `activeId()`
+  names something inside `moreDestinations()`, or reading the Manual would leave the whole bar dark.
+- **The sheet's actions need `ArenaFooter` in `imports`.** `[footer]` is a marker, and a marker
+  written without its directive renders nothing at all, in silence.
 - **`panelFor()` matches on a segment boundary.** `'/restaurantes'.startsWith('/restaurante')` is
   true, and once put the public restaurant listing behind a panel's gate. The trap now exists four
   times: that pair is gone, but `/rider` sits against the public `/riders`, `/plataforma` sits
