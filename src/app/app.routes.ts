@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 import { arenaRouteMeta } from '@dravensoft/arena-angular/metadata';
-import { SITE_DESCRIPTION } from './seo/site';
+import { NOT_INDEXED, SITE_DESCRIPTION } from './seo/site';
 
-const PRIVATE = arenaRouteMeta({ robots: 'noindex,follow' });
+const PRIVATE = arenaRouteMeta({ robots: NOT_INDEXED });
+const INVENTED = arenaRouteMeta({ robots: NOT_INDEXED });
 
 export const routes: Routes = [
   {
@@ -19,6 +20,7 @@ export const routes: Routes = [
       ...arenaRouteMeta({
         description:
           'Restaurantes de La Paz, Santa Cruz, Cochabamba, Oruro y Sucre, con la sucursal que te queda cerca.',
+        robots: NOT_INDEXED,
       }),
     },
     loadComponent: () => import('./pages/public/companies/companies').then((m) => m.Companies),
@@ -26,12 +28,12 @@ export const routes: Routes = [
   {
     path: 'restaurantes/:empresa',
     loadComponent: () => import('./pages/public/company/company').then((m) => m.CompanyDetail),
-    data: { type: 'restaurante' },
+    data: { type: 'restaurante', ...INVENTED },
   },
   {
     path: 'restaurantes/:empresa/:sucursal',
     loadComponent: () => import('./pages/public/branch/branch').then((m) => m.BranchDetail),
-    data: { type: 'restaurante' },
+    data: { type: 'restaurante', ...INVENTED },
   },
   {
     path: 'tiendas',
@@ -41,6 +43,7 @@ export const routes: Routes = [
       ...arenaRouteMeta({
         description:
           'Importadoras con sucursal en tu ciudad: compra desde otra ciudad y recibe en tu puerta o recoge en mostrador.',
+        robots: NOT_INDEXED,
       }),
     },
     loadComponent: () => import('./pages/public/companies/companies').then((m) => m.Companies),
@@ -48,12 +51,12 @@ export const routes: Routes = [
   {
     path: 'tiendas/:empresa',
     loadComponent: () => import('./pages/public/company/company').then((m) => m.CompanyDetail),
-    data: { type: 'importadora' },
+    data: { type: 'importadora', ...INVENTED },
   },
   {
     path: 'tiendas/:empresa/:sucursal',
     loadComponent: () => import('./pages/public/branch/branch').then((m) => m.BranchDetail),
-    data: { type: 'importadora' },
+    data: { type: 'importadora', ...INVENTED },
   },
   {
     path: 'riders',

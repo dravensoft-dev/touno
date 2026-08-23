@@ -8,6 +8,7 @@ import {
   panelFor,
   panelOf,
 } from './panel-nav';
+import { PROFILES } from '../domain/session';
 
 describe('panelFor', () => {
   it('finds the panel of each role by its prefix', () => {
@@ -151,6 +152,22 @@ describe('panelOf', () => {
     expect(panelOf('gerente-empresa')?.prefix).toBe('/empresa');
     expect(panelOf('gerente-sucursal')?.prefix).toBe('/sucursal');
     expect(panelOf('operador')?.prefix).toBe('/plataforma');
+  });
+
+  it('answers every role a profile actually holds, so no count has to be written down', () => {
+    expect(PROFILES.length).toBeGreaterThan(0);
+
+    for (const profile of PROFILES) {
+      expect(panelOf(profile.role), `${profile.id} has a role with no panel`).toBeDefined();
+    }
+  });
+
+  it('is answered by at least one profile per panel, which is what makes every panel walkable', () => {
+    for (const panel of PANELS) {
+      const holders = PROFILES.filter((one) => panelOf(one.role)?.prefix === panel.prefix);
+
+      expect(holders.length, `${panel.prefix} has no profile that opens it`).toBeGreaterThan(0);
+    }
   });
 });
 

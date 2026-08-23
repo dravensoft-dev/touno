@@ -1,4 +1,4 @@
-# src/app/domain — the model, the fixtures and the services
+# src/app/domain: the model, the fixtures and the services
 
 Every area follows the same three files: `<area>.model.ts` for the types, `<area>.data.ts` for the
 typed module constant, and `<area>.ts` for the `providedIn: 'root'` service that holds it in a
@@ -21,7 +21,7 @@ the reader is told.
   array rather than editing it, so a template that reads a computed sees the change.
 - **`withLatency()` resolves immediately on the server.** A promise that settles on a timer never
   settles during prerender, and the build hangs rather than failing.
-- **A missing record throws** where a page needs one to render — `pages/public/company` and
+- **A missing record throws** where a page needs one to render: `pages/public/company` and
   `pages/public/branch` do exactly that, because a bad slug in a prerender list is a bug we want
   loud. A missing record **answers `undefined`** where the reader might legitimately ask for
   something that is not theirs; the page then says which refusal it is.
@@ -57,12 +57,12 @@ the reader is told.
 - **A rider is bound to a sucursal only by an agreement both sides accepted.** `agreements.ts`
   throws three times and the three throws are the rule: you cannot answer your own proposal, one
   addressed to someone else, or one already answered.
-- **A reclutamiento carries runs — `carreras` — and the hora pico rules are throws too.** `propose()` refuses
+- **A reclutamiento carries runs, `carreras`, and the hora pico rules are throws too.** `propose()` refuses
   under Touno's minimum, a sucursal scoping outside itself, a second hora pico, one from an empresa
   that already recruited this rider that way, and one to a rider who still owes runs. `settle()`
   re-checks the last three on accept, because the rider could have taken a normal recruitment in
   between. `spend()` charges the hora pico first, then the one with fewest runs left, then by id
-  — never `Math.random()`.
+  and never `Math.random()`.
 - **`cumplido` is a real state and it stops binding.** `covers()` filters on `activo`, so the scan
   that spends the last run drops the rider out of `ridersOf()` in the same update. `ag-516` is
   left at one run on purpose, so that transition is walkable and not only asserted.
@@ -76,7 +76,7 @@ the reader is told.
 - **`carga-en-espera` is the only milestone with no tracking**, and it carries the note. That is
   the honest gap in the product: the parcel is not moving, and the screen says how many orders the
   truck is still short of rather than showing a mute wait. It replaced an older rule that said the
-  opposite — that the moving leg was the dark one — and the whole shipping model went with it.
+  moving leg carry the note instead: the parcel that is moving is the one with something to say.
 - **Milestones are a reached prefix.** No milestone after an unreached one carries an `at`.
 - **A code's slug is its lowercase form.** Route segments are lowercase because a prerendered
   directory on a case-sensitive host is a 404 waiting to happen.
@@ -94,7 +94,7 @@ the reader is told.
   its `priceScope` is `sucursal` and that sucursal has a row, and setting the scope back to `marca`
   drops every row. `al-campera` is the one article priced per sucursal.
 - **The reputation ledger is closed history, and the present is derived.** `reputation.data.ts` is
-  tallies — `subjectId`, `fact`, `count` — because nine hundred literal rows are a file that says
+  tallies of `subjectId`, `fact` and `count`, because a row per event is a file that says
   nothing, and because a tally adds no prerendered route. Everything live comes from
   `factsOfOrder`, `factsOfAgreement` and `factsOfLoad`, so a scan moves the figure with no write at
   all. `reputation.spec.ts` holds that no ledger row names a live pedido and that each fact appears
@@ -109,16 +109,16 @@ the reader is told.
   asserted.
 - **The manual is a fixture with a coverage spec.** Every `Role` has a chapter, every chapter has
   both a Tutorial and a Reputación section, and the Reputación section names `ReputationFact` members
-  rather than repeating their wording — so renaming a fact renames the manual.
+  rather than repeating their wording, so renaming a fact renames the manual.
 - **An order stores its fare and `orders.spec.ts` recomputes it.** The four amounts are
   denormalised, so the spec rebuilds each one from the order's own branch, zone, city and weather
   and compares. Editing an amount by hand without its inputs fails loudly.
 
 ## Fixtures are for walking, not only for consistency
 
-Three times during the rebuild a screen turned out not to be reachable — no counter pickup arriving
-at the demo sucursal, no invitation for the demo rider to accept, no application for the demo
-empresa to answer. Each was consistent and each made one of the guide's flows undemonstrable.
+A set of fixtures can be perfectly consistent and still leave a screen unreachable: no counter
+pickup arriving at the demo sucursal, no invitation for the demo rider to accept, no application for
+the demo empresa to answer. Each of those is a flow the product promises and nobody can demonstrate.
 
-**When you add a screen, check a fixture reaches it**, and add one when it does not. A model that
-is correct and cannot be walked is half a mock-up.
+**When you add a screen, check a fixture reaches it**, and add one when it does not. A model that is
+correct and cannot be walked is half a mock-up.

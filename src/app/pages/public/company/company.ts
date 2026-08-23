@@ -21,7 +21,7 @@ import { BusinessType, pathOfType } from '../../../domain/businesses.model';
 import { bs } from '../../../domain/format';
 import { BranchCard } from '../../../shared/branch-card/branch-card';
 import { StructuredData } from '../../../seo/structured-data';
-import { PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
+import { NOT_INDEXED, PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
 
 @Component({
   selector: 'app-company-detail',
@@ -149,7 +149,7 @@ export class CompanyDetail {
         title: company.name,
         description: `${company.summary} ${this.branches().length} sucursales en ${this.cities().join(', ')}.`,
         canonical: this.path(),
-        robots: 'index,follow',
+        robots: NOT_INDEXED,
         type: 'website',
       });
     });

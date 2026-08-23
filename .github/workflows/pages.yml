@@ -29,8 +29,7 @@ jobs:
       - run: bun run lint
       - run: bun run test
       - run: bun run audit:arena
-      - run: bun run build --base-href=/touno/
-      - run: bun run scripts/pages-preview.ts /touno/
+      - run: bun run build
 
       - uses: actions/upload-pages-artifact@v3
         with:

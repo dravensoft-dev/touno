@@ -1,6 +1,6 @@
-# src/app/pages/company — the gerente de empresa's lane
+# src/app/pages/company: the gerente de empresa's lane
 
-Nine screens for the person who answers for the brand rather than for a counter.
+The lane of the person who answers for the brand rather than for a counter.
 
 ## The proposal is the half of the mutual rule that lives here
 
@@ -10,7 +10,7 @@ makes.
 
 The reachable set is not cosmetic: an urban rider is offered only the sucursales in his own city, a
 truck rider all of them, and the ones he cannot cover are **named rather than hidden**, because
-"he cannot serve that local" is what the manager needs to know. Proposing buys nothing on its own —
+"he cannot serve that local" is what the manager needs to know. Proposing buys nothing on its own:
 the spec asserts `covers()` is still false until the rider says yes.
 
 The empresa answers applications and sends proposals, and can do neither to its own. The page offers
@@ -32,21 +32,20 @@ and not the other.
 The sucursal serves `/sucursal/carta` and `/sucursal/catalogo` from one component under two nouns,
 because a counter speaks the local's language. This lane does not split: one `/empresa/catalogo`,
 one `/empresa/catalogo/:id`, labelled "Catálogo" whatever the empresa sells. Reading the split as
-symmetric is how five product pages were swept against the 404 for a while. Making the restaurant's
+symmetric is how a walk ends up measuring the 404. Making the restaurant's
 empresa read "Carta" is a product change carrying two routes and their prerender params, not a
 label edit.
 
-## `/empresa/riders/:slug` carries a slug, and now says so
+## `/empresa/riders/:slug` is the one route here that resolves by slug
 
-Every other `:id` in the tree carries a real id: `empresa/sucursales/:id`, `empresa/catalogo/:id`,
-`rider/cargas/:id`. This one resolves through `Riders.bySlug`, because `marco-quispe` is what a
-gerente would paste into a chat and `r-marco` is not. It was called `:id` until the parameter was
-renamed to match what it holds — while it lied, the overflow sweep spent ten pages measuring the
-not-found state. `app.routes.spec.ts` holds every dynamic route to the names it declares and
-refuses one the static output would not prerender.
+Every other dynamic segment in this lane carries a real id: `empresa/sucursales/:id` and
+`empresa/catalogo/:id`. This one resolves through `Riders.bySlug`, because `marco-quispe` is what a
+gerente would paste into a chat and `r-marco` is not, and the segment is named `:slug` for that
+reason. Why a parameter is named for what it holds is
+[`../../AGENTS.md`](../../AGENTS.md).
 
 ## This lane does not operate
 
 No accepting a pedido, no assigning a rider, no answering a chat. When something is stuck, the
-empresa's job is to see **why** — a sucursal with no riders, a city with no branch — not to reach in
+empresa's job is to see **why** (a sucursal with no riders, a city with no branch) rather than to reach in
 and do the sucursal's work. The orders screen says so where it would be tempting.

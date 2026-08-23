@@ -1,4 +1,4 @@
-# src/app/shared — the pieces Arena does not ship
+# src/app/shared: the pieces Arena does not ship
 
 Everything here either composes Arena components or is drawn from tokens because Arena has no
 component for it. Nothing here restyles an Arena component.
@@ -19,8 +19,9 @@ component for it. Nothing here restyles an Arena component.
 
 ## The two inline SVGs, and why they are allowed
 
-The rule is "icons are Phosphor class strings". A brand mark and a schematic map are not icons, and
-`arena-to-prod --audit` agrees — it reads the whole tree and reports nothing on either. Do not read
+[`../../../design/AGENTS.md`](../../../design/AGENTS.md) says icons are Phosphor class strings. A
+brand mark and a schematic map are not icons, and
+`arena-to-prod --audit` agrees: it reads the whole tree and reports nothing on either. Do not read
 that as a licence for a third one without checking.
 
 **BrandMark** takes `--ink-heading` on the container, `--fill-page` on the parcel and
@@ -45,11 +46,11 @@ tells a screen reader the picture exists and nothing about what changed.
 
 ## OrderCode is one component because there is one code
 
-It replaced `qr-panel` and `pickup-code`, which were two answers to a question the guide asks once.
-Its modules are **seeded from the order code**, so the same order draws the same square on the
-server and in the browser; `Math.random()` would have made hydration disagree with itself. The
-first version copied `qr-panel`'s hatched field, which is a `repeating-linear-gradient`, and the
-audit was right to fail it — this project bans gradients outright.
+There is one code and one component that draws it, because the guide asks the question once.
+Its modules are **seeded from the order code**, which is what the prerender contract in
+[`../AGENTS.md`](../AGENTS.md) requires of anything that draws. **Its field is
+drawn from tokens and not from a `repeating-linear-gradient`**, because this project bans gradients
+outright and the audit fails one.
 
 ## ScanPanel reports and decides nothing
 
@@ -60,8 +61,8 @@ its spec asserts it says neither "correcto" nor "incorrecto".
 ## RiderPicker is where the guide's rule is enforced on screen
 
 It reads `Agreements.ridersOf(branchId)` and nothing else, so a sucursal can only put work on
-someone who agreed to work with it. It splits by range — trucks for the interurban leg, motos for
-the local one — and it lists a rider who is out of shift **without a button rather than hiding
+someone who agreed to work with it. It splits by range, trucks for the interurban leg and motos for
+the local one, and it lists a rider who is out of shift **without a button rather than hiding
 him**, because "he is not available" and "he does not work here" are different answers to the
 manager's question.
 
@@ -73,7 +74,7 @@ hand-over read as an explanation rather than as a stranger talking.
 ## OrderTimeline carries the honest gap
 
 A milestone with `at` is reached and draws a filled check in `--color-success`; the first one
-without is current and draws the amber dot — the mark's own package, reused; the rest are hollow and
+without is current and draws the amber dot, which is the mark's own package reused; the rest are hollow and
 muted. **The untracked milestone renders its note**, in the amber left-rail callout, and that note
 is now `carga-en-espera`: the parcel is sitting in a sucursal waiting for the truck to fill, and the
 screen says how many orders are missing rather than showing a mute wait.
@@ -90,7 +91,7 @@ sucursal's name fills `ArenaCard`'s own `eyebrow`. It also takes `available`, be
 belongs to the local rather than to the product. It takes no `href` even in the feed, because the
 card already holds the Agregar button.
 
-`branch-card` links three segments — `/tiendas/:empresa/:sucursal` — so it prepares both the `href`
+`branch-card` links three segments, `/tiendas/:empresa/:sucursal`, so it prepares both the `href`
 and the cover through `Location`, and its spec holds the `/touno/` case.
 
 ## ReputationFigure never draws a figure it does not have
@@ -99,11 +100,10 @@ It takes a `Standing` and an optional breakdown, and it draws the percentage **w
 of underneath**, never one without the other. With no history it says "Sin historial" in words
 instead of a zero, which is the same honesty as "Última conexión registrada": a figure computed from
 nothing is not a bad figure, it is an absent one. **There is no star, and no glyph, bar or dot row
-standing in for one** — `audit:arena --strict=glyph` fails the build over that, and it is how the
-old `ph-fill ph-star` in `branch-card` was found and removed.
+standing in for one**, and `audit:arena --strict=glyph` fails the build over one.
 
 ## StateTag composes, it does not restyle
 
 It maps an `OrderState`, a `LoadState` or an `AgreementState` to an `ArenaTag` tone and a Spanish
-label in one place, so twelve order states are not re-worded in six templates. Any new state must
+label in one place, so a state is not re-worded in every template that shows one. Any new state must
 be added here or TypeScript breaks, which is the point.

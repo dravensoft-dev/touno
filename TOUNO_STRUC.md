@@ -1,4 +1,4 @@
-# Touno — cómo funciona, contado por tipo de usuario
+# Touno: cómo funciona, contado por tipo de usuario
 
 > **Este documento está abierto a observaciones.** Describe cómo está planteado Touno hoy, antes de
 > construirlo. Si algo de lo que leas no encaja con cómo funciona tu negocio, tu trabajo o tu forma
@@ -64,7 +64,7 @@ las sucursales que le interesan. En ambos casos, **la otra parte tiene que acept
 no hay asignación y la sucursal no le puede mandar trabajo.
 
 **Todo reclutamiento trae carreras.** Es la cantidad de entregas que cubre, y la elige
-quien recluta —con un mínimo que fija Touno para todos—. **Se descuenta una carrera cada vez que un
+quien recluta, con un mínimo que fija Touno para todos. **Se descuenta una carrera cada vez que un
 escaneo cierra una entrega**: el del código del comprador cuando el rider llega a su puerta, y el
 del código de la carga cuando un rider de camión descarga en la sucursal de destino. Cuando se
 gasta la última carrera el reclutamiento queda **cumplido**: esas sucursales dejan de mandarle
@@ -113,8 +113,8 @@ ciudad o en otra.
 2. **Armas tu carrito.** Un solo carrito, aunque mezcles comida y mercadería.
 3. **Eliges cómo lo quieres recibir.** Aquí hay una sola decisión, y sólo aparece cuando compras a
    una importadora que está en otra ciudad:
-   - **Entrega a domicilio** — llega hasta la dirección que marques.
-   - **Recojo en sucursal** — llega hasta la sucursal de esa importadora en tu ciudad, y vas a
+   - **Entrega a domicilio**: llega hasta la dirección que marques.
+   - **Recojo en sucursal**: llega hasta la sucursal de esa importadora en tu ciudad, y vas a
      recogerlo tú.
 
    Si compras comida, o si compras a una importadora de tu misma ciudad, no hay nada que elegir:
@@ -154,14 +154,14 @@ Tres cosas que conviene decir sin rodeos:
 La ficha de tu pedido tiene una línea de tiempo con los pasos cumplidos y los que faltan, y encima
 un estado en palabras. Los estados que vas a ver:
 
-- **En espera de rider** — el pedido está hecho y aceptado, pero la sucursal todavía no le asignó
+- **En espera de rider**: el pedido está hecho y aceptado, pero la sucursal todavía no le asignó
   un rider.
-- **En espera de más pedidos** — sólo en compras a otra ciudad. Tu paquete está en la sucursal de
+- **En espera de más pedidos**: sólo en compras a otra ciudad. Tu paquete está en la sucursal de
   origen esperando a que el camión se llene. Te decimos cuántos pedidos faltan, por ejemplo _3 de 6_.
-- **En camino** — hay un rider moviéndose con tu pedido, y **ves el mapa**.
-- **En ruta** — el camión va entre ciudades, y también lo ves en el mapa.
-- **En sucursal de destino** / **Listo para recoger** — llegó a tu ciudad.
-- **Entregado** — te escanearon el código.
+- **En camino**: hay un rider moviéndose con tu pedido, y **ves el mapa**.
+- **En ruta**: el camión va entre ciudades, y también lo ves en el mapa.
+- **En sucursal de destino** / **Listo para recoger**: llegó a tu ciudad.
+- **Entregado**: te escanearon el código.
 
 **El mapa** aparece en el momento en que se asigna un rider y se apaga cuando te escanean el
 código. Muestra el recorrido y la posición del rider.
@@ -262,9 +262,9 @@ una entrega tuya, y cuando llegan a cero ese reclutamiento queda **cumplido**: e
 dejan de mandarte trabajo y tú quedas libre.
 
 Sirven para una cosa concreta: **mientras te quede una carrera pendiente, en cualquier
-reclutamiento, no puedes aceptar uno de hora pico**. Un reclutamiento de hora pico es exclusivo —sólo puedes tener
-uno en toda tu cuenta, y una misma empresa no puede dártelo dos veces—, así que Touno se asegura de
-que no lo tomes con trabajo a medias.
+reclutamiento, no puedes aceptar uno de hora pico**. Un reclutamiento de hora pico es exclusivo
+(sólo puedes tener uno en toda tu cuenta, y una misma empresa no puede dártelo dos veces), así que
+Touno se asegura de que no lo tomes con trabajo a medias.
 
 En **Acuerdos** ves cuántas carreras te quedan en total, y si una invitación de hora pico está
 bloqueada te decimos **por qué**, no sólo que no se puede.
@@ -297,19 +297,19 @@ entrega en mano, y tú entregas a una sucursal, no a una persona.
    te lo muestra en su pantalla, tú lo escaneas, y con eso la carga queda recibida, cada comprador
    es avisado y **se te descuenta una carrera**. Un escaneo por carga, no uno por pedido.
    Es tu constancia de que entregaste, que antes no tenías.
-5. Ahí termina tu parte. Lo que pase después —que el comprador lo recoja en mostrador, o que otro
-   rider se lo lleve a su casa— ya no es tuyo, y el chat pasa a quien corresponda.
+5. Ahí termina tu parte. Lo que pase después, sea que el comprador lo recoja en mostrador o que otro
+   rider se lo lleve a su casa, ya no es tuyo, y el chat pasa a quien corresponda.
 
 ### Qué pantallas tienes
 
-- **Turno** — te pones disponible, ves lo del día y lo que tienes en curso.
-- **Encargos** — el encargo que te ofrecen, con la ganancia por delante, y el encargo activo con su
+- **Turno**: te pones disponible, ves lo del día y lo que tienes en curso.
+- **Encargos**: el encargo que te ofrecen, con la ganancia por delante, y el encargo activo con su
   mapa, su chat y el escaneo.
-- **Cargas** — sólo si llevas camión: tus cargas, cuánto les falta para salir y qué llevan.
-- **Acuerdos** — invitaciones que te llegaron, postulaciones que enviaste, con qué sucursales estás
+- **Cargas**: sólo si llevas camión: tus cargas, cuánto les falta para salir y qué llevan.
+- **Acuerdos**: invitaciones que te llegaron, postulaciones que enviaste, con qué sucursales estás
   trabajando hoy, cuántas carreras te quedan y cuáles ya cumpliste.
-- **Ganancias** — lo que llevas ganado, por día y por periodo, y dónde quieres que te lo paguen.
-- **Manual** — cómo funciona Touno para ti, y cómo se calcula tu reputación.
+- **Ganancias**: lo que llevas ganado, por día y por periodo, y dónde quieres que te lo paguen.
+- **Manual**: cómo funciona Touno para ti, y cómo se calcula tu reputación.
 
 ### Qué ganas
 
@@ -353,7 +353,7 @@ Respondes por la marca completa: todos los locales, no uno.
    sucursal tiene el suyo**; en los dos casos los escribes tú. Al ponerlo, Touno te avisa qué se le
    suma encima al comprador.
 3. **Reclutas riders.** Invitas a un rider, **eliges a qué sucursales tuyas queda asociado**, la
-   clase de reclutamiento —normal o de hora pico— y **cuántas carreras le das**. Ves quién
+   clase de reclutamiento (normal o de hora pico) y **cuántas carreras le das**. Ves quién
    aceptó, quién está pendiente y quién se postuló a ti. Si un rider no puede tomar hora pico ahora,
    la pantalla te dice por qué.
 4. **Miras las finanzas** de toda la marca junta, y comparas entre sucursales.
@@ -490,7 +490,7 @@ Resumen de la empresa · Sucursales · Catálogo · Riders · Finanzas · Ajuste
 Respondes por un depósito o local. **Tu trabajo cambia según de qué lado del viaje estés**, y es la
 única sección donde una misma persona hace dos papeles distintos.
 
-### Papel 1 — eres la sucursal de origen
+### Papel 1: eres la sucursal de origen
 
 El pedido salió de tu depósito.
 
@@ -502,12 +502,12 @@ El pedido salió de tu depósito.
    esa ciudad. Desde ese momento el comprador ve _En espera de más pedidos_, con cuánto falta.
 5. Cuando la carga se completa, **sale** con su rider de camión.
 
-### Papel 2 — eres la sucursal de destino
+### Papel 2: eres la sucursal de destino
 
 Llegó un camión a tu ciudad con pedidos de compradores de aquí.
 
-1. **Recibes la carga.** Le **muestras al rider el código de recepción** de esa carga —uno por
-   carga, no por pedido— y él lo escanea. Con ese escaneo la carga queda recibida y los compradores
+1. **Recibes la carga.** Le **muestras al rider el código de recepción** de esa carga (uno por
+   carga, no por pedido) y él lo escanea. Con ese escaneo la carga queda recibida y los compradores
    son avisados, todo de una vez.
 2. En ese momento **el comprador es notificado** de que su pedido está en tu sucursal, y **el chat
    pasa a ti**: si te escribe, te escribe a ti, y la conversación se lo explica.
@@ -585,45 +585,45 @@ Tarifas · Clima · Red · Manual.
 
 Los mismos hechos de arriba, ahora en orden y diciendo **quién ve qué** en cada paso.
 
-### Recorrido A — Comida, misma ciudad
+### Recorrido A: Comida, misma ciudad
 
 | Paso               | Comprador                     | Sucursal              | Rider                                    |
 | ------------------ | ----------------------------- | --------------------- | ---------------------------------------- |
-| Compra             | Recibe su código              | Le entra el pedido    | —                                        |
-| La sucursal acepta | Ve _Aceptado_                 | Lo pasa a cocina      | —                                        |
-| Preparando         | Ve _Preparando_               | Cocina                | —                                        |
-| Sin rider aún      | Ve **En espera de rider**     | Busca a quién asignar | —                                        |
+| Compra             | Recibe su código              | Le entra el pedido    | ·                                        |
+| La sucursal acepta | Ve _Aceptado_                 | Lo pasa a cocina      | ·                                        |
+| Preparando         | Ve _Preparando_               | Cocina                | ·                                        |
+| Sin rider aún      | Ve **En espera de rider**     | Busca a quién asignar | ·                                        |
 | Asignan al rider   | **Empieza el mapa** y el chat | Sigue el pedido       | Recibe el encargo con su ganancia        |
-| El rider recoge    | Ve el recorrido en vivo       | —                     | Va en camino                             |
-| Llega              | Muestra su código             | —                     | **Escanea**                              |
+| El rider recoge    | Ve el recorrido en vivo       | ·                     | Va en camino                             |
+| Llega              | Muestra su código             | ·                     | **Escanea**                              |
 | Fin                | Ve _Entregado_                | Entra al historial    | Suma a sus ganancias y gasta una carrera |
 
-### Recorrido B — Importadora, misma ciudad
+### Recorrido B: Importadora, misma ciudad
 
 Idéntico al recorrido A. Cambia lo que va en la caja, no el camino.
 
-### Recorrido C — Importadora, otra ciudad, **recojo en sucursal**
+### Recorrido C: Importadora, otra ciudad, **recojo en sucursal**
 
 | Paso               | Comprador                                     | Sucursal de origen        | Rider de camión                                       | Sucursal de destino                                       |
 | ------------------ | --------------------------------------------- | ------------------------- | ----------------------------------------------------- | --------------------------------------------------------- |
-| Compra             | Elige _recojo en sucursal_ y recibe su código | Le entra el pedido        | —                                                     | —                                                         |
-| Aceptan y preparan | Ve el avance                                  | Prepara                   | —                                                     | —                                                         |
-| Entra a la carga   | Ve **En espera de más pedidos · 3 de 6**      | Suma el pedido a la carga | Ve crecer su carga                                    | —                                                         |
-| La carga sale      | **Empieza el mapa**                           | —                         | En ruta                                               | Ve que viene                                              |
-| Llega a destino    | Es **notificado**: está en su sucursal        | —                         | **Escanea el código de la carga** y gasta una carrera | **Se lo muestra**, recibe la carga, y el chat pasa a ella |
-| Va al mostrador    | Muestra su código                             | —                         | —                                                     | **Escanea**                                               |
-| Fin                | Ve _Entregado_                                | —                         | —                                                     | Entra al historial                                        |
+| Compra             | Elige _recojo en sucursal_ y recibe su código | Le entra el pedido        | ·                                                     | ·                                                         |
+| Aceptan y preparan | Ve el avance                                  | Prepara                   | ·                                                     | ·                                                         |
+| Entra a la carga   | Ve **En espera de más pedidos · 3 de 6**      | Suma el pedido a la carga | Ve crecer su carga                                    | ·                                                         |
+| La carga sale      | **Empieza el mapa**                           | ·                         | En ruta                                               | Ve que viene                                              |
+| Llega a destino    | Es **notificado**: está en su sucursal        | ·                         | **Escanea el código de la carga** y gasta una carrera | **Se lo muestra**, recibe la carga, y el chat pasa a ella |
+| Va al mostrador    | Muestra su código                             | ·                         | ·                                                     | **Escanea**                                               |
+| Fin                | Ve _Entregado_                                | ·                         | ·                                                     | Entra al historial                                        |
 
-### Recorrido D — Importadora, otra ciudad, **entrega a domicilio**
+### Recorrido D: Importadora, otra ciudad, **entrega a domicilio**
 
 Igual que el C hasta que llega a destino. Desde ahí:
 
 | Paso                | Comprador                                                      | Sucursal de destino                       | Rider local                              |
 | ------------------- | -------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------- |
-| Llega a destino     | Es notificado; **el chat pasa a la sucursal**                  | Muestra el código de la carga y la recibe | —                                        |
+| Llega a destino     | Es notificado; **el chat pasa a la sucursal**                  | Muestra el código de la carga y la recibe | ·                                        |
 | Asignan rider local | Ve **En espera de rider**, luego **el chat vuelve a un rider** | Elige entre sus riders                    | Recibe el encargo                        |
 | Va en camino        | **Mapa otra vez**                                              | Sigue el pedido                           | Va                                       |
-| Llega               | Muestra su código                                              | —                                         | **Escanea**                              |
+| Llega               | Muestra su código                                              | ·                                         | **Escanea**                              |
 | Fin                 | Ve _Entregado_                                                 | Entra al historial                        | Suma a sus ganancias y gasta una carrera |
 
 Este es el recorrido donde el chat cambia de interlocutor **dos veces**: rider de camión →
@@ -656,7 +656,7 @@ No se pierde ni se cancela solo.
 
 **El comprador no aparece a recoger su pedido.**
 El pedido se queda en la sucursal como _Listo para recoger_, y pasado el plazo **cuenta contra la
-reputación del comprador** —de nadie más, y sólo él la ve—. _(Sigue sin estar definido cuánto tiempo
+reputación del comprador**, de nadie más, y sólo él la ve. _(Sigue sin estar definido cuánto tiempo
 se guarda el paquete ni qué pasa después con la mercadería. Esa parte nos gustaría decidirla con tu
 ayuda.)_
 
@@ -714,8 +714,8 @@ ese piso rige para toda la red.
 - **Un rider por encima del piso** aparece antes en la lista cuando un gerente elige a quién
   asignarle un pedido, y **puede aceptar un reclutamiento de hora pico**. Por debajo, no puede:
   la pantalla se lo dice con ese motivo y no con otro. Sigue trabajando con reclutamientos normales.
-- **Una sucursal por encima del piso** aparece antes en el escaparate —la portada, Restaurantes y
-  Tiendas— y antes en la lista de invitaciones que ve un rider. Por debajo, **no puede reclutar**.
+- **Una sucursal por encima del piso** aparece antes en el escaparate (la portada, Restaurantes y
+  Tiendas) y antes en la lista de invitaciones que ve un rider. Por debajo, **no puede reclutar**.
   Y no se puede esconder: si una empresa nombra varias sucursales en un mismo reclutamiento, manda
   la peor de las que nombró.
 - **Un comprador** no gana ni pierde nada frente a un negocio, porque **su cifra no la ve nadie más
@@ -739,7 +739,7 @@ baja y qué gana y qué pierde con ella. El manual es público: se puede leer an
 Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista de promesas.
 
 - **Ya se puede administrar buena parte de lo que antes venía puesto.** Se pueden escribir los
-  precios —de marca o por sucursal—, subir el envío base de cada local y el recargo por clima,
+  precios (de marca o por sucursal), subir el envío base de cada local y el recargo por clima,
   reclutar con su clase y sus carreras, registrar una tarjeta y cambiar los valores universales de
   Touno. Lo que **todavía** no se puede crear ni editar es: **los artículos del catálogo** en sí,
   **la dirección y el horario de una sucursal**, y **cuántos pedidos tiene que juntar una carga
@@ -754,7 +754,7 @@ Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista 
 - **No hay cuentas ni contraseñas.** Lo que existe hoy es una maqueta navegable: se entra eligiendo
   un perfil, para poder recorrer y opinar. Verás **ocho perfiles de ejemplo para siete tipos de
   usuario**, porque hay dos riders: uno en moto y uno en camión. No son dos tipos de usuario
-  distintos — es el mismo perfil con distinto vehículo, y están los dos para que puedas ver las dos
+  distintos: es el mismo perfil con distinto vehículo, y están los dos para que puedas ver las dos
   clases de viaje sin cambiar de aplicación.
 - **No hay devoluciones ni cancelaciones** una vez que el pedido salió.
 - **No hay pedidos programados** para una hora futura.

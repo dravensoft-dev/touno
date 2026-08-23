@@ -1,13 +1,13 @@
-# src/app/pages/branch — the gerente de sucursal's lane
+# src/app/pages/branch: the gerente de sucursal's lane
 
-Eight screens for the person who is there when the pedido comes in. Two of them carry rules the
+The lane of the person who is there when the pedido comes in. Some of these screens carry rules the
 guide states outright.
 
 ## A rider is offered only if an agreement covers this sucursal
 
 `shared/rider-picker` reads `Agreements.ridersOf(branchId)`, and that is the only source. There is
 no "all riders" list anywhere in this lane, on purpose: the screen cannot offer what the model
-forbids. It splits by range — trucks for the interurban leg, motos for the local one — and a rider
+forbids. It splits by range, trucks for the interurban leg and motos for the local one, and a rider
 out of shift is listed without a button rather than hidden.
 
 Assigning takes custody with the rider **and** hands the chat over in the same handler, so the buyer
@@ -22,7 +22,7 @@ id** as `scannedBy`, and writes the system line into the buyer's thread. Both br
 
 ## The board is a board, and the one action that matters is assigning
 
-Four columns — nuevos, preparando, esperando rider, en camino. What is broken goes **above** the
+Four columns: nuevos, preparando, esperando rider, en camino. What is broken goes **above** the
 board: an alert counting the pedidos waiting on a rider, with an action that opens the first. That
 ordering is the whole reason the screen beats a spreadsheet.
 

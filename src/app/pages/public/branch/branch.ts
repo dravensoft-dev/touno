@@ -28,7 +28,7 @@ import { bs, minutos, porcentaje } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 import { ProductCard } from '../../../shared/product-card/product-card';
 import { StructuredData } from '../../../seo/structured-data';
-import { PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
+import { NOT_INDEXED, PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
 
 const DAYS: Record<string, readonly string[]> = {
   'Lunes a viernes': ['Mo', 'Tu', 'We', 'Th', 'Fr'],
@@ -212,7 +212,7 @@ export class BranchDetail {
         title: `${branch.name} · ${this.cityName()}`,
         description: `${branch.address}, ${this.cityName()}. ${this.company().summary} Pide y sigue tu pedido en el mapa con Touno.`,
         canonical: this.path(),
-        robots: 'index,follow',
+        robots: NOT_INDEXED,
         type: 'website',
       });
     });

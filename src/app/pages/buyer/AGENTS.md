@@ -1,7 +1,6 @@
-# src/app/pages/buyer — the buyer's lane
+# src/app/pages/buyer: the buyer's lane
 
-`feed`, `cart`, `checkout`, `orders`, `order-detail`. Five screens, and the one that carries the
-guide is the ficha.
+`feed`, `cart`, `checkout`, `orders`, `order-detail`. The one that carries the guide is the ficha.
 
 ## The ficha draws its parties from `sheetOf()`
 
@@ -17,7 +16,7 @@ it says how many parcels are still missing; once the code is read the map goes. 
 reporting, the drawing keeps his last point and labels it with the hour, and the figcaption says the
 same thing in words.
 
-Never draw the map from `mapLive` alone — it also needs a track. A rider assigned in a city the
+Never draw the map from `mapLive` alone; it also needs a track. A rider assigned in a city the
 fixtures do not map would otherwise render an empty box.
 
 ## Checkout is the buyer's one decision, and it only sometimes exists

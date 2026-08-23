@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://touno.bo/sitemap.xml
+Sitemap: https://touno.dravensoft.org/sitemap.xml

@@ -1,23 +1,23 @@
-# design/touno — the style kernel
+# design/touno: the style kernel
 
 This directory is the project's answer to Arena's style kernel. `arena.config.json` names it in
 `stylePlugins`, and it is the first (root) entry, so it emits on `:root`.
 
 Two files, and nothing else belongs here:
 
-- `plugin.tokens.json` — the 77 roles, in DTCG form, each with a `$description`.
-- `plugin.css` — the four motifs no role expresses.
+- `plugin.tokens.json`: every role the kernel asks for, in DTCG form, each with a `$description`.
+- `plugin.css`: the motifs no role expresses.
 
 ## plugin.tokens.json
 
-- **Answer all 77 roles.** The root plugin has no fallback: an unanswered role is a custom property
-  with no value, which is invalid at computed-value time, so the declaration reading it is dropped.
+- **Answer every role the kernel asks for.** The root plugin has no fallback: an unanswered role
+  is a custom property with no value, which is invalid at computed-value time, so the declaration reading it is dropped.
   That is a missing border, not a plainer look. `arena-to-prod` refuses the build over it.
 - **A colour role takes a `{color.*}` alias and nothing else.** A literal resolves to one palette's
   value and inherits it into the other, so `papel` would bleed into `.arena-noche`.
 - **Write a `$description` on every entry.** `bin/style-plugin-rules.mjs` has a check that demands
   one; the consumer path does not call it today, and one wiring change makes it fatal.
-- **Five roles need a unit the type does not carry**, through
+- **Some roles need a unit the type does not carry**, through
   `$extensions."com.dravensoft.arena".cssUnit`: `track-heading`, `track-eyebrow`, `track-label` and
   `track-trail` take `em`; `measure-prose` takes `ch`. Forget it and the value emits as a bare
   number, which is not a valid letter spacing, and it silently resolves to `normal`.
@@ -52,9 +52,9 @@ Two files, and nothing else belongs here:
   `clamp()` stays the role**, so desktop does not move.
 - **The app bar's motif is a translate, and the state is the app's.** `app-bar` takes
   `transition: translate` and `translate: 0 -100%` under `.shell-bar-away`, which `App` binds on
-  its own host — the plugin owns the part hook and nothing else, because only this file may select
+  its own host; the plugin owns the part hook and nothing else, because only this file may select
   one. `:focus-within` re-answers it to `none`, so a bar holding keyboard focus cannot be scrolled
-  off screen. `src/app/layout/CLAUDE.md` carries the reasoning.
+  off screen. [`../../src/app/layout/AGENTS.md`](../../src/app/layout/AGENTS.md) carries the reasoning.
 - **`app-bar.band` is where the narrowest phone buys its last ten pixels.** Under
   `@media (width < 22.5rem)` the band, the nav and the actions take `--sp-2` for their gap and the
   band re-answers `--dz-ctl-h` as `--dz-ctl-h-sm`. It is scoped to the band by inheritance rather

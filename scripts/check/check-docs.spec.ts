@@ -1,0 +1,109 @@
+import { describe, expect, it } from 'vitest';
+import {
+  BANNED_PUNCTUATION,
+  findComments,
+  MAX_DOCUMENT_CHARS,
+  problems,
+  punctuationProblems,
+  scannedSources,
+  SIZE_ALLOWANCE,
+  sizeProblems,
+  startsRegex,
+  zeroProblems,
+} from './check-docs';
+
+describe('the comment rule', () => {
+  it('finds a line comment', () => {
+    expect(findComments('const a = 1;\n// why\nconst b = 2;\n', '.ts')).toEqual([2]);
+  });
+
+  it('finds a block comment and reports where it opens', () => {
+    expect(findComments('const a = 1;\n/* why\n   more */\n', '.ts')).toEqual([2]);
+  });
+
+  it('finds an html comment', () => {
+    expect(findComments('<div>\n<!-- why -->\n</div>\n', '.html')).toEqual([2]);
+  });
+
+  it('finds a css comment', () => {
+    expect(findComments('a { color: red; }\n/* why */\n', '.css')).toEqual([2]);
+  });
+
+  it('does not read a url inside a string as a comment', () => {
+    expect(findComments("const a = 'https://touno.dravensoft.org';\n", '.ts')).toEqual([]);
+  });
+
+  it('does not read a double slash inside a regex as a comment', () => {
+    expect(findComments('const a = /^[a-z]+:\\/\\//i.test(b);\n', '.ts')).toEqual([]);
+  });
+
+  it('does not read a character class holding a slash as a comment', () => {
+    expect(findComments('const a = /[/*]/.test(b);\n', '.ts')).toEqual([]);
+  });
+
+  it('still finds a comment that follows a regex literal', () => {
+    expect(findComments('const a = /x/.test(b);\n// why\n', '.ts')).toEqual([2]);
+  });
+
+  it('reads a division as division rather than as a regex', () => {
+    expect(findComments('const a = b / c;\nconst d = e / f;\n// why\n', '.ts')).toEqual([3]);
+  });
+
+  it('treats a slash after a keyword as a regex', () => {
+    expect(startsRegex('return /a/', 7, 'n')).toBe(true);
+  });
+});
+
+describe('the punctuation rule', () => {
+  it('names the em dash', () => {
+    expect(BANNED_PUNCTUATION.map(([mark]) => mark)).toContain('—');
+  });
+
+  it('reports an em dash in prose', () => {
+    const found = punctuationProblems(['one.md'], () => 'a sentence — an aside');
+    expect(found).toHaveLength(1);
+    expect(found[0]).toContain('one.md:1');
+  });
+
+  it('leaves a fenced block alone', () => {
+    expect(punctuationProblems(['one.md'], () => '```\na — b\n```')).toEqual([]);
+  });
+
+  it('leaves a code span alone', () => {
+    expect(punctuationProblems(['one.md'], () => 'the `a — b` token')).toEqual([]);
+  });
+});
+
+describe('the size rule', () => {
+  it('reports a document over the limit', () => {
+    const found = sizeProblems(['big.md'], () => 'x'.repeat(MAX_DOCUMENT_CHARS + 1));
+    expect(found).toHaveLength(1);
+    expect(found[0]).toContain('big.md');
+  });
+
+  it('passes a document at the limit', () => {
+    expect(sizeProblems(['fits.md'], () => 'x'.repeat(MAX_DOCUMENT_CHARS))).toEqual([]);
+  });
+
+  it('holds SIZE_ALLOWANCE empty, which is the claim that no document needs one', () => {
+    expect(SIZE_ALLOWANCE.size).toBe(0);
+  });
+});
+
+describe('an empty subject', () => {
+  it('fails rather than passing over a tree it never opened', () => {
+    expect(zeroProblems([], ['a.ts'])).toHaveLength(1);
+    expect(zeroProblems(['a.md'], [])).toHaveLength(1);
+    expect(zeroProblems([], [])).toHaveLength(2);
+  });
+});
+
+describe('the tree as it stands', () => {
+  it('reads more than zero sources', () => {
+    expect(scannedSources().length).toBeGreaterThan(0);
+  });
+
+  it('passes', () => {
+    expect(problems()).toEqual([]);
+  });
+});

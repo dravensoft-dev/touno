@@ -1,4 +1,5 @@
-export const SITE_ORIGIN = 'https://touno.bo';
+export const SITE_ORIGIN = 'https://touno.dravensoft.org';
+export const NOT_INDEXED = 'noindex,follow';
 export const SITE_NAME = 'Touno';
 export const SITE_TAGLINE = 'Logística de última milla';
 export const SITE_DESCRIPTION =

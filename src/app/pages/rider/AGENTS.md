@@ -1,12 +1,12 @@
-# src/app/pages/rider — the rider's lane
+# src/app/pages/rider: the rider's lane
 
-Eight screens, one panel, two kinds of rider. What separates them is the vehicle and nothing else:
+One panel, two kinds of rider. What separates them is the vehicle and nothing else:
 `rangeOf(vehicle)` decides whether this person sees urban jobs or interurban loads. There is no
 second role, no second panel and no seventh profile.
 
 ## The agreement screen is the rider's half of the mutual rule
 
-He answers an invitation the empresa sent, and he **cannot answer one he sent himself** — no button,
+He answers an invitation the empresa sent, and he **cannot answer one he sent himself**: no button,
 and the service would throw. The spec asserts what accepting actually buys: before it, `covers()` is
 false and no sucursal can assign him anything; after it, true.
 
@@ -23,7 +23,7 @@ including one he carried on a leg that is over.
 every buyer's counterpart becomes the truck rider with a line saying why. That is what makes
 "the counterpart follows custody" hold on the interurban leg too.
 
-The departure button is disabled until the load is full, and the screen says how many are missing —
+The departure button is disabled until the load is full, and the screen says how many are missing,
 the same number the buyer sees. That is the point of `En espera a más pedidos`: it is not a delay,
 it is how the leg works, and both sides are told the same thing.
 
