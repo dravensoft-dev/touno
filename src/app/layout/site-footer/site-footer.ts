@@ -5,8 +5,6 @@ import { BrandMark } from '../../shared/brand-mark/brand-mark';
 import {
   CONTACT_CITY,
   CONTACT_COUNTRY,
-  CONTACT_INSTAGRAM,
-  CONTACT_INSTAGRAM_URL,
   CONTACT_PHONE,
   CONTACT_WHATSAPP_URL,
   SITE_NAME,
@@ -26,8 +24,6 @@ export class SiteFooter {
   protected readonly tagline = SITE_TAGLINE;
   protected readonly phone = CONTACT_PHONE;
   protected readonly whatsapp = CONTACT_WHATSAPP_URL;
-  protected readonly instagram = CONTACT_INSTAGRAM;
-  protected readonly instagramUrl = CONTACT_INSTAGRAM_URL;
   protected readonly city = CONTACT_CITY;
   protected readonly country = CONTACT_COUNTRY;
   protected readonly year = 2026;

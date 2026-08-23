@@ -9,8 +9,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <rect class="mark__box" width="96" height="96" rx="22" />
       <rect class="mark__parcel" x="22" y="22" width="52" height="52" rx="9" />
       <rect class="mark__route" y="44" width="96" height="5" />
-      <circle class="mark__knockout" cx="78" cy="46.5" r="15" />
-      <circle class="mark__dot" cx="78" cy="46.5" r="10" />
+      <circle class="mark__knockout" cx="74" cy="46.5" r="15" />
+      <circle class="mark__dot" cx="74" cy="46.5" r="10" />
     </svg>
   `,
   styles: `
