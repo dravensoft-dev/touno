@@ -7,9 +7,25 @@
 
 .shell-rail-brand {
   display: block;
-  padding-block-end: var(--rhythm-component);
+  padding-block-end: var(--rhythm-group);
   color: inherit;
   text-decoration: none;
+}
+
+.shell-rail-person {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gap-items);
+  margin-block-start: var(--rhythm-component);
+  padding-block-start: var(--rhythm-group);
+  border-block-start: var(--bw-separator) solid var(--edge-separator);
+}
+
+.shell-rail-person__who {
+  display: inline-flex;
+  align-items: center;
 }
 
 .shell-brand__narrow {
@@ -35,7 +51,7 @@
 }
 
 :host(.shell-signed-in) .shell-panel {
-  padding-block-start: var(--rhythm-section);
+  padding-block-start: var(--rhythm-component);
 }
 
 .shell-panel__rail {

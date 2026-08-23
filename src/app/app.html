@@ -60,6 +60,24 @@
           />
         }
       </arena-side-nav>
+
+      @if (session.profile(); as who) {
+        <div class="shell-rail-person">
+          <span class="shell-rail-person__who" [title]="who.name + ' · ' + who.place">
+            <arena-avatar [name]="who.name" size="sm" />
+            <span class="arena-sr-only">Tu sesión: {{ who.name }}, {{ who.place }}</span>
+          </span>
+          <span class="shell-rail-person__actions arena-row">
+            <app-theme-toggle />
+            <arena-icon-button
+              icon="ph-bold ph-sign-out"
+              label="Cerrar sesión"
+              variant="ghost"
+              (click)="leave()"
+            />
+          </span>
+        </div>
+      }
     </div>
 
     <div class="shell-panel__main arena-band">

@@ -234,6 +234,33 @@ describe('App signed in', () => {
     expect(host.classList.contains('shell-signed-in')).toBe(false);
   });
 
+  it('says who is signed in under the rail, and offers the tema and the salida there', async () => {
+    const fixture = await shellAs('p-comprador', '/feed');
+    const person = fixture.nativeElement.querySelector('.shell-rail-person') as HTMLElement;
+
+    expect(person).not.toBeNull();
+    expect(person.querySelector('arena-avatar')?.textContent?.trim()).toBe('RV');
+    expect(person.querySelector('app-theme-toggle')).not.toBeNull();
+    expect(person.querySelector('arena-icon-button')).not.toBeNull();
+  });
+
+  it('names the reader for a screen reader, because the avatar draws initials alone', async () => {
+    const fixture = await shellAs('p-comprador', '/feed');
+    const hidden = fixture.nativeElement.querySelector('.shell-rail-person .arena-sr-only');
+
+    expect((hidden?.textContent ?? '').trim()).toBe('Tu sesión: Rosa Villca, La Paz · Obrajes');
+  });
+
+  it('keeps the person out of the rail while nobody is signed in', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({ providers: [provideRouter([])] });
+
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.shell-rail-person')).toBeNull();
+  });
+
   it('carries the rail into a public route, so the marketplace never strands a reader', async () => {
     const fixture = await shellAs('p-comprador', '/restaurantes');
     const rail = [...fixture.nativeElement.querySelectorAll('arena-side-nav a')].map(

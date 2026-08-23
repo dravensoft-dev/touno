@@ -15,6 +15,15 @@ is no bar at all: the brand sits above the rail on a desktop, and on a phone the
 whole chrome. `signedIn()` gates the bar and `shell-signed-in` on the host is what re-answers the
 rail's sticky offset and gives the panel the top padding the bar used to provide.
 
+**The session sits under the rail, and it is an avatar and two controls — no name.** The rail is
+`--layout-sidebar`, 232px, of which 208 is content, and an avatar plus a name plus the theme plus
+the salida leaves the name 56px where "Delia Mamani" wants 85. The name would have been truncated
+for half the profiles, so it is not drawn: `arena-avatar` carries the initials, a `.arena-sr-only`
+span carries "Tu sesión: name, place" for a screen reader, and a `title` carries it on hover.
+**`arena-avatar` renders initials with no `aria-label` and no `title` of its own**, so without that
+span nothing anywhere would say who is signed in. `--layout-sidebar` is Arena's token and this
+project's plugin does not answer it; widening the rail would mean adding a role, which is refused.
+
 **Where they are decides the shape**, and `panelFor(router.url)` decides that:
 
 - **no panel** — the page in a band, then `app-site-footer`;
