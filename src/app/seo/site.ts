@@ -6,9 +6,9 @@ export const SITE_DESCRIPTION =
   'Touno mueve comida y encomiendas en Bolivia: pide a la sucursal que te queda cerca, sigue a tu rider en el mapa, escríbele por el chat del pedido y recibe con tu propio código.';
 export const SITE_IMAGE = `${SITE_ORIGIN}/og/touno.png`;
 export const SITE_LOCALE = 'es_BO';
-export const CONTACT_PHONE = '68518043';
-export const CONTACT_PHONE_E164 = '+59168518043';
-export const CONTACT_WHATSAPP_URL = 'https://wa.me/59168518043';
+export const CONTACT_PHONE = '64875891';
+export const CONTACT_PHONE_E164 = '+59164875891';
+export const CONTACT_WHATSAPP_URL = 'https://wa.me/59164875891';
 export const CONTACT_CITY = 'La Paz';
 export const CONTACT_COUNTRY = 'Bolivia';
 export const PRICE_CURRENCY = 'BOB';
