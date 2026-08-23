@@ -52,3 +52,12 @@
     gap: var(--sp-2);
   }
 }
+
+.shell-panel__rail [data-arena-part="side-nav.item"] {
+  min-height: var(--sp-10);
+  padding-block: var(--sp-1);
+}
+
+[data-arena-part="sheet.caret"] {
+  display: none;
+}

@@ -48,13 +48,30 @@ Two files, and nothing else belongs here:
   `section.title`, because `fs` steps are fixed pixels and a 44px title overflows a 320px phone;
   the horizontal scroll on the tablist, because four category tabs do not fit a 320px screen
   and a tab strip that scrolls inside itself is the only fix that does not need a width the
-  prerender cannot know; and the two things the app bar needs, below. **The ceiling of every
-  `clamp()` stays the role**, so desktop does not move.
+  prerender cannot know; the rail's own density and the sheet's folded-away caret, below; and the
+  two things the app bar needs, below.
+  **The ceiling of every `clamp()` stays the role**, so desktop does not move.
 - **The app bar's motif is a translate, and the state is the app's.** `app-bar` takes
   `transition: translate` and `translate: 0 -100%` under `.shell-bar-away`, which `App` binds on
   its own host; the plugin owns the part hook and nothing else, because only this file may select
   one. `:focus-within` re-answers it to `none`, so a bar holding keyboard focus cannot be scrolled
   off screen. [`../../src/app/layout/AGENTS.md`](../../src/app/layout/AGENTS.md) carries the reasoning.
+- **`side-nav.item` is denser inside the rail, and only inside it.** The page wears
+  `.arena-comfortable`, so an item stands 48px tall on a thumb's target, and the rail is read with a
+  pointer on a desktop. Scoped by `.shell-panel__rail`, the item takes `--sp-10` for its floor and
+  one `--sp-1` of block padding, which is 40px and one row of air rather than five, so the column of
+  destinations is shorter and the session block below it has further to fall. The phone's
+  copy of the same navigation, the one inside the `Más` sheet, keeps the full target, which is the
+  point of scoping rather than re-answering: how large a control is answers who is pointing at it.
+  The row's inline start padding is an inline style Arena binds for indentation, and no sheet
+  outranks one, so the density this file can buy is block only.
+- **`sheet.caret` is hidden, because the fold it offers never happens.** `arena-sheet` heads itself
+  with a trigger and a caret whichever way it is used, and Arena never folds the panel by itself:
+  `collapsed` is an input and `collapsedChange` is an output, so a host that binds neither draws an
+  affordance that reports and a body that does not move. The Más sheet binds neither on purpose,
+  because a panel a phone opened from the bar has one way out and it is the close control beside it.
+  The caret is the half of that a person can see, so the caret is what goes. There is no input that
+  suppresses it, which is why this is a motif rather than an attribute.
 - **`app-bar.band` is where the narrowest phone buys its last ten pixels.** Under
   `@media (width < 22.5rem)` the band, the nav and the actions take `--sp-2` for their gap and the
   band re-answers `--dz-ctl-h` as `--dz-ctl-h-sm`. It is scoped to the band by inheritance rather

@@ -25,6 +25,13 @@ span carries "Tu sesión: name, place" for a screen reader, and a `title` carrie
 span nothing anywhere would say who is signed in. `--layout-sidebar` is Arena's token and this
 project's plugin does not answer it; widening the rail would mean adding a role, which is refused.
 
+**`.shell-person` is that block, and the phone wears the same one.** The rail's foot and the Más
+sheet's `[footer]` draw the identical markup, so a reader who learns the row on a desktop finds it
+where they left it on a phone. Only the separator above it belongs to the rail, because the sheet
+draws its own; `.shell-panel__rail .shell-person` is where that lives. The sheet's copy carries the
+cart in front of the theme when there is one to carry, which the rail has no reason to: on a phone,
+signed in, there is no app bar left to hold it.
+
 **Where they are decides the shape**, and `panelFor(router.url)` decides that:
 
 - **no panel**: the page in a band, then `app-site-footer`;
@@ -99,6 +106,16 @@ hydration never claims.
 - above it the rail appears and the bottom bar goes. The rail is sticky under the app bar when
   there is one, and `:host(.shell-signed-in)` drops that offset to `--rhythm-component` when there
   is not.
+
+**The rail is as tall as the screen, and the session sits at its foot.** Above the query it is a
+flex column whose height is the viewport less its own sticky offset and one `--rhythm-component` of
+air below, so the bottom of the rail is the bottom of the screen whatever the page is long enough to
+do. `.shell-panel__rail-nav` is the wrapper the destinations sit in and it is the flexing child, so
+the brand stays at the top, the session block lands on the floor, and a viewport too short for every
+destination scrolls the list inside itself rather than pushing the session off screen. The wrapper
+exists because the growing element has to be one we own: a class of ours never goes on an Arena
+element, which [`../../../design/AGENTS.md`](../../../design/AGENTS.md) states as a rule for the whole
+tree.
 
 **Why a query and not `arenaViewportBelow`**: `--bp-*` does not resolve during prerender, so the
 signal returns the wide branch server-side and a phone is served the sidebar until hydration.
@@ -179,7 +196,8 @@ meets both.
   destinations, and every panel has more than that, so without the sheet each role hides whatever
   falls past the last slot. Every rail ends with its Manual, which is exactly what a bar alone would
   drop. The sheet also carries the theme and the salida, because signed in there is no app bar to
-  carry them.
+  carry them, and it carries them as the rail does: the salida is an icon with `Cerrar sesión` for
+  its accessible name and no visible copy, so the row stays a row at 320px.
 - **Más lights up for the destination it hides.** `barActiveId()` answers `mas` when `activeId()`
   names something inside `moreDestinations()`, or reading the Manual would leave the whole bar dark.
 - **The sheet's actions need `ArenaFooter` in `imports`.** `[footer]` is a marker, and a marker

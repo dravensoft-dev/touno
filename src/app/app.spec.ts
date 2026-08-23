@@ -236,7 +236,9 @@ describe('App signed in', () => {
 
   it('says who is signed in under the rail, and offers the tema and the salida there', async () => {
     const fixture = await shellAs('p-comprador', '/feed');
-    const person = fixture.nativeElement.querySelector('.shell-rail-person') as HTMLElement;
+    const person = fixture.nativeElement.querySelector(
+      '.shell-panel__rail .shell-person',
+    ) as HTMLElement;
 
     expect(person).not.toBeNull();
     expect(person.querySelector('arena-avatar')?.textContent?.trim()).toBe('RV');
@@ -246,7 +248,9 @@ describe('App signed in', () => {
 
   it('names the reader for a screen reader, because the avatar draws initials alone', async () => {
     const fixture = await shellAs('p-comprador', '/feed');
-    const hidden = fixture.nativeElement.querySelector('.shell-rail-person .arena-sr-only');
+    const hidden = fixture.nativeElement.querySelector(
+      '.shell-panel__rail .shell-person .arena-sr-only',
+    );
 
     expect((hidden?.textContent ?? '').trim()).toBe('Tu sesión: Rosa Villca, La Paz · Obrajes');
   });
@@ -258,7 +262,7 @@ describe('App signed in', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('.shell-rail-person')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.shell-person')).toBeNull();
   });
 
   it('carries the rail into a public route, so the marketplace never strands a reader', async () => {
@@ -345,15 +349,33 @@ describe('App bottom bar Más', () => {
     expect(inSheet).toEqual(['Ganancias', 'Manual']);
   });
 
-  it('offers the tema and the salida there, which the app bar used to carry', async () => {
+  it('foots the sheet with the same session block the rail carries', async () => {
     const fixture = await barOf('p-rider', '/rider/turno');
     const host: HTMLElement = fixture.nativeElement;
 
     host.querySelector<HTMLButtonElement>('arena-bottom-nav button')?.click();
     fixture.detectChanges();
 
-    expect(host.querySelector('arena-sheet app-theme-toggle')).not.toBeNull();
-    expect(host.querySelector('arena-sheet [footer]')?.textContent).toContain('Marco Quispe');
+    const foot = host.querySelector('arena-sheet [footer]') as HTMLElement;
+
+    expect(foot.classList.contains('shell-person')).toBe(true);
+    expect(foot.querySelector('arena-avatar')?.textContent?.trim()).toBe('MQ');
+    expect(foot.querySelector('app-theme-toggle')).not.toBeNull();
+    expect(foot.querySelector('arena-icon-button')).not.toBeNull();
+  });
+
+  it('names the reader nowhere a person can see, because the salida is an icon', async () => {
+    const fixture = await barOf('p-rider', '/rider/turno');
+    const host: HTMLElement = fixture.nativeElement;
+
+    host.querySelector<HTMLButtonElement>('arena-bottom-nav button')?.click();
+    fixture.detectChanges();
+
+    const foot = host.querySelector('arena-sheet [footer]') as HTMLElement;
+    const hidden = foot.querySelector('.arena-sr-only');
+
+    expect((hidden?.textContent ?? '').trim()).toBe('Tu sesión: Marco Quispe, La Paz · 3421 KZP');
+    expect(foot.textContent?.replace(hidden?.textContent ?? '', '')).not.toContain('Marco Quispe');
   });
 
   it('lights Más when the reader is on a destination the sheet holds', async () => {

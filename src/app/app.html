@@ -50,24 +50,26 @@
         </a>
       }
 
-      <arena-side-nav [ariaLabel]="area.label" [active]="activeId()" (nav)="go($event)">
-        @for (destination of destinations(); track destination.id) {
-          <arena-side-nav-item
-            [id]="destination.id"
-            [label]="destination.label"
-            [icon]="destination.icon"
-            [href]="destination.href"
-          />
-        }
-      </arena-side-nav>
+      <div class="shell-panel__rail-nav">
+        <arena-side-nav [ariaLabel]="area.label" [active]="activeId()" (nav)="go($event)">
+          @for (destination of destinations(); track destination.id) {
+            <arena-side-nav-item
+              [id]="destination.id"
+              [label]="destination.label"
+              [icon]="destination.icon"
+              [href]="destination.href"
+            />
+          }
+        </arena-side-nav>
+      </div>
 
       @if (session.profile(); as who) {
-        <div class="shell-rail-person">
-          <span class="shell-rail-person__who" [title]="who.name + ' · ' + who.place">
+        <div class="shell-person">
+          <span class="shell-person__who" [title]="who.name + ' · ' + who.place">
             <arena-avatar [name]="who.name" size="sm" />
             <span class="arena-sr-only">Tu sesión: {{ who.name }}, {{ who.place }}</span>
           </span>
-          <span class="shell-rail-person__actions arena-row">
+          <span class="shell-person__actions arena-row">
             <app-theme-toggle />
             <arena-icon-button
               icon="ph-bold ph-sign-out"
@@ -144,18 +146,29 @@
         }
       </arena-side-nav>
 
-      <div footer class="shell-more arena-row">
-        @if (cart.count() > 0 && !session.is('comprador')) {
-          <arena-button variant="ghost" icon="ph-bold ph-shopping-cart-simple" (click)="toCart()">
-            {{ cart.count() }}
-          </arena-button>
-        }
-        <app-theme-toggle />
+      <div footer class="shell-person">
         @if (session.profile(); as who) {
-          <arena-button variant="ghost" icon="ph-bold ph-sign-out" (click)="leave()">
-            Salir de {{ who.name }}
-          </arena-button>
+          <span class="shell-person__who" [title]="who.name + ' · ' + who.place">
+            <arena-avatar [name]="who.name" size="sm" />
+            <span class="arena-sr-only">Tu sesión: {{ who.name }}, {{ who.place }}</span>
+          </span>
         }
+        <span class="shell-person__actions arena-row">
+          @if (cart.count() > 0 && !session.is('comprador')) {
+            <arena-button variant="ghost" icon="ph-bold ph-shopping-cart-simple" (click)="toCart()">
+              {{ cart.count() }}
+            </arena-button>
+          }
+          <app-theme-toggle />
+          @if (session.profile()) {
+            <arena-icon-button
+              icon="ph-bold ph-sign-out"
+              label="Cerrar sesión"
+              variant="ghost"
+              (click)="leave()"
+            />
+          }
+        </span>
       </div>
     </arena-sheet>
   </div>
