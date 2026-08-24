@@ -8,4 +8,5 @@ export const PLATFORM: PlatformConfig = {
   weatherFeeBob: 5,
   minRuns: 5,
   minReputationPct: 80,
+  riderBaseBob: { 'agente-libre': 8, normal: 12, 'hora-pico': 22 },
 };

@@ -54,6 +54,21 @@ auto reparte dentro de una ciudad; quien va en camión une dos ciudades llevando
 vez. Es la misma cuenta y la misma aplicación: lo que cambia es el trabajo que le llega, y lo
 decide su vehículo. En la sección 4 está contado por completo.
 
+### Tres maneras de trabajar
+
+Un rider puede trabajar de tres maneras, y **dos de las tres son un reclutamiento**. La tercera es
+lo que hace quien no tiene ninguno.
+
+| Manera                         | Quién la abre                                                  | Alcance                     | Compromete carreras | Lo que paga      |
+| ------------------------------ | -------------------------------------------------------------- | --------------------------- | ------------------- | ---------------- |
+| **Agente libre**               | Sólo una sucursal, con cupos                                   | Esa sucursal y ninguna otra | No                  | La fija más baja |
+| **Reclutamiento normal**       | La sucursal para sí misma, o el gerente de empresa para varias | Las sucursales que nombra   | Sí                  | Una fija mayor   |
+| **Reclutamiento de hora pico** | Igual, y además es exclusivo                                   | Las sucursales que nombra   | Sí                  | La fija más alta |
+
+Una **sucursal** recluta **sólo para sí misma**, sea cual sea la clase. Si hay que cubrir dos o más
+sucursales con el mismo rider, eso lo hace el gerente de empresa. Y un **llamado de agentes libres
+lo abre únicamente una sucursal**: no existe uno que cubra varias.
+
 ### El reclutamiento es de dos partes
 
 Cuando una empresa contrata a un rider, eso se llama **reclutamiento**, y un rider **nunca** queda
@@ -63,23 +78,39 @@ Puede empezar de cualquiera de los dos lados: la empresa invita al rider, o el r
 las sucursales que le interesan. En ambos casos, **la otra parte tiene que aceptar**. Si no acepta,
 no hay asignación y la sucursal no le puede mandar trabajo.
 
-**Todo reclutamiento trae carreras.** Es la cantidad de entregas que cubre, y la elige
-quien recluta, con un mínimo que fija Touno para todos. **Se descuenta una carrera cada vez que un
-escaneo cierra una entrega**: el del código del comprador cuando el rider llega a su puerta, y el
-del código de la carga cuando un rider de camión descarga en la sucursal de destino. Cuando se
-gasta la última carrera el reclutamiento queda **cumplido**: esas sucursales dejan de mandarle
-trabajo, y el rider queda libre.
-
-**Hay dos clases de reclutamiento.**
+**Todo reclutamiento trae carreras.** Una **carrera** es el acto de recoger un pedido y llevarlo
+hasta el comprador. El reclutamiento dice cuántas cubre, y la elige quien recluta, con un mínimo
+que fija Touno para todos. **Se descuenta una carrera cada vez que un escaneo cierra una entrega**:
+el del código del comprador cuando el rider llega a su puerta, y el del código de la carga cuando
+un rider de camión descarga en la sucursal de destino. Cuando se gasta la última carrera el
+reclutamiento queda **cumplido**: esas sucursales dejan de mandarle trabajo, y el rider queda
+libre.
 
 - **Normal.** El rider puede tener varios a la vez, de empresas distintas, y trabajar para todas.
 - **Hora pico.** Es exclusivo y por eso tiene reglas duras: un rider sólo lo puede aceptar cuando
-  **no le queda ningún punto pendiente** en ningún otro reclutamiento, sólo puede tener **uno en
+  **no le queda ninguna carrera pendiente** en ningún otro reclutamiento, sólo puede tener **uno en
   toda su cuenta**, y **ninguna empresa puede reclutarlo así dos veces**, ni siquiera después de
   que lo haya cumplido.
 
-Una **sucursal** puede reclutar en hora pico, pero **sólo para sí misma**. Si hay que cubrir dos o
-más sucursales con el mismo rider, eso lo hace el gerente de empresa.
+### El agente libre no firma con nadie
+
+Un rider que **no tiene ningún reclutamiento**, ni normal ni de hora pico, y que no le debe
+carreras a nadie, puede ponerse en **modo agente libre**. Entonces ve un mapa con su posición y las
+sucursales cercanas que abrieron un llamado, dice que va en camino a una de ellas, y reparte para
+ella hasta que se retire.
+
+- **La sucursal publica cuántos cupos necesita.** Cuando se llenan, su llamado deja de aparecer en
+  el mapa de los demás, así que nadie viaja a un sitio donde ya no hacen falta manos.
+- **Un agente libre trabaja para una sucursal a la vez.** Es un trato del momento, no un acuerdo.
+- **No compromete carreras**, y por eso gana la fija más baja de las tres. Lo que no arriesga es
+  quedar atado.
+- **Se va cuando quiere, y avisa en el momento.** Cada vez que cierra una entrega, la aplicación le
+  pregunta si sigue o se retira, y tiene un minuto para responder. Si no responde, Touno entiende
+  que se retira, para que la sucursal pueda buscar a otro cuanto antes.
+- **Retirarse no le cuesta nada.** Lo que sí cuenta en su contra es tomar un cupo y no aparecer
+  nunca.
+- **Aceptar un reclutamiento apaga el modo.** Mientras esté reclutado, trabaja para quien lo
+  reclutó.
 
 ### El código del pedido
 
@@ -246,6 +277,9 @@ urbano**; si llevas camión, tu recorrido es el de la sección siguiente.
 
    Cada reclutamiento viene con sus **carreras**, y las ves antes de aceptar.
 
+   **O no haces ninguna de las dos, y trabajas suelto.** Eso es ser agente libre, y está contado
+   más abajo.
+
 2. **Te pones en turno** cuando quieras trabajar.
 3. **Recibes un encargo** de una de tus sucursales, con el punto de recojo, el destino y **cuánto
    ganas, antes de aceptar**. Aceptas o rechazas.
@@ -269,6 +303,33 @@ Touno se asegura de que no lo tomes con trabajo a medias.
 En **Acuerdos** ves cuántas carreras te quedan en total, y si una invitación de hora pico está
 bloqueada te decimos **por qué**, no sólo que no se puede.
 
+### Cuando trabajas suelto
+
+Si **no tienes ningún reclutamiento** y no le debes carreras a nadie, puedes activar el modo
+**agente libre**. Se queda encendido hasta que tú lo apagues.
+
+1. **Abres Agente libre** y ves un mapa con tu posición y las sucursales de tu ciudad que están
+   buscando. Sólo aparecen las que abrieron un llamado: si una no quiere agentes libres, no la ves.
+2. **Dices que vas en camino** a la que elijas. Ocupas uno de sus cupos, así que la sucursal ya
+   sabe que llegas y deja de ofrecerle ese cupo a otro.
+3. **Llegas y repartes.** Te asignan pedidos uno tras otro, igual que a cualquier rider suyo, y
+   cierras cada uno escaneando el código del comprador.
+4. **Después de cada entrega te preguntamos si sigues.** Aparece una pregunta que no se puede
+   saltar, con dos respuestas: seguir con esa sucursal, o dejarlo. Tienes **un minuto**. Si no
+   respondes, entendemos que lo dejas.
+5. **Cuando lo dejas, se acaba sólo ese trato.** Tu modo de agente libre sigue encendido y puedes
+   tomar otro llamado enseguida.
+
+Trabajas para **una sucursal a la vez**, y **no comprometes carreras con nadie**. Por eso la fija
+que cobras es la más baja de las tres maneras: lo que no das es compromiso.
+
+**Irte no te cuenta en contra.** La pregunta del minuto existe justamente para que puedas irte sin
+dejar a nadie esperando. Lo que sí cuenta en tu contra es ocupar un cupo y no aparecer nunca.
+
+**El piso de reputación no te cierra esta puerta.** Aunque estés por debajo del piso que fija Touno,
+puedes trabajar como agente libre: es la manera de volver a cumplir. Lo que el piso cierra es la
+hora pico. La sucursal ve tu cumplimiento antes de que ocupes el cupo, y decide ella.
+
 ### Cómo cobras
 
 Por defecto, lo que ganas te llega **a tu cuenta**, como siempre. Si prefieres, puedes **registrar
@@ -280,6 +341,19 @@ empresa, para que sepas con quién sí y con quién no.
 
 Esta maqueta **no pide el número completo de tu tarjeta**: guarda la marca, los últimos cuatro
 dígitos, el titular y el vencimiento, y nada más.
+
+**Lo que ganas por una carrera son tres cosas sumadas:**
+
+- **Una fija**, que depende de cómo estés trabajando. La más baja es la del agente libre, encima
+  está la del reclutamiento normal, y la más alta la del de hora pico. Touno fija el mínimo de cada
+  una, y **una sucursal puede subirla para destacar, nunca bajarla**.
+- **La distancia**, medida en **unidades del plano** del mapa. No son kilómetros: el mapa de Touno
+  es esquemático. Hay una tarifa por unidad dentro de una ciudad y otra entre ciudades, porque los
+  dos planos no comparten escala.
+- **Un extra por mal clima**, cuando la ciudad está marcada así. También tiene un mínimo de Touno y
+  también se puede subir.
+
+Antes de aceptar ves la fija, y en el mapa ves la distancia. Nada se te descuenta por detrás.
 
 ### Si llevas camión
 
@@ -308,6 +382,8 @@ entrega en mano, y tú entregas a una sucursal, no a una persona.
 - **Cargas**: sólo si llevas camión: tus cargas, cuánto les falta para salir y qué llevan.
 - **Acuerdos**: invitaciones que te llegaron, postulaciones que enviaste, con qué sucursales estás
   trabajando hoy, cuántas carreras te quedan y cuáles ya cumpliste.
+- **Agente libre**: el mapa de quién te está buscando cerca, con cuántos cupos le quedan a cada uno
+  y cuánto paga, y la sucursal con la que estás ahora si tomaste un cupo.
 - **Ganancias**: lo que llevas ganado, por día y por periodo, y dónde quieres que te lo paguen.
 - **Manual**: cómo funciona Touno para ti, y cómo se calcula tu reputación.
 
@@ -322,6 +398,8 @@ entrega en mano, y tú entregas a una sucursal, no a una persona.
 - **Eliges dónde cobrar.** A tu cuenta o a tu tarjeta, y si algo lo impide se te dice cuál es.
 - **Si pierdes señal no quedas mal.** El sistema muestra tu última conexión con su hora, en vez de
   aparentar que dejaste de moverte, **y tu reputación tampoco lo cuenta**.
+- **Puedes trabajar sin comprometerte.** Si no quieres atarte a nadie, el modo agente libre te deja
+  salir a repartir hoy y no deberle nada a nadie mañana.
 - **Cumplir se nota.** Tu reputación te pone antes en la lista del gerente y te abre la hora pico,
   y sale de hechos y no de opiniones. Está en la sección 12.
 
@@ -333,6 +411,10 @@ entrega en mano, y tú entregas a una sucursal, no a una persona.
   a mano. Si llevas camión no escaneas nunca el código de un comprador: el tuyo es el de la carga.
 - **No aceptas un reclutamiento de hora pico con carreras pendientes**, ni un segundo de hora pico, ni
   uno de una empresa que ya te reclutó así antes.
+- **No eres agente libre de dos sucursales a la vez**, ni eres agente libre teniendo un
+  reclutamiento activo o carreras pendientes.
+- **No eliges a qué sucursales aparecerles como agente libre.** Sólo te ven las que abrieron un
+  llamado, y sólo ves tú a esas.
 - **No decides cuándo sale tu camión.** Sale cuando se llena, y cuántos pedidos hacen falta lo fija
   la empresa.
 
@@ -355,7 +437,8 @@ Respondes por la marca completa: todos los locales, no uno.
 3. **Reclutas riders.** Invitas a un rider, **eliges a qué sucursales tuyas queda asociado**, la
    clase de reclutamiento (normal o de hora pico) y **cuántas carreras le das**. Ves quién
    aceptó, quién está pendiente y quién se postuló a ti. Si un rider no puede tomar hora pico ahora,
-   la pantalla te dice por qué.
+   la pantalla te dice por qué. **Eres el único que puede nombrar varias sucursales en un mismo
+   reclutamiento**, y **no abres llamados de agentes libres**: eso lo hace cada sucursal.
 4. **Miras las finanzas** de toda la marca junta, y comparas entre sucursales.
 5. **Fijas los ajustes** que rigen para todos: el **envío base de cada sucursal** y el **recargo por
    clima** de la marca. Los dos tienen un mínimo universal que pone Touno, y **sólo puedes subirlos
@@ -374,8 +457,8 @@ Resumen de la empresa · Sucursales · Carta · Riders · Finanzas · Ajustes ·
   ocho, y eso lo decides tú.
 - **Un precio por marca o uno por local, y lo eliges artículo por artículo.** No tienes que elegir
   una sola política para todo el catálogo.
-- **Eres el único que puede reclutar en hora pico para varias sucursales.** Una sucursal sólo puede
-  hacerlo para sí misma.
+- **Eres el único que puede reclutar para varias sucursales a la vez.** Una sucursal, sea en normal
+  o en hora pico, sólo puede reclutar para sí misma.
 - **Ves lo que no funciona** sin que te lo cuenten: qué local rechaza pedidos, cuál se queda sin
   riders. Ahora con una cifra: la reputación de cada sucursal, con de qué está hecha.
 
@@ -410,7 +493,7 @@ Respondes por un local. Es la persona que está cuando entra el pedido.
 ### Qué pantallas tienes
 
 Pedidos (el tablero del día) · Ficha del pedido · Escanear · Disponibilidad de la carta ·
-Tus riders, con el reclutamiento de hora pico y tu propia reputación · Historial · Métricas de tu
+Tus riders, con el llamado de agentes libres, el reclutamiento y tu propia reputación · Historial · Métricas de tu
 local · Ajustes de tu local, con la tarjeta de la sucursal · Manual.
 
 ### Qué ganas
@@ -426,9 +509,12 @@ local · Ajustes de tu local, con la tarjeta de la sucursal · Manual.
 - **No cambias precios ni creas platos.** La carta es de la empresa, incluso cuando tu local tiene
   un precio distinto del de las otras sucursales: ese número también lo escribe la empresa, y tú lo
   ves para confirmarlo.
-- **Sí puedes reclutar, pero sólo en hora pico y sólo para tu local.** Es la respuesta a la duda que
-  este documento planteaba antes. Para todo lo demás sigues trabajando con quien ya tiene
-  reclutamiento aceptado, y las invitaciones normales las manda la empresa.
+- **Sí puedes reclutar, en normal y en hora pico, pero siempre sólo para tu local.** Si necesitas al
+  mismo rider en dos locales, eso lo hace el gerente de empresa.
+- **Sí puedes abrir un llamado de agentes libres**, y es lo único que la empresa no puede abrir por
+  ti: dices cuántos cupos necesitas y cuánto pagas de fija, y los riders sin reclutamiento te ven en
+  su mapa. Cuando se llenan los cupos dejas de aparecer, y ves quién viene en camino y quién ya está
+  repartiendo. Bajo el piso de reputación no puedes abrirlo, igual que no puedes reclutar.
 - **No decides sobre las tarifas.** El envío base y el recargo por clima los fija la empresa, sobre
   el mínimo de Touno.
 - **No abres ni cierras otras sucursales.**
@@ -536,7 +622,8 @@ Manual.
 - **No entregas sin escanear el código del comprador.** El de la carga es otro y sirve para otra
   cosa: cerrar la carga, no un pedido.
 - **No cambias precios ni el catálogo.** Es de la empresa, incluso el precio propio de tu sucursal.
-- **Sí puedes reclutar en hora pico, pero sólo para tu sucursal.**
+- **Sí puedes reclutar, en normal y en hora pico, pero sólo para tu sucursal**, y **sí puedes abrir
+  un llamado de agentes libres**, que es cosa de la sucursal y no de la empresa.
 - **No decides cuántos pedidos junta un camión antes de salir.** Ese número lo fija la empresa.
 
 ---
@@ -553,12 +640,16 @@ que rigen para **todas** las empresas a la vez.
 1. **Fijas las tarifas universales.** La comisión de Touno, el **envío base mínimo** que ninguna
    empresa puede bajar, las tarifas por distancia y el **recargo por clima**. También el **mínimo de
    carreras** que puede comprometer un reclutamiento y el **piso de reputación** que hace falta para
-   reclutar y para tomar hora pico.
+   reclutar y para tomar hora pico. Y las **tres fijas mínimas** que puede cobrar un rider por
+   carrera, una por cada manera de trabajar: **la del agente libre por debajo de la del
+   reclutamiento normal, y ésa por debajo de la de hora pico**. Ese orden es una regla, y la
+   pantalla no guarda un valor que lo rompa.
 2. **Marcas el clima de cada ciudad.** Mientras una ciudad esté marcada como desfavorable, cada
    pedido a domicilio que llegue ahí paga el recargo, y ese dinero va completo al rider. Un pedido
    con recojo en mostrador no lo paga.
 3. **Miras la red.** Qué empresa subió qué tarifa por encima del piso, cuántos reclutamientos de
-   hora pico hay en curso, y qué riders pueden cobrar a tarjeta de verdad.
+   hora pico hay en curso, cuántos llamados de agentes libres están abiertos, y qué riders pueden
+   cobrar a tarjeta de verdad.
 
 ### Qué pantallas tienes
 
@@ -686,11 +777,17 @@ porque tuvo un mal día, y nadie puede subirte la cifra pidiéndolo.
 
 ### Qué cuenta, por tipo de usuario
 
-| Tú eres       | Suma                                                                                | Resta                                                                                                |
-| ------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| **Rider**     | Entregas cerradas dentro de la hora · cargas descargadas · reclutamientos cumplidos | Entregas cerradas tarde · reclutamientos que aceptaste y dejaste con carreras pendientes             |
-| **Sucursal**  | Pedidos despachados y entregados · cargas que salieron                              | Pedidos rechazados · pedidos que pasaron su hora sin rider · cargas que pasaron su hora sin llenarse |
-| **Comprador** | Pedidos recibidos en la puerta al primer intento · recojos dentro del plazo         | Pedidos que se quedaron esperando en el mostrador · direcciones equivocadas                          |
+| Tú eres       | Suma                                                                                                     | Resta                                                                                                                               |
+| ------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Rider**     | Entregas cerradas dentro de la hora · cargas descargadas · reclutamientos cumplidos · llamados atendidos | Entregas cerradas tarde · reclutamientos que aceptaste y dejaste con carreras pendientes · cupos que tomaste y no llegaste a ocupar |
+| **Sucursal**  | Pedidos despachados y entregados · cargas que salieron                                                   | Pedidos rechazados · pedidos que pasaron su hora sin rider · cargas que pasaron su hora sin llenarse                                |
+| **Comprador** | Pedidos recibidos en la puerta al primer intento · recojos dentro del plazo                              | Pedidos que se quedaron esperando en el mostrador · direcciones equivocadas                                                         |
+
+**Tu cumplimiento de rider se ve en cuatro cifras, no en una.** Una por cada manera de trabajar
+(agente libre, reclutamiento normal, hora pico) y **un total con todas juntas**. Así se sabe si
+cumples mejor suelto o reclutado, y no se esconde una manera detrás de otra. El total no es el
+promedio de las tres: se arma con la cuenta completa, para que una manera con cuatro carreras no
+pese lo mismo que otra con cuatrocientas. Lo ves tú, y lo ve la sucursal antes de darte trabajo.
 
 **La reputación de un negocio es de la sucursal, no de la marca.** Es la sucursal la que acepta,
 despacha y hace esperar. La cifra de la empresa se arma **sumando los compromisos de todas sus
@@ -703,6 +800,10 @@ que uno con cuatrocientos.
 pierde señal no queda mal, y un sistema de puntuación que la contara rompería esa promesa. Lo mismo
 con **rechazar una invitación**: negarse a una oferta no es incumplir nada.
 
+**Retirarse de un llamado de agentes libres tampoco cuenta.** Es una salida que el propio producto
+ofrece, y con un botón: cobrársela sería una trampa. Lo que cuenta es **tomar un cupo y no llegar
+nunca**, porque eso deja a una sucursal esperando a alguien que no viene.
+
 **Una carga que todavía está juntando pedidos, dentro de su plazo, no cuenta contra la sucursal.**
 Eso es el producto funcionando, no una falla.
 
@@ -713,9 +814,12 @@ ese piso rige para toda la red.
 
 - **Un rider por encima del piso** aparece antes en la lista cuando un gerente elige a quién
   asignarle un pedido, y **puede aceptar un reclutamiento de hora pico**. Por debajo, no puede:
-  la pantalla se lo dice con ese motivo y no con otro. Sigue trabajando con reclutamientos normales.
+  la pantalla se lo dice con ese motivo y no con otro. Sigue trabajando con reclutamientos normales,
+  y **sigue pudiendo ser agente libre**: el piso no le cierra esa puerta, porque es por donde vuelve
+  a cumplir.
 - **Una sucursal por encima del piso** aparece antes en el escaparate (la portada, Restaurantes y
-  Tiendas) y antes en la lista de invitaciones que ve un rider. Por debajo, **no puede reclutar**.
+  Tiendas) y antes en la lista de invitaciones que ve un rider. Por debajo, **no puede reclutar ni
+  abrir un llamado de agentes libres**.
   Y no se puede esconder: si una empresa nombra varias sucursales en un mismo reclutamiento, manda
   la peor de las que nombró.
 - **Un comprador** no gana ni pierde nada frente a un negocio, porque **su cifra no la ve nadie más
@@ -740,8 +844,8 @@ Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista 
 
 - **Ya se puede administrar buena parte de lo que antes venía puesto.** Se pueden escribir los
   precios (de marca o por sucursal), subir el envío base de cada local y el recargo por clima,
-  reclutar con su clase y sus carreras, registrar una tarjeta y cambiar los valores universales de
-  Touno. Lo que **todavía** no se puede crear ni editar es: **los artículos del catálogo** en sí,
+  reclutar con su clase y sus carreras, abrir un llamado de agentes libres con sus cupos y su fija,
+  registrar una tarjeta y cambiar los valores universales de Touno. Lo que **todavía** no se puede crear ni editar es: **los artículos del catálogo** en sí,
   **la dirección y el horario de una sucursal**, y **cuántos pedidos tiene que juntar una carga
   antes de salir**. Esos datos se ven en pantalla, se explica de quién son, y por ahora vienen
   puestos.
@@ -752,10 +856,10 @@ Dicho sin rodeos, porque una lista honesta de límites sirve más que una lista 
 - **El envío se mide sobre el plano esquemático del mapa, no en kilómetros.** Las distancias son
   coherentes entre sí y sirven para ver cómo se comporta la tarifa, pero no son una medida real.
 - **No hay cuentas ni contraseñas.** Lo que existe hoy es una maqueta navegable: se entra eligiendo
-  un perfil, para poder recorrer y opinar. Verás **ocho perfiles de ejemplo para siete tipos de
-  usuario**, porque hay dos riders: uno en moto y uno en camión. No son dos tipos de usuario
-  distintos: es el mismo perfil con distinto vehículo, y están los dos para que puedas ver las dos
-  clases de viaje sin cambiar de aplicación.
+  un perfil, para poder recorrer y opinar. Hay **tres riders de ejemplo para un solo tipo de
+  usuario**: uno en moto, uno en camión y uno suelto. No son tres tipos de usuario distintos: es el
+  mismo perfil con distinto vehículo y distinta manera de trabajar, y están los tres para que puedas
+  ver las dos clases de viaje y las tres maneras de trabajar sin cambiar de aplicación.
 - **No hay devoluciones ni cancelaciones** una vez que el pedido salió.
 - **No hay pedidos programados** para una hora futura.
 - **No hay calificación por estrellas de nadie hacia nadie, y no la va a haber.** Lo que hay es
@@ -781,6 +885,9 @@ tu realidad**. Por ejemplo:
 
 - "En mi negocio el local **sí** contrata a sus propios repartidores, la empresa no se mete."
 - "Un rider mío trabaja para tres empresas el mismo día y eso aquí no se ve."
+- "Un agente libre que aparece sin acuerdo no me sirve: yo necesito saber quién entra a mi local
+  antes de que llegue."
+- "Un minuto para decidir si se queda es poco / es mucho."
 - "Nadie va a esperar a que se llene un camión; yo mando lo que haya cada mañana a las 8."
 - "Mis clientes no tienen teléfono con cámara para el QR."
 - "Falta un tipo de usuario: el que sólo atiende el mostrador y no administra nada."

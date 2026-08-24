@@ -44,6 +44,16 @@ export const PROFILES: readonly Profile[] = [
     riderId: 'r-marco',
   },
   {
+    id: 'p-rider-libre',
+    role: 'rider',
+    label: 'Rider suelto',
+    name: 'Diego Choque',
+    place: 'La Paz · 4416 TVB',
+    icon: 'ph-bold ph-motorcycle',
+    home: '/rider/libre',
+    riderId: 'r-diego',
+  },
+  {
     id: 'p-rider-camion',
     role: 'rider',
     label: 'Rider con camión',

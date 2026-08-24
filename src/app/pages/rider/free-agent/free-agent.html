@@ -1,0 +1,88 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Agente libre"
+    subtitle="Trabajas suelto, sin comprometerte con nadie, y te vas cuando quieras."
+  />
+
+  @if (blocked(); as why) {
+    <arena-alert tone="warning" title="Todavía no puedes trabajar suelto">
+      <p>{{ why }}</p>
+      <arena-button action variant="secondary" (click)="toAgreements()">
+        Ver tus acuerdos
+      </arena-button>
+    </arena-alert>
+  } @else {
+    <arena-switch
+      [state]="on()"
+      label="Quiero trabajar como agente libre"
+      (requestChange)="toggle()"
+    />
+  }
+
+  @if (on() && !blocked()) {
+    @if (holding(); as claim) {
+      <arena-section
+        headingLevel="h2"
+        title="Estás con una sucursal"
+        description="Un agente libre trabaja para una a la vez. Te reparten pedidos hasta que te retires."
+      >
+        <div class="arena-stack arena-stack--component">
+          <app-state-tag [claim]="claim.state" />
+          <arena-key-value [rows]="bond()" />
+          <arena-button variant="danger" (click)="leave()">
+            Dejar de ser agente libre de {{ hostCompany()?.name }}, {{ host()?.name }}
+          </arena-button>
+        </div>
+      </arena-section>
+    } @else {
+      <arena-section
+        headingLevel="h2"
+        title="Quién te está buscando"
+        description="Sucursales de tu ciudad con un llamado abierto, la más cercana primero."
+      >
+        <div class="arena-stack arena-stack--component">
+          @if (here(); as point) {
+            <app-nearby-map
+              label="Sucursales de tu ciudad que buscan agentes libres"
+              [here]="point"
+              [places]="places()"
+              [streets]="streets()"
+            />
+          }
+
+          @if (!online()) {
+            <arena-alert tone="info" title="Estás fuera de turno">
+              Puedes mirar el mapa, pero para decir que vas en camino tienes que estar en turno.
+            </arena-alert>
+          }
+
+          @for (callout of nearby(); track callout.id) {
+            <arena-card [title]="branchName(callout)" [eyebrow]="companyName(callout)">
+              <div class="arena-stack arena-stack--group">
+                @if (callout.message) {
+                  <p>{{ callout.message }}</p>
+                }
+                <p>{{ cupos(callout) }} · {{ pay(callout) }}</p>
+                <arena-button
+                  action
+                  variant="primary"
+                  [disabled]="!online()"
+                  (click)="claim(callout)"
+                >
+                  Voy en camino
+                </arena-button>
+              </div>
+            </arena-card>
+          } @empty {
+            <arena-empty-state
+              icon="ph-bold ph-map-pin-simple-area"
+              title="Nadie te está buscando ahora"
+              description="Ninguna sucursal de tu ciudad tiene un llamado abierto en este momento."
+            />
+          }
+        </div>
+      </arena-section>
+    }
+  }
+</div>

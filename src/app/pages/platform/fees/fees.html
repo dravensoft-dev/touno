@@ -19,7 +19,11 @@
     rhythm="md"
   >
     <div class="arena-stack arena-stack--group">
-      @for (knob of knobs; track knob.key) {
+      @if (refused(); as why) {
+        <arena-alert tone="danger" title="Ese valor no se guardó">{{ why }}</arena-alert>
+      }
+
+      @for (knob of knobs; track knob.label) {
         <arena-input
           [label]="knob.label"
           type="number"

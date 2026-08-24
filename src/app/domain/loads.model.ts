@@ -1,8 +1,11 @@
+import { WorkMode } from './agreements.model';
+
 export type LoadState = 'acumulando' | 'en-ruta' | 'descargado';
 
 export interface TruckLoad {
   readonly id: string;
   readonly riderId: string;
+  readonly mode: WorkMode;
   readonly fromBranchId: string;
   readonly toBranchId: string;
   readonly orderCodes: readonly string[];

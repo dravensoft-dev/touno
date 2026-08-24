@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Manual } from './manual';
 import { MANUAL } from './manual.data';
 import { ManualSection, pathOfRole, sectionLabel } from './manual.model';
-import { factLabel, subjectOf } from './reputation.model';
+import { REPUTATION_FACTS, factLabel, subjectOf } from './reputation.model';
 import { PROFILES, Role } from './session';
 
 const SECTIONS: readonly ManualSection[] = ['tutorial', 'reputacion'];
@@ -48,6 +48,16 @@ describe('the manual', () => {
         expect(factLabel(fact)).toBeDefined();
         expect(subjectOf(fact)).toBe(chapter?.subject);
       }
+    }
+  });
+
+  it('names every fact Touno counts, so a new one cannot be added without a manual for it', () => {
+    const named = MANUAL.flatMap(
+      (entry) => manual.chapter(entry.role, 'reputacion')?.counted ?? [],
+    );
+
+    for (const fact of REPUTATION_FACTS) {
+      expect(named, `${fact} is counted and no manual explains it`).toContain(fact);
     }
   });
 

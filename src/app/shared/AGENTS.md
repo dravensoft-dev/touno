@@ -60,8 +60,11 @@ its spec asserts it says neither "correcto" nor "incorrecto".
 
 ## RiderPicker is where the guide's rule is enforced on screen
 
-It reads `Agreements.ridersOf(branchId)` and nothing else, so a sucursal can only put work on
-someone who agreed to work with it. It splits by range, trucks for the interurban leg and motos for
+It reads `Staffing.ridersOf(branchId)` and nothing else, so a sucursal can only put work on someone
+it is actually bound to: a rider who accepted a reclutamiento with it, or a free agent occupying one
+of its cupos right now. **The union lives in the domain rather than here**, so the rule holds for
+`Orders.assign()` as well and the screen still cannot offer what the model forbids. Each row says
+which of the two bonds it is, because the two are not paid the same. It splits by range, trucks for the interurban leg and motos for
 the local one, and it lists a rider who is out of shift **without a button rather than hiding
 him**, because "he is not available" and "he does not work here" are different answers to the
 manager's question.
@@ -94,6 +97,43 @@ card already holds the Agregar button.
 `branch-card` links three segments, `/tiendas/:empresa/:sucursal`, so it prepares both the `href`
 and the cover through `Location`, and its spec holds the `/touno/` case.
 
+## NearbyMap is the third inline SVG, and here is the argument for it
+
+`route-map` draws a journey: it requires an `origin` and a `destination`, frames itself around them,
+draws exactly one origin circle and one destination pin, and its `figcaption` says one of three
+sentences all built around a rider travelling between two points. A free agent's map has no journey
+and no destination: it has one point that is him and N sucursales around it, each with its own
+label and its own cupos left.
+
+Serving both from one component means making `origin` and `destination` optional, which silently
+lets any caller draw an empty map, and rewriting the caption into something that no longer describes
+either. **The figcaption is the reason these SVGs are allowed at all**, so a component whose caption
+has to hedge is the wrong shape.
+
+What the two do share is extracted rather than copied: `map-frame.ts` holds the framing, and both
+obey the same two mechanics, `vector-effect="non-scaling-stroke"` on every stroke so `stroke-width`
+can read a `--bw-*` token, and every colour from a CSS class because an SVG presentation attribute
+cannot read a `var()`. `nearby-map.spec.ts` asserts both by walking the drawn shapes.
+
+**Its caption names the nearest sucursal and its cupos, and says "ninguna" in words** when nothing
+is open, rather than drawing an empty frame.
+
+## FreeAgentPrompt is blocking on purpose, and it answers for a rider who does not
+
+It wraps `ArenaConfirmDialog`, which never closes on a scrim click, so the question cannot be
+dismissed by accident. Confirm keeps the trato, cancel ends it, and **Escape lands on cancel, which
+is the same answer the minute lands on**: the safe answer for the sucursal is that he left, because
+then it can look for someone else at once.
+
+**The countdown starts in `afterNextRender` and never reads `clock.ts`.** `NOW` is a literal, so a
+countdown derived from it would never move; and the interval must not exist during prerender. The
+handle is a field cleared from `DestroyRef.onDestroy`, never read through an input, because a throw
+in a destroy hook takes the router outlet with it. Answering once stops the interval, so a late tick
+cannot answer again, and the spec holds that too.
+
+**`destructive` stays false.** Leaving is a door this design offers, not a loss, and it costs the
+rider nothing in his figure.
+
 ## ReputationFigure never draws a figure it does not have
 
 It takes a `Standing` and an optional breakdown, and it draws the percentage **with what it is made
@@ -104,6 +144,10 @@ standing in for one**, and `audit:arena --strict=glyph` fails the build over one
 
 ## StateTag composes, it does not restyle
 
-It maps an `OrderState`, a `LoadState` or an `AgreementState` to an `ArenaTag` tone and a Spanish
-label in one place, so a state is not re-worded in every template that shows one. Any new state must
-be added here or TypeScript breaks, which is the point.
+It maps an `OrderState`, a `LoadState`, an `AgreementState`, a `CalloutState` or a `ClaimState` to
+an `ArenaTag` tone and a Spanish label in one place, so a state is not re-worded in every template
+that shows one. Any new state must be added here or TypeScript breaks, which is the point, and
+`callouts.model.ts` deliberately carries no labels of its own so there is nowhere else to word one.
+
+**A cupo state is never amber.** `design/AGENTS.md` spends amber on the mark, the in-motion state
+and the rider's own dot, and the free agent map already spends it on "me".

@@ -14,6 +14,7 @@ export interface Rider {
   readonly cityId: string;
   readonly zones: readonly string[];
   readonly online: boolean;
+  readonly freeAgent: boolean;
   readonly ratePerTripBob: number;
   readonly account: string;
   readonly payoutMethod: PayoutMethod;

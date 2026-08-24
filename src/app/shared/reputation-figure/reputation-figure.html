@@ -5,6 +5,16 @@
       <span class="standing__label">{{ label() }}</span>
     </p>
     <p class="standing__made-of arena-num">{{ madeOf() }}</p>
+    @if (byMode().length > 0) {
+      <dl class="standing__rows">
+        @for (row of byMode(); track row.label) {
+          <div class="standing__row">
+            <dt>{{ row.label }}</dt>
+            <dd class="arena-num">{{ row.figure }} · {{ row.madeOf }}</dd>
+          </div>
+        }
+      </dl>
+    }
     @if (rows().length > 0) {
       <dl class="standing__rows">
         @for (row of rows(); track row.label) {

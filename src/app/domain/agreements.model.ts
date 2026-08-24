@@ -1,6 +1,8 @@
 export type AgreementSide = 'empresa' | 'rider';
 
-export type RecruitmentKind = 'normal' | 'hora-pico';
+export type WorkMode = 'agente-libre' | 'normal' | 'hora-pico';
+
+export type RecruitmentKind = Exclude<WorkMode, 'agente-libre'>;
 
 export type AgreementState =
   'pendiente' | 'activo' | 'cumplido' | 'rechazado' | 'terminado' | 'vencido';
@@ -50,13 +52,19 @@ const KIND_LABELS: Record<RecruitmentKind, string> = {
   'hora-pico': 'Reclutamiento de hora pico',
 };
 
+const WORK_MODE_LABELS: Record<WorkMode, string> = {
+  'agente-libre': 'Agente libre',
+  normal: 'Reclutamiento normal',
+  'hora-pico': 'Reclutamiento de hora pico',
+};
+
 export const PEAK_REASONS: Record<PeakRefusal, string> = {
   'reputacion-baja':
     'Su reputación está por debajo del piso que fija Touno, así que no puede tomar hora pico ahora.',
   'carreras-pendientes': 'Todavía le quedan carreras por cumplir en otro reclutamiento.',
   'ya-tiene-hora-pico': 'Ya tiene un reclutamiento de hora pico, y sólo puede tener uno.',
   'empresa-repetida': 'Esta empresa ya lo reclutó en hora pico una vez, y no puede repetir.',
-  'alcance-de-sucursal': 'Una sucursal sólo puede reclutar en hora pico para sí misma.',
+  'alcance-de-sucursal': 'Una sucursal sólo puede reclutar para sí misma, sea cual sea la clase.',
 };
 
 export function otherSide(side: AgreementSide): AgreementSide {
@@ -65,6 +73,10 @@ export function otherSide(side: AgreementSide): AgreementSide {
 
 export function kindLabel(kind: RecruitmentKind): string {
   return KIND_LABELS[kind];
+}
+
+export function workModeLabel(mode: WorkMode): string {
+  return WORK_MODE_LABELS[mode];
 }
 
 export function owes(agreement: RiderAgreement): boolean {
@@ -102,16 +114,26 @@ export interface PeakAsk {
   readonly floorPct?: number;
 }
 
-export function peakRefusal(
-  list: readonly RiderAgreement[],
-  ask: PeakAsk,
-  exceptId?: string,
-): PeakRefusal | undefined {
+export function scopeRefusal(ask: PeakAsk): PeakRefusal | undefined {
   if (
     ask.originBranchId !== undefined &&
     (ask.branchIds.length !== 1 || ask.branchIds[0] !== ask.originBranchId)
   ) {
     return 'alcance-de-sucursal';
+  }
+
+  return undefined;
+}
+
+export function peakRefusal(
+  list: readonly RiderAgreement[],
+  ask: PeakAsk,
+  exceptId?: string,
+): PeakRefusal | undefined {
+  const scope = scopeRefusal(ask);
+
+  if (scope) {
+    return scope;
   }
 
   if (ask.riderPct !== undefined && ask.floorPct !== undefined && ask.riderPct < ask.floorPct) {

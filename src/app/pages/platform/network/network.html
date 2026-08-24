@@ -19,6 +19,18 @@
       sub="Contando los cumplidos y los pendientes"
     />
     <arena-stat-card
+      icon="ph-bold ph-map-pin-simple-area"
+      label="Llamados abiertos"
+      [value]="openCallouts().length.toString()"
+      sub="Sucursales buscando agentes libres ahora"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-user-focus"
+      label="Riders en modo libre"
+      [value]="freeAgents().toString()"
+      sub="Trabajan sin reclutamiento con nadie"
+    />
+    <arena-stat-card
       icon="ph-bold ph-credit-card"
       label="Riders con tarjeta"
       [value]="withCard().toString()"

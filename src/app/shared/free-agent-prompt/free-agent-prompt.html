@@ -1,0 +1,18 @@
+<arena-confirm-dialog
+  [open]="true"
+  eyebrow="Entregado"
+  [title]="'¿Sigues como agente libre de ' + where() + '?'"
+  [confirmLabel]="'Seguir como agente libre de ' + where()"
+  [cancelLabel]="'Dejar de ser agente libre de ' + where()"
+  (confirm)="onKeep()"
+  (cancel)="onQuit()"
+>
+  <div class="prompt arena-stack arena-stack--group">
+    <p>
+      La sucursal necesita saberlo ahora para seguir dándote pedidos, o buscar a otro. Si te vas, tu
+      modo de agente libre sigue activo y puedes tomar otro llamado.
+    </p>
+    <p class="prompt__clock arena-num">{{ countdown() }}</p>
+    <p class="prompt__note">Si no respondes, dejamos de contarte para esta sucursal.</p>
+  </div>
+</arena-confirm-dialog>

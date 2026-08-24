@@ -1,21 +1,25 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { Agreements } from './agreements';
 import { Businesses } from './businesses';
+import { Callouts } from './callouts';
 import { Loads } from './loads';
 import { Orders } from './orders';
 import { Platform } from './platform';
 import { REPUTATION_HISTORY } from './reputation.data';
 import {
   FactCount,
+  ModeStanding,
   ReputationEvent,
   ReputationGate,
   Standing,
   countsOf,
   factsOfAgreement,
+  factsOfClaim,
   factsOfLoad,
   factsOfOrder,
   meetsFloor,
   mergeStandings,
+  modeStandingOf,
   standingOf,
 } from './reputation.model';
 
@@ -24,6 +28,7 @@ export class Reputation {
   private readonly orders = inject(Orders);
   private readonly agreements = inject(Agreements);
   private readonly loads = inject(Loads);
+  private readonly callouts = inject(Callouts);
   private readonly businesses = inject(Businesses);
   private readonly platform = inject(Platform);
 
@@ -33,6 +38,7 @@ export class Reputation {
     ...this.orders.all().flatMap((one) => factsOfOrder(one)),
     ...this.agreements.all().flatMap((one) => factsOfAgreement(one)),
     ...this.loads.all().flatMap((one) => factsOfLoad(one)),
+    ...this.callouts.claims().flatMap((one) => factsOfClaim(one)),
   ]);
 
   breakdownOf(subjectId: string): readonly FactCount[] {
@@ -44,6 +50,14 @@ export class Reputation {
 
   of(subjectId: string): Standing {
     return standingOf(this.breakdownOf(subjectId));
+  }
+
+  ofByMode(subjectId: string): ModeStanding {
+    return modeStandingOf(
+      this.history.filter((one) => one.subjectId === subjectId),
+      this.live().filter((one) => one.subjectId === subjectId),
+      this.of(subjectId),
+    );
   }
 
   ofCompany(companyId: string): Standing {

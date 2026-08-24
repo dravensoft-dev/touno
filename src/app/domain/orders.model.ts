@@ -1,3 +1,4 @@
+import { WorkMode } from './agreements.model';
 import { BusinessType } from './businesses.model';
 import { Custody } from './chat.model';
 
@@ -53,6 +54,7 @@ export interface Assignment {
   readonly riderId: string;
   readonly branchId: string;
   readonly assignedAt: string;
+  readonly mode: WorkMode;
 }
 
 export interface Milestone {

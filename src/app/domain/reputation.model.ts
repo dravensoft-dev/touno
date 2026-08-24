@@ -1,4 +1,5 @@
-import { RiderAgreement } from './agreements.model';
+import { RiderAgreement, WorkMode } from './agreements.model';
+import { CupoClaim } from './callouts.model';
 import { minutesSince } from './clock';
 import { TruckLoad } from './loads.model';
 import { Order } from './orders.model';
@@ -11,6 +12,8 @@ export type ReputationFact =
   | 'carga-entregada'
   | 'reclutamiento-cumplido'
   | 'reclutamiento-abandonado'
+  | 'cupo-cumplido'
+  | 'cupo-abandonado'
   | 'pedido-despachado'
   | 'pedido-rechazado'
   | 'pedido-sin-rider'
@@ -29,17 +32,24 @@ export interface ReputationEvent {
   readonly fact: ReputationFact;
   readonly at: string;
   readonly orderCode?: string;
+  readonly mode?: WorkMode;
 }
 
 export interface ReputationTally {
   readonly subjectId: string;
   readonly fact: ReputationFact;
   readonly count: number;
+  readonly mode?: WorkMode;
 }
 
 export interface FactCount {
   readonly fact: ReputationFact;
   readonly count: number;
+}
+
+export interface ModeStanding {
+  readonly byMode: Record<WorkMode, Standing>;
+  readonly total: Standing;
 }
 
 export interface Standing {
@@ -72,6 +82,8 @@ const FACT_SUBJECTS: Record<ReputationFact, ReputationSubject> = {
   'carga-entregada': 'rider',
   'reclutamiento-cumplido': 'rider',
   'reclutamiento-abandonado': 'rider',
+  'cupo-cumplido': 'rider',
+  'cupo-abandonado': 'rider',
   'pedido-despachado': 'sucursal',
   'pedido-rechazado': 'sucursal',
   'pedido-sin-rider': 'sucursal',
@@ -89,6 +101,8 @@ const FACT_WEIGHTS: Record<ReputationFact, FactWeight> = {
   'carga-entregada': 'cumplido',
   'reclutamiento-cumplido': 'cumplido',
   'reclutamiento-abandonado': 'incumplido',
+  'cupo-cumplido': 'cumplido',
+  'cupo-abandonado': 'incumplido',
   'pedido-despachado': 'cumplido',
   'pedido-rechazado': 'incumplido',
   'pedido-sin-rider': 'incumplido',
@@ -106,6 +120,8 @@ const FACT_LABELS: Record<ReputationFact, string> = {
   'carga-entregada': 'Cargas descargadas en la sucursal de destino',
   'reclutamiento-cumplido': 'Reclutamientos cumplidos hasta la última carrera',
   'reclutamiento-abandonado': 'Reclutamientos dejados con carreras pendientes',
+  'cupo-cumplido': 'Llamados de agente libre atendidos en la sucursal que los abrió',
+  'cupo-abandonado': 'Llamados de agente libre tomados sin llegar nunca',
   'pedido-despachado': 'Pedidos despachados y entregados',
   'pedido-rechazado': 'Pedidos rechazados',
   'pedido-sin-rider': 'Pedidos que pasaron su hora sin rider asignado',
@@ -116,6 +132,8 @@ const FACT_LABELS: Record<ReputationFact, string> = {
   'recojo-abandonado': 'Pedidos que se quedaron esperando en el mostrador',
   'direccion-incorrecta': 'Entregas con la dirección o la zona equivocada',
 };
+
+export const REPUTATION_FACTS = Object.keys(FACT_SUBJECTS) as readonly ReputationFact[];
 
 export function subjectOf(fact: ReputationFact): ReputationSubject {
   return FACT_SUBJECTS[fact];
@@ -189,6 +207,29 @@ export function mergeStandings(list: readonly Standing[]): Standing {
       };
 }
 
+export function modeStandingOf(
+  tallies: readonly ReputationTally[],
+  events: readonly ReputationEvent[],
+  total: Standing,
+): ModeStanding {
+  const of = (mode: WorkMode): Standing =>
+    standingOf(
+      countsOf(
+        tallies.filter((one) => one.mode === mode),
+        events.filter((one) => one.mode === mode),
+      ),
+    );
+
+  return {
+    byMode: {
+      'agente-libre': of('agente-libre'),
+      normal: of('normal'),
+      'hora-pico': of('hora-pico'),
+    },
+    total,
+  };
+}
+
 export function meetsFloor(standing: Standing, floorPct: number): boolean {
   return standing.totalCount === 0 || standing.pct >= floorPct;
 }
@@ -224,6 +265,8 @@ export function factsOfOrder(order: Order): readonly ReputationEvent[] {
             late ? 'entrega-tarde' : 'entrega-a-tiempo',
             order.scannedAt,
             order.code,
+            undefined,
+            closedBy.mode,
           ),
         ]
       : []),
@@ -245,6 +288,7 @@ export function factsOfAgreement(agreement: RiderAgreement): readonly Reputation
         agreement.settledAt ?? agreement.sentAt,
         undefined,
         agreement.id,
+        agreement.kind,
       ),
     ];
   }
@@ -262,9 +306,33 @@ export function factsOfAgreement(agreement: RiderAgreement): readonly Reputation
           agreement.settledAt ?? agreement.sentAt,
           undefined,
           agreement.id,
+          agreement.kind,
         ),
       ]
     : [];
+}
+
+export function factsOfClaim(claim: CupoClaim): readonly ReputationEvent[] {
+  if (claim.state === 'abandonado') {
+    return [
+      event(claim.riderId, 'cupo-abandonado', claim.claimedAt, undefined, claim.id, 'agente-libre'),
+    ];
+  }
+
+  if (claim.state !== 'terminado' || claim.arrivedAt === undefined) {
+    return [];
+  }
+
+  return [
+    event(
+      claim.riderId,
+      'cupo-cumplido',
+      claim.leftAt ?? claim.arrivedAt,
+      undefined,
+      claim.id,
+      'agente-libre',
+    ),
+  ];
 }
 
 export function factsOfLoad(load: TruckLoad): readonly ReputationEvent[] {
@@ -277,7 +345,7 @@ export function factsOfLoad(load: TruckLoad): readonly ReputationEvent[] {
   return [
     event(load.fromBranchId, 'carga-despachada', load.departsAt, undefined, load.id),
     ...(load.state === 'descargado' && load.receivedAt !== undefined
-      ? [event(load.riderId, 'carga-entregada', load.receivedAt, undefined, load.id)]
+      ? [event(load.riderId, 'carga-entregada', load.receivedAt, undefined, load.id, load.mode)]
       : []),
   ];
 }
@@ -288,6 +356,7 @@ function event(
   at: string,
   orderCode?: string,
   key?: string,
+  mode?: WorkMode,
 ): ReputationEvent {
-  return { id: `${key ?? orderCode ?? subjectId}-${fact}`, subjectId, fact, at, orderCode };
+  return { id: `${key ?? orderCode ?? subjectId}-${fact}`, subjectId, fact, at, orderCode, mode };
 }

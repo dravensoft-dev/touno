@@ -19,17 +19,17 @@ describe('Session', () => {
     orders = TestBed.inject(Orders);
   });
 
-  it('carries eight profiles over five roles', () => {
-    expect(session.profiles.length).toBe(8);
+  it('carries a profile of every role and gives each one its own id', () => {
     expect(new Set(session.profiles.map((one) => one.role)).size).toBe(5);
-    expect(new Set(session.profiles.map((one) => one.id)).size).toBe(8);
+    expect(new Set(session.profiles.map((one) => one.id)).size).toBe(session.profiles.length);
   });
 
-  it('carries a rider of each range under one role, because the vehicle decides', () => {
-    const both = profilesOfRole('rider');
+  it('carries both ranges of rider under one role, because the vehicle decides', () => {
+    const vehicles = profilesOfRole('rider').map((one) => riders.byId(one.riderId ?? '')?.vehicle);
 
-    expect(both.length).toBe(2);
-    expect(both.map((one) => riders.byId(one.riderId ?? '')?.vehicle)).toEqual(['moto', 'camion']);
+    expect(vehicles).toContain('moto');
+    expect(vehicles).toContain('camion');
+    expect(new Set(profilesOfRole('rider').map((one) => one.role)).size).toBe(1);
   });
 
   it('gives both management levels to both verticals', () => {

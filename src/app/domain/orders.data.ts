@@ -100,6 +100,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'origen',
+        mode: 'normal',
         riderId: 'r-marco',
         branchId: 'b-copacabana-miraflores',
         assignedAt: '2026-08-15T12:58:00',
@@ -135,6 +136,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'origen',
+        mode: 'normal',
         riderId: 'r-noemi',
         branchId: 'b-illimani-san-miguel',
         assignedAt: '2026-08-15T12:46:00',
@@ -170,6 +172,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'origen',
+        mode: 'normal',
         riderId: 'r-gabriela',
         branchId: 'b-oriental-equipetrol',
         assignedAt: '2026-08-15T11:36:00',
@@ -271,6 +274,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'origen',
+        mode: 'normal',
         riderId: 'r-lucia',
         branchId: 'b-ale-cochabamba',
         assignedAt: '2026-08-15T12:30:00',
@@ -342,6 +346,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-elias',
         branchId: 'b-tecno-cochabamba',
         assignedAt: '2026-08-15T07:20:00',
@@ -385,12 +390,14 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-hugo',
         branchId: 'b-ale-santa-cruz',
         assignedAt: '2026-08-14T06:30:00',
       },
       {
         leg: 'local',
+        mode: 'normal',
         riderId: 'r-marco',
         branchId: 'b-ale-la-paz',
         assignedAt: '2026-08-15T12:50:00',
@@ -432,6 +439,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-elias',
         branchId: 'b-andes-santa-cruz',
         assignedAt: '2026-08-14T07:00:00',
@@ -466,6 +474,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-hugo',
         branchId: 'b-ale-la-paz',
         assignedAt: '2026-08-12T06:20:00',
@@ -505,12 +514,14 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-hugo',
         branchId: 'b-ale-la-paz',
         assignedAt: '2026-08-12T06:20:00',
       },
       {
         leg: 'local',
+        mode: 'normal',
         riderId: 'r-lucia',
         branchId: 'b-ale-cochabamba',
         assignedAt: '2026-08-13T14:00:00',
@@ -547,6 +558,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-hugo',
         branchId: 'b-ale-santa-cruz',
         assignedAt: '2026-08-14T06:30:00',
@@ -589,6 +601,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-hugo',
         branchId: 'b-ale-santa-cruz',
         assignedAt: '2026-08-15T06:40:00',
@@ -623,6 +636,7 @@ export const ORDERS: readonly Order[] = [
     assignments: [
       {
         leg: 'interurbano',
+        mode: 'normal',
         riderId: 'r-hugo',
         branchId: 'b-ale-santa-cruz',
         assignedAt: '2026-08-15T06:40:00',

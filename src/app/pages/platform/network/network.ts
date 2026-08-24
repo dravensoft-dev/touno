@@ -19,6 +19,7 @@ import { Company } from '../../../domain/businesses.model';
 import { Rider } from '../../../domain/riders.model';
 import { cardLabel, payoutRouteOf } from '../../../domain/payments.model';
 import { bs, porcentaje } from '../../../domain/format';
+import { Callouts } from '../../../domain/callouts';
 import { Reputation } from '../../../domain/reputation';
 
 const COMPANY_COLUMNS: readonly ArenaTableColumn[] = [
@@ -88,12 +89,20 @@ export class PlatformNetwork {
       })),
   ]);
 
+  private readonly callouts = inject(Callouts);
+
   protected readonly peaks = computed(() =>
     this.agreements.all().filter((one) => one.kind === 'hora-pico'),
   );
 
   protected readonly livePeaks = computed(() =>
     this.peaks().filter((one) => one.state === 'activo'),
+  );
+
+  protected readonly openCallouts = computed(() => this.callouts.open());
+
+  protected readonly freeAgents = computed(
+    () => this.riders.all().filter((one) => one.freeAgent).length,
   );
 
   protected readonly withCard = computed(

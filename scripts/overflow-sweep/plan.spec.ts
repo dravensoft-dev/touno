@@ -2,6 +2,7 @@ import { BRANCHES, COMPANIES } from '../../src/app/domain/businesses.data';
 import { pathOfType } from '../../src/app/domain/businesses.model';
 import { ORDERS } from '../../src/app/domain/orders.data';
 import { RIDERS } from '../../src/app/domain/riders.data';
+import { PROFILES } from '../../src/app/domain/session';
 import { routes } from '../../src/app/app.routes';
 import { PlannedRoute, sweepPlan } from './plan';
 
@@ -40,7 +41,16 @@ describe('sweepPlan', () => {
   it('walks the anonymous visitor before it signs in as anyone', () => {
     expect(plan[0]?.id).toBe('anon');
     expect(plan[0]?.button).toBeUndefined();
-    expect(plan).toHaveLength(11);
+  });
+
+  it('walks every profile the gate offers, and none of them twice', () => {
+    const walked = plan.map((one) => one.id);
+
+    for (const profile of PROFILES) {
+      expect(walked, `${profile.id} is offered at the gate and never swept`).toContain(profile.id);
+    }
+
+    expect(new Set(walked).size).toBe(walked.length);
   });
 
   it('covers every page the sitemap asks Google to index', () => {

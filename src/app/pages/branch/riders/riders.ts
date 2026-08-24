@@ -7,21 +7,29 @@ import {
   ArenaInput,
   ArenaPageHead,
   ArenaSection,
+  ArenaPeopleList,
+  ArenaPersonRow,
+  ArenaRadio,
+  ArenaRadioGroup,
   ArenaSelect,
   ArenaSelectOption,
   ArenaStatCard,
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
+import { Callouts } from '../../../domain/callouts';
+import { Staffing } from '../../../domain/staffing';
 import { Reputation } from '../../../domain/reputation';
 import { ReputationFigure } from '../../../shared/reputation-figure/reputation-figure';
 import { Businesses } from '../../../domain/businesses';
 import { Platform } from '../../../domain/platform';
 import { Riders } from '../../../domain/riders';
 import { Session } from '../../../domain/session';
+import { RecruitmentKind } from '../../../domain/agreements.model';
 import { rangeOf, vehicleLabel } from '../../../domain/riders.model';
 import { bs } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 import { RiderPicker } from '../../../shared/rider-picker/rider-picker';
+import { StateTag } from '../../../shared/state-tag/state-tag';
 
 @Component({
   selector: 'app-branch-riders',
@@ -38,12 +46,18 @@ import { RiderPicker } from '../../../shared/rider-picker/rider-picker';
     ArenaSelect,
     ArenaButton,
     ArenaEmptyState,
+    ArenaPeopleList,
+    ArenaPersonRow,
+    ArenaRadio,
+    ArenaRadioGroup,
     RiderPicker,
+    StateTag,
   ],
   templateUrl: './riders.html',
 })
 export class BranchRiders {
   private readonly agreements = inject(Agreements);
+  private readonly staffing = inject(Staffing);
   private readonly reputation = inject(Reputation);
   private readonly businesses = inject(Businesses);
   private readonly notices = inject(Notices);
@@ -55,7 +69,9 @@ export class BranchRiders {
 
   protected readonly branch = computed(() => this.businesses.branchById(this.branchId()));
 
-  protected readonly working = computed(() => this.agreements.ridersOf(this.branchId()));
+  protected readonly callouts = inject(Callouts);
+
+  protected readonly working = computed(() => this.staffing.ridersOf(this.branchId()));
 
   protected readonly online = computed(() => this.working().filter((one) => one.online));
 
@@ -73,6 +89,38 @@ export class BranchRiders {
       .filter((one) => one.initiatedBy === 'rider' && one.branchIds.includes(this.branchId())),
   );
 
+  protected readonly kind = signal<RecruitmentKind>('hora-pico');
+
+  protected readonly callout = computed(() => this.callouts.liveOf(this.branchId()));
+
+  protected readonly cuposLeft = computed(() => {
+    const callout = this.callout();
+
+    return callout ? this.callouts.cuposLeft(callout) : 0;
+  });
+
+  protected readonly calloutState = computed(() => {
+    const callout = this.callout();
+
+    return callout && this.callouts.stateOf(callout);
+  });
+
+  protected readonly coming = computed(() => {
+    const callout = this.callout();
+
+    return callout
+      ? this.callouts
+          .claimsOf(callout.id)
+          .filter((one) => one.state === 'en-camino' || one.state === 'trabajando')
+      : [];
+  });
+
+  protected readonly cupos = signal('');
+
+  protected readonly fixed = signal('');
+
+  protected readonly baseFloor = computed(() => this.platform.riderBaseBob()['agente-libre']);
+
   protected readonly chosen = signal('');
 
   protected readonly rate = signal('');
@@ -89,7 +137,7 @@ export class BranchRiders {
     this.riders
       .inCity(this.branch()?.cityId ?? '')
       .filter((one) => rangeOf(one.vehicle) === 'urbano')
-      .filter((one) => !this.agreements.covers(one.id, this.branchId())),
+      .filter((one) => !this.staffing.covers(one.id, this.branchId())),
   );
 
   protected readonly options = computed<readonly ArenaSelectOption[]>(() =>
@@ -106,7 +154,7 @@ export class BranchRiders {
   protected readonly canRecruit = computed(() => this.reputation.clears(this.branchId()));
 
   protected readonly reason = computed(() =>
-    this.chosen() === ''
+    this.chosen() === '' || this.kind() === 'normal'
       ? undefined
       : this.agreements.reasonFor(
           this.chosen(),
@@ -130,6 +178,55 @@ export class BranchRiders {
     this.chosen.set(value);
   }
 
+  protected pickKind(value: string): void {
+    this.kind.set(value === 'normal' ? 'normal' : 'hora-pico');
+  }
+
+  protected riderName(id: string): string {
+    return this.riders.nameOf(id);
+  }
+
+  protected fixedOf(callout: { readonly fixedBob: number }): string {
+    return bs(callout.fixedBob);
+  }
+
+  protected onCupos(value: string): void {
+    this.cupos.set(value);
+  }
+
+  protected onFixed(value: string): void {
+    this.fixed.set(value);
+  }
+
+  protected readonly calloutReady = computed(
+    () => Number(this.cupos()) >= 1 && Number(this.fixed()) >= this.baseFloor(),
+  );
+
+  protected toggleCallout(): void {
+    const live = this.callout();
+
+    if (live) {
+      this.callouts.close(live.id);
+
+      return;
+    }
+
+    if (!this.calloutReady() || !this.canRecruit()) {
+      return;
+    }
+
+    this.callouts.publish({
+      branchId: this.branchId(),
+      companyId: this.branch()?.companyId ?? '',
+      originBranchId: this.branchId(),
+      cupos: Number(this.cupos()),
+      fixedBob: Number(this.fixed()),
+    });
+
+    this.cupos.set('');
+    this.fixed.set('');
+  }
+
   protected onRate(value: string): void {
     this.rate.set(value);
   }
@@ -150,7 +247,7 @@ export class BranchRiders {
         branchIds: [this.branchId()],
         initiatedBy: 'empresa',
         originBranchId: this.branchId(),
-        kind: 'hora-pico',
+        kind: this.kind(),
         perTripBob: Number(this.rate()),
         runs: this.runsGiven(),
       }),

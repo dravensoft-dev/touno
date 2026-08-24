@@ -5,7 +5,8 @@ import { Businesses } from './businesses';
 import { Geography } from './geography';
 import { Loads } from './loads';
 import { Riders } from './riders';
-import { RiderAgreement } from './agreements.model';
+import { Staffing } from './staffing';
+import { RiderAgreement, WorkMode } from './agreements.model';
 import { timelineOf } from './timeline';
 import { COUPONS, ORDERS, SETTLEMENTS } from './orders.data';
 import {
@@ -41,6 +42,7 @@ export class Orders {
   private readonly businesses = inject(Businesses);
   private readonly geography = inject(Geography);
   private readonly riders = inject(Riders);
+  private readonly staffing = inject(Staffing);
   private readonly agreements = inject(Agreements);
   private readonly loads = inject(Loads);
 
@@ -180,7 +182,7 @@ export class Orders {
               ...one,
               assignments: [
                 ...one.assignments.filter((two) => two.leg !== leg),
-                { leg, riderId, branchId, assignedAt: NOW },
+                { leg, riderId, branchId, assignedAt: NOW, mode: this.bondOf(riderId, branchId) },
               ],
               state: leg === 'local' ? 'reparto-local' : 'en-camino',
               custody: { kind: 'rider', riderId, since: NOW },
@@ -188,6 +190,16 @@ export class Orders {
           : one,
       ),
     );
+  }
+
+  bondOf(riderId: string, branchId: string): WorkMode {
+    const bond = this.staffing.bondOf(riderId, branchId);
+
+    if (bond === undefined) {
+      throw new Error('Esa sucursal no puede darle trabajo a alguien que no trabaja para ella');
+    }
+
+    return bond;
   }
 
   scan(slug: string, by: string): RiderAgreement | undefined {

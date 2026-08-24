@@ -29,6 +29,7 @@ import { RecruitmentKind, kindLabel } from '../../../domain/agreements.model';
 import { rangeOf, vehicleLabel } from '../../../domain/riders.model';
 import { bs, porcentaje } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
+import { ReputationFigure } from '../../../shared/reputation-figure/reputation-figure';
 import { StateTag } from '../../../shared/state-tag/state-tag';
 
 @Component({
@@ -50,6 +51,7 @@ import { StateTag } from '../../../shared/state-tag/state-tag';
     ArenaButton,
     ArenaEmptyState,
     StateTag,
+    ReputationFigure,
   ],
   templateUrl: './rider-detail.html',
 })
@@ -163,6 +165,8 @@ export class CompanyRiderDetail {
   });
 
   protected readonly standing = computed(() => this.reputation.of(this.rider()?.id ?? ''));
+
+  protected readonly figures = computed(() => this.reputation.ofByMode(this.rider()?.id ?? ''));
 
   protected readonly breakdown = computed(() =>
     this.reputation.breakdownOf(this.rider()?.id ?? ''),

@@ -14,6 +14,7 @@ import {
   kindLabel,
   peakRefusal,
   runsPending,
+  scopeRefusal,
 } from './agreements.model';
 import { AGREEMENTS } from './agreements.data';
 
@@ -106,6 +107,10 @@ export class Agreements {
     return [...new Set(this.activeFor(riderId).flatMap((one) => one.branchIds))];
   }
 
+  freeToRoam(riderId: string): boolean {
+    return this.activeFor(riderId).length === 0 && this.runsPendingOf(riderId) === 0;
+  }
+
   between(riderId: string, companyId: string): RiderAgreement | undefined {
     return this.ofRider(riderId).find(
       (one) => one.companyId === companyId && (one.state === 'activo' || one.state === 'pendiente'),
@@ -127,11 +132,25 @@ export class Agreements {
       );
     }
 
+    const scope = scopeRefusal(draft);
+
+    if (scope) {
+      throw new Error(PEAK_REASONS[scope]);
+    }
+
     const minimum = this.platform.minRuns();
 
     if (draft.runs < minimum) {
       throw new Error(
         `Un ${kindLabel(draft.kind).toLowerCase()} no puede dar menos de ${minimum} carreras`,
+      );
+    }
+
+    const floor = this.platform.riderBaseBob()[draft.kind];
+
+    if (draft.perTripBob < floor) {
+      throw new Error(
+        `Un ${kindLabel(draft.kind).toLowerCase()} no puede pagar una fija menor a ${floor} Bs`,
       );
     }
 

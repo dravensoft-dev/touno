@@ -12,6 +12,7 @@ import {
   ReputationGate,
   countsOf,
   factsOfAgreement,
+  factsOfClaim,
   meetsFloor,
   mergeStandings,
   pctOf,
@@ -20,6 +21,8 @@ import {
   weightOf,
 } from './reputation.model';
 import { RIDERS } from './riders.data';
+import { CUPO_CLAIMS } from './callouts.data';
+import { ClaimState } from './callouts.model';
 
 function counts(...pairs: readonly [ReputationFact, number][]) {
   return pairs.map(([fact, count]) => ({ fact, count }));
@@ -116,8 +119,8 @@ describe('the closed history', () => {
     }
   });
 
-  it('states each fact once per subject, so nothing is counted twice', () => {
-    const keys = REPUTATION_HISTORY.map((one) => `${one.subjectId}|${one.fact}`);
+  it('states each fact once per subject and way of working, so nothing is counted twice', () => {
+    const keys = REPUTATION_HISTORY.map((one) => `${one.subjectId}|${one.mode ?? ''}|${one.fact}`);
 
     expect(new Set(keys).size).toBe(keys.length);
   });
@@ -244,5 +247,96 @@ describe('Reputation', () => {
     platform.patch({ minReputationPct: 99 });
 
     expect(reputation.clears('r-marco')).toBe(false);
+  });
+
+  it('splits a rider compliance into the three ways of working, and a total over all of them', () => {
+    const reputation = TestBed.inject(Reputation);
+    const marco = reputation.ofByMode('r-marco');
+
+    expect(marco.total).toEqual(reputation.of('r-marco'));
+    expect(marco.byMode.normal.totalCount).toBeGreaterThan(0);
+  });
+
+  it('counts every rider fact under one way of working, so the three add up to the total', () => {
+    const reputation = TestBed.inject(Reputation);
+
+    for (const rider of RIDERS) {
+      const figures = reputation.ofByMode(rider.id);
+      const parts = [
+        figures.byMode['agente-libre'],
+        figures.byMode.normal,
+        figures.byMode['hora-pico'],
+      ];
+
+      expect(mergeStandings(parts)).toEqual(figures.total);
+    }
+  });
+
+  it('carries a rider whose three figures differ, or the split is an ornament', () => {
+    const reputation = TestBed.inject(Reputation);
+    const split = RIDERS.map((one) => reputation.ofByMode(one.id)).find((one) => {
+      const seen = [one.byMode['agente-libre'], one.byMode.normal, one.byMode['hora-pico']].filter(
+        (figure) => figure.totalCount > 0,
+      );
+
+      return seen.length === 3 && new Set(seen.map((figure) => figure.pct)).size > 1;
+    });
+
+    expect(split).toBeDefined();
+  });
+
+  it('never counts leaving a llamado against a free agent, only never arriving', () => {
+    expect(weightOf('cupo-abandonado')).toBe('incumplido');
+    expect(weightOf('cupo-cumplido')).toBe('cumplido');
+    expect(subjectOf('cupo-abandonado')).toBe('rider');
+  });
+
+  it('counts a cupo the rider reached and left as kept, and one he never reached as broken', () => {
+    expect(
+      factsOfClaim({
+        id: 'cc-900',
+        calloutId: 'lc-601',
+        riderId: 'r-x',
+        state: 'terminado',
+        claimedAt: '2026-08-15T11:00:00',
+        arrivedAt: '2026-08-15T11:20:00',
+        leftAt: '2026-08-15T14:00:00',
+      })[0].fact,
+    ).toBe('cupo-cumplido');
+
+    expect(
+      factsOfClaim({
+        id: 'cc-901',
+        calloutId: 'lc-601',
+        riderId: 'r-x',
+        state: 'abandonado',
+        claimedAt: '2026-08-15T11:00:00',
+      })[0].fact,
+    ).toBe('cupo-abandonado');
+  });
+
+  it('counts a cupo still in hand as neither, because it is not over yet', () => {
+    const open = (state: ClaimState) =>
+      factsOfClaim({
+        id: 'cc-902',
+        calloutId: 'lc-601',
+        riderId: 'r-x',
+        state,
+        claimedAt: '2026-08-15T11:00:00',
+      });
+
+    expect(open('en-camino')).toEqual([]);
+    expect(open('trabajando')).toEqual([]);
+  });
+
+  it('files a cupo fact under the free agent figure and never under a recruited one', () => {
+    const reputation = TestBed.inject(Reputation);
+    const walked = CUPO_CLAIMS.find((one) => one.state === 'abandonado');
+
+    expect(walked).toBeDefined();
+
+    const figures = reputation.ofByMode(walked!.riderId);
+
+    expect(figures.byMode['agente-libre'].brokenCount).toBeGreaterThan(0);
   });
 });

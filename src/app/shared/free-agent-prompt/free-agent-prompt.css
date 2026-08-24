@@ -1,0 +1,11 @@
+.prompt__clock {
+  margin: 0;
+  color: var(--ink-heading);
+  font-size: var(--fs-lg);
+}
+
+.prompt__note {
+  margin: 0;
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+  font-size: var(--fs-sm);
+}

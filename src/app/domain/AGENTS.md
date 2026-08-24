@@ -8,7 +8,10 @@ signal and exposes computed slices.
 the cross-cutting ones, plus `timeline.ts` and `pricing.ts`, which are pure functions rather than
 services because a timeline and a fare are both derived from an order and never stored.
 `payments.model.ts` is a model with no data and no service of its own: a card belongs to a rider or
-to a business, so it lives beside neither. `clipboard.ts` is the one that touches a
+to a business, so it lives beside neither. `staffing.ts` is the opposite shape, a service with no
+model and no data: it answers who a sucursal may put work on, by reading `Agreements` and
+`Callouts` together, because after free agency that question has two answers and only one caller
+should have to know it. `clipboard.ts` is the one that touches a
 browser API, and it answers a boolean rather than throwing, so the page that called it decides what
 the reader is told.
 
@@ -27,6 +30,11 @@ the reader is told.
   something that is not theirs; the page then says which refusal it is.
 - **`clock.ts` is the only clock.** `NOW` is a literal and every elapsed, remaining or stale count
   derives from it. A wall clock makes the server and the first client render disagree.
+- **A rider has no stored position, and that is deliberate.** `Rider.zones` names the zones he
+  works, `Geography.zoneOf(cityId, name)` resolves the first of them to a point, and that point is
+  what the free agent map draws him at. Storing one on `Rider` would be a second source of truth
+  against `RiderTrack`, which is per order in flight and answers nothing for a rider carrying
+  nothing.
 - **A `GeoPoint` is not a coordinate.** It is a position in the map component's `0 0 100 100`
   viewBox. Naming it after geography was a convenience; filling it with real latitudes would imply
   a map we cannot draw and a `geo` node in JSON-LD we cannot honour.
@@ -34,6 +42,19 @@ the reader is told.
   `Branch.point` sit in their city's plane; a `City.point` sits in a national one. `pricing.ts`
   therefore charges them at two separate rates, and the copy says "unidades del plano" and never a
   kilometre.
+- **A work mode is not a recruitment kind, and `RecruitmentKind` is derived from it.**
+  `WorkMode` names the three ways a rider works and `RecruitmentKind` is `Exclude<WorkMode,
+'agente-libre'>`, so the two lists cannot drift apart. A free agent is bound to nobody by
+  agreement, which is why he is a mode and not a third kind.
+- **A carrera is paid in three terms, and the mode decides only the first.**
+  `pricing.ts:riderPayOf()` mirrors `fareOf()`: a fixed component floored per mode, a distance at
+  the plane's own rate, and the bad-weather extra. **`riderRatesOf()` is the only place a rate is
+  resolved**, and it takes the best of what Touno, the empresa and the sucursal offer, because a
+  raise is the only edit any of them may make. A `RiderPayInput` carries the resolved rates rather
+  than the config, so there is no second path that could quietly read the floor instead.
+- **The order of the three fixed minimums is a rule with a throw behind it.**
+  `platform.model.ts:orderedBases()` states it and `Platform.patch()` refuses a write that breaks
+  it, so `agente-libre < normal < hora-pico` cannot become a convention that drifted.
 - **A service that reads a floor reads it with `Math.max`, and a service that writes one throws.**
   `Businesses.setDeliveryFee` and `setWeatherFee` refuse a value under `Platform`'s, and
   `deliveryFeeOf`/`weatherFeeOf` clamp on the way out, so raising the universal floor lifts every
@@ -41,8 +62,9 @@ the reader is told.
 - **`Platform` injects nothing and must stay that way.** `Businesses -> Platform`,
   `Agreements -> Platform` and `Orders -> Agreements` are all safe only while it is a leaf.
 - **`Reputation` reads and never writes, and nothing it reads may read it back.** It injects
-  `Orders`, `Agreements`, `Loads`, `Businesses` and `Platform`; an `Agreements -> Reputation` edge
-  would be a cycle. The gate goes the other way through `ReputationGate` on the ask, which is the
+  `Orders`, `Agreements`, `Loads`, `Callouts`, `Businesses` and `Platform`; an
+  `Agreements -> Reputation` edge would be a cycle. **`Callouts` injects only `Platform`** for the
+  same reason: `Reputation` and `Staffing` both read it. The gate goes the other way through `ReputationGate` on the ask, which is the
   same move `pricing.ts` makes by taking `config` as an argument. `Manual` injects nothing at all.
 
 ## Facts the fixtures carry, and the tests that hold them
@@ -58,11 +80,35 @@ the reader is told.
   throws three times and the three throws are the rule: you cannot answer your own proposal, one
   addressed to someone else, or one already answered.
 - **A reclutamiento carries runs, `carreras`, and the hora pico rules are throws too.** `propose()` refuses
-  under Touno's minimum, a sucursal scoping outside itself, a second hora pico, one from an empresa
-  that already recruited this rider that way, and one to a rider who still owes runs. `settle()`
+  under Touno's minimum, a fija under the floor of its own class, a second hora pico, one from an
+  empresa that already recruited this rider that way, and one to a rider who still owes runs.
+  **The scope check is not one of the hora pico rules**: `scopeRefusal()` runs for every class, so
+  a sucursal recruiting beyond itself is refused in normal as well, and calling `peakRefusal()` for
+  a normal proposal would wrongly refuse a rider who simply holds a peak elsewhere. `settle()`
   re-checks the last three on accept, because the rider could have taken a normal recruitment in
   between. `spend()` charges the hora pico first, then the one with fewest runs left, then by id
   and never `Math.random()`.
+- **A llamado de agentes libres is a sucursal's alone, and its cupos are the whole of its
+  bookkeeping.** `Callouts.publish()` throws on an opener that is not the sucursal itself, on no
+  cupos, and on a fija under Touno's free agent floor. `claim()` throws on a rider who is not free,
+  on one already holding a cupo, and on a llamado with none left. **`claim()` never reads
+  reputation, and the absence is the rule**: the floor closes hora pico and closes recruiting, and
+  leaves free agency open, because it is the only way back for a rider under it.
+  `callouts.spec.ts` asserts that `r-rene`, who is under the floor, may take one.
+- **A rider is staffed by an agreement or by a cupo, and `Staffing` is the only place that knows
+  it.** `staffing.ts:ridersOf()` is what `rider-picker` reads, and `Orders.assign()` refuses a
+  rider `Staffing.bondOf()` answers nothing for, so a sucursal cannot put work on someone bound to
+  it by neither.
+- **An assignment records the mode it was handed under, and never derives it afterwards.**
+  `Assignment.mode` and `TruckLoad.mode` are written at the moment the work is given, so a
+  recruitment that later goes `cumplido` cannot move an old delivery from one compliance figure to
+  another.
+- **A rider's compliance is four figures and the total is not their average.**
+  `reputation.model.ts:modeStandingOf()` splits by mode and `mergeStandings()` builds the total out
+  of kept and total counts, so a mode with four carreras cannot weigh the same as one with four
+  hundred. Every rider fact carries a mode, and `reputation.spec.ts` holds that the three add up to
+  the total for every rider. **Retiring from a llamado writes no fact at all**, and that absence is
+  the promise: `factsOfClaim()` counts only the cupo taken and never reached.
 - **`cumplido` is a real state and it stops binding.** `covers()` filters on `activo`, so the scan
   that spends the last run drops the rider out of `ridersOf()` in the same update. `ag-516` is
   left at one run on purpose, so that transition is walkable and not only asserted.

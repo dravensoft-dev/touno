@@ -1,0 +1,50 @@
+.nearby {
+  margin: 0;
+}
+
+.nearby__frame {
+  position: relative;
+  border: var(--bw-surface) solid var(--edge-surface);
+  border-radius: var(--r-media);
+  background: var(--fill-surface-sunken);
+  overflow: hidden;
+}
+
+.nearby__canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: var(--aspect-media);
+}
+
+.nearby__street {
+  stroke: var(--fill-track);
+  stroke-width: var(--bw-separator);
+  stroke-linecap: square;
+}
+
+.nearby__street--avenida {
+  stroke: var(--edge-separator);
+  stroke-width: var(--bw-surface);
+}
+
+.nearby__pin {
+  fill: var(--ink-heading);
+  stroke: none;
+}
+
+.nearby__pin--full {
+  fill: var(--ink-muted);
+}
+
+.nearby__here {
+  fill: var(--color-secondary);
+  stroke: var(--fill-surface);
+  stroke-width: var(--bw-control);
+}
+
+.nearby__summary {
+  margin: 0;
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+  font-size: var(--fs-sm);
+}

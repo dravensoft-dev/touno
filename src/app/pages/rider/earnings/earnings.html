@@ -133,6 +133,38 @@
     </div>
   </arena-section>
 
+  <arena-section
+    headingLevel="h2"
+    eyebrow="Cómo se arma lo que ganas"
+    title="Lo que paga una carrera"
+    description="Son tres cosas sumadas. Touno fija el mínimo de cada una, y una sucursal puede subirlas para destacar, nunca bajarlas. Las distancias son unidades del plano del mapa."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      <arena-key-value [rows]="terms()" />
+      @if (adverse()) {
+        <arena-alert tone="warning" title="El clima está en contra en tu ciudad">
+          Hoy cada carrera a domicilio te suma el extra por clima.
+        </arena-alert>
+      }
+    </div>
+  </arena-section>
+
+  <arena-section
+    headingLevel="h2"
+    eyebrow="Cumplimiento"
+    title="Cómo cumples en cada manera de trabajar"
+    description="Una cifra por cada manera, y un total con todas juntas. El total no es el promedio de las tres: sale de la cuenta completa."
+    rhythm="md"
+  >
+    <app-reputation-figure
+      label="en total"
+      [standing]="standing()"
+      [breakdown]="breakdown()"
+      [modes]="figures()"
+    />
+  </arena-section>
+
   @if (payers().length > 0) {
     <arena-section
       eyebrow="Empresa por empresa"

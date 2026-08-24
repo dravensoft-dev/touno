@@ -59,9 +59,76 @@
   }
 
   <arena-section
+    eyebrow="Sin acuerdo y sin compromiso"
+    title="Buscar agentes libres"
+    description="Publicas cuántos te hacen falta. Los riders sin ningún reclutamiento te ven en su mapa, dicen que vienen, y reparten para ti hasta que se retiren."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      @if (callout(); as live) {
+        <app-state-tag [callout]="calloutState()!" />
+
+        <p>
+          Ofreces {{ fixedOf(live) }} fijos por carrera, más la distancia y el clima.
+          {{ cuposLeft() === 1 ? 'Queda un cupo' : 'Quedan ' + cuposLeft() + ' cupos' }}.
+        </p>
+
+        @if (coming().length > 0) {
+          <arena-people-list label="Quién viene">
+            @for (claim of coming(); track claim.id) {
+              <arena-person-row
+                [name]="riderName(claim.riderId)"
+                [secondary]="claim.state === 'trabajando' ? 'Repartiendo aquí' : 'En camino'"
+              />
+            }
+          </arena-people-list>
+        } @else {
+          <arena-alert tone="info" title="Todavía no viene nadie">
+            Tu llamado está publicado. Los agentes libres de tu ciudad lo ven en su mapa.
+          </arena-alert>
+        }
+
+        <arena-button variant="danger" (click)="toggleCallout()">Cerrar el llamado</arena-button>
+      } @else if (!canRecruit()) {
+        <arena-alert tone="warning" title="No puedes abrir un llamado bajo el piso">
+          El mismo piso de reputación que te impide reclutar te impide llamar agentes libres.
+        </arena-alert>
+      } @else {
+        <arena-input
+          label="Cuántos agentes libres necesitas"
+          type="number"
+          [value]="cupos()"
+          (change)="onCupos($event)"
+        />
+
+        <arena-input
+          label="La fija que ofreces por carrera"
+          type="number"
+          [hint]="
+            'Touno no permite menos de ' +
+            baseFloor() +
+            ' Bs para un agente libre. Puedes subirla para destacar. La distancia y el clima se suman aparte.'
+          "
+          [value]="fixed()"
+          (change)="onFixed($event)"
+        />
+
+        <arena-button
+          size="lg"
+          icon="ph-bold ph-map-pin-simple-area"
+          [disabled]="!calloutReady()"
+          (click)="toggleCallout()"
+        >
+          Publicar el llamado
+        </arena-button>
+      }
+    </div>
+  </arena-section>
+
+  <arena-section
     eyebrow="Sólo para ti"
-    title="Reclutar en hora pico"
-    description="Una sucursal recluta en hora pico únicamente para sí misma. Si necesitas cubrir dos locales con el mismo rider, eso lo hace el gerente de empresa."
+    title="Reclutar para esta sucursal"
+    description="Una sucursal recluta únicamente para sí misma, sea normal o de hora pico. Si necesitas cubrir dos locales con el mismo rider, eso lo hace el gerente de empresa."
     rhythm="md"
   >
     @if (candidates().length > 0) {
@@ -73,6 +140,25 @@
           [value]="chosen()"
           (change)="pickRider($event)"
         />
+
+        <arena-radio-group
+          label="Qué clase de reclutamiento"
+          ariaLabel="Qué clase de reclutamiento"
+          name="clase"
+          [value]="kind()"
+          (change)="pickKind($event)"
+        >
+          <arena-radio
+            value="normal"
+            label="Normal"
+            hint="Puede tenerlo junto con otros reclutamientos normales, de otras empresas también."
+          />
+          <arena-radio
+            value="hora-pico"
+            label="Hora pico"
+            hint="Es exclusivo: sólo puede tener uno en toda su cuenta, y sólo si no debe carreras."
+          />
+        </arena-radio-group>
 
         <arena-input
           label="Lo que le pagas por viaje"
@@ -99,10 +185,17 @@
           </arena-alert>
         }
 
-        <arena-alert tone="info" title="Qué significa para él">
-          Mientras le queden carreras de este reclutamiento no puede aceptar otro de hora pico, de
-          nadie. Y una vez que lo cumpla, tu empresa ya no podrá volver a reclutarlo en hora pico.
-        </arena-alert>
+        @if (kind() === 'hora-pico') {
+          <arena-alert tone="info" title="Qué significa para él">
+            Mientras le queden carreras de este reclutamiento no puede aceptar otro de hora pico, de
+            nadie. Y una vez que lo cumpla, tu empresa ya no podrá volver a reclutarlo en hora pico.
+          </arena-alert>
+        } @else {
+          <arena-alert tone="info" title="Qué significa para él">
+            Puede tener varios reclutamientos normales a la vez, con empresas distintas. Mientras le
+            queden carreras contigo no podrá aceptar uno de hora pico de nadie.
+          </arena-alert>
+        }
 
         <arena-button
           size="lg"

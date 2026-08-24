@@ -346,7 +346,7 @@ describe('App bottom bar Más', () => {
 
     const inSheet = labelsIn(host, 'arena-sheet arena-side-nav-item');
 
-    expect(inSheet).toEqual(['Ganancias', 'Manual']);
+    expect(inSheet).toEqual(['Agente libre', 'Ganancias', 'Manual']);
   });
 
   it('foots the sheet with the same session block the rail carries', async () => {

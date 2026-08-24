@@ -306,12 +306,24 @@ describe('Orders', () => {
   });
 
   it('replaces a leg rather than stacking two riders on it', () => {
-    orders.assign('to-2205', 'local', 'r-noemi', 'b-ale-la-paz');
+    orders.assign('to-2205', 'local', 'r-hugo', 'b-ale-la-paz');
 
     const legs = orders.bySlug('to-2205')?.assignments.filter((one) => one.leg === 'local') ?? [];
 
     expect(legs.length).toBe(1);
-    expect(legs[0].riderId).toBe('r-noemi');
+    expect(legs[0].riderId).toBe('r-hugo');
+  });
+
+  it('refuses to put work on a rider that sucursal is not bound to at all', () => {
+    expect(() => orders.assign('to-2205', 'local', 'r-diego', 'b-ale-la-paz')).toThrow();
+  });
+
+  it('records how the rider was working when the leg was handed to him', () => {
+    orders.assign('to-2205', 'local', 'r-hugo', 'b-ale-la-paz');
+
+    const leg = orders.bySlug('to-2205')?.assignments.find((one) => one.leg === 'local');
+
+    expect(leg?.mode).toBe('normal');
   });
 
   it('spends a career point when the rider scans at the door, and none at the counter', () => {

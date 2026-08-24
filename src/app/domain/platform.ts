@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { PlatformConfig } from './platform.model';
+import { PlatformConfig, orderedBases } from './platform.model';
 import { PLATFORM } from './platform.data';
 
 @Injectable({ providedIn: 'root' })
@@ -18,7 +18,15 @@ export class Platform {
 
   readonly minReputationPct = computed(() => this.config().minReputationPct);
 
+  readonly riderBaseBob = computed(() => this.config().riderBaseBob);
+
   patch(change: Partial<PlatformConfig>): void {
-    this.state.update((one) => ({ ...one, ...change }));
+    const next = { ...this.state(), ...change };
+
+    if (!orderedBases(next.riderBaseBob)) {
+      throw new Error('La fija sube con el compromiso: agente libre, normal y hora pico.');
+    }
+
+    this.state.set(next);
   }
 }

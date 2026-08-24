@@ -70,6 +70,22 @@ export class Notices {
     });
   }
 
+  onTheWay(branchName: string): void {
+    this.toasts.raise({
+      title: 'Avisamos que vas en camino',
+      message: `${branchName} ya sabe que tiene un agente libre llegando.`,
+      tone: 'success',
+    });
+  }
+
+  leftTheCallout(branchName: string): void {
+    this.toasts.raise({
+      title: 'Dejaste de ser agente libre',
+      message: `${branchName} ya sabe que debe buscar a otro. Tu modo de agente libre sigue activo.`,
+      tone: 'neutral',
+    });
+  }
+
   agreementSent(): void {
     this.toasts.raise({
       title: 'Propuesta enviada',

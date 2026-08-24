@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Geography } from './geography';
 import { Riders } from './riders';
 import { Vehicle, rangeOf, vehicleIcon, vehicleLabel } from './riders.model';
+import { RIDERS } from './riders.data';
 
 describe('Riders', () => {
   let riders: Riders;
@@ -82,5 +83,19 @@ describe('Riders', () => {
   it('adds up the week from the payouts it holds', () => {
     expect(riders.weekTrips()).toBe(riders.payouts.reduce((sum, one) => sum + one.trips, 0));
     expect(riders.weekEarnings()).toBeGreaterThan(0);
+  });
+
+  it('holds the free agent switch on the rider, so it outlives one llamado', () => {
+    const riders = TestBed.inject(Riders);
+
+    expect(riders.byId('r-diego')?.freeAgent).toBe(true);
+
+    riders.setFreeAgent('r-diego', false);
+
+    expect(riders.byId('r-diego')?.freeAgent).toBe(false);
+  });
+
+  it('leaves the switch off for a rider who works under a reclutamiento', () => {
+    expect(RIDERS.find((one) => one.id === 'r-marco')?.freeAgent).toBe(false);
   });
 });

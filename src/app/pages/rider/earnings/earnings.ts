@@ -22,6 +22,9 @@ import {
 } from '@dravensoft/arena-angular';
 import { Agreements } from '../../../domain/agreements';
 import { Businesses } from '../../../domain/businesses';
+import { Geography } from '../../../domain/geography';
+import { Platform } from '../../../domain/platform';
+import { Reputation } from '../../../domain/reputation';
 import { Orders } from '../../../domain/orders';
 import { Riders } from '../../../domain/riders';
 import { Session } from '../../../domain/session';
@@ -34,6 +37,7 @@ import {
   payoutRouteOf,
 } from '../../../domain/payments.model';
 import { Notices } from '../../../layout/notices';
+import { ReputationFigure } from '../../../shared/reputation-figure/reputation-figure';
 
 const COLUMNS: readonly ArenaTableColumn[] = [
   { header: 'Día' },
@@ -62,11 +66,15 @@ const COLUMNS: readonly ArenaTableColumn[] = [
     ArenaTableRow,
     ArenaTableCell,
     ArenaEmptyState,
+    ReputationFigure,
   ],
   templateUrl: './earnings.html',
 })
 export class RiderEarnings {
   private readonly agreements = inject(Agreements);
+  private readonly geography = inject(Geography);
+  private readonly platform = inject(Platform);
+  private readonly reputation = inject(Reputation);
   private readonly businesses = inject(Businesses);
   private readonly orders = inject(Orders);
   private readonly notices = inject(Notices);
@@ -96,10 +104,46 @@ export class RiderEarnings {
     { label: 'Ganancia', values: this.payouts().map((one) => one.earnBob) },
   ]);
 
+  protected readonly figures = computed(() => this.reputation.ofByMode(this.riderId()));
+
+  protected readonly standing = computed(() => this.reputation.of(this.riderId()));
+
+  protected readonly breakdown = computed(() => this.reputation.breakdownOf(this.riderId()));
+
+  protected readonly terms = computed<readonly ArenaKeyValueRow[]>(() => {
+    const config = this.platform.config();
+    const bases = config.riderBaseBob;
+
+    return [
+      { term: 'Fija de un agente libre', value: bs(bases['agente-libre']), numeric: true },
+      { term: 'Fija de un reclutamiento normal', value: bs(bases.normal), numeric: true },
+      {
+        term: 'Fija de un reclutamiento de hora pico',
+        value: bs(bases['hora-pico']),
+        numeric: true,
+      },
+      {
+        term: 'Por unidad del plano, en tu ciudad',
+        value: bs(config.cityRateBob),
+        numeric: true,
+      },
+      {
+        term: 'Por unidad del plano, entre ciudades',
+        value: bs(config.interurbanRateBob),
+        numeric: true,
+      },
+      { term: 'Extra por clima en contra', value: bs(config.weatherFeeBob), numeric: true },
+    ];
+  });
+
+  protected readonly adverse = computed(() =>
+    this.geography.isAdverse(this.riders.byId(this.riderId())?.cityId ?? ''),
+  );
+
   protected readonly byCompany = computed<readonly ArenaKeyValueRow[]>(() =>
     this.agreements.activeFor(this.riderId()).map((one) => ({
       term: this.businesses.companyById(one.companyId)?.name ?? '',
-      value: `${bs(one.perTripBob)} por viaje`,
+      value: `${bs(one.perTripBob)} de fija`,
       numeric: true,
     })),
   );

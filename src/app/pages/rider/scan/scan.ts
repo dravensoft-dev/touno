@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ArenaAlert,
@@ -8,6 +8,8 @@ import {
   ArenaKeyValueRow,
   ArenaPageHead,
 } from '@dravensoft/arena-angular';
+import { Businesses } from '../../../domain/businesses';
+import { Callouts } from '../../../domain/callouts';
 import { Chat } from '../../../domain/chat';
 import { Orders } from '../../../domain/orders';
 import { Riders } from '../../../domain/riders';
@@ -15,17 +17,28 @@ import { Session } from '../../../domain/session';
 import { movingLeg } from '../../../domain/orders.model';
 import { bs } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
+import { FreeAgentPrompt } from '../../../shared/free-agent-prompt/free-agent-prompt';
 import { ScanPanel } from '../../../shared/scan-panel/scan-panel';
 
 @Component({
   selector: 'app-rider-scan',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { style: 'display: contents' },
-  imports: [ArenaPageHead, ArenaAlert, ArenaKeyValue, ArenaButton, ArenaEmptyState, ScanPanel],
+  imports: [
+    ArenaPageHead,
+    ArenaAlert,
+    ArenaKeyValue,
+    ArenaButton,
+    ArenaEmptyState,
+    ScanPanel,
+    FreeAgentPrompt,
+  ],
   templateUrl: './scan.html',
 })
 export class RiderScan {
   private readonly router = inject(Router);
+  private readonly businesses = inject(Businesses);
+  private readonly callouts = inject(Callouts);
   private readonly chat = inject(Chat);
   private readonly riders = inject(Riders);
   private readonly notices = inject(Notices);
@@ -34,6 +47,8 @@ export class RiderScan {
   protected readonly orders = inject(Orders);
 
   readonly codigo = input('');
+
+  protected readonly asking = signal<string | undefined>(undefined);
 
   protected readonly riderId = computed(() => this.session.riderId() ?? '');
 
@@ -91,6 +106,41 @@ export class RiderScan {
     } else if (spent) {
       this.notices.runSpent(spent.runsLeft);
     }
+
+    const claim = this.callouts.holdingOf(this.riderId());
+
+    if (claim) {
+      this.asking.set(claim.id);
+    }
+  }
+
+  protected readonly askedAbout = computed(() => {
+    const claim = this.callouts.claimById(this.asking() ?? '');
+    const callout = claim && this.callouts.byId(claim.calloutId);
+
+    if (!callout) {
+      return undefined;
+    }
+
+    return {
+      company: this.businesses.companyById(callout.companyId)?.name ?? '',
+      branch: this.businesses.branchById(callout.branchId)?.name ?? '',
+    };
+  });
+
+  protected onKeep(): void {
+    this.asking.set(undefined);
+  }
+
+  protected onQuit(): void {
+    const id = this.asking();
+
+    if (id) {
+      this.callouts.leave(id);
+      this.notices.leftTheCallout(this.askedAbout()?.branch ?? '');
+    }
+
+    this.asking.set(undefined);
   }
 
   protected back(): void {

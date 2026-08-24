@@ -21,6 +21,22 @@ function render(): ComponentFixture<PlatformFees> {
   return fixture;
 }
 
+function save(fixture: ComponentFixture<PlatformFees>, label: string, value: string): void {
+  const field = [...fixture.nativeElement.querySelectorAll('arena-input')].find((one: Element) =>
+    (one.textContent ?? '').includes(label),
+  ) as Element;
+  const input = field.querySelector('input') as HTMLInputElement;
+
+  input.value = value;
+  input.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+
+  [...fixture.nativeElement.querySelectorAll('button')]
+    .find((one: HTMLButtonElement) => (one.textContent ?? '').includes(label))
+    ?.click();
+  fixture.detectChanges();
+}
+
 describe('PlatformFees', () => {
   it('names every value Touno sets for the whole network', () => {
     const host: HTMLElement = render().nativeElement;
@@ -47,5 +63,33 @@ describe('PlatformFees', () => {
     platform.patch({ weatherFeeBob: before + 7 });
 
     expect(businesses.weatherFeeOf('c-ale')).toBe(before + 7);
+  });
+
+  it('sets the fija a rider is paid at least, one for each way of working', () => {
+    const host: HTMLElement = render().nativeElement;
+
+    expect(host.textContent).toContain('Fija mínima de un agente libre');
+    expect(host.textContent).toContain('Fija mínima de un reclutamiento normal');
+    expect(host.textContent).toContain('Fija mínima de un reclutamiento de hora pico');
+  });
+
+  it('writes one of the three without disturbing the other two', () => {
+    const fixture = render();
+    const platform = TestBed.inject(Platform);
+
+    save(fixture, 'Fija mínima de un agente libre', '10');
+
+    expect(platform.riderBaseBob()['agente-libre']).toBe(10);
+    expect(platform.riderBaseBob().normal).toBe(12);
+  });
+
+  it('refuses a fija that would pay a free agent more than a recruited rider, and says why', () => {
+    const fixture = render();
+    const platform = TestBed.inject(Platform);
+
+    save(fixture, 'Fija mínima de un agente libre', '30');
+
+    expect(platform.riderBaseBob()['agente-libre']).toBe(8);
+    expect(fixture.nativeElement.textContent).toContain('sube con el compromiso');
   });
 });

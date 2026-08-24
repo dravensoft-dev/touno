@@ -139,6 +139,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/rider/load/load').then((m) => m.RiderLoad),
   },
   {
+    path: 'rider/libre',
+    title: 'Agente libre',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/rider/free-agent/free-agent').then((m) => m.RiderFreeAgent),
+  },
+  {
     path: 'rider/acuerdos',
     title: 'Acuerdos',
     data: PRIVATE,

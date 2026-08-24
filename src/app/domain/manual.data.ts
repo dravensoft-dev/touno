@@ -107,7 +107,7 @@ export const MANUAL: readonly ManualEntry[] = [
     title: 'Manual del rider',
     lede: 'Transportas con tu propio vehículo. Decides para quién trabajas y cuándo estás disponible.',
     description:
-      'Cómo trabaja un rider en Touno: el reclutamiento de dos partes, las carreras, el escaneo que cierra la entrega y la reputación que te abre la hora pico.',
+      'Cómo trabaja un rider en Touno: las tres maneras de trabajar, el reclutamiento de dos partes, las carreras, el escaneo que cierra la entrega y la reputación que te abre la hora pico.',
     icon: 'ph-bold ph-motorcycle',
     chapters: [
       {
@@ -125,8 +125,12 @@ export const MANUAL: readonly ManualEntry[] = [
             body: 'Cada reclutamiento viene con sus carreras: la cantidad de entregas que cubre. Las ves antes de decir que sí, y se descuenta una cada vez que un escaneo cierra una entrega tuya.',
           },
           {
+            title: 'O trabajas suelto, como agente libre',
+            body: 'Si no tienes ningún reclutamiento y no le debes carreras a nadie, activas el modo agente libre. Ves un mapa con las sucursales de tu ciudad que abrieron un llamado, dices que vas en camino a una, ocupas uno de sus cupos y repartes para ella hasta que te retires. No comprometes carreras con nadie, y por eso la fija que cobras es la más baja de las tres maneras.',
+          },
+          {
             title: 'Te pones en turno',
-            body: 'Cuando quieras trabajar. Sólo una sucursal con la que tengas acuerdo aceptado te puede asignar un encargo.',
+            body: 'Cuando quieras trabajar. Sólo una sucursal con la que tengas acuerdo aceptado, o cuyo cupo estés ocupando, te puede asignar un encargo.',
           },
           {
             title: 'Recibes un encargo',
@@ -141,6 +145,14 @@ export const MANUAL: readonly ManualEntry[] = [
             body: 'Al llegar. Eso cierra el pedido y te descuenta una carrera del reclutamiento que cubre esa sucursal. Cuando gastas la última, el reclutamiento queda cumplido y quedas libre.',
           },
           {
+            title: 'Si eres agente libre, te preguntamos si sigues',
+            body: 'Justo después de cada escaneo aparece una pregunta que no se puede saltar: seguir con esa sucursal, o dejarlo. Tienes un minuto. Si no respondes, entendemos que lo dejas, para que la sucursal pueda buscar a otro cuanto antes. Dejarlo termina el trato con esa sucursal y nada más: tu modo de agente libre sigue activo.',
+          },
+          {
+            title: 'Lo que ganas por una carrera',
+            body: 'Son tres cosas sumadas: una fija que depende de cómo estés trabajando, la distancia en unidades del plano del mapa, y un extra si el clima está en contra. Touno fija el mínimo de cada una y una sucursal puede subirlas para destacar, nunca bajarlas.',
+          },
+          {
             title: 'Si llevas camión',
             body: 'No sales con un pedido, sales con una carga, y nunca escaneas el código de un comprador. Esperas a que la carga se llene, sales, y en la sucursal de destino el gerente te muestra el código de recepción y tú lo escaneas. Un escaneo por carga, no uno por pedido, y ahí se te descuenta una carrera.',
           },
@@ -149,6 +161,7 @@ export const MANUAL: readonly ManualEntry[] = [
           'Eliges para quién trabajas, y a qué sucursales concretas.',
           'Nadie te asigna sin tu sí. El acuerdo es de dos partes, siempre.',
           'Sabes cuánto ganas antes de aceptar, y cuántas carreras te compromete.',
+          'Puedes trabajar sin comprometerte con nadie, como agente libre, y retirarte cuando quieras.',
           'Eliges dónde cobrar: a tu cuenta o a tu tarjeta.',
         ],
         limits: [
@@ -156,6 +169,7 @@ export const MANUAL: readonly ManualEntry[] = [
           'No cierras un pedido sin escanear el código del comprador. No hay forma de marcarlo entregado a mano.',
           'No aceptas un reclutamiento de hora pico con carreras pendientes, ni un segundo de hora pico, ni uno de una empresa que ya te reclutó así antes.',
           'No decides cuándo sale tu camión: sale cuando se llena.',
+          'No eres agente libre de dos sucursales a la vez, ni con un reclutamiento activo o carreras pendientes.',
         ],
         counted: [],
       },
@@ -171,15 +185,15 @@ export const MANUAL: readonly ManualEntry[] = [
           },
           {
             title: 'Qué la sube',
-            body: 'Cada entrega que cierras escaneando dentro de la hora prometida. Cada carga que descargas en la sucursal de destino. Cada reclutamiento que llevas hasta su última carrera y queda cumplido.',
+            body: 'Cada entrega que cierras escaneando dentro de la hora prometida. Cada carga que descargas en la sucursal de destino. Cada reclutamiento que llevas hasta su última carrera y queda cumplido. Y cada llamado de agente libre al que llegaste y atendiste.',
           },
           {
             title: 'Qué la baja',
-            body: 'Una entrega cerrada después de la hora prometida. Y un reclutamiento que aceptaste y dejaste con carreras pendientes: te comprometiste a un número de entregas y no las hiciste.',
+            body: 'Una entrega cerrada después de la hora prometida. Un reclutamiento que aceptaste y dejaste con carreras pendientes: te comprometiste a un número de entregas y no las hiciste. Y un cupo de agente libre que tomaste y nunca fuiste a ocupar, porque dejaste a una sucursal esperando a alguien que no llegó.',
           },
           {
             title: 'Lo que no se cuenta, a propósito',
-            body: 'Quedarte sin señal no cuenta contra ti. Touno promete que si pierdes señal no quedas mal, y contarlo aquí rompería esa promesa. Rechazar una invitación tampoco cuenta: negarte a una oferta no es incumplir nada.',
+            body: 'Quedarte sin señal no cuenta contra ti. Touno promete que si pierdes señal no quedas mal, y contarlo aquí rompería esa promesa. Rechazar una invitación tampoco cuenta: negarte a una oferta no es incumplir nada. Y retirarte de un llamado de agente libre tampoco: es una salida que el producto te ofrece con un botón, así que cobrártela sería una trampa.',
           },
           {
             title: 'Qué ganas con una buena',
@@ -187,11 +201,15 @@ export const MANUAL: readonly ManualEntry[] = [
           },
           {
             title: 'Qué pierdes con una mala',
-            body: 'Por debajo del piso que fija Touno no puedes aceptar hora pico, y la pantalla te dice que es por tu reputación y no por otra cosa. Sigues pudiendo trabajar con reclutamientos normales, y apareces más abajo en la lista del gerente.',
+            body: 'Por debajo del piso que fija Touno no puedes aceptar hora pico, y la pantalla te dice que es por tu reputación y no por otra cosa. Sigues pudiendo trabajar con reclutamientos normales, y sigues pudiendo ser agente libre: el piso no te cierra esa puerta, porque es por donde vuelves a cumplir. Apareces más abajo en la lista del gerente.',
           },
           {
             title: 'Si recién empiezas',
             body: 'Sin historial no estás por debajo de nada. No tener récord no es tener mal récord, así que un rider nuevo puede tomar hora pico igual que cualquiera.',
+          },
+          {
+            title: 'Son cuatro cifras, no una',
+            body: 'Tu cumplimiento se separa por cómo trabajaste: una cifra como agente libre, una en reclutamiento normal, una en hora pico, y un total con todas juntas. Así se ve si cumples mejor suelto o reclutado, y ninguna manera se esconde detrás de otra. El total no es el promedio de las tres: sale de la cuenta completa.',
           },
         ],
         gains: [
@@ -209,6 +227,8 @@ export const MANUAL: readonly ManualEntry[] = [
           'carga-entregada',
           'reclutamiento-cumplido',
           'reclutamiento-abandonado',
+          'cupo-cumplido',
+          'cupo-abandonado',
         ],
       },
     ],

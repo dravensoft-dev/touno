@@ -57,3 +57,12 @@
     </div>
   }
 </div>
+
+@if (askedAbout(); as about) {
+  <app-free-agent-prompt
+    [companyName]="about.company"
+    [branchName]="about.branch"
+    (keep)="onKeep()"
+    (quit)="onQuit()"
+  />
+}

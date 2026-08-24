@@ -149,6 +149,12 @@ export const PANELS: readonly PanelArea[] = [
         path: '/rider/acuerdos',
       },
       {
+        id: 'libre',
+        label: 'Agente libre',
+        icon: 'ph-bold ph-map-pin-simple-area',
+        path: '/rider/libre',
+      },
+      {
         id: 'ganancias',
         label: 'Ganancias',
         icon: 'ph-bold ph-hand-coins',

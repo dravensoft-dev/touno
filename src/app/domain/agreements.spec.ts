@@ -161,6 +161,30 @@ describe('Agreements', () => {
     expect(agreements.covers(agreement.riderId, branchId)).toBe(false);
   });
 
+  it('calls a rider free only when he owes nobody and nothing', () => {
+    expect(agreements.activeFor('r-marco').length).toBeGreaterThan(0);
+    expect(agreements.freeToRoam('r-marco')).toBe(false);
+    expect(agreements.freeToRoam('r-tania')).toBe(true);
+  });
+
+  it('stops calling a rider free the moment he accepts a reclutamiento', () => {
+    const invitation = agreements.propose({
+      riderId: 'r-tania',
+      companyId: 'c-copacabana',
+      branchIds: ['b-copacabana-miraflores'],
+      initiatedBy: 'empresa',
+      kind: 'normal',
+      perTripBob: 16,
+      runs: 8,
+    });
+
+    expect(agreements.freeToRoam('r-tania')).toBe(true);
+
+    agreements.accept(invitation.id, 'rider', 'r-tania');
+
+    expect(agreements.freeToRoam('r-tania')).toBe(false);
+  });
+
   function peakDraft(change: Partial<AgreementDraft> = {}): AgreementDraft {
     return {
       riderId: 'r-ivan',
@@ -173,6 +197,41 @@ describe('Agreements', () => {
       ...change,
     };
   }
+
+  it('refuses a sucursal that scopes any reclutamiento beyond itself', () => {
+    const beyond = {
+      originBranchId: 'b-copacabana-miraflores',
+      branchIds: ['b-copacabana-miraflores', 'b-copacabana-sopocachi'],
+    };
+
+    expect(() => agreements.propose(peakDraft({ kind: 'normal', ...beyond }))).toThrow();
+    expect(() => agreements.propose(peakDraft({ kind: 'hora-pico', ...beyond }))).toThrow();
+  });
+
+  it('lets a sucursal recruit normal for itself, which is the whole of its reach', () => {
+    const own = agreements.propose(
+      peakDraft({
+        kind: 'normal',
+        riderId: 'r-noemi',
+        originBranchId: 'b-copacabana-sopocachi',
+        branchIds: ['b-copacabana-sopocachi'],
+      }),
+    );
+
+    expect(own.kind).toBe('normal');
+    expect(own.originBranchId).toBe('b-copacabana-sopocachi');
+  });
+
+  it('refuses a fixed below what Touno pays that clase, which is what orders the margins', () => {
+    const floors = TestBed.inject(Platform).riderBaseBob();
+
+    expect(() =>
+      agreements.propose(peakDraft({ kind: 'normal', perTripBob: floors.normal - 1 })),
+    ).toThrow();
+    expect(() =>
+      agreements.propose(peakDraft({ kind: 'hora-pico', perTripBob: floors.normal })),
+    ).toThrow();
+  });
 
   it('refuses a reclutamiento that gives less than the minimum Touno set', () => {
     const minimum = TestBed.inject(Platform).minRuns();

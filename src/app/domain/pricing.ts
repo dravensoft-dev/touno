@@ -1,3 +1,4 @@
+import { WorkMode } from './agreements.model';
 import { GeoPoint } from './geography.model';
 import { DeliveryChoice } from './orders.model';
 import { PlatformConfig, atLeast } from './platform.model';
@@ -76,5 +77,81 @@ export function fareOf(input: FareInput): Fare {
     distanceBob,
     weatherBob,
     totalBob: round2(round2(input.productsBob) + commissionBob + distanceBob + weatherBob),
+  };
+}
+
+export interface RiderOffer {
+  readonly baseBob?: number;
+  readonly cityRateBob?: number;
+  readonly interurbanRateBob?: number;
+  readonly weatherFeeBob?: number;
+}
+
+export interface RiderRates {
+  readonly baseBob: number;
+  readonly cityRateBob: number;
+  readonly interurbanRateBob: number;
+  readonly weatherFeeBob: number;
+}
+
+export interface RiderPay {
+  readonly baseBob: number;
+  readonly distanceBob: number;
+  readonly weatherBob: number;
+  readonly totalBob: number;
+}
+
+export interface RiderPayInput {
+  readonly rates: RiderRates;
+  readonly cityUnits: number;
+  readonly interurbanUnits: number;
+  readonly adverseWeather: boolean;
+}
+
+function raised(floor: number, ...offers: readonly (number | undefined)[]): number {
+  return offers
+    .filter((one): one is number => one !== undefined)
+    .reduce((best, one) => atLeast(one, best), floor);
+}
+
+export function riderRatesOf(
+  mode: WorkMode,
+  config: PlatformConfig,
+  branch?: RiderOffer,
+  company?: RiderOffer,
+): RiderRates {
+  return {
+    baseBob: raised(config.riderBaseBob[mode], branch?.baseBob, company?.baseBob),
+    cityRateBob: raised(config.cityRateBob, branch?.cityRateBob, company?.cityRateBob),
+    interurbanRateBob: raised(
+      config.interurbanRateBob,
+      branch?.interurbanRateBob,
+      company?.interurbanRateBob,
+    ),
+    weatherFeeBob: raised(config.weatherFeeBob, branch?.weatherFeeBob, company?.weatherFeeBob),
+  };
+}
+
+export function riderDistanceOf(input: RiderPayInput): number {
+  return round2(
+    input.cityUnits * input.rates.cityRateBob +
+      input.interurbanUnits * input.rates.interurbanRateBob,
+  );
+}
+
+export function riderWeatherOf(input: RiderPayInput): number {
+  return input.adverseWeather ? round2(input.rates.weatherFeeBob) : 0;
+}
+
+export function riderPayOf(input: RiderPayInput): RiderPay {
+  const baseBob = round2(input.rates.baseBob);
+  const distanceBob = riderDistanceOf(input);
+  const weatherBob = riderWeatherOf(input);
+
+  return {
+    baseBob,
+    distanceBob,
+    weatherBob,
+    totalBob: round2(baseBob + distanceBob + weatherBob),
   };
 }

@@ -10,6 +10,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { Platform } from '../../../domain/platform';
 import { PlatformConfig } from '../../../domain/platform.model';
+import { WorkMode } from '../../../domain/agreements.model';
 import { bs, porcentaje } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 
@@ -17,6 +18,7 @@ interface Knob {
   readonly key: keyof PlatformConfig;
   readonly label: string;
   readonly hint: string;
+  readonly mode?: WorkMode;
 }
 
 const KNOBS: readonly Knob[] = [
@@ -46,6 +48,24 @@ const KNOBS: readonly Knob[] = [
     hint: 'Sólo se cobra a domicilio y sólo donde el clima está marcado como desfavorable.',
   },
   {
+    key: 'riderBaseBob',
+    mode: 'agente-libre',
+    label: 'Fija mínima de un agente libre',
+    hint: 'Lo menos que puede cobrar por carrera quien trabaja suelto. Es la más baja de las tres, y una sucursal puede subirla en su llamado.',
+  },
+  {
+    key: 'riderBaseBob',
+    mode: 'normal',
+    label: 'Fija mínima de un reclutamiento normal',
+    hint: 'Lo menos que puede pagar por carrera quien recluta en normal. Va por encima de la del agente libre.',
+  },
+  {
+    key: 'riderBaseBob',
+    mode: 'hora-pico',
+    label: 'Fija mínima de un reclutamiento de hora pico',
+    hint: 'La más alta de las tres, porque es la que más compromete al rider. La distancia y el clima se suman aparte.',
+  },
+  {
     key: 'minReputationPct',
     label: 'Reputación mínima',
     hint: 'El cumplimiento que hace falta para reclutar y para tomar hora pico. Se lee cada vez que alguien pregunta, así que subirlo bloquea al instante a quien quede debajo.',
@@ -72,6 +92,8 @@ export class PlatformFees {
 
   private readonly typed = signal<Record<string, string>>({});
 
+  protected readonly refused = signal<string | undefined>(undefined);
+
   protected readonly facts = computed<readonly ArenaKeyValueRow[]>(() => {
     const config = this.platform.config();
 
@@ -93,7 +115,7 @@ export class PlatformFees {
   });
 
   protected valueOf(knob: Knob): string {
-    return this.typed()[knob.key] ?? String(this.platform.config()[knob.key]);
+    return this.typed()[keyOf(knob)] ?? String(this.storedOf(knob));
   }
 
   protected ready(knob: Knob): boolean {
@@ -103,7 +125,7 @@ export class PlatformFees {
   }
 
   protected onValue(knob: Knob, value: string): void {
-    this.typed.update((held) => ({ ...held, [knob.key]: value }));
+    this.typed.update((held) => ({ ...held, [keyOf(knob)]: value }));
   }
 
   protected save(knob: Knob): void {
@@ -111,14 +133,39 @@ export class PlatformFees {
       return;
     }
 
-    this.platform.patch({ [knob.key]: Number(this.valueOf(knob)) });
+    const mode = knob.mode;
+    const value = Number(this.valueOf(knob));
+
+    try {
+      this.platform.patch(
+        mode
+          ? { riderBaseBob: { ...this.platform.riderBaseBob(), [mode]: value } }
+          : { [knob.key]: value },
+      );
+    } catch (refusal) {
+      this.refused.set(refusal instanceof Error ? refusal.message : '');
+
+      return;
+    }
+
+    this.refused.set(undefined);
     this.typed.update((held) => {
       const rest = { ...held };
 
-      delete rest[knob.key];
+      delete rest[keyOf(knob)];
 
       return rest;
     });
     this.notices.universalChanged(knob.label);
   }
+
+  private storedOf(knob: Knob): number {
+    const config = this.platform.config();
+
+    return knob.mode ? config.riderBaseBob[knob.mode] : (config[knob.key] as number);
+  }
+}
+
+function keyOf(knob: Knob): string {
+  return knob.mode ? `${knob.key}:${knob.mode}` : knob.key;
 }

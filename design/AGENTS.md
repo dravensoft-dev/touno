@@ -29,7 +29,7 @@ edited. [`GENERATED.md`](../GENERATED.md) says which files and why.
   stroke widths for instance, is refused. Derive with `calc()` over an existing token inside the
   component's own stylesheet, which is what `src/app/shared/route-map` does.
 - **Icons are Phosphor class strings**, `class="ph-bold ph-truck"` or `icon="…"`, never an element
-  and never inline SVG. The two inline SVGs in the tree are ours and are argued for in
+  and never inline SVG. The three inline SVGs in the tree are ours and are argued for in
   [`src/app/shared/AGENTS.md`](../src/app/shared/AGENTS.md).
 - **No emoji, and no glyph standing in for one.** A row of star characters is reported by the audit
   as an emoji and is not how this system draws a figure.

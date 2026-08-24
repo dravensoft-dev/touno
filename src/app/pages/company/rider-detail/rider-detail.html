@@ -29,6 +29,21 @@
       />
     </arena-grid>
 
+    <arena-section
+      headingLevel="h2"
+      eyebrow="Cumplimiento"
+      title="Cómo cumple en cada manera de trabajar"
+      description="Una cifra por cada manera y un total con todas juntas, para que no se esconda una detrás de otra."
+      rhythm="md"
+    >
+      <app-reputation-figure
+        label="en total"
+        [standing]="standing()"
+        [breakdown]="breakdown()"
+        [modes]="figures()"
+      />
+    </arena-section>
+
     @if (answerable()) {
       <arena-alert tone="warning" title="Se postuló y espera tu respuesta">
         Él ya dijo que sí, para las sucursales que nombró. Aceptas o rechazas tú.

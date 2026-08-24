@@ -1,11 +1,11 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { Agreements } from '../../../domain/agreements';
 import { Chat } from '../../../domain/chat';
 import { Orders } from '../../../domain/orders';
 import { Reputation } from '../../../domain/reputation';
 import { Riders } from '../../../domain/riders';
+import { Staffing } from '../../../domain/staffing';
 import { Session } from '../../../domain/session';
 import { rangeOf } from '../../../domain/riders.model';
 import { BranchOrderDetail } from './order-detail';
@@ -57,9 +57,9 @@ describe('BranchOrderDetail', () => {
     expect(render('to-1043').nativeElement.querySelector('app-rider-picker')).toBeNull();
   });
 
-  it('offers only riders whose agreement covers this sucursal', () => {
+  it('offers only riders this sucursal is bound to, by reclutamiento or by a cupo', () => {
     const fixture = render('to-1041', 'p-sucursal-restaurante', true);
-    const agreements = TestBed.inject(Agreements);
+    const staffing = TestBed.inject(Staffing);
     const riders = TestBed.inject(Riders);
     const names = offered(fixture);
 
@@ -69,8 +69,14 @@ describe('BranchOrderDetail', () => {
       const rider = riders.all().find((one) => one.name === name);
 
       expect(rider).toBeDefined();
-      expect(agreements.covers(rider!.id, 'b-copacabana-miraflores')).toBe(true);
+      expect(staffing.covers(rider!.id, 'b-copacabana-miraflores')).toBe(true);
     }
+  });
+
+  it('offers a free agent on a cupo beside the riders it recruited', () => {
+    const names = offered(render('to-1041', 'p-sucursal-restaurante', true));
+
+    expect(names).toContain('Tania Mamani');
   });
 
   it('never offers a rider who works for another empresa', () => {

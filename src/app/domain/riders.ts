@@ -73,4 +73,10 @@ export class Riders {
   setOnline(id: string, online: boolean): void {
     this.riderList.update((list) => list.map((one) => (one.id === id ? { ...one, online } : one)));
   }
+
+  setFreeAgent(id: string, freeAgent: boolean): void {
+    this.riderList.update((list) =>
+      list.map((one) => (one.id === id ? { ...one, freeAgent } : one)),
+    );
+  }
 }

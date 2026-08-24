@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { ArenaTag, ArenaTagTone } from '@dravensoft/arena-angular';
 import { AgreementState } from '../../domain/agreements.model';
+import { CalloutState, ClaimState } from '../../domain/callouts.model';
 import { LoadState } from '../../domain/loads.model';
 import { OrderState } from '../../domain/orders.model';
 
@@ -39,6 +40,19 @@ const AGREEMENT: Record<AgreementState, Look> = {
   vencido: { label: 'Vencido', tone: 'neutral' },
 };
 
+const CALLOUT: Record<CalloutState, Look> = {
+  abierto: { label: 'Buscando agentes libres', tone: 'success' },
+  lleno: { label: 'Cupos completos', tone: 'neutral' },
+  cerrado: { label: 'Cerrado', tone: 'neutral' },
+};
+
+const CLAIM: Record<ClaimState, Look> = {
+  'en-camino': { label: 'En camino', tone: 'primary' },
+  trabajando: { label: 'Repartiendo aquí', tone: 'primary' },
+  terminado: { label: 'Se retiró', tone: 'success' },
+  abandonado: { label: 'No llegó', tone: 'danger' },
+};
+
 export function orderLabel(state: OrderState): string {
   return ORDER[state].label;
 }
@@ -49,6 +63,14 @@ export function loadLabel(state: LoadState): string {
 
 export function agreementLabel(state: AgreementState): string {
   return AGREEMENT[state].label;
+}
+
+export function calloutLabel(state: CalloutState): string {
+  return CALLOUT[state].label;
+}
+
+export function claimLabel(state: ClaimState): string {
+  return CLAIM[state].label;
 }
 
 @Component({
@@ -62,11 +84,15 @@ export class StateTag {
   readonly order = input<OrderState>();
   readonly load = input<LoadState>();
   readonly agreement = input<AgreementState>();
+  readonly callout = input<CalloutState>();
+  readonly claim = input<ClaimState>();
 
   protected readonly look = computed<Look>(() => {
     const order = this.order();
     const load = this.load();
     const agreement = this.agreement();
+    const callout = this.callout();
+    const claim = this.claim();
 
     if (order) {
       return ORDER[order];
@@ -78,6 +104,14 @@ export class StateTag {
 
     if (agreement) {
       return AGREEMENT[agreement];
+    }
+
+    if (callout) {
+      return CALLOUT[callout];
+    }
+
+    if (claim) {
+      return CLAIM[claim];
     }
 
     return { label: '', tone: 'neutral' };

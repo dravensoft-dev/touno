@@ -1,0 +1,42 @@
+<figure class="nearby arena-stack arena-stack--group">
+  <div class="nearby__frame">
+    <svg
+      class="nearby__canvas"
+      [attr.viewBox]="viewBox()"
+      role="img"
+      [attr.aria-label]="label()"
+      focusable="false"
+    >
+      @for (street of streets(); track $index) {
+        <line
+          [class]="'nearby__street nearby__street--' + street.rank"
+          [attr.x1]="street.from.x"
+          [attr.y1]="street.from.y"
+          [attr.x2]="street.to.x"
+          [attr.y2]="street.to.y"
+          vector-effect="non-scaling-stroke"
+        />
+      }
+
+      @for (place of places(); track place.id) {
+        <path
+          [class]="place.cuposLeft > 0 ? 'nearby__pin' : 'nearby__pin nearby__pin--full'"
+          [attr.d]="
+            'M ' + place.point.x + ' ' + (place.point.y + 1) + ' l -3.2 -5 a 3.7 3.7 0 1 1 6.4 0 Z'
+          "
+          vector-effect="non-scaling-stroke"
+        />
+      }
+
+      <circle
+        class="nearby__here"
+        [attr.cx]="here().x"
+        [attr.cy]="here().y"
+        r="3.2"
+        vector-effect="non-scaling-stroke"
+      />
+    </svg>
+  </div>
+
+  <figcaption class="nearby__summary">{{ summary() }}</figcaption>
+</figure>

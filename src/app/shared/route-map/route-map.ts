@@ -2,9 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { GeoPoint } from '../../domain/geography.model';
 import { StreetSegment } from '../../domain/tracking.model';
 import { hhmm } from '../../domain/format';
-
-const PADDING = 14;
-const RATIO = 1.5;
+import { frameOf } from '../map-frame';
 
 @Component({
   selector: 'app-route-map',
@@ -34,27 +32,7 @@ export class RouteMap {
       points.push(rider);
     }
 
-    const left = Math.min(...points.map((one) => one.x)) - PADDING;
-    const right = Math.max(...points.map((one) => one.x)) + PADDING;
-    const top = Math.min(...points.map((one) => one.y)) - PADDING;
-    const bottom = Math.max(...points.map((one) => one.y)) + PADDING;
-
-    let width = right - left;
-    let height = bottom - top;
-    let x = left;
-    let y = top;
-
-    if (width / height < RATIO) {
-      const grown = height * RATIO;
-      x -= (grown - width) / 2;
-      width = grown;
-    } else {
-      const grown = width / RATIO;
-      y -= (grown - height) / 2;
-      height = grown;
-    }
-
-    return `${round(x)} ${round(y)} ${round(width)} ${round(height)}`;
+    return frameOf(points);
   });
 
   protected readonly line = computed(() =>
@@ -96,8 +74,4 @@ export class RouteMap {
 
     return `${this.riderLabel()} va en camino de ${this.originLabel()} a ${this.destinationLabel()}.`;
   });
-}
-
-function round(value: number): number {
-  return Math.round(value * 100) / 100;
 }

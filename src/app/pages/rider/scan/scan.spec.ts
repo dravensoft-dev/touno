@@ -1,6 +1,7 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { Callouts } from '../../../domain/callouts';
 import { Chat } from '../../../domain/chat';
 import { Orders } from '../../../domain/orders';
 import { Session } from '../../../domain/session';
@@ -17,6 +18,27 @@ function render(slug: string, profileId = 'p-rider'): ComponentFixture<RiderScan
   const fixture = TestBed.createComponent(RiderScan);
 
   fixture.componentRef.setInput('codigo', slug);
+  fixture.detectChanges();
+
+  return fixture;
+}
+
+function asFreeAgent(): ComponentFixture<RiderScan> {
+  TestBed.resetTestingModule();
+  TestBed.configureTestingModule({
+    providers: [provideRouter([]), { provide: APP_BASE_HREF, useValue: '/' }],
+  });
+
+  const callouts = TestBed.inject(Callouts);
+  const claim = callouts.claim('lc-601', 'r-diego', true);
+
+  callouts.arrive(claim.id);
+  TestBed.inject(Orders).assign('to-1043', 'origen', 'r-diego', 'b-copacabana-miraflores');
+  TestBed.inject(Session).enter('p-rider-libre');
+
+  const fixture = TestBed.createComponent(RiderScan);
+
+  fixture.componentRef.setInput('codigo', 'to-1043');
   fixture.detectChanges();
 
   return fixture;
@@ -90,5 +112,54 @@ describe('RiderScan', () => {
 
     expect(fixture.nativeElement.textContent).toContain('El código coincidió');
     expect(fixture.nativeElement.querySelector('app-scan-panel')).toBeNull();
+  });
+
+  it('asks a free agent whether he stays, the moment the pedido is closed', () => {
+    const fixture = asFreeAgent();
+
+    expect(fixture.nativeElement.querySelector('app-free-agent-prompt')).toBeNull();
+
+    scanWith(fixture, 'to-1043');
+
+    expect(fixture.nativeElement.querySelector('app-free-agent-prompt')).not.toBeNull();
+    expect(fixture.nativeElement.textContent).toContain('Copacabana');
+  });
+
+  it('asks a recruited rider nothing, because he did not come by a llamado', () => {
+    const fixture = render('to-1043');
+
+    scanWith(fixture, 'to-1043');
+
+    expect(fixture.nativeElement.querySelector('app-free-agent-prompt')).toBeNull();
+  });
+
+  it('ends the trato when he says he is going, and leaves his free agent mode alone', () => {
+    const fixture = asFreeAgent();
+    const callouts = TestBed.inject(Callouts);
+
+    scanWith(fixture, 'to-1043');
+
+    [...fixture.nativeElement.querySelectorAll('button')]
+      .find((one: HTMLButtonElement) => (one.textContent ?? '').startsWith('Dejar de ser'))
+      ?.click();
+    fixture.detectChanges();
+
+    expect(callouts.holdingOf('r-diego')).toBeUndefined();
+    expect(fixture.nativeElement.querySelector('app-free-agent-prompt')).toBeNull();
+  });
+
+  it('keeps the trato when he says he stays', () => {
+    const fixture = asFreeAgent();
+    const callouts = TestBed.inject(Callouts);
+
+    scanWith(fixture, 'to-1043');
+
+    [...fixture.nativeElement.querySelectorAll('button')]
+      .find((one: HTMLButtonElement) => (one.textContent ?? '').startsWith('Seguir como'))
+      ?.click();
+    fixture.detectChanges();
+
+    expect(callouts.holdingOf('r-diego')?.state).toBe('trabajando');
+    expect(fixture.nativeElement.querySelector('app-free-agent-prompt')).toBeNull();
   });
 });
