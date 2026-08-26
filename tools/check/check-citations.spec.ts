@@ -119,6 +119,13 @@ describe('OUTSIDE_THE_TREE', () => {
     }
   });
 
+  it('excuses a build product a page names by the tail of the package holding it', () => {
+    const naming = () => 'it writes `public/sitemap.xml`';
+
+    expect(pathProblems([`${WEB}/tools/AGENTS.md`], naming)).toEqual([]);
+    expect(pathProblems(['one.md'], naming)).toHaveLength(1);
+  });
+
   it('reports an entry no document cites any more', () => {
     const found = staleExemptProblems(['one.md'], () => 'nothing cited here');
     expect(found.length).toBe(OUTSIDE_THE_TREE.size);

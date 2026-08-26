@@ -29,7 +29,9 @@ gate would otherwise be wrong in a way that reads as correct:
   holding the page.** `tree.ts:packageRootOf()` answers the third, so a page inside an app names its
   own files by the tail alone and keeps saying something true when the app moves. Without it every
   in-app citation would carry the app's full path, which is the form that goes stale the next time
-  anything is rearranged.
+  anything is rearranged. `check-citations.ts:claimSpellings()` is that reading written once, and
+  `OUTSIDE_THE_TREE` is matched through it as well, so one entry excuses a build product whichever
+  of the three spellings the page naming it uses.
 - **A command resolves against the manifest nearest the page that names it**, the same way the
   convention resolves the nearest `AGENTS.md`. `check-vocabulary.ts:nearest()` is that resolution. A
   page under an app that named a root command would be telling a reader to run something from a

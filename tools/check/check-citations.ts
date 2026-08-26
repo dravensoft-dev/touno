@@ -12,7 +12,7 @@ import {
 
 export const OUTSIDE_THE_TREE = new Map<string, string>([
   [
-    'public/sitemap.xml',
+    'apps/frontend/web/public/sitemap.xml',
     'a build product. generate-sitemap.ts writes it into a git-ignored path, so a fresh clone ' +
       'carries none and a gate demanding it would fail before the first build.',
   ],
@@ -68,14 +68,22 @@ export function memberClaims(text: string): { path: string; member: string; numb
   );
 }
 
-export function resolveClaim(rel: string, claim: string): string | null {
-  if (exists(claim)) return claim;
+export function claimSpellings(rel: string, claim: string): string[] {
   const directory = rel.includes('/') ? rel.slice(0, rel.lastIndexOf('/')) : '';
-  const beside = directory === '' ? claim : `${directory}/${claim}`;
-  if (exists(beside)) return beside;
   const root = packageRootOf(rel);
-  const within = root === '' ? claim : `${root}/${claim}`;
-  return exists(within) ? within : null;
+  return [
+    claim,
+    directory === '' ? claim : `${directory}/${claim}`,
+    root === '' ? claim : `${root}/${claim}`,
+  ];
+}
+
+export function resolveClaim(rel: string, claim: string): string | null {
+  return claimSpellings(rel, claim).find((spelling) => exists(spelling)) ?? null;
+}
+
+export function exemptionFor(rel: string, claim: string): string | null {
+  return claimSpellings(rel, claim).find((spelling) => OUTSIDE_THE_TREE.has(spelling)) ?? null;
 }
 
 export const LINK = /\]\(([^)\s]+)/g;
@@ -121,7 +129,7 @@ export function linkProblems(documents: string[], readPage = read): string[] {
 export function pathProblems(documents: string[], readPage = read): string[] {
   return documents.flatMap((rel) =>
     pathClaims(readPage(rel))
-      .filter(({ claim }) => !OUTSIDE_THE_TREE.has(claim) && resolveClaim(rel, claim) === null)
+      .filter(({ claim }) => exemptionFor(rel, claim) === null && resolveClaim(rel, claim) === null)
       .map(
         ({ claim, number }) =>
           `${rel}:${number}: names "${claim}", which is not at the root of this tree, beside this ` +
@@ -134,12 +142,11 @@ export function pathProblems(documents: string[], readPage = read): string[] {
 export function memberProblems(documents: string[], readPage = read): string[] {
   return documents.flatMap((rel) =>
     memberClaims(readPage(rel)).flatMap(({ path, member, number }) => {
-      if (OUTSIDE_THE_TREE.has(path)) return [];
+      if (exemptionFor(rel, path) !== null) return [];
       const resolved = resolveClaim(rel, path);
       if (resolved === null) {
         return [`${rel}:${number}: cites "${path}:${member}()" and that file is not in the tree`];
       }
-      if (OUTSIDE_THE_TREE.has(resolved)) return [];
       const source = readPage(resolved);
       if (new RegExp(`\\b${member}\\b`).test(source)) return [];
       return [
@@ -152,7 +159,11 @@ export function memberProblems(documents: string[], readPage = read): string[] {
 }
 
 export function citedPaths(documents: string[], readPage = read): Set<string> {
-  return new Set(documents.flatMap((rel) => pathClaims(readPage(rel)).map(({ claim }) => claim)));
+  return new Set(
+    documents.flatMap((rel) =>
+      pathClaims(readPage(rel)).flatMap(({ claim }) => claimSpellings(rel, claim)),
+    ),
+  );
 }
 
 export function staleExemptProblems(documents: string[], readPage = read): string[] {
