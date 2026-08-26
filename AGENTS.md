@@ -9,7 +9,8 @@ The vocabulary the whole tree speaks: a business is an **empresa** and at least 
 **rider** is a free agent bound to a sucursal only by a recruitment both sides accepted; an **order**
 is one entity for both verticals and its **code belongs to the buyer**. The model in full is
 [`apps/frontend/web/src/app/domain/AGENTS.md`](./apps/frontend/web/src/app/domain/AGENTS.md), and
-what the business promises the people who use it is [`TOUNO_STRUC.md`](./TOUNO_STRUC.md).
+what the business promises the people who use it is [`TOUNO_STRUC.md`](./TOUNO_STRUC.md), and what
+it charges for is [`TOUNO_DINERO.md`](./TOUNO_DINERO.md).
 
 **This file routes. Read only what your task needs.**
 
@@ -34,6 +35,7 @@ subject has no row for.
 | an Arena component does not take what I wrote, or takes it and draws nothing                              | the idiom table in [`apps/frontend/web/src/app/AGENTS.md`](./apps/frontend/web/src/app/AGENTS.md)                               |
 | something crosses the right edge of a phone                                                               | [`apps/frontend/web/tools/overflow-sweep/AGENTS.md`](./apps/frontend/web/tools/overflow-sweep/AGENTS.md)                        |
 | what the business promises a person                                                                       | [`TOUNO_STRUC.md`](./TOUNO_STRUC.md), which is the product and the document a change is argued against                          |
+| what Touno charges, who funds a promotion, what a plan sells                                              | [`TOUNO_DINERO.md`](./TOUNO_DINERO.md), the product document's sibling, argued against the same way                             |
 | an order, a recruitment, a fare, a reputation figure, a fixture                                           | [`apps/frontend/web/src/app/domain/AGENTS.md`](./apps/frontend/web/src/app/domain/AGENTS.md)                                    |
 | the rail, the app bar, the gate, the theme, a notice                                                      | [`apps/frontend/web/src/app/layout/AGENTS.md`](./apps/frontend/web/src/app/layout/AGENTS.md)                                    |
 | a routed page, in any of the six lanes                                                                    | [`apps/frontend/web/src/app/pages/AGENTS.md`](./apps/frontend/web/src/app/pages/AGENTS.md), then that lane's own                |
@@ -109,7 +111,9 @@ symlink to this file, which is the migration answer that convention publishes.
 - **A level is reachable by a link from this page and not only by being nearest.** Proximity hands
   an agent the closest page and hands a reader nothing.
 - **Every document stays under 60,000 characters.** The way a budget is bought back is always the
-  same: move a level's own tour into that level's page and leave a pointer.
+  same: move a level's own tour into that level's page and leave a pointer. A document with no page
+  beneath it to hand a tour to takes a named allowance instead, which carries the reason it was
+  raised and expires by itself; [`tools/check/AGENTS.md`](./tools/check/AGENTS.md) owns that.
 - **Documentation is written in the present tense** and describes what Touno is, never what it was,
   when a part of it arrived, or what a change replaced. The reason a rule exists is not history and
   stays: state it as a property of the thing, not as an incident. **This is the one rule no gate

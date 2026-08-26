@@ -187,6 +187,15 @@ meets both.
 
 `panel-nav.ts` is the single destination table, keyed by role.
 
+- **A group is a run of the flat list, not a shape beside it.** A destination names its group and
+  nothing else, and `panel-nav.ts:railEntries()` folds consecutive destinations that share one into
+  a single rail entry the moment it is drawn. **The flat table stays the source of truth**, so the
+  bar, Más and `panel-nav.ts:activeIdIn()` go on reading it and never learn that groups exist. What
+  draws the fold is `<arena-side-nav-collapsible>`, which opens itself around the active destination
+  and, unlike the section component, survives a prerender; the reason that matters is the idiom
+  table in [`../AGENTS.md`](../AGENTS.md). A group's destinations are kept adjacent and clear of the
+  bar's slots, and `panel-nav.spec.ts` refuses one split between the bar and Más, because a heading
+  whose children are on two surfaces is a heading naming nothing on either.
 - **The bottom bar is derived from the rail's order, never from a flag.** `barDestinations()` takes
   the first `BAR_SLOTS` and `moreDestinations()` takes the rest; `app.html` draws a fourth column,
   **Más**, that opens an `arena-sheet` holding everything the bar could not. A `bar: boolean` on

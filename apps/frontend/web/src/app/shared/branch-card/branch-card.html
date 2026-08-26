@@ -20,6 +20,9 @@
       @for (tag of company().tags; track tag) {
         <arena-tag tone="neutral">{{ tag }}</arena-tag>
       }
+      @if (promoted()) {
+        <arena-tag tone="success">Con promoción</arena-tag>
+      }
       @if (!branch().open) {
         <arena-tag tone="warning">Cerrada ahora</arena-tag>
       }

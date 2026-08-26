@@ -7,8 +7,10 @@ signal and exposes computed slices.
 `clock.ts`, `format.ts`, `session.ts`, `cart.ts`, `draft.ts`, `clipboard.ts` and `latency.ts` are
 the cross-cutting ones, plus `timeline.ts` and `pricing.ts`, which are pure functions rather than
 services because a timeline and a fare are both derived from an order and never stored.
-`payments.model.ts` is a model with no data and no service of its own: a card belongs to a rider or
-to a business, so it lives beside neither. `staffing.ts` is the opposite shape, a service with no
+`promotions.*` is an ordinary three-file area whose fixtures are read from two sides: a buyer types
+a code at checkout and an empresa manages the list from its panel. `payments.model.ts` is a model
+with no data and no service of its own: a card belongs to a rider or to a business, so it lives
+beside neither. `staffing.ts` is the opposite shape, a service with no
 model and no data: it answers who a sucursal may put work on, by reading `Agreements` and
 `Callouts` together, because after free agency that question has two answers and only one caller
 should have to know it. `clipboard.ts` is the one that touches a
@@ -59,6 +61,34 @@ the reader is told.
   `Businesses.setDeliveryFee` and `setWeatherFee` refuse a value under `Platform`'s, and
   `deliveryFeeOf`/`weatherFeeOf` clamp on the way out, so raising the universal floor lifts every
   empresa that had raised less without invalidating a stored row.
+- **A promotion is subtracted, never a floor lowered.** `Businesses.setDeliveryFee()` throws under
+  Touno's minimum, so free delivery cannot be expressed by lowering a fee. `pricing.ts:discountOf()`
+  is a fifth term of the fare instead, and `Fare.discountBob` is what a page reads.
+- **The commission is charged on the undiscounted products, and that is a monetization decision
+  rather than an oversight.** The empresa funds every promotion in full, so Touno's revenue has to
+  be invariant under one. `promotions.spec.ts` asserts it against every fixture rather than a
+  sentence asserting it here.
+- **No promotion may reach what a rider is paid.** It is already true by construction, because
+  `pricing.ts:riderRatesOf()` resolves with `raised()` and only ever raises, and
+  `promotions.spec.ts` holds it as a claim so it stays true. A `RiderLeg` is the one thing an
+  empresa may offer instead, and `pricing.ts:legUnderFloor()` is what refuses one below the mode's
+  minimum.
+- **A promotion carries a buyer's discount, a rider's leg, or both, and never neither.**
+  `promotions.model.ts:BuyerDiscount` is the half a comprador meets and `promotions.model.ts:RiderLeg`
+  is the half a rider is offered, and both are optional on the record while the pair is not.
+  `promotions.ts:create()` refuses a draft with neither, and `promotions.spec.ts` asserts over the
+  fixtures both that none is empty and that all three shapes exist, because a shape no fixture
+  carries is a screen nobody walks. **The audience is read off the record and never stored beside
+  it**, which is the same move the reputation gate makes below: a field naming what the two other
+  fields already say is a field that can disagree with them.
+- **A promotion's reputation gate is read at the question, like every other floor here.**
+  `promotions.model.ts:promotionRefusal()` takes the buyer's percentage as an argument, which is the
+  same move `fareOf()` makes with `config`, so `Promotions` never injects `Reputation` and the
+  buyer's figure is never written onto a record. `Cart` is what resolves it and passes it down.
+- **A plan is a `Record<CompanyPlan, PlanLimits>` and not a set of scattered conditionals.**
+  `businesses.model.ts:PLAN_LIMITS` refuses to compile until a new tier answers every limit, so no
+  document has to enumerate them. Every tier charges the same commission, and the argument for that
+  is in [`TOUNO_DINERO.md`](../../../../../../TOUNO_DINERO.md).
 - **`Platform` injects nothing and must stay that way.** `Businesses -> Platform`,
   `Agreements -> Platform` and `Orders -> Agreements` are all safe only while it is a leaf.
 - **`Reputation` reads and never writes, and nothing it reads may read it back.** It injects
@@ -159,6 +189,18 @@ the reader is told.
 - **An order stores its fare and `orders.spec.ts` recomputes it.** The four amounts are
   denormalised, so the spec rebuilds each one from the order's own branch, zone, city and weather
   and compares. Editing an amount by hand without its inputs fails loudly.
+
+- **Every promotion refusal is reachable from a fixture, and a spec asserts the set is complete.**
+  `promotions.spec.ts` collects the refusals the fixtures can produce and compares them against the
+  keys of `promotions.model.ts:PROMOTION_REASONS`, so adding a reason nobody can reach fails. A
+  promotion that only pays a rider answers a comprador with its own refusal rather than with
+  silence, and `promotions.ts:spend()` refuses to count a use for one, because that ceiling counts
+  carreras and a checkout is not one.
+- **A settlement is the empresa's own money and the commission is not deducted from it.**
+  `Settlement.grossBob` is what buyers paid in products and belongs to the empresa,
+  `commissionBob` is what Touno charged the buyer on top and is reported rather than subtracted, and
+  `netBob` is `grossBob` less `promotionsBob`. Reading it the other way contradicts `fareOf()`,
+  which charges the commission to the buyer above the price.
 
 ## Fixtures are for walking, not only for consistency
 

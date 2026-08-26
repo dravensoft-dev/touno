@@ -7,6 +7,7 @@ export interface CheckoutDraft {
   readonly destinationBranchId: string;
   readonly zoneName: string;
   readonly note: string;
+  readonly promotionCode: string;
 }
 
 const EMPTY: CheckoutDraft = {
@@ -15,6 +16,7 @@ const EMPTY: CheckoutDraft = {
   destinationBranchId: '',
   zoneName: '',
   note: '',
+  promotionCode: '',
 };
 
 @Injectable({ providedIn: 'root' })

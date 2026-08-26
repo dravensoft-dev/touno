@@ -1,0 +1,19 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head headingLevel="h1" [title]="title()" [subtitle]="subtitle()" />
+
+  <arena-alert tone="info" title="Una promoción es de la marca, igual que el precio">
+    La escribe y la enciende el gerente de la empresa. Aquí la lees para saber qué te van a teclear
+    en mostrador, y no se apaga desde esta pantalla.
+  </arena-alert>
+
+  @if (mine().length > 0) {
+    <app-promotion-table [promotions]="mine()" [audience]="audience()" [label]="title()" />
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-ticket"
+      title="Ninguna corriendo ahora"
+      [message]="emptyMessage()"
+    />
+  }
+</div>

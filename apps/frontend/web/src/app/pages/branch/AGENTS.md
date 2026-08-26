@@ -15,6 +15,14 @@ out of shift is listed without a button rather than hidden.
 Assigning takes custody with the rider **and** hands the chat over in the same handler, so the buyer
 learns why his counterpart changed at the moment it changes.
 
+## Promotions are read here and written nowhere
+
+`promotions/` lists what the marca is running, in the same two audiences the empresa's lane uses and
+through the same `shared/promotion-table`, and it carries neither the switch column nor a way to the
+ficha. **A promotion belongs to the empresa exactly as a marca price does**, so a gerente de sucursal
+has nothing to change about one; what a sucursal needs is to know what a comprador is about to type
+at the counter, and reading it is the whole of that need.
+
 ## The llamado is the one thing this lane opens that the empresa cannot
 
 `riders/` publishes a llamado de agentes libres with its cupos and its fija, and the empresa has no

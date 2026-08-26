@@ -32,6 +32,10 @@ export const MANUAL: readonly ManualEntry[] = [
             body: 'Si va a tu dirección, eliges tu zona. No es un trámite: de ahí sale lo que pagas de envío, que se mide entre la sucursal y tu zona.',
           },
           {
+            title: 'Aplicas un código de promoción, si tienes',
+            body: 'El código lo escribe el negocio y lo paga el negocio: la comisión de Touno se calcula sobre el precio sin descontar, así que la promoción no le cuesta nada a la plataforma ni le quita nada a tu rider. Si no se puede aplicar, la pantalla te dice por qué con ese motivo y no con otro: no existe, está apagada, venció, se agotó, es de otro negocio, descuenta el envío y tú recoges en mostrador, o pide una reputación más alta que la tuya.',
+          },
+          {
             title: 'Confirmas y recibes tu código',
             body: 'Touno te entrega el código del pedido en ese mismo momento. Es tuyo, es el mismo durante toda la vida del pedido, y es la prueba de que lo recibiste.',
           },
@@ -77,11 +81,11 @@ export const MANUAL: readonly ManualEntry[] = [
           },
           {
             title: 'Qué ganas con una buena',
-            body: 'Por ahora, saber que Touno tiene contado que cumples. Es la base sobre la que se van a construir las promociones, y esas van a mirar tu constancia y no tu gasto.',
+            body: 'Un negocio puede pedir un mínimo de cumplimiento para que su código de promoción descuente, y si lo tienes, descuenta. Miran tu constancia y no tu gasto: la cifra sale de recibir a la primera y de recoger a tiempo, nunca de cuánto compraste.',
           },
           {
             title: 'Qué pierdes con una mala',
-            body: 'Hoy, nada frente a un negocio ni frente a un rider: nadie la ve. Lo que pierdes es el acceso a lo que se construya encima.',
+            body: 'Las promociones que piden un mínimo dejan de aplicarte, y la pantalla te dice que es por tu reputación y no por otra cosa. Nada más: ni la sucursal ni el rider ven tu cifra, así que no cambia cómo te tratan.',
           },
         ],
         gains: [
@@ -192,6 +196,10 @@ export const MANUAL: readonly ManualEntry[] = [
             body: 'Una entrega cerrada después de la hora prometida. Un reclutamiento que aceptaste y dejaste con carreras pendientes: te comprometiste a un número de entregas y no las hiciste. Y un cupo de agente libre que tomaste y nunca fuiste a ocupar, porque dejaste a una sucursal esperando a alguien que no llegó.',
           },
           {
+            title: 'Una promoción del negocio no te quita nada',
+            body: 'Tu fija, tu distancia y tu recargo por clima se calculan igual con promoción y sin ella. Lo que sí puede ofrecerte un negocio es una promoción con pata de rider: una fija más baja que la suya de siempre, pero nunca bajo el mínimo que fija Touno, a cambio de un bono al llegar a cierto número de carreras y un mínimo garantizado si el volumen no llega. Ves las tres cifras y la comparación con tu tarifa de siempre antes de aceptar, nunca después.',
+          },
+          {
             title: 'Lo que no se cuenta, a propósito',
             body: 'Quedarte sin señal no cuenta contra ti. Touno promete que si pierdes señal no quedas mal, y contarlo aquí rompería esa promesa. Rechazar una invitación tampoco cuenta: negarte a una oferta no es incumplir nada. Y retirarte de un llamado de agente libre tampoco: es una salida que el producto te ofrece con un botón, así que cobrártela sería una trampa.',
           },
@@ -260,8 +268,20 @@ export const MANUAL: readonly ManualEntry[] = [
             body: 'Invitas a un rider, eliges a qué sucursales tuyas queda asociado, la clase de reclutamiento —normal o de hora pico— y cuántas carreras le das. Eres el único que puede reclutar en hora pico para varias sucursales: una sucursal sólo puede hacerlo para sí misma.',
           },
           {
+            title: 'Escribes promociones',
+            body: 'Un código que el comprador teclea al confirmar, de tres formas: un monto fijo de los productos, un porcentaje de los productos, o un porcentaje del envío. Cada una con su tope de usos y su vencimiento, y se apaga sola cuando se agota o se vence. Puedes pedir un mínimo de reputación del comprador, y entonces premia constancia y no gasto.',
+          },
+          {
+            title: 'Y las pagas tú, enteras',
+            body: 'La comisión de Touno se calcula sobre el precio sin descontar, así que el descuento sale de tu neto y no del suyo. Lo ves con esa palabra en Finanzas. Lo que una promoción nunca toca es lo que cobra el rider: su fija, su distancia y su clima se calculan igual con ella y sin ella.',
+          },
+          {
+            title: 'Puedes ofrecerle una pata al rider, si tu plan la trae',
+            body: 'Una fija más baja que la que le pagas normalmente, nunca bajo el mínimo de Touno, a cambio de un bono al llegar a cierto volumen y un mínimo garantizado si no llega. Él ve la comparación completa antes de aceptar, que es lo que hace que la oferta sea legítima y no una rebaja disfrazada.',
+          },
+          {
             title: 'Miras las finanzas',
-            body: 'De toda la marca junta, y comparando entre sucursales con los mismos números.',
+            body: 'De toda la marca junta, y comparando entre sucursales con los mismos números. Ahí ves lo que llevas financiado en promociones y lo que te cuesta tu plan.',
           },
           {
             title: 'Fijas los ajustes de la marca',
@@ -272,10 +292,13 @@ export const MANUAL: readonly ManualEntry[] = [
           'Una sola carta para toda la marca: cambias un precio una vez, no local por local.',
           'Contratas una vez y repartes el alcance entre las sucursales que quieras.',
           'Ves qué local no funciona sin que te lo cuenten.',
+          'Eres el único que decide una promoción, y ves lo que te cuesta mientras corre.',
         ],
         limits: [
           'No operas el día a día: no aceptas pedidos, no asignas riders a un pedido concreto, no respondes el chat.',
           'No decides qué plato está disponible ahora mismo: eso lo marca el local.',
+          'No puedes bajar la comisión de Touno con ningún plan: es la misma para toda la red.',
+          'No puedes tener más promociones encendidas de las que admite tu plan.',
         ],
         counted: [],
       },
@@ -461,6 +484,10 @@ export const MANUAL: readonly ManualEntry[] = [
             title: 'Miras la red',
             body: 'Qué empresa subió qué tarifa por encima del piso, cuántos reclutamientos de hora pico hay en curso, qué riders pueden cobrar a tarjeta de verdad, y quién está por debajo del piso de reputación.',
           },
+          {
+            title: 'No tocas ninguna promoción',
+            body: 'Las escribe cada empresa y las paga cada empresa, enteras. La comisión se calcula sobre el precio sin descontar, así que ninguna promoción cambia lo que Touno cobra, y por eso no hay nada que autorizar ni que revisar aquí.',
+          },
         ],
         gains: [
           'Un piso para toda la red: subes el mínimo y todas las empresas suben con él.',
@@ -469,6 +496,7 @@ export const MANUAL: readonly ManualEntry[] = [
         limits: [
           'No bajas el precio de nadie: los precios son de cada empresa.',
           'No operas ningún pedido, y no reclutas riders.',
+          'No escribes ni apagas la promoción de una empresa, ni cobras una comisión distinta por plan: la comisión es una sola para toda la red.',
         ],
         counted: [],
       },

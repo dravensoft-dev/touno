@@ -18,6 +18,13 @@ export const SURVIVORS = new Map([
     'GENERATED.md',
     'which half of a file is yours to edit, asked before an edit and reached from the router.',
   ],
+  [
+    'TOUNO_DINERO.md',
+    'the money, written in Spanish beside the product for the same reason: what Touno charges, ' +
+      'who funds a promotion and what a plan sells. It is a sibling of the product document and ' +
+      'not a level of this tree, and it is its own page because the product document has no ' +
+      'budget left to hold it.',
+  ],
   ['DOUBTS.md', 'what counts as a debt here and where the records that are not prose live.'],
 ]);
 

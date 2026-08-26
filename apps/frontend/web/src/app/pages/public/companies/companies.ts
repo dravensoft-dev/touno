@@ -6,6 +6,7 @@ import {
   ArenaGrid,
   ArenaInput,
   ArenaPageHead,
+  ArenaSection,
   ArenaSelect,
   ArenaSelectOption,
 } from '@dravensoft/arena-angular';
@@ -14,6 +15,7 @@ import { Reputation } from '../../../domain/reputation';
 import { Catalog } from '../../../domain/catalog';
 import { Geography } from '../../../domain/geography';
 import { BusinessType, pathOfType } from '../../../domain/businesses.model';
+import { today } from '../../../domain/promotions.model';
 import { BranchCard } from '../../../shared/branch-card/branch-card';
 import { StructuredData } from '../../../seo/structured-data';
 import { SITE_ORIGIN } from '../../../seo/site';
@@ -28,6 +30,7 @@ import { SITE_ORIGIN } from '../../../seo/site';
     ArenaSelect,
     ArenaInput,
     ArenaGrid,
+    ArenaSection,
     ArenaEmptyState,
     BranchCard,
     StructuredData,
@@ -80,6 +83,15 @@ export class Companies {
         }),
     );
   });
+
+  protected readonly featured = computed(() =>
+    this.branches().filter(
+      (one) =>
+        one.featuredUntil !== undefined &&
+        one.featuredUntil >= today() &&
+        this.reputation.clears(one.id),
+    ),
+  );
 
   protected readonly schema = computed<Record<string, unknown>>(() => ({
     '@context': 'https://schema.org',

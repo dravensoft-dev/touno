@@ -52,13 +52,26 @@
 
       <div class="shell-panel__rail-nav">
         <arena-side-nav [ariaLabel]="area.label" [active]="activeId()" (nav)="go($event)">
-          @for (destination of destinations(); track destination.id) {
-            <arena-side-nav-item
-              [id]="destination.id"
-              [label]="destination.label"
-              [icon]="destination.icon"
-              [href]="destination.href"
-            />
+          @for (entry of railGroups(); track entry.key) {
+            @if (entry.group; as group) {
+              <arena-side-nav-collapsible [id]="group.id" [label]="group.label" [icon]="group.icon">
+                @for (destination of entry.destinations; track destination.id) {
+                  <arena-side-nav-item
+                    [id]="destination.id"
+                    [label]="destination.label"
+                    [icon]="destination.icon"
+                    [href]="destination.href"
+                  />
+                }
+              </arena-side-nav-collapsible>
+            } @else if (entry.destination; as destination) {
+              <arena-side-nav-item
+                [id]="destination.id"
+                [label]="destination.label"
+                [icon]="destination.icon"
+                [href]="destination.href"
+              />
+            }
           }
         </arena-side-nav>
       </div>
@@ -136,13 +149,26 @@
       (close)="closeMore()"
     >
       <arena-side-nav ariaLabel="Más destinos" [active]="activeId()" (nav)="go($event)">
-        @for (destination of more(); track destination.id) {
-          <arena-side-nav-item
-            [id]="destination.id"
-            [label]="destination.label"
-            [icon]="destination.icon"
-            [href]="destination.href"
-          />
+        @for (entry of moreGroups(); track entry.key) {
+          @if (entry.group; as group) {
+            <arena-side-nav-collapsible [id]="group.id" [label]="group.label" [icon]="group.icon">
+              @for (destination of entry.destinations; track destination.id) {
+                <arena-side-nav-item
+                  [id]="destination.id"
+                  [label]="destination.label"
+                  [icon]="destination.icon"
+                  [href]="destination.href"
+                />
+              }
+            </arena-side-nav-collapsible>
+          } @else if (entry.destination; as destination) {
+            <arena-side-nav-item
+              [id]="destination.id"
+              [label]="destination.label"
+              [icon]="destination.icon"
+              [href]="destination.href"
+            />
+          }
         }
       </arena-side-nav>
 

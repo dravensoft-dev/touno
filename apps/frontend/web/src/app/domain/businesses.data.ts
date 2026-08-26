@@ -10,6 +10,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Combos', 'Pollo', 'Salteñas', 'Bebidas'],
     tags: ['Pollo', 'Boliviana'],
     since: '1978',
+    plan: 'marca',
   },
   {
     id: 'c-oriental',
@@ -20,6 +21,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Platos', 'Horneados', 'Bebidas'],
     tags: ['Camba', 'Boliviana'],
     since: '1996',
+    plan: 'plus',
   },
   {
     id: 'c-illimani',
@@ -30,6 +32,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Rolls', 'Entradas', 'Bebidas'],
     tags: ['Japonesa', 'Trucha'],
     since: '2014',
+    plan: 'basico',
   },
   {
     id: 'c-cafe-sucre',
@@ -40,6 +43,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Desayunos', 'Tortas', 'Café'],
     tags: ['Café', 'Repostería'],
     since: '2009',
+    plan: 'basico',
   },
   {
     id: 'c-ale',
@@ -51,6 +55,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Ropa', 'Calzado', 'Accesorios'],
     tags: ['Temporada', 'Mayor y menor'],
     since: '2011',
+    plan: 'plus',
   },
   {
     id: 'c-andes',
@@ -61,6 +66,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Herramienta', 'Ferretería', 'Repuestos'],
     tags: ['Taller', 'Moto'],
     since: '2007',
+    plan: 'basico',
   },
   {
     id: 'c-tecno',
@@ -71,6 +77,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Celulares', 'Audio', 'Accesorios'],
     tags: ['Garantía', 'Tecnología'],
     since: '2016',
+    plan: 'basico',
   },
   {
     id: 'c-yungas',
@@ -81,6 +88,7 @@ export const COMPANIES: readonly Company[] = [
     categories: ['Menaje', 'Textil', 'Hogar'],
     tags: ['Hogar', 'Cocina'],
     since: '2013',
+    plan: 'basico',
   },
 ];
 
@@ -103,6 +111,7 @@ export const BRANCHES: readonly Branch[] = [
     open: true,
     prepMinutes: 25,
     deliveryBob: 8,
+    featuredUntil: '2026-09-30',
     managerName: 'Delia Mamani',
   },
   {
@@ -119,6 +128,7 @@ export const BRANCHES: readonly Branch[] = [
     open: true,
     prepMinutes: 30,
     deliveryBob: 8,
+    featuredUntil: '2026-09-30',
     managerName: 'Freddy Ticona',
   },
   {
@@ -232,6 +242,7 @@ export const BRANCHES: readonly Branch[] = [
     open: true,
     prepMinutes: 60,
     deliveryBob: 10,
+    featuredUntil: '2026-09-30',
     managerName: 'Ale Quisbert',
   },
   {

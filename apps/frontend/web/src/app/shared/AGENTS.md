@@ -3,19 +3,21 @@
 Everything here either composes Arena components or is drawn from tokens because Arena has no
 component for it. Nothing here restyles an Arena component.
 
-| Piece                         | Why it exists                                                     |
-| ----------------------------- | ----------------------------------------------------------------- |
-| `brand-mark`                  | the first of the two inline SVGs the project allows               |
-| `route-map`                   | the second, and the answer to "live map" without a map library    |
-| `branch-card`, `product-card` | compositions over `ArenaCard`                                     |
-| `state-tag`                   | maps an order, a load or an agreement state to a tone and a label |
-| `order-timeline`              | `ArenaActivityFeed` has no pending state and nowhere for the note |
-| `order-chat`                  | it has no per-item projection and no notion of sides              |
-| `order-code`, `scan-panel`    | the two halves of the handover, drawn from tokens                 |
-| `custody-card`                | the ficha: who answers for this order right now                   |
-| `rider-picker`                | the one place a sucursal may choose someone to carry a pedido     |
-| `order-header`                | the ink band on a pedido's heading                                |
-| `reputation-figure`           | the compliance percentage, and what it is made of                 |
+| Piece                         | Why it exists                                                           |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `brand-mark`                  | the first of the two inline SVGs the project allows                     |
+| `route-map`                   | the second, and the answer to "live map" without a map library          |
+| `branch-card`, `product-card` | compositions over `ArenaCard`                                           |
+| `state-tag`                   | maps an order, a load or an agreement state to a tone and a label       |
+| `order-timeline`              | `ArenaActivityFeed` has no pending state and nowhere for the note       |
+| `order-chat`                  | it has no per-item projection and no notion of sides                    |
+| `order-code`, `scan-panel`    | the two halves of the handover, drawn from tokens                       |
+| `custody-card`                | the ficha: who answers for this order right now                         |
+| `rider-picker`                | the one place a sucursal may choose someone to carry a pedido           |
+| `order-header`                | the ink band on a pedido's heading                                      |
+| `reputation-figure`           | the compliance percentage, and what it is made of                       |
+| `promotion-table`             | one table, two audiences, and the switch column only where it is earned |
+| `promotion-picker`            | what a negocio is running, read before buying rather than at the till   |
 
 ## The two inline SVGs, and why they are allowed
 

@@ -6,6 +6,7 @@ import { BusinessType } from './domain/businesses.model';
 import { PRODUCTS } from './domain/catalog.data';
 import { TRUCK_LOADS } from './domain/loads.data';
 import { ORDERS } from './domain/orders.data';
+import { PROMOTIONS } from './domain/promotions.data';
 import { RIDERS } from './domain/riders.data';
 
 function companiesOfType(type: BusinessType) {
@@ -94,6 +95,22 @@ export const serverRoutes: ServerRoute[] = [
     path: 'empresa/catalogo/:id',
     renderMode: RenderMode.Prerender,
     getPrerenderParams: () => Promise.resolve(PRODUCTS.map((one) => ({ id: one.id }))),
+  },
+  {
+    path: 'empresa/promociones/compradores/:code',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: () =>
+      Promise.resolve(
+        PROMOTIONS.filter((one) => one.discount !== undefined).map((one) => ({ code: one.code })),
+      ),
+  },
+  {
+    path: 'empresa/promociones/riders/:code',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: () =>
+      Promise.resolve(
+        PROMOTIONS.filter((one) => one.riderLeg !== undefined).map((one) => ({ code: one.code })),
+      ),
   },
   {
     path: 'empresa/riders/:slug',

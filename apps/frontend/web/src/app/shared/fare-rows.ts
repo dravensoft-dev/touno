@@ -6,6 +6,7 @@ export const PRODUCTS_TERM = 'Productos';
 export const COMMISSION_TERM = 'Comisión de Touno';
 export const DISTANCE_TERM = 'Envío por distancia';
 export const WEATHER_TERM = 'Recargo por clima';
+export const DISCOUNT_TERM = 'Descuento';
 export const TOTAL_TERM = 'Total';
 
 export function fareRows(fare: Fare): readonly ArenaKeyValueRow[] {
@@ -17,6 +18,10 @@ export function fareRows(fare: Fare): readonly ArenaKeyValueRow[] {
 
   if (fare.weatherBob > 0) {
     rows.push({ term: WEATHER_TERM, value: bs(fare.weatherBob), numeric: true });
+  }
+
+  if (fare.discountBob > 0) {
+    rows.push({ term: DISCOUNT_TERM, value: `-${bs(fare.discountBob)}`, numeric: true });
   }
 
   return rows;

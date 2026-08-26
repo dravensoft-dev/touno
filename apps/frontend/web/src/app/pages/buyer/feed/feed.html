@@ -21,7 +21,7 @@
   <arena-section
     eyebrow="Comida"
     title="De un restaurante de tu ciudad"
-    description="Llega a tu puerta con un rider de la sucursal que lo prepara."
+    description="Entra a una sucursal para ver su carta. Llega a tu puerta con un rider de la que la prepara."
     rhythm="md"
   >
     <arena-button
@@ -35,14 +35,15 @@
 
     @if (food().length > 0) {
       <arena-grid>
-        @for (item of food(); track item.branch.id + item.product.id) {
-          <app-product-card
-            [product]="item.product"
-            [branch]="item.branch"
-            [priceBob]="item.priceBob"
-            fallbackIcon="ph ph-fork-knife"
-            (add)="addToCart(item)"
-          />
+        @for (branch of food(); track branch.id) {
+          @if (companyOf(branch); as company) {
+            <app-branch-card
+              headingLevel="h3"
+              [branch]="branch"
+              [company]="company"
+              [cityName]="cityName()"
+            />
+          }
         }
       </arena-grid>
     } @else {
@@ -73,14 +74,15 @@
 
     @if (parcels().length > 0) {
       <arena-grid>
-        @for (item of parcels(); track item.branch.id + item.product.id) {
-          <app-product-card
-            [product]="item.product"
-            [branch]="item.branch"
-            [priceBob]="item.priceBob"
-            fallbackIcon="ph ph-package"
-            (add)="addToCart(item)"
-          />
+        @for (branch of parcels(); track branch.id) {
+          @if (companyOf(branch); as company) {
+            <app-branch-card
+              headingLevel="h3"
+              [branch]="branch"
+              [company]="company"
+              [cityName]="cityName()"
+            />
+          }
         }
       </arena-grid>
     } @else {

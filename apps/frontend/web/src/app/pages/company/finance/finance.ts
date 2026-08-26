@@ -17,6 +17,7 @@ import {
 import { Businesses } from '../../../domain/businesses';
 import { Orders } from '../../../domain/orders';
 import { Session } from '../../../domain/session';
+import { limitsOf } from '../../../domain/businesses.model';
 import { bs, fecha } from '../../../domain/format';
 
 const COLUMNS: readonly ArenaTableColumn[] = [
@@ -25,6 +26,7 @@ const COLUMNS: readonly ArenaTableColumn[] = [
   { header: 'Pedidos', align: 'right' },
   { header: 'Bruto', align: 'right' },
   { header: 'Comisión', align: 'right' },
+  { header: 'Promociones', align: 'right' },
   { header: 'Neto', align: 'right' },
   { header: 'Pagado', align: 'right' },
 ];
@@ -68,6 +70,14 @@ export class CompanyFinance {
     this.settlements().reduce((sum, one) => sum + one.commissionBob, 0),
   );
 
+  protected readonly promotions = computed(() =>
+    this.settlements().reduce((sum, one) => sum + one.promotionsBob, 0),
+  );
+
+  protected readonly company = computed(() => this.businesses.companyById(this.companyId()));
+
+  protected readonly plan = computed(() => limitsOf(this.company()?.plan ?? 'basico'));
+
   protected readonly net = computed(() =>
     this.settlements().reduce((sum, one) => sum + one.netBob, 0),
   );
@@ -90,6 +100,8 @@ export class CompanyFinance {
   protected readonly summary = computed<readonly ArenaKeyValueRow[]>(() => [
     { term: 'Bruto liquidado', value: bs(this.gross()), numeric: true },
     { term: 'Comisión de Touno', value: bs(this.commission()), numeric: true },
+    { term: 'Promociones que financiaste', value: `-${bs(this.promotions())}`, numeric: true },
+    { term: 'Tu plan, al mes', value: bs(this.plan().feeBob), numeric: true },
     { term: 'Por cobrar', value: bs(this.pending()), numeric: true },
   ]);
 

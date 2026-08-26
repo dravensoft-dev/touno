@@ -27,6 +27,7 @@ import { Product } from '../../../domain/catalog.model';
 import { bs, minutos, porcentaje } from '../../../domain/format';
 import { Notices } from '../../../layout/notices';
 import { ProductCard } from '../../../shared/product-card/product-card';
+import { PromotionPicker } from '../../../shared/promotion-picker/promotion-picker';
 import { StructuredData } from '../../../seo/structured-data';
 import { NOT_INDEXED, PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
 
@@ -53,6 +54,7 @@ const DAYS: Record<string, readonly string[]> = {
     ArenaAlert,
     ArenaEmptyState,
     ProductCard,
+    PromotionPicker,
     StructuredData,
   ],
   templateUrl: './branch.html',

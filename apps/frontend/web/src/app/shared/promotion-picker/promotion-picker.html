@@ -1,0 +1,15 @@
+@if (offers().length > 0) {
+  <div class="arena-stack arena-stack--group">
+    <arena-select
+      label="Promociones de este negocio"
+      hint="Míralas antes de pedir. El código se teclea al confirmar el pedido."
+      [options]="options()"
+      [value]="picked()"
+      (change)="pick($event)"
+    />
+
+    @if (chosen(); as promotion) {
+      <arena-alert tone="success" [title]="promotion.code">{{ detail() }}</arena-alert>
+    }
+  </div>
+}

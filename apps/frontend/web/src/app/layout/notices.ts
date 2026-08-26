@@ -134,6 +134,22 @@ export class Notices {
     });
   }
 
+  promotionCreated(code: string): void {
+    this.toasts.raise({
+      title: 'Promoción creada',
+      message: `${code} ya corre, y el descuento lo financias tú.`,
+      tone: 'success',
+    });
+  }
+
+  promotionToggled(code: string, active: boolean): void {
+    this.toasts.raise({
+      title: active ? 'Promoción encendida' : 'Promoción apagada',
+      message: active ? `${code} ya descuenta en el carrito.` : `${code} deja de descontar.`,
+      tone: 'success',
+    });
+  }
+
   universalChanged(label: string): void {
     this.toasts.raise({
       title: 'Valor universal actualizado',

@@ -17,6 +17,7 @@ import {
   ArenaMain,
   ArenaSheet,
   ArenaSideNav,
+  ArenaSideNavCollapsible,
   ArenaSideNavItem,
   ArenaSkipLink,
   ArenaToast,
@@ -32,6 +33,7 @@ import {
   barDestinations,
   destinationsFor,
   moreDestinations,
+  railEntries,
   panelFor,
   panelOf,
 } from './layout/panel-nav';
@@ -78,6 +80,7 @@ const MORE_ID = 'mas';
     ArenaIconButton,
     ArenaSheet,
     ArenaSideNav,
+    ArenaSideNavCollapsible,
     ArenaSideNavItem,
     ArenaBottomNav,
     ArenaBottomNavItem,
@@ -150,6 +153,10 @@ export class App {
   protected readonly bar = computed(() => barDestinations(this.destinations()));
 
   protected readonly more = computed(() => moreDestinations(this.destinations()));
+
+  protected readonly railGroups = computed(() => railEntries(this.destinations()));
+
+  protected readonly moreGroups = computed(() => railEntries(this.more()));
 
   protected readonly barActiveId = computed(() => {
     const active = this.activeId();

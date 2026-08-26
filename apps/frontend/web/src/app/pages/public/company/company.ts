@@ -20,6 +20,7 @@ import { Geography } from '../../../domain/geography';
 import { BusinessType, pathOfType } from '../../../domain/businesses.model';
 import { bs } from '../../../domain/format';
 import { BranchCard } from '../../../shared/branch-card/branch-card';
+import { PromotionPicker } from '../../../shared/promotion-picker/promotion-picker';
 import { StructuredData } from '../../../seo/structured-data';
 import { NOT_INDEXED, PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
 
@@ -35,6 +36,7 @@ import { NOT_INDEXED, PRICE_CURRENCY, SITE_ORIGIN } from '../../../seo/site';
     ArenaKeyValue,
     ArenaAlert,
     BranchCard,
+    PromotionPicker,
     StructuredData,
   ],
   templateUrl: './company.html',

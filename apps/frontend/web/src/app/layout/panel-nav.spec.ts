@@ -7,6 +7,7 @@ import {
   moreDestinations,
   panelFor,
   panelOf,
+  railEntries,
 } from './panel-nav';
 import { PROFILES } from '../domain/session';
 
@@ -208,5 +209,41 @@ describe('the bottom bar', () => {
         expect(moreDestinations(destinationsFor(panel, type)).length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it('never splits a group between the bottom bar and Más', () => {
+    for (const panel of PANELS) {
+      for (const type of verticals) {
+        const all = destinationsFor(panel, type);
+        const inBar = new Set(barDestinations(all).map((one) => one.group));
+
+        for (const destination of moreDestinations(all)) {
+          expect(inBar.has(destination.group)).toBe(destination.group === undefined);
+        }
+      }
+    }
+  });
+
+  it('folds a group into one rail entry and leaves every other destination alone', () => {
+    for (const panel of PANELS) {
+      for (const type of verticals) {
+        const all = destinationsFor(panel, type);
+        const entries = railEntries(all);
+        const flat = entries.flatMap((one) =>
+          one.group ? [...one.destinations!] : [one.destination!],
+        );
+
+        expect(flat).toEqual(all);
+        expect(new Set(entries.map((one) => one.key)).size).toBe(entries.length);
+      }
+    }
+  });
+
+  it('gives the two panels that sell promotions a group and the others none', () => {
+    const grouped = PANELS.filter((panel) =>
+      panel.destinations.some((one) => one.group === 'promociones'),
+    ).map((panel) => panel.role);
+
+    expect(grouped.sort()).toEqual(['gerente-empresa', 'gerente-sucursal']);
   });
 });

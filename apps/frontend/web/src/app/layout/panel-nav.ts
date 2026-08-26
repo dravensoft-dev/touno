@@ -7,9 +7,27 @@ export interface Destination {
   readonly icon: string;
   readonly path: string;
   readonly type?: BusinessType;
+  readonly group?: string;
 }
 
+export interface DestinationGroup {
+  readonly id: string;
+  readonly label: string;
+  readonly icon: string;
+}
+
+export const GROUPS: readonly DestinationGroup[] = [
+  { id: 'promociones', label: 'Promociones', icon: 'ph-bold ph-ticket' },
+];
+
 export const BAR_SLOTS = 3;
+
+export interface RailEntry<T extends Destination> {
+  readonly key: string;
+  readonly destination?: T;
+  readonly group?: DestinationGroup;
+  readonly destinations?: readonly T[];
+}
 
 export interface PanelArea {
   readonly role: Role;
@@ -47,6 +65,27 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Riders',
         icon: 'ph-bold ph-motorcycle',
         path: '/empresa/riders',
+      },
+      {
+        id: 'promociones-crear',
+        label: 'Crear',
+        icon: 'ph-bold ph-plus-circle',
+        path: '/empresa/promociones/crear',
+        group: 'promociones',
+      },
+      {
+        id: 'promociones-compradores',
+        label: 'Para compradores',
+        icon: 'ph-bold ph-shopping-bag',
+        path: '/empresa/promociones/compradores',
+        group: 'promociones',
+      },
+      {
+        id: 'promociones-riders',
+        label: 'Para riders',
+        icon: 'ph-bold ph-motorcycle',
+        path: '/empresa/promociones/riders',
+        group: 'promociones',
       },
       {
         id: 'finanzas',
@@ -104,6 +143,20 @@ export const PANELS: readonly PanelArea[] = [
         label: 'Riders',
         icon: 'ph-bold ph-motorcycle',
         path: '/sucursal/riders',
+      },
+      {
+        id: 'promociones-compradores',
+        label: 'Para compradores',
+        icon: 'ph-bold ph-shopping-bag',
+        path: '/sucursal/promociones/compradores',
+        group: 'promociones',
+      },
+      {
+        id: 'promociones-riders',
+        label: 'Para riders',
+        icon: 'ph-bold ph-motorcycle',
+        path: '/sucursal/promociones/riders',
+        group: 'promociones',
       },
       {
         id: 'historial',
@@ -265,6 +318,39 @@ export function barDestinations<T extends Destination>(destinations: readonly T[
 
 export function moreDestinations<T extends Destination>(destinations: readonly T[]): readonly T[] {
   return destinations.slice(BAR_SLOTS);
+}
+
+export function groupOf(id: string): DestinationGroup | undefined {
+  return GROUPS.find((group) => group.id === id);
+}
+
+export function railEntries<T extends Destination>(
+  destinations: readonly T[],
+): readonly RailEntry<T>[] {
+  const entries: RailEntry<T>[] = [];
+
+  for (const destination of destinations) {
+    const group = destination.group ? groupOf(destination.group) : undefined;
+    const last = entries[entries.length - 1];
+
+    if (!group) {
+      entries.push({ key: destination.id, destination });
+      continue;
+    }
+
+    if (last?.group?.id === group.id) {
+      entries[entries.length - 1] = {
+        key: last.key,
+        group,
+        destinations: [...(last.destinations ?? []), destination],
+      };
+      continue;
+    }
+
+    entries.push({ key: `group:${group.id}`, group, destinations: [destination] });
+  }
+
+  return entries;
 }
 
 export function activeIdIn(panel: PanelArea, url: string): string | undefined {

@@ -10,6 +10,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { Branch, Company, pathOfType } from '../../domain/businesses.model';
 import { bs, porcentaje } from '../../domain/format';
+import { Promotions } from '../../domain/promotions';
 import { Reputation } from '../../domain/reputation';
 
 @Component({
@@ -24,6 +25,7 @@ export class BranchCard {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
   private readonly reputation = inject(Reputation);
+  private readonly promotions = inject(Promotions);
 
   readonly branch = input.required<Branch>();
   readonly company = input.required<Company>();
@@ -44,6 +46,10 @@ export class BranchCard {
 
   protected readonly fallbackIcon = computed(() =>
     this.company().type === 'restaurante' ? 'ph ph-fork-knife' : 'ph ph-package',
+  );
+
+  protected readonly promoted = computed(() =>
+    this.promotions.liveOfCompany(this.company().id).some((one) => one.discount !== undefined),
   );
 
   protected readonly delivery = computed(() => bs(this.branch().deliveryBob));

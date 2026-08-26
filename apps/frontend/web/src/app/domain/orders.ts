@@ -8,11 +8,10 @@ import { Riders } from './riders';
 import { Staffing } from './staffing';
 import { RiderAgreement, WorkMode } from './agreements.model';
 import { timelineOf } from './timeline';
-import { COUPONS, ORDERS, SETTLEMENTS } from './orders.data';
+import { ORDERS, SETTLEMENTS } from './orders.data';
 import {
   Assignment,
   AssignmentLeg,
-  Coupon,
   Order,
   OrderSheet,
   OrderSheetParty,
@@ -47,11 +46,7 @@ export class Orders {
   private readonly loads = inject(Loads);
 
   private readonly orderList = signal<readonly Order[]>(ORDERS);
-  private readonly couponList = signal<readonly Coupon[]>(COUPONS);
-
   readonly all = this.orderList.asReadonly();
-
-  readonly coupons = this.couponList.asReadonly();
 
   readonly settlements: readonly Settlement[] = SETTLEMENTS;
 
@@ -154,10 +149,6 @@ export class Orders {
     return { code: order.code, scenario: order.scenario, parties };
   }
 
-  couponsOf(companyId: string): readonly Coupon[] {
-    return this.coupons().filter((one) => one.companyId === companyId);
-  }
-
   settlementsOf(companyId: string): readonly Settlement[] {
     return this.settlements.filter((one) => one.companyId === companyId);
   }
@@ -218,12 +209,6 @@ export class Orders {
     }
 
     return undefined;
-  }
-
-  toggleCoupon(code: string): void {
-    this.couponList.update((list) =>
-      list.map((one) => (one.code === code ? { ...one, active: !one.active } : one)),
-    );
   }
 
   private riderParty(

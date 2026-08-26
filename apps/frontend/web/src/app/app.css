@@ -115,7 +115,7 @@
   }
 
   .shell-panel__main {
-    padding-block-end: 0;
+    padding-block-end: var(--rhythm-section);
   }
 
   .shell-panel__bar {

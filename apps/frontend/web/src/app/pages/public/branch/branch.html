@@ -22,6 +22,8 @@
     </div>
   </arena-page-head>
 
+  <app-promotion-picker [company]="company()" />
+
   @if (!restaurant()) {
     <arena-alert tone="info" title="Si estás en otra ciudad">
       {{ company().name }} puede mandarte lo que compres aquí, siempre que tenga sucursal en tu

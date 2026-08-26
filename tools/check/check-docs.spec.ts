@@ -3,6 +3,7 @@ import {
   BANNED_PUNCTUATION,
   DOC_COMMENT,
   findComments,
+  limitFor,
   MAX_DOCUMENT_CHARS,
   problems,
   punctuationProblems,
@@ -116,8 +117,31 @@ describe('the size rule', () => {
     expect(sizeProblems(['fits.md'], () => 'x'.repeat(MAX_DOCUMENT_CHARS))).toEqual([]);
   });
 
-  it('holds SIZE_ALLOWANCE empty, which is the claim that no document needs one', () => {
-    expect(SIZE_ALLOWANCE.size).toBe(0);
+  it('gives every raised limit a reason rather than a bare number', () => {
+    for (const [rel, allowed] of SIZE_ALLOWANCE) {
+      expect(allowed.reason.length, rel).toBeGreaterThan(40);
+    }
+  });
+
+  it('raises a limit above the shared one, because raising it to less buys nothing', () => {
+    for (const [rel, allowed] of SIZE_ALLOWANCE) {
+      expect(allowed.limit, rel).toBeGreaterThan(MAX_DOCUMENT_CHARS);
+    }
+  });
+
+  it('takes an allowance back once the document fits the shared budget again', () => {
+    const found = sizeProblems(['TOUNO_STRUC.md'], () => 'x'.repeat(MAX_DOCUMENT_CHARS));
+
+    expect(found).toHaveLength(1);
+    expect(found[0]).toContain('stale allowance');
+  });
+
+  it('still fails a document that runs past the limit its allowance raised', () => {
+    const limit = limitFor('TOUNO_STRUC.md');
+    const found = sizeProblems(['TOUNO_STRUC.md'], () => 'x'.repeat(limit + 1));
+
+    expect(found).toHaveLength(1);
+    expect(found[0]).toContain(String(limit));
   });
 });
 

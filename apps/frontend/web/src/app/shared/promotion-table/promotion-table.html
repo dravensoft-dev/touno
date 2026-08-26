@@ -1,0 +1,48 @@
+<arena-table [label]="label()" [columns]="columns()">
+  @for (promotion of promotions(); track promotion.code) {
+    <tr arena-table-row [interactive]="interactive()" (activate)="chosen.emit(promotion)">
+      <td arena-table-cell>
+        <span class="arena-num">{{ promotion.code }}</span>
+      </td>
+
+      @if (forRiders()) {
+        @if (promotion.riderLeg; as leg) {
+          <td arena-table-cell>
+            <span class="arena-num">{{ money(leg.perTripBob) }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ money(leg.bonusBob) }} a las {{ leg.bonusAfterRuns }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ money(leg.guaranteedBob) }}</span>
+          </td>
+        }
+      } @else {
+        <td arena-table-cell>
+          {{ valueOf(promotion) }}
+          <span class="arena-num">· {{ promotion.label }}{{ gateOf(promotion) }}</span>
+        </td>
+        <td arena-table-cell>
+          <span class="arena-num">{{ usesOf(promotion) }}</span>
+        </td>
+      }
+
+      <td arena-table-cell>
+        <span class="arena-num">{{ dateOf(promotion.until) }}</span>
+      </td>
+      <td arena-table-cell>
+        <arena-badge [tone]="toneOf(promotion)">{{ stateOf(promotion) }}</arena-badge>
+      </td>
+
+      @if (switchable()) {
+        <td arena-table-cell>
+          <arena-switch
+            [state]="promotion.active"
+            [label]="'Encender ' + promotion.code"
+            (requestChange)="switched.emit(promotion)"
+          />
+        </td>
+      }
+    </tr>
+  }
+</arena-table>

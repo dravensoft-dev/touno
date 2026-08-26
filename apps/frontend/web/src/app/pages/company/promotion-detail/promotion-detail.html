@@ -1,0 +1,99 @@
+@if (promotion(); as promo) {
+  <div class="arena-stack arena-stack--section">
+    <arena-page-head headingLevel="h1" [title]="promo.label" [subtitle]="companyName()">
+      <arena-badge [tone]="stateTone()">{{ stateLabel() }}</arena-badge>
+    </arena-page-head>
+
+    <arena-key-value [rows]="facts()" />
+
+    @if (promo.discount) {
+      <arena-alert tone="info" title="Quién paga este descuento">
+        Tú, entero. Touno cobra su comisión sobre el precio sin descontar, así que esta promoción no
+        le cuesta nada a la plataforma y sale de tu neto en la liquidación.
+      </arena-alert>
+    } @else {
+      <arena-alert tone="info" title="Esta promoción no descuenta nada al comprador">
+        Es un trato entre tú y tus riders. El comprador paga lo de siempre, y su código no se aplica
+        en un pedido.
+      </arena-alert>
+    }
+
+    @if (leg(); as pata) {
+      <arena-grid>
+        <arena-stat-card
+          icon="ph-bold ph-motorcycle"
+          label="La fija de la promoción"
+          [value]="money(pata.perTripBob)"
+          [sub]="'Su tarifa de siempre contigo: ' + money(ordinaryBob())"
+        />
+        <arena-stat-card
+          icon="ph-bold ph-gift"
+          label="Bono"
+          [value]="money(pata.bonusBob)"
+          [sub]="'Al llegar a ' + runsLabel(pata.bonusAfterRuns)"
+        />
+        <arena-stat-card
+          icon="ph-bold ph-shield-check"
+          label="Mínimo garantizado"
+          [value]="money(pata.guaranteedBob)"
+          sub="Se lo llevas aunque el volumen no llegue"
+        />
+      </arena-grid>
+
+      <arena-alert tone="warning" title="Por qué le conviene al rider aceptar menos por carrera">
+        La fija de esta promoción es más baja que la que le pagas normalmente, y por eso tiene que
+        ver la cuenta antes de aceptar y no después. Lo que la hace aceptable son las otras dos
+        cifras: el bono al llegar al volumen, y el mínimo garantizado si no llega. El piso de Touno
+        para esta clase es {{ money(floor()) }}, y ninguna promoción puede bajar de ahí.
+      </arena-alert>
+
+      <arena-section
+        headingLevel="h2"
+        eyebrow="La cuenta que ve el rider"
+        title="Lo mismo, en las dos condiciones"
+        description="Sobre la fija sola. La distancia y el clima se suman aparte y la promoción no los toca."
+        rhythm="md"
+      >
+        <arena-table label="Comparación de la pata de rider" [columns]="columns">
+          @for (step of steps(); track step.runs) {
+            <tr arena-table-row>
+              <td arena-table-cell>{{ runsLabel(step.runs) }}</td>
+              <td arena-table-cell>
+                <span class="arena-num">{{ money(step.pay.ordinaryBob) }}</span>
+              </td>
+              <td arena-table-cell>
+                <span class="arena-num">{{ money(step.pay.promotionBob) }}</span>
+              </td>
+              <td arena-table-cell>
+                <span class="arena-num">{{ money(step.pay.paidBob) }}</span>
+              </td>
+            </tr>
+          }
+        </arena-table>
+      </arena-section>
+    } @else {
+      <arena-alert tone="info" title="Esta promoción no compromete a ningún rider">
+        Descuenta al comprador y nada más. Lo que cobra el rider por llevarla es exactamente lo
+        mismo que cobraría sin ella.
+      </arena-alert>
+    }
+  </div>
+} @else {
+  <div class="arena-stack arena-stack--section">
+    @if (notMine()) {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-prohibit"
+        title="Esa promoción no es de tu empresa"
+        message="Sólo ves las que escribiste tú."
+      />
+    } @else {
+      <arena-empty-state
+        headingLevel="h1"
+        icon="ph-bold ph-magnifying-glass"
+        title="No encontramos esa promoción"
+        message="Revisa el código o vuelve a la lista."
+      />
+    }
+  </div>
+}

@@ -212,6 +212,59 @@ export const routes: Routes = [
       import('./pages/company/rider-detail/rider-detail').then((m) => m.CompanyRiderDetail),
   },
   {
+    path: 'empresa/promociones/crear',
+    title: 'Escribir una promoción',
+    data: PRIVATE,
+    loadComponent: () =>
+      import('./pages/company/promotion-new/promotion-new').then((m) => m.CompanyPromotionNew),
+  },
+  {
+    path: 'empresa/promociones/compradores',
+    title: 'Promociones para compradores',
+    data: { audience: 'compradores', ...PRIVATE },
+    loadComponent: () =>
+      import('./pages/company/promotions/promotions').then((m) => m.CompanyPromotions),
+  },
+  {
+    path: 'empresa/promociones/compradores/:code',
+    title: 'Promoción',
+    data: { audience: 'compradores', ...PRIVATE },
+    loadComponent: () =>
+      import('./pages/company/promotion-detail/promotion-detail').then(
+        (m) => m.CompanyPromotionDetail,
+      ),
+  },
+  {
+    path: 'empresa/promociones/riders',
+    title: 'Promociones para riders',
+    data: { audience: 'riders', ...PRIVATE },
+    loadComponent: () =>
+      import('./pages/company/promotions/promotions').then((m) => m.CompanyPromotions),
+  },
+  {
+    path: 'empresa/promociones/riders/:code',
+    title: 'Promoción',
+    data: { audience: 'riders', ...PRIVATE },
+    loadComponent: () =>
+      import('./pages/company/promotion-detail/promotion-detail').then(
+        (m) => m.CompanyPromotionDetail,
+      ),
+  },
+  {
+    path: 'sucursal/promociones/compradores',
+    title: 'Promociones para compradores',
+    data: { audience: 'compradores', ...PRIVATE },
+    loadComponent: () =>
+      import('./pages/branch/promotions/promotions').then((m) => m.BranchPromotions),
+  },
+  {
+    path: 'sucursal/promociones/riders',
+    title: 'Promociones para riders',
+    data: { audience: 'riders', ...PRIVATE },
+    loadComponent: () =>
+      import('./pages/branch/promotions/promotions').then((m) => m.BranchPromotions),
+  },
+  {
     path: 'empresa/finanzas',
     title: 'Finanzas',
     data: PRIVATE,

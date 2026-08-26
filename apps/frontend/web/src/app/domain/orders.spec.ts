@@ -12,6 +12,24 @@ import { Riders } from './riders';
 import { Order, OrderScenario, isInterurban, movingLeg } from './orders.model';
 import { rangeOf } from './riders.model';
 
+import { SETTLEMENTS } from './orders.data';
+
+describe('settlements', () => {
+  it('pays the empresa its own price less what it discounted, and never less the commission', () => {
+    expect(SETTLEMENTS.length).toBeGreaterThan(0);
+
+    for (const one of SETTLEMENTS) {
+      expect(one.netBob).toBe(one.grossBob - one.promotionsBob);
+      expect(one.commissionBob).toBeGreaterThan(0);
+      expect(one.netBob).toBeGreaterThan(one.grossBob - one.commissionBob);
+    }
+  });
+
+  it('carries one period that financed a promotion, so the line is walkable', () => {
+    expect(SETTLEMENTS.some((one) => one.promotionsBob > 0)).toBe(true);
+  });
+});
+
 describe('Orders', () => {
   let orders: Orders;
   let businesses: Businesses;

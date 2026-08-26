@@ -12,7 +12,22 @@ import {
 
 export const MAX_DOCUMENT_CHARS = 60_000;
 
-export const SIZE_ALLOWANCE = new Map<string, { limit: number; reason: string }>([]);
+export const SIZE_ALLOWANCE = new Map<string, { limit: number; reason: string }>([
+  [
+    'TOUNO_STRUC.md',
+    {
+      limit: 75_000,
+      reason:
+        'a product document rather than a level page. The shared budget is paid back by moving a ' +
+        "level's own tour into the page below it and leaving a pointer, and this document has no " +
+        'page below it: it is the whole of what Touno promises the business that reads it, and it ' +
+        'is exported and read as one PDF, where a pointer to another file is a dead end rather ' +
+        'than a hop. That is also why it cites its sibling by section number and never by link. ' +
+        'It is raised by a quarter and no further, and the gate takes the allowance back by ' +
+        'itself the moment the document fits the shared budget again',
+    },
+  ],
+]);
 
 export const BANNED_PUNCTUATION: [string, string][] = [['—', 'an em dash']];
 

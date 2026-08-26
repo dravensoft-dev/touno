@@ -4,9 +4,12 @@ import { Catalog } from './catalog';
 import { Checkout } from './draft';
 import { Geography } from './geography';
 import { Platform } from './platform';
+import { Promotions } from './promotions';
+import { Reputation } from './reputation';
 import { Session } from './session';
 import { Branch } from './businesses.model';
 import { Product } from './catalog.model';
+import { Promotion } from './promotions.model';
 import { EMPTY_FARE, Fare, fareOf, round2, unitsBetween } from './pricing';
 
 export interface CartLine {
@@ -25,6 +28,8 @@ export class Cart {
   private readonly checkout = inject(Checkout);
   private readonly geography = inject(Geography);
   private readonly platform = inject(Platform);
+  private readonly promotions = inject(Promotions);
+  private readonly reputation = inject(Reputation);
   private readonly session = inject(Session);
 
   private readonly lines = signal<readonly CartLine[]>([]);
@@ -41,6 +46,30 @@ export class Cart {
 
   readonly homeCityId = computed(() => this.session.cityId() ?? this.geography.all()[0].id);
 
+  readonly buyerPct = computed(() => {
+    const phone = this.session.buyerPhone();
+
+    return phone ? this.reputation.of(phone).pct : undefined;
+  });
+
+  readonly promotion = computed<Promotion | undefined>(() =>
+    this.promotions.byCode(this.checkout.current().promotionCode),
+  );
+
+  readonly refusal = computed(() => {
+    const typed = this.checkout.current().promotionCode.trim();
+
+    if (typed === '') {
+      return undefined;
+    }
+
+    return this.promotions.reasonOf(typed, {
+      companyIds: this.companies(),
+      delivery: this.checkout.current().delivery,
+      buyerPct: this.buyerPct(),
+    });
+  });
+
   readonly fare = computed<Fare>(() =>
     this.branches()
       .map((one) => this.fareOfBranch(one))
@@ -50,6 +79,7 @@ export class Cart {
           commissionBob: round2(whole.commissionBob + one.commissionBob),
           distanceBob: round2(whole.distanceBob + one.distanceBob),
           weatherBob: round2(whole.weatherBob + one.weatherBob),
+          discountBob: round2(whole.discountBob + one.discountBob),
           totalBob: round2(whole.totalBob + one.totalBob),
         }),
         EMPTY_FARE,
@@ -61,6 +91,12 @@ export class Cart {
   readonly distanceBob = computed(() => this.fare().distanceBob);
 
   readonly weatherBob = computed(() => this.fare().weatherBob);
+
+  readonly discountBob = computed(() => this.fare().discountBob);
+
+  readonly applied = computed<Promotion | undefined>(() =>
+    this.refusal() === undefined && this.discountBob() > 0 ? this.promotion() : undefined,
+  );
 
   readonly totalBob = computed(() => this.fare().totalBob);
 
@@ -87,6 +123,9 @@ export class Cart {
       adverseWeather: this.geography.isAdverse(home),
       weatherFeeBob: this.businesses.weatherFeeOf(branch.companyId),
       config: this.platform.config(),
+      companyId: branch.companyId,
+      promotion: this.promotion(),
+      buyerPct: this.buyerPct(),
     });
   }
 

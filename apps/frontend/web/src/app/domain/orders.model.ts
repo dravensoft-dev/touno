@@ -84,6 +84,8 @@ export interface Order {
   readonly commissionBob: number;
   readonly distanceBob: number;
   readonly weatherBob: number;
+  readonly discountBob: number;
+  readonly promotionCode?: string;
   readonly totalBob: number;
   readonly state: OrderState;
   readonly placedAt: string;
@@ -121,17 +123,6 @@ export interface OrderTimeline {
   readonly etaAt?: string;
 }
 
-export interface Coupon {
-  readonly code: string;
-  readonly companyId: string;
-  readonly label: string;
-  readonly discountBob: number;
-  readonly uses: number;
-  readonly limit: number;
-  readonly active: boolean;
-  readonly until: string;
-}
-
 export interface Settlement {
   readonly id: string;
   readonly companyId: string;
@@ -140,6 +131,7 @@ export interface Settlement {
   readonly orders: number;
   readonly grossBob: number;
   readonly commissionBob: number;
+  readonly promotionsBob: number;
   readonly netBob: number;
   readonly paidAt?: string;
 }

@@ -2,6 +2,15 @@
 
 `feed`, `cart`, `checkout`, `orders`, `order-detail`. The one that carries the guide is the ficha.
 
+## The feed lists negocios, and the ficha of a sucursal is where a carrito is filled
+
+Two sections, one per vertical, each listing the sucursales open in the chosen city and ordered by
+`Reputation.bestFirst()` exactly as the public listings are. **The card is `shared/branch-card` and
+not a card of this lane's own**, so the etiqueta a negocio con promoción carries is written once and
+shows wherever a sucursal is drawn. Adding to a carrito happens inside the sucursal, which is the
+screen that knows the precio de esa sucursal; a feed of loose products would have to answer that
+question twice.
+
 ## The ficha draws its parties from `sheetOf()`
 
 Two, three or four of them, from one record: a restaurant order shows the sucursal and the rider; a

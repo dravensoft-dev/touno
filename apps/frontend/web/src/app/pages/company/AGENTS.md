@@ -44,6 +44,36 @@ gerente would paste into a chat and `r-marco` is not, and the segment is named `
 reason. Why a parameter is named for what it holds is
 [`../../AGENTS.md`](../../AGENTS.md).
 
+## Promotions are the one thing this lane sells rather than administers
+
+`promotion-new`, `promotions` and `promotion-detail` are where an empresa writes a discount, and the
+screen says out loud what no other screen in this tree has to: **the empresa funds it entirely**.
+Touno's commission is computed on the undiscounted price, so a promotion costs the platform nothing
+and comes out of the empresa's own net. Finanzas carries the same figure from the other side, as
+`promotionsBob` on each settlement.
+
+**Writing one and reading them are separate screens, because they answer separate questions.**
+`promotion-new` asks who a promotion is for and takes the fields that audience needs, so the rider's
+figures appear only once a rider is involved. `promotions` is the same component twice, reading its
+audience from the route the way the public listings read their vertical, and each side lists only
+what carries that half: what discounts a comprador under `compradores`, what carries a leg under
+`riders`. **A promotion with both is on both lists and is not duplicated by that**, because the two
+screens show different columns of one record. The rail says the same thing, and how it draws the
+group is [`../../layout/AGENTS.md`](../../layout/AGENTS.md).
+
+**The empresa's ficha of a promotion hangs off the list it was reached from**, so a rail destination
+stays lit on it and no literal segment has to compete with a promotion's code for the same slot.
+
+**The detail screen exists for the rider's arithmetic and not for the promotion's.** It says who
+funds the discount only where there is one to fund; a promotion that only pays a rider is told apart
+there rather than being handed a sentence about a descuento it does not carry. A promotion may
+carry a `RiderLeg`, which is the only way an empresa may offer a rider less per carrera than it
+normally pays, and it is legitimate only because the rider sees the whole comparison before
+accepting: his ordinary rate, the promotion's fija, the bonus at the volume mark, and the guaranteed
+minimum if the volume never arrives. The floor underneath all of it is Touno's and
+`pricing.ts:legUnderFloor()` refuses a leg below it. Which plan may offer one at all is
+`businesses.model.ts:PLAN_LIMITS`.
+
 ## This lane does not operate
 
 No accepting a pedido, no assigning a rider, no answering a chat. When something is stuck, the

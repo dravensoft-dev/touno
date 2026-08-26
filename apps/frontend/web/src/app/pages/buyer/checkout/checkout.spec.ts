@@ -29,7 +29,25 @@ function withCart(productId: string, branchId: string): ComponentFixture<Checkou
   return fixture;
 }
 
+function addressField(fixture: ComponentFixture<CheckoutPage>): Element | null {
+  const fields: Element[] = [...fixture.nativeElement.querySelectorAll('arena-input')];
+
+  return fields.find((one) => one.getAttribute('label')?.includes('Dirección')) ?? null;
+}
+
 describe('CheckoutPage', () => {
+  it('tells the buyer that a code which only pays the rider is not for him', () => {
+    const fixture = withCart('pc-cuarto-pollo', 'b-copacabana-miraflores');
+
+    TestBed.inject(Checkout).patch({ promotionCode: 'COPANOCHE' });
+    fixture.detectChanges();
+
+    const host: HTMLElement = fixture.nativeElement;
+
+    expect(host.textContent).toContain('es un trato entre el negocio y sus riders');
+    expect(TestBed.inject(Cart).discountBob()).toBe(0);
+  });
+
   it('asks nothing when the cart is empty', () => {
     const { fixture } = start();
 
@@ -74,12 +92,12 @@ describe('CheckoutPage', () => {
   it('asks for an address for a home delivery and never for a counter pickup', () => {
     const fixture = withCart('al-jean', 'b-ale-santa-cruz');
 
-    expect(fixture.nativeElement.querySelector('arena-input')).not.toBeNull();
+    expect(addressField(fixture)).not.toBeNull();
 
     TestBed.inject(Checkout).patch({ delivery: 'sucursal' });
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelector('arena-input')).toBeNull();
+    expect(addressField(fixture)).toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Lleva tu código del pedido y tu carnet');
   });
 

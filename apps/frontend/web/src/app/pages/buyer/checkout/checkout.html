@@ -74,6 +74,22 @@
       </div>
     }
 
+    <arena-input
+      label="¿Tienes un código de promoción?"
+      hint="Lo escribe el negocio y lo paga el negocio. Si no tienes, deja el campo vacío."
+      placeholder="COPA10"
+      [value]="checkout.current().promotionCode"
+      (change)="setPromotion($event)"
+    />
+
+    @if (cart.refusal(); as why) {
+      <arena-alert tone="warning" title="Ese código no se aplicó">{{ why }}</arena-alert>
+    } @else if (cart.applied(); as promo) {
+      <arena-alert tone="success" [title]="promo.label">
+        Ya está descontado abajo. La comisión de Touno no cambia, y lo que cobra tu rider tampoco.
+      </arena-alert>
+    }
+
     <arena-key-value [rows]="summary()" [total]="total()" />
 
     <div class="arena-row">

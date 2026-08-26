@@ -19,6 +19,7 @@ import { Cart } from '../../../domain/cart';
 import { Checkout } from '../../../domain/draft';
 import { Geography } from '../../../domain/geography';
 import { Orders } from '../../../domain/orders';
+import { Promotions } from '../../../domain/promotions';
 import { Session } from '../../../domain/session';
 import { DeliveryChoice } from '../../../domain/orders.model';
 import { Notices } from '../../../layout/notices';
@@ -47,6 +48,7 @@ export class CheckoutPage {
   private readonly orders = inject(Orders);
   private readonly session = inject(Session);
   private readonly notices = inject(Notices);
+  private readonly promotions = inject(Promotions);
 
   protected readonly cart = inject(Cart);
   protected readonly checkout = inject(Checkout);
@@ -126,7 +128,17 @@ export class CheckoutPage {
     this.checkout.patch({ destinationBranchId });
   }
 
+  protected setPromotion(promotionCode: string): void {
+    this.checkout.patch({ promotionCode });
+  }
+
   protected confirm(): void {
+    const applied = this.cart.applied();
+
+    if (applied) {
+      this.promotions.spend(applied.code);
+    }
+
     this.notices.orderPlaced('TO-2299');
     this.cart.clear();
     this.checkout.reset();

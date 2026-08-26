@@ -1,0 +1,61 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head headingLevel="h1" [title]="title()" [subtitle]="subtitle()" />
+
+  <arena-grid>
+    <arena-stat-card
+      icon="ph-bold ph-ticket"
+      label="Corriendo"
+      [value]="running().length.toString()"
+      [sub]="capLabel()"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-hand-coins"
+      label="Lo que llevas financiado"
+      [value]="money(funded())"
+      sub="Sale de tu neto, no de la comisión de Touno"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-crown-simple"
+      label="Tu plan"
+      [value]="planLabel()"
+      [sub]="capLabel()"
+    />
+  </arena-grid>
+
+  @if (forRiders()) {
+    <arena-alert tone="warning" title="Enséñale la cuenta entera antes de que acepte">
+      Ninguna promoción baja lo que Touno le garantiza a un rider por carrera. Lo que sí puedes es
+      ofrecerle otra fija mientras dure, con su bono y su mínimo garantizado, y sólo vale si la ve
+      completa antes de aceptar.
+    </arena-alert>
+  } @else {
+    <arena-alert tone="warning" title="La promoción la pagas tú, entera">
+      Touno cobra su comisión sobre el precio sin descontar, así que el descuento sale de lo tuyo y
+      no de lo suyo. Y no toca lo que cobra el rider: su fija, su distancia y su clima se calculan
+      igual con promoción y sin ella.
+    </arena-alert>
+  }
+
+  @if (refused(); as why) {
+    <arena-alert tone="danger" title="Eso no se guardó">{{ why }}</arena-alert>
+  }
+
+  @if (mine().length > 0) {
+    <app-promotion-table
+      [promotions]="mine()"
+      [audience]="audience()"
+      [label]="title()"
+      [switchable]="true"
+      [interactive]="true"
+      (chosen)="open($event)"
+      (switched)="toggle($event)"
+    />
+  } @else {
+    <arena-empty-state
+      headingLevel="h2"
+      icon="ph-bold ph-ticket"
+      title="Todavía no tienes ninguna aquí"
+      [message]="emptyMessage()"
+    />
+  }
+</div>

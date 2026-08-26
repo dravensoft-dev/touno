@@ -26,6 +26,29 @@
     </div>
   </arena-page-head>
 
+  @if (featured().length > 0) {
+    <arena-section
+      headingLevel="h2"
+      eyebrow="Destacado"
+      title="Locales que pagaron por aparecer aquí"
+      description="Lo decimos porque es lo que es: estas sucursales compraron esta franja con su plan. No adelantan a nadie en la lista de abajo, que sigue ordenada por cumplimiento y las incluye igual."
+      rhythm="md"
+    >
+      <arena-grid>
+        @for (branch of featured(); track branch.id) {
+          @if (companyOf(branch.id); as company) {
+            <app-branch-card
+              [branch]="branch"
+              [company]="company"
+              [cityName]="geography.nameOf(branch.cityId)"
+              headingLevel="h3"
+            />
+          }
+        }
+      </arena-grid>
+    </arena-section>
+  }
+
   @if (branches().length > 0) {
     <arena-grid>
       @for (branch of branches(); track branch.id) {

@@ -13,6 +13,7 @@ const COMPANY: Company = {
   categories: ['Ropa'],
   tags: ['Temporada'],
   since: '2011',
+  plan: 'basico',
 };
 
 const BRANCH: Branch = {
@@ -33,7 +34,11 @@ const BRANCH: Branch = {
   cover: '/img/branches/ale-la-paz.webp',
 };
 
-function render(base: string, branch: Branch = BRANCH): ComponentFixture<BranchCard> {
+function render(
+  base: string,
+  branch: Branch = BRANCH,
+  company: Company = COMPANY,
+): ComponentFixture<BranchCard> {
   TestBed.configureTestingModule({
     providers: [provideRouter([]), { provide: APP_BASE_HREF, useValue: base }],
   });
@@ -41,7 +46,7 @@ function render(base: string, branch: Branch = BRANCH): ComponentFixture<BranchC
   const fixture = TestBed.createComponent(BranchCard);
 
   fixture.componentRef.setInput('branch', branch);
-  fixture.componentRef.setInput('company', COMPANY);
+  fixture.componentRef.setInput('company', company);
   fixture.componentRef.setInput('cityName', 'La Paz');
   fixture.detectChanges();
 
@@ -89,5 +94,20 @@ describe('BranchCard', () => {
     const host: HTMLElement = render('/', { ...BRANCH, open: false }).nativeElement;
 
     expect(host.textContent).toContain('Cerrada ahora');
+  });
+
+  it('marks a sucursal whose empresa is running a discount', () => {
+    const host: HTMLElement = render('/').nativeElement;
+
+    expect(host.textContent).toContain('Con promoción');
+  });
+
+  it('leaves the mark off an empresa with nothing running', () => {
+    const host: HTMLElement = render('/', BRANCH, {
+      ...COMPANY,
+      id: 'c-illimani',
+    }).nativeElement;
+
+    expect(host.textContent).not.toContain('Con promoción');
   });
 });

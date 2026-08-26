@@ -161,6 +161,7 @@ export class BuyerOrderDetail {
         commissionBob: order.commissionBob,
         distanceBob: order.distanceBob,
         weatherBob: order.weatherBob,
+        discountBob: order.discountBob,
         totalBob: order.totalBob,
       }),
     ];

@@ -10,13 +10,19 @@
       icon="ph-bold ph-hand-coins"
       label="Neto"
       [value]="money(net())"
-      sub="Lo que te queda después de la comisión"
+      sub="Tu precio íntegro, menos lo que descontaste tú"
     />
     <arena-stat-card
       icon="ph-bold ph-receipt"
       label="Comisión"
       [value]="money(commission())"
-      sub="Lo que cobra Touno"
+      sub="Lo que Touno le cobró al comprador encima de tu precio"
+    />
+    <arena-stat-card
+      icon="ph-bold ph-ticket"
+      label="Promociones"
+      [value]="money(promotions())"
+      sub="Lo que descontaste tú, y sale de tu neto"
     />
     <arena-stat-card
       icon="ph-bold ph-clock"
@@ -53,6 +59,9 @@
           </td>
           <td arena-table-cell>
             <span class="arena-num">{{ money(row.commissionBob) }}</span>
+          </td>
+          <td arena-table-cell>
+            <span class="arena-num">{{ money(row.promotionsBob) }}</span>
           </td>
           <td arena-table-cell>
             <span class="arena-num">{{ money(row.netBob) }}</span>

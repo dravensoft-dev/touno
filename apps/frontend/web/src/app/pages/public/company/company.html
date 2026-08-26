@@ -10,6 +10,8 @@
 
   <arena-page-head headingLevel="h1" [title]="company().name" [subtitle]="company().summary" />
 
+  <app-promotion-picker [company]="company()" />
+
   @if (!restaurant()) {
     <arena-alert tone="info" title="Cómo llega lo que compras aquí">
       Si tienes una sucursal de {{ company().name }} en tu ciudad, puedes comprar desde cualquiera

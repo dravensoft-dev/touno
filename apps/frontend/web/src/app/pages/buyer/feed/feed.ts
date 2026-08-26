@@ -12,14 +12,13 @@ import {
   ArenaSelectOption,
 } from '@dravensoft/arena-angular';
 import { Businesses } from '../../../domain/businesses';
-import { Cart } from '../../../domain/cart';
 import { Catalog } from '../../../domain/catalog';
-import { FeedItem } from '../../../domain/catalog.model';
 import { Geography } from '../../../domain/geography';
 import { Orders } from '../../../domain/orders';
+import { Reputation } from '../../../domain/reputation';
 import { Session } from '../../../domain/session';
-import { Notices } from '../../../layout/notices';
-import { ProductCard } from '../../../shared/product-card/product-card';
+import { Branch } from '../../../domain/businesses.model';
+import { BranchCard } from '../../../shared/branch-card/branch-card';
 
 @Component({
   selector: 'app-feed',
@@ -34,15 +33,14 @@ import { ProductCard } from '../../../shared/product-card/product-card';
     ArenaGrid,
     ArenaSelect,
     ArenaEmptyState,
-    ProductCard,
+    BranchCard,
   ],
   templateUrl: './feed.html',
 })
 export class Feed {
   private readonly router = inject(Router);
-  private readonly cart = inject(Cart);
-  private readonly notices = inject(Notices);
   private readonly orders = inject(Orders);
+  private readonly reputation = inject(Reputation);
   private readonly session = inject(Session);
 
   protected readonly catalog = inject(Catalog);
@@ -66,9 +64,9 @@ export class Feed {
     this.geography.all().map((one) => ({ value: one.id, label: one.name })),
   );
 
-  protected readonly food = computed(() => this.catalog.feedOf('restaurante', this.city()));
+  protected readonly food = computed(() => this.openOfType('restaurante'));
 
-  protected readonly parcels = computed(() => this.catalog.feedOf('importadora', this.city()));
+  protected readonly parcels = computed(() => this.openOfType('importadora'));
 
   protected readonly reachable = computed(() =>
     this.businesses
@@ -81,12 +79,19 @@ export class Feed {
     this.chosen.set(cityId);
   }
 
-  protected addToCart(item: FeedItem): void {
-    this.cart.add(item.product, item.branch.id);
-    this.notices.addedToCart(item.product.name);
+  protected companyOf(branch: Branch) {
+    return this.businesses.companyById(branch.companyId);
   }
 
   protected goTo(path: string): void {
     void this.router.navigateByUrl(path);
+  }
+
+  private openOfType(type: 'restaurante' | 'importadora'): readonly Branch[] {
+    const open = this.businesses
+      .branchesIn(this.city())
+      .filter((one) => one.open && this.businesses.typeOfBranch(one.id) === type);
+
+    return this.reputation.bestFirst(open);
   }
 }

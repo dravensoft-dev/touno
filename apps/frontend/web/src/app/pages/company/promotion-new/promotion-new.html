@@ -1,0 +1,155 @@
+<div class="arena-stack arena-stack--section">
+  <arena-page-head
+    headingLevel="h1"
+    title="Escribir una promoción"
+    subtitle="Decide a quién alcanza, qué da y hasta cuándo. Se enciende apenas la guardes."
+  />
+
+  @if (refused(); as why) {
+    <arena-alert tone="danger" title="Eso no se guardó">{{ why }}</arena-alert>
+  }
+
+  @if (!room()) {
+    <arena-alert tone="warning" title="Tu plan ya tiene todas sus promociones encendidas">
+      {{ capLabel() }}. Apaga una para escribir otra, o sube de plan.
+    </arena-alert>
+  }
+
+  <arena-section
+    headingLevel="h2"
+    eyebrow="A quién alcanza"
+    title="La audiencia"
+    description="Una promoción descuenta al comprador, le paga al rider, o hace las dos cosas."
+    rhythm="md"
+  >
+    <arena-select
+      label="Para quién es"
+      [options]="audiences"
+      [value]="audience()"
+      (change)="setAudience($event)"
+    />
+  </arena-section>
+
+  <arena-section
+    headingLevel="h2"
+    eyebrow="Lo que lleva siempre"
+    title="El código y su vigencia"
+    description="El código es lo que teclea el comprador al confirmar. Se guarda en mayúsculas."
+    rhythm="md"
+  >
+    <div class="arena-stack arena-stack--group">
+      <arena-input
+        label="Código"
+        hint="Lo que el comprador teclea. Sin espacios."
+        placeholder="COPA10"
+        [value]="code()"
+        (change)="code.set($event)"
+      />
+      <arena-input
+        label="Cómo se llama"
+        hint="Lo que verá el comprador y lo que verás tú en la lista."
+        placeholder="Bs 10 de descuento en combos"
+        [value]="label()"
+        (change)="label.set($event)"
+      />
+      <arena-input
+        label="Cuántos usos admite"
+        type="number"
+        hint="Cuando se agotan, la promoción deja de correr sola."
+        [value]="limit()"
+        (change)="limit.set($event)"
+      />
+      <arena-input
+        label="Hasta cuándo"
+        hint="Año, mes y día. Después de esa fecha ya no corre."
+        placeholder="2026-12-31"
+        [value]="until()"
+        (change)="until.set($event)"
+      />
+    </div>
+  </arena-section>
+
+  @if (forBuyers()) {
+    <arena-section
+      headingLevel="h2"
+      eyebrow="Para el comprador"
+      title="Qué descuenta"
+      description="Lo pagas tú, entero. Touno cobra su comisión sobre el precio sin descontar."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        <arena-select
+          label="Qué descuenta"
+          [options]="kinds"
+          [value]="kind()"
+          (change)="setKind($event)"
+        />
+        <arena-input
+          label="Cuánto"
+          type="number"
+          hint="Bolivianos si descuenta un monto, porcentaje si descuenta una parte."
+          [value]="value()"
+          (change)="value.set($event)"
+        />
+        <arena-input
+          label="Reputación mínima que pide"
+          type="number"
+          hint="Déjalo vacío si la puede usar cualquiera. Mide constancia, nunca gasto."
+          [value]="gate()"
+          (change)="gate.set($event)"
+        />
+      </div>
+    </arena-section>
+  }
+
+  @if (forRiders()) {
+    <arena-section
+      headingLevel="h2"
+      eyebrow="Para el rider"
+      title="La pata de rider"
+      description="Nunca baja del piso que Touno fija por clase de trabajo, y el rider ve las tres cifras juntas antes de aceptar."
+      rhythm="md"
+    >
+      <div class="arena-stack arena-stack--group">
+        <arena-select
+          label="Clase de trabajo"
+          [options]="modes"
+          [value]="mode()"
+          (change)="setMode($event)"
+        />
+        <arena-input
+          label="La fija de la promoción"
+          type="number"
+          hint="Lo que se paga por carrera mientras dure."
+          [value]="perTrip()"
+          (change)="perTrip.set($event)"
+        />
+        <arena-input
+          label="Carreras para el bono"
+          type="number"
+          hint="Cuántas tiene que hacer para que el bono entre."
+          [value]="bonusAfter()"
+          (change)="bonusAfter.set($event)"
+        />
+        <arena-input
+          label="El bono"
+          type="number"
+          hint="Lo que se suma al llegar a ese número de carreras."
+          [value]="bonus()"
+          (change)="bonus.set($event)"
+        />
+        <arena-input
+          label="El mínimo garantizado"
+          type="number"
+          hint="Lo que se lleva aunque el volumen nunca llegue."
+          [value]="guaranteed()"
+          (change)="guaranteed.set($event)"
+        />
+      </div>
+    </arena-section>
+  }
+
+  <arena-button variant="primary" [disabled]="!ready() || !room()" (click)="create()">
+    Crear la promoción
+  </arena-button>
+</div>

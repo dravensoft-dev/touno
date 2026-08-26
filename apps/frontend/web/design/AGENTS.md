@@ -16,6 +16,13 @@ edited. [`GENERATED.md`](../../../../GENERATED.md) says which files and why.
 
 ## The rules that bind every screen
 
+- **The mock spends Arena before it draws anything.** Every screen is built out of the components
+  Arena ships, and a component of our own is written only where Arena has none, which is the case
+  [`../src/app/shared/AGENTS.md`](../src/app/shared/AGENTS.md) argues one by one. Reaching for a
+  bare element, a hand-made list or a private stylesheet where a component exists costs the screen
+  the palettes, the focus ring and the reduced-motion answer that component already carries, and no
+  gate gives any of them back. When Arena's idiom refuses what you wrote, the answer is in the
+  idiom table in [`../src/app/AGENTS.md`](../src/app/AGENTS.md) rather than in markup of your own.
 - **No class of ours on an Arena element.** Put the class on a container we own and let the Arena
   element be its child.
 - **No rule targeting an `arena-*` class.** Those names are compiler output, not a contract.
@@ -47,6 +54,13 @@ edited. [`GENERATED.md`](../../../../GENERATED.md) says which files and why.
   that are not rhythm, the panel shell's rail-and-column frame and the milestone timeline's
   bullet-and-body row, are page frames rather than rhythm, and both read their gap from a token.
 - `--gap-control` and `--gap-inline` are for composition **inside a single control** and nothing else.
+- **A page ends a section step above the floor, and the shell is what puts it there.** A page opens
+  with the container [`../src/app/pages/AGENTS.md`](../src/app/pages/AGENTS.md) names and its stack
+  spaces what is inside it, so the gap under the last component belongs to the lane around it. The
+  public lane spends the site footer's own band on it. The panel lane carries no footer, so
+  `.shell-panel__main` pays it directly: the bottom bar, the safe area and a section step on a
+  phone, and a section step alone once the bar goes at the wide breakpoint. A page that ends flush
+  against the floor is that padding missing, never a stack class the page forgot.
 
 ## Figures a person would dictate
 
