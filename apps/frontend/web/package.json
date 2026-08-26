@@ -1,0 +1,46 @@
+{
+  "name": "@touno/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "NODE_OPTIONS=--disable-warning=DEP0205 ng build",
+    "watch": "NODE_OPTIONS=--disable-warning=DEP0205 ng build --watch --configuration development",
+    "test": "ng test",
+    "prestart": "bun run prepare:assets",
+    "prebuild": "bun run prepare:assets",
+    "pretest": "bun run prepare:assets",
+    "postbuild": "bun run tools/emit-404.ts",
+    "prepare:assets": "bun run tools/generate-sitemap.ts && arena-to-prod",
+    "audit:arena": "arena-to-prod --audit --strict=audit,glyph,markers,restated,weight",
+    "lint": "ng lint",
+    "serve:static": "bunx http-server dist/touno/browser -p 4173 -c-1",
+    "sweep:overflow": "bun run tools/overflow-sweep.ts"
+  },
+  "dependencies": {
+    "@angular/cdk": "^22.1.2",
+    "@angular/common": "^22.1.0",
+    "@angular/compiler": "^22.1.0",
+    "@angular/core": "^22.1.0",
+    "@angular/forms": "^22.1.0",
+    "@angular/platform-browser": "^22.1.0",
+    "@angular/platform-server": "^22.1.0",
+    "@angular/router": "^22.1.0",
+    "@angular/ssr": "^22.1.4",
+    "@dravensoft/arena-angular": "10.2.2",
+    "@phosphor-icons/web": "^2.1.2",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular-eslint/builder": "22.1.0",
+    "@angular/build": "^22.1.4",
+    "@angular/cli": "^22.1.4",
+    "@angular/compiler-cli": "^22.1.0",
+    "angular-eslint": "22.1.0",
+    "jsdom": "^28.0.0",
+    "playwright-core": "^1.62.1",
+    "vitest": "^4.0.8"
+  }
+}

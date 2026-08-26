@@ -1,6 +1,4 @@
 consolidarse como empresa de identificación con guardado de datos personales.
-usar la base de datos de tránsito o segip para búsqueda de antecedentes.
-hay que ver si se puede.
 consolidar términos de privacidad.
 
 
@@ -8,27 +6,6 @@ Touno es una plataforma que se sirve a travez de una página web y una app móvi
 La plataforma está a cargo de la Empresa Dravensoft ( NIT/Matrícula de comercio con Seprec 696114036, No. de registro Seprec 722572 ), una empresa unipersonal que desarrolla actividades de software.
 
 Implementaciones de servicios de terceros:
-
-Identificación/Registro en la plataforma:
-
-Servicio OAuth de ciudadanía digital o Base de datos sistema segip.
-Cualquier persona mayor de edad tendrá la opción de registrarse/acceder como usuario a touno únicamente por medio de los canales mencionados, los datos de usuarios mínimos que la plataforma necesita almacenar son:
-- Número de Cedula de Identidad
-- Nombre Completo
-- Fecha de nacimiento
-Touno no necesita ambas plataformas para entrar en operaciones, se las menciona porque ambas plataformas proveen el servicio y la información que Touno requiere: cuando se alcance la integración con cualquiera de los servicios, la integración con el otro podrá ser descartado o considerado para una futura actualización.
-Un dato opcional para añadir a los mencionados es el retrato del rostro del usuario, para aumentar la confiabilidad de la plataforma, pero de no ser posible su obtención o de requerir respaldo legal adicional, puede ser descartado.
-
-
-Identificación de vehículos/recapitulación de antecedentes:
-
-Base de datos del sistema de tránsito/sistema policial.
-Para los usuarios que se registren como conductores, además de la identificación mencionada anteriormente, se les recapitulará la información sobre los vehículos motorizados que estén a su nombre y sus antecedentes penales, los datos mínimos que la plataforma necesita almacenar son:
-- Placa del motorizado
-- Chasis del motorizado
-- Verificación si el motorizado se encuentra a nombre del usuario conductor solicitante.
-- Un dato de sí/no que indique si el conductor solicitante tiene antecedentes penales.
-Un dato opcional para añadir a los mencionados es la fotografía del motorizado, para aumentar la confiabilidad de la plataforma, pero de no ser posible su obtención o de requerir respaldo legal adicional, puede ser descartado.
 
 Generación/gestión de códigos qr para pagos por medio de billetera móvil:
 

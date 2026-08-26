@@ -31,7 +31,7 @@ does not. That is the entire argument for this order:
 2. **A gate, with a reason-carrying map.** `SURVIVORS`, `SIZE_ALLOWANCE`, `OUTSIDE_THE_TREE`,
    `NOT_AN_ENTRY_POINT`: each entry names a case and says why, as a string value rather than a
    comment, and **a stale entry fails its own gate**. See
-   [`scripts/check/AGENTS.md`](./scripts/check/AGENTS.md).
+   [`tools/check/AGENTS.md`](./tools/check/AGENTS.md).
 3. **A spec assertion.** A limit a test can pin is pinned, and this tree already prefers it: a fare
    is recomputed from its own inputs rather than trusted, and the sitemap's count is asserted against
    the routes rather than written into a sentence. An assertion that a collision does **not** happen

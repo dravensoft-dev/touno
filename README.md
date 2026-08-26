@@ -4,7 +4,8 @@ A working mock-up of **Touno**, a last-mile logistics marketplace for Bolivia. T
 one network, one cart, one code and one tracking story: food ordered from restaurant branches, and
 goods bought from import shops that travel between cities by truck.
 
-Angular 22 and Bun, prerendered to static HTML, skinned with Arena.
+A monorepo: the site is Angular 22 and Bun, prerendered to static HTML and skinned with Arena, and
+it shares this tree with the surfaces and services Touno is growing into.
 
 **Start with [`TOUNO_STRUC.md`](TOUNO_STRUC.md).** It describes the business by user group, in
 Spanish, for the people who will use Touno rather than for the people who build it. It is the
@@ -69,32 +70,34 @@ role is not the current one renders an unauthenticated card offering the profile
   holder and an expiry, and there is no field that could hold a full number.
 - **No real distance.** Fares are measured over the same schematic planes the map draws, one per city
   plus a national one at its own scale, so a fee is coherent without pretending to be kilometres.
-- **No map library.** `src/app/shared/route-map` is our own SVG: a schematic street grid, a route, an
+- **No map library.** `apps/frontend/web/src/app/shared/route-map` is our own SVG: a schematic street grid, a route, an
   amber rider dot, and, when the rider stops reporting, his last known point labelled with the hour.
   Its coordinates are viewBox positions rather than latitudes, which is why no `geo` node appears in
   any JSON-LD.
-- **No real QR encoding.** `src/app/shared/order-code` draws a square seeded from the order code, so
+- **No real QR encoding.** `apps/frontend/web/src/app/shared/order-code` draws a square seeded from the order code, so
   it is stable across renders without being scannable.
 - **No photography.** Every card falls back to its Phosphor glyph.
-- **No live clock.** `src/app/domain/clock.ts` exports a literal `NOW`, because a wall clock writes
+- **No live clock.** `apps/frontend/web/src/app/domain/clock.ts` exports a literal `NOW`, because a wall clock writes
   different HTML on the server than on the first client render.
 
 ## Where to go next
 
 [`AGENTS.md`](AGENTS.md) is the root of the working documentation and routes into all of it. This
-page belongs to no level and carries no rule of its own. The levels below it:
+page belongs to no level and carries no rule of its own.
 
-- [`src/app/AGENTS.md`](src/app/AGENTS.md): the routes, what prerendering forbids, and where Arena's
-  Angular layer takes something other than what you would write.
-- [`src/app/domain/AGENTS.md`](src/app/domain/AGENTS.md): the model in one screen, the fixtures, and
-  which spec holds each rule.
-- [`src/app/layout/AGENTS.md`](src/app/layout/AGENTS.md): the shell, the rail, the gate and the
-  theme.
-- [`src/app/pages/AGENTS.md`](src/app/pages/AGENTS.md): the six lanes, and what binds all of them.
-- [`src/app/shared/AGENTS.md`](src/app/shared/AGENTS.md): the components Arena does not ship.
-- [`src/app/seo/AGENTS.md`](src/app/seo/AGENTS.md): the head, the constants and the structured data.
-- [`design/AGENTS.md`](design/AGENTS.md): how anything is allowed to look, and the style kernel
-  beside it.
-- [`scripts/AGENTS.md`](scripts/AGENTS.md): the build-time helpers, and the gates under it.
+The tree has four axes: `apps` is what gets deployed, `packages` is what more than one app needs,
+`tools` is what reads the whole tree, and `infra` is how it runs in containers.
+
+- [`apps/AGENTS.md`](apps/AGENTS.md): the surfaces and the services, and the rule that keeps them
+  from reaching into each other.
+- [`apps/frontend/web/AGENTS.md`](apps/frontend/web/AGENTS.md): the site, which is what most of this
+  page describes, and the levels under it.
+- [`apps/backend/AGENTS.md`](apps/backend/AGENTS.md): the modular monolith, and one service per
+  third party Touno talks to.
+- [`packages/AGENTS.md`](packages/AGENTS.md): the API contract, and the demo walk the surfaces
+  share.
+- [`tools/AGENTS.md`](tools/AGENTS.md): the gates, and what makes something belong to the root
+  rather than to an app.
+- [`infra/AGENTS.md`](infra/AGENTS.md): the development stack, and what each app adds to it.
 - [`GENERATED.md`](GENERATED.md): which half of a file is yours to edit.
 - [`DOUBTS.md`](DOUBTS.md): what counts as a debt here, and where the records live.

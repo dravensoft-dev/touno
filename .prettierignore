@@ -1,9 +1,9 @@
 dist
 .angular
 bun.lock
-src/arena.generated.css
-src/icons.generated.css
-src/plugin.generated.css
-public/sitemap.xml
-public/fonts
+apps/frontend/web/src/arena.generated.css
+apps/frontend/web/src/icons.generated.css
+apps/frontend/web/src/plugin.generated.css
+apps/frontend/web/public/sitemap.xml
+apps/frontend/web/public/fonts
 Brief para producto nuevo
